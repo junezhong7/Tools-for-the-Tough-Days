@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome Back — Tools for the Tough Days</title>
+<meta name="description" content="Welcome back to Tools for the Tough Days. Pick up where you left off or start fresh — clinically reviewed support whenever you need it.">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "waf821qhxo");
+</script>
+<!-- GA4 placeholder — replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal:      #2a2825;
+    --warm-grey:     #6b6560;
+    --sand:          #f2ede6;
+    --cream:         #faf8f4;
+    --white:         #ffffff;
+    --teal:          #26777B;
+    --teal-hover:    #1e5f63;
+    --teal-dark:     #1a4e52;
+    --teal-light:    #e8f4f4;
+    --amber:         #c8752a;
+    --amber-light:   #f5ece0;
+    --red-crisis:    #c0392b;
+    --red-light:     #fdf0ef;
+    --green:         #3a6b45;
+    --green-bg:      #edf5ef;
+    --blue:          #2a5a8a;
+    --blue-bg:       #e8f0f8;
+    --border:        rgba(42,40,37,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+  /* ── CRISIS BAR ── */
+  .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+
+  /* ── NAV ── */
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
+  .nav-cta:hover { background: var(--teal-hover); }
+
+  /* ── HERO ── */
+  .hero { background: var(--teal); padding: 48px 40px 40px; text-align: center; position: relative; overflow: hidden; }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+  .hero-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.75); font-weight: 500; margin-bottom: 14px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 36px); color: #fff; line-height: 1.2; margin-bottom: 10px; font-weight: 400; }
+  .hero h1 em { color: #c8f0f2; font-style: italic; }
+  .hero-sub { color: rgba(255,255,255,0.82); font-size: 15px; font-weight: 300; }
+
+  /* ── SCENARIO TABS ── */
+  .scenario-tabs { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn { padding: 16px 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; background: none; border: none; border-bottom: 2px solid transparent; color: var(--warm-grey); cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 7px; transition: color 0.15s, border-color 0.15s; }
+  .tab-btn:hover { color: var(--charcoal); }
+  .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ── SCENARIO VIEWS ── */
+  .scenario-view { display: none; }
+  .scenario-view.active { display: block; }
+
+  /* ── SCENARIO HEADER ── */
+  .scen-header { padding: 40px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 20px; background: var(--white); }
+  .scen-icon { font-size: 36px; flex-shrink: 0; margin-top: 4px; }
+  .scen-tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; font-weight: 500; }
+  .scen-header h2 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 6px; }
+  .scen-header p { color: var(--warm-grey); font-size: 14px; max-width: 580px; line-height: 1.7; }
+
+  /* ── CONTENT WRAPPER ── */
+  .scen-body { padding: 40px; max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+  .scen-main { width: 100%; }
+  .scen-sidebar { width: 100%; }
+
+  /* ── MOCK SCREEN ── */
+  .mock-screen { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 40px rgba(42,40,37,0.08); }
+
+  /* ── WELCOME BANNERS ── */
+  .wb { padding: 24px 28px; }
+  .wb-anon    { background: var(--sand); }
+  .wb-employee { background: var(--teal-light); border-bottom: 2px solid rgba(38,119,123,0.2); }
+  .wb-crisis  { background: var(--red-light); border-bottom: 2px solid rgba(192,57,43,0.15); }
+  .wb-employer { background: var(--blue-bg); border-bottom: 2px solid rgba(42,90,138,0.15); }
+  .wb-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; margin-bottom: 8px; }
+  .wb-anon    .wb-eyebrow { color: var(--warm-grey); }
+  .wb-employee .wb-eyebrow { color: var(--teal); }
+  .wb-crisis  .wb-eyebrow { color: var(--red-crisis); }
+  .wb-employer .wb-eyebrow { color: var(--blue); }
+  .wb-heading { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 6px; }
+  .wb-sub { font-size: 13px; color: var(--warm-grey); line-height: 1.6; }
+  .wb-crisis .wb-sub { color: #7a2020; }
+
+  /* ── MOOD CHECK-IN ── */
+  .return-checkin { padding: 22px 28px; border-bottom: 1px solid var(--border); }
+  .return-checkin h3 { font-size: 15px; font-weight: 400; margin-bottom: 16px; color: var(--charcoal); }
+  .mini-slider { width: 100%; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 3px; background: linear-gradient(to right, #c0392b 0%, var(--amber) 40%, var(--teal) 100%); outline: none; cursor: pointer; margin-bottom: 8px; }
+  .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--warm-grey); margin-bottom: 16px; }
+  .checkin-btn { background: var(--teal); color: #fff; border: none; padding: 11px 22px; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; transition: background 0.15s; }
+  .checkin-btn:hover { background: var(--teal-hover); }
+
+  /* ── CONTINUE READING ── */
+  .continue-section { padding: 22px 28px; border-bottom: 1px solid var(--border); }
+  .continue-section h3 { font-size: 12px; font-weight: 500; color: var(--warm-grey); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; }
+  .continue-card { display: flex; align-items: center; gap: 12px; background: var(--sand); border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: border-color 0.12s; }
+  .continue-card:hover { border-color: var(--teal); }
+  .continue-icon { font-size: 20px; flex-shrink: 0; }
+  .continue-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; line-height: 1.3; }
+  .continue-meta { font-size: 11px; color: var(--warm-grey); }
+  .continue-progress { margin-left: auto; flex-shrink: 0; }
+  .prog-bar { width: 56px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--teal); border-radius: 2px; }
+  .prog-label { font-size: 10px; color: var(--warm-grey); margin-top: 3px; text-align: right; }
+
+  /* ── NEW RESOURCES ── */
+  .new-section { padding: 22px 28px; border-bottom: 1px solid var(--border); }
+  .new-section h3 { font-size: 12px; font-weight: 500; color: var(--warm-grey); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; }
+  .new-chip { display: inline-block; background: var(--green-bg); color: var(--green); font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; margin-right: 6px; }
+  .new-resource { border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; background: var(--white); transition: box-shadow 0.12s; }
+  .new-resource:hover { box-shadow: 0 3px 16px rgba(42,40,37,0.08); }
+  .new-resource-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .new-resource-meta { font-size: 11px; color: var(--warm-grey); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .fmt-tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; border: 1px solid var(--border); color: var(--warm-grey); }
+
+  /* ── CRISIS RETURN ── */
+  .crisis-return-box { background: var(--red-light); border: 1.5px solid rgba(192,57,43,0.2); border-radius: 12px; padding: 20px 22px; margin: 22px 28px; }
+  .crisis-return-box h3 { font-family: 'DM Serif Display', serif; color: var(--red-crisis); font-size: 17px; font-weight: 400; margin-bottom: 8px; }
+  .crisis-return-box p { font-size: 13px; color: #7a2020; margin-bottom: 14px; line-height: 1.6; }
+  .crisis-numbers { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .crisis-num-btn { background: var(--red-crisis); color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; }
+  .crisis-secondary { background: transparent; color: var(--red-crisis); border: 1.5px solid var(--red-crisis); padding: 9px 16px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; }
+
+  /* ── PRIVACY STRIP ── */
+  .privacy-strip { padding: 14px 28px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--sand); }
+  .privacy-strip p { font-size: 12px; color: var(--warm-grey); }
+  .privacy-strip button { font-size: 12px; color: var(--warm-grey); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: 'DM Sans', sans-serif; }
+
+  /* ── EMPLOYER PORTAL ── */
+  .employer-dash { padding: 22px 28px; }
+  .anon-note { background: var(--teal-light); border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; font-size: 12px; color: var(--teal-dark); line-height: 1.6; }
+  .new-content-alert { background: var(--green-bg); border: 1px solid rgba(58,107,69,0.2); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .nca-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--green); }
+  .nca-text { font-size: 13px; color: var(--green); font-weight: 500; }
+  .nca-sub { font-size: 12px; color: rgba(58,107,69,0.7); }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .dash-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .dash-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--charcoal); }
+  .dash-label { font-size: 12px; color: var(--warm-grey); margin-top: 2px; line-height: 1.4; }
+  .dash-note { font-size: 11px; color: var(--teal); margin-top: 5px; }
+  .employer-action { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; background: var(--white); transition: border-color 0.12s; }
+  .employer-action:hover { border-color: rgba(38,119,123,0.4); }
+  .ea-icon { font-size: 18px; flex-shrink: 0; }
+  .ea-title { font-size: 13px; font-weight: 500; }
+  .ea-sub { font-size: 11px; color: var(--warm-grey); }
+  .ea-arrow { margin-left: auto; color: var(--warm-grey); font-size: 18px; }
+
+  /* ── SIDEBAR INFO CARDS ── */
+  .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+  .sidebar-card h3 { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; margin-bottom: 8px; color: var(--charcoal); }
+  .sidebar-card p { font-size: 13px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 14px; }
+  .sidebar-card ul { list-style: none; padding: 0; }
+  .sidebar-card ul li { font-size: 13px; color: var(--charcoal); padding: 5px 0 5px 16px; position: relative; border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .sidebar-card ul li:last-child { border-bottom: none; }
+  .sidebar-card ul li::before { content: '·'; position: absolute; left: 4px; color: var(--teal); font-size: 18px; line-height: 1.3; }
+  .sidebar-link { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 500; color: var(--teal); text-decoration: none; }
+  .sidebar-link:hover { color: var(--teal-hover); }
+
+  /* ── SECTION LABEL ── */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── TOPIC CHIPS ── */
+  .topic-chip { display: inline-block; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--white); color: var(--charcoal); text-decoration: none; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+  .topic-chip:hover { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
+  .topic-chip.crisis-chip { border-color: rgba(192,57,43,0.25); color: var(--red-crisis); background: var(--red-light); }
+  .topic-chip.crisis-chip:hover { border-color: var(--red-crisis); background: #fae0de; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* ── FLOATING CHAT ── */
+  .free-chat-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--teal); color: #fff; border: none; padding: 14px 22px; border-radius: 99px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; box-shadow: 0 4px 20px rgba(38,119,123,0.4); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; text-decoration: none; }
+  .free-chat-float:hover { transform: translateY(-2px); background: var(--teal-hover); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .scen-body { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; }
+    .hero { padding: 36px 20px 28px; }
+    .scen-header { padding: 24px 20px; flex-direction: column; gap: 10px; }
+    .scenario-tabs { padding: 0 16px; }
+    .dash-grid { grid-template-columns: 1fr; }
+    footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .scen-body { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Crisis bar -->
+<div class="crisis-bar">
+  <span>If things feel urgent right now —</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <div class="nav-links">
+    <a href="index.html">For Individuals</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Welcome back</div>
+    <h1>Good to see you <em>again.</em></h1>
+    <p class="hero-sub">How are you feeling today? Let's find what's helpful right now.</p>
+  </div>
+</section>
+
+<!-- Scenario Tabs -->
+<div class="scenario-tabs">
+  <button class="tab-btn active" onclick="showScenario('anon', this)">👤 Returning visitor</button>
+  <button class="tab-btn" onclick="showScenario('employee', this)">🏢 Team member</button>
+  <button class="tab-btn" onclick="showScenario('crisis', this)">🚨 After a difficult visit</button>
+  <button class="tab-btn" onclick="showScenario('employer', this)">👔 Employer portal</button>
+</div>
+
+
+<!-- ═══════════ SCENARIO 1: ANONYMOUS RETURN ═══════════ -->
+<div class="scenario-view active" id="scen-anon">
+  <div class="scen-header">
+    <div class="scen-icon">👤</div>
+    <div>
+      <span class="scen-tag" style="background:var(--sand);color:var(--warm-grey)">General public · No login required</span>
+      <h2>Welcome back</h2>
+      <p>Your privacy is protected — your history is stored only on this device, never on our servers. Take a fresh mood check-in and we'll find what's most helpful for today.</p>
+    </div>
+  </div>
+
+  <div class="scen-body">
+    <div class="scen-main">
+      <div class="section-label">Your session</div>
+      <div class="mock-screen">
+
+        <div class="wb wb-anon">
+          <div class="wb-eyebrow">Welcome back</div>
+          <div class="wb-heading">Good to see you again.</div>
+          <div class="wb-sub">How are you feeling today? Let's find what's helpful right now.</div>
+        </div>
+
+        <div class="return-checkin">
+          <h3>Take a moment — how's today, honestly?</h3>
+          <input type="range" class="mini-slider" min="1" max="10" value="6">
+          <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Find what's helpful →</button>
+        </div>
+
+        <div class="continue-section">
+          <h3>Pick up where you left off</h3>
+          <div class="continue-card">
+            <div class="continue-icon">📄</div>
+            <div>
+              <div class="continue-title">Anxiety and avoidance — breaking the cycle</div>
+              <div class="continue-meta">😰 Anxiety · ANX-P04</div>
+            </div>
+            <div class="continue-progress">
+              <div class="prog-bar"><div class="prog-fill" style="width:35%"></div></div>
+              <div class="prog-label">35% read</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-section">
+          <h3>New since your last visit</h3>
+          <div class="new-resource">
+            <span class="new-chip">New</span>
+            <div class="new-resource-title">Small steps for getting through an anxious day</div>
+            <div class="new-resource-meta">
+              😰 Anxiety · ANX-P03
+              <span class="fmt-tag">📄 Read</span>
+              <span class="fmt-tag">🎧 Listen</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="privacy-strip">
+          <p>Your data is stored only in this browser — never on our servers.</p>
+          <button>Clear my history</button>
+        </div>
+
+        <!-- TOPIC BROWSER -->
+        <div style="padding:22px 28px 28px;">
+          <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or explore a different topic</h3>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 I need help right now</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="support.html" class="topic-chip">Really down on myself</a>
+              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="support.html" class="topic-chip">Expecting father</a>
+              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Building better habits</a>
+              <a href="support.html" class="topic-chip">Relationship pressure</a>
+              <a href="support.html" class="topic-chip">Tough with the kids</a>
+              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="support.html" class="topic-chip">Getting older</a>
+              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="support.html" class="topic-chip">Worried about someone else</a>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Money stress</a>
+              <a href="support.html" class="topic-chip">Big life change</a>
+              <a href="support.html" class="topic-chip">Stressed about the future</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="scen-sidebar">
+      <div class="sidebar-card">
+        <h3>Your privacy matters</h3>
+        <p>We never store your personal usage on our servers. Everything you read, listen to, or access is kept only on this device — and you can clear it any time.</p>
+        <ul>
+          <li>No account required to use the platform</li>
+          <li>History stored in browser only</li>
+          <li>Clear all data with one tap</li>
+          <li>Employer access codes never share individual data</li>
+        </ul>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+      </div>
+      <div class="sidebar-card">
+        <h3>Want to unlock more?</h3>
+        <p>Subscribe for $10/month and access all 160+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
+        <a href="support.html" class="sidebar-link">See all free resources →</a><br>
+        <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe — $10/month →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════ SCENARIO 2: EMPLOYEE WITH ACCESS CODE ═══════════ -->
+<div class="scenario-view" id="scen-employee">
+  <div class="scen-header">
+    <div class="scen-icon">🏢</div>
+    <div>
+      <span class="scen-tag" style="background:var(--teal-light);color:var(--teal)">Team member · Access code recognised</span>
+      <h2>Welcome back, team member</h2>
+      <p>Your access is through your employer's subscription. Your individual usage is completely private — your employer sees only anonymous team totals, never your activity.</p>
+    </div>
+  </div>
+
+  <div class="scen-body">
+    <div class="scen-main">
+      <div class="section-label">Your session</div>
+      <div class="mock-screen">
+
+        <div class="wb wb-employee">
+          <div class="wb-eyebrow">Your team subscription</div>
+          <div class="wb-heading">Welcome back.</div>
+          <div class="wb-sub">Your access is private — your employer sees only anonymous team data, never your individual activity.</div>
+        </div>
+
+        <div class="return-checkin">
+          <h3>How are you feeling right now?</h3>
+          <input type="range" class="mini-slider" min="1" max="10" value="7">
+          <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Show me what's available →</button>
+        </div>
+
+        <div class="continue-section">
+          <h3>Continue where you left off</h3>
+          <div class="continue-card">
+            <div class="continue-icon">🎧</div>
+            <div>
+              <div class="continue-title">When worry won't switch off</div>
+              <div class="continue-meta">😰 Anxiety · ANX-P02 · 3 min remaining</div>
+            </div>
+            <div class="continue-progress">
+              <div class="prog-bar"><div class="prog-fill" style="width:60%"></div></div>
+              <div class="prog-label">60% listened</div>
+            </div>
+          </div>
+          <div class="continue-card">
+            <div class="continue-icon">📄</div>
+            <div>
+              <div class="continue-title">Practical steps when money feels out of control</div>
+              <div class="continue-meta">💸 Financial stress · FIN-P03</div>
+            </div>
+            <div class="continue-progress">
+              <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+              <div class="prog-label">Not started</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-section">
+          <h3>New resources in your areas</h3>
+          <div class="new-resource">
+            <span class="new-chip">New</span>
+            <div class="new-resource-title">Understanding your anger and what's underneath it</div>
+            <div class="new-resource-meta">
+              😔 Feeling flat · MHW-P02
+              <span class="fmt-tag">📄</span>
+              <span class="fmt-tag">🎧</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="privacy-strip">
+          <p>Your employer sees only anonymous team totals — never your individual history.</p>
+          <button>Clear my history</button>
+        </div>
+
+        <!-- TOPIC BROWSER -->
+        <div style="padding:22px 28px 28px;">
+          <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or explore a different topic</h3>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 I need help right now</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="support.html" class="topic-chip">Really down on myself</a>
+              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="support.html" class="topic-chip">Expecting father</a>
+              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Building better habits</a>
+              <a href="support.html" class="topic-chip">Relationship pressure</a>
+              <a href="support.html" class="topic-chip">Tough with the kids</a>
+              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="support.html" class="topic-chip">Getting older</a>
+              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="support.html" class="topic-chip">Worried about someone else</a>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Money stress</a>
+              <a href="support.html" class="topic-chip">Big life change</a>
+              <a href="support.html" class="topic-chip">Stressed about the future</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="scen-sidebar">
+      <div class="sidebar-card">
+        <h3>Your privacy, protected</h3>
+        <p>Your employer provides your access, but they cannot see what you read, listen to, or how often you visit. That information stays with you.</p>
+        <ul>
+          <li>Individual activity is never shared</li>
+          <li>Employer sees anonymous totals only</li>
+          <li>You can clear your history at any time</li>
+          <li>Booking a session with Nic is confidential</li>
+        </ul>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+      </div>
+      <div class="sidebar-card">
+        <h3>Book a session</h3>
+        <p>As a team member, you have access to book a free 15-min call directly with Nic — a Registered Psychologist with 20+ years of experience.</p>
+        <a href="booking.html" class="sidebar-link">Book a free 15-min call →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════ SCENARIO 3: RETURN AFTER CRISIS ═══════════ -->
+<div class="scenario-view" id="scen-crisis">
+  <div class="scen-header">
+    <div class="scen-icon">🚨</div>
+    <div>
+      <span class="scen-tag" style="background:var(--red-light);color:var(--red-crisis)">Previous visit: crisis support accessed</span>
+      <h2>We're glad you're back</h2>
+      <p>Last time you visited, things were really tough. We never assume how you're feeling today — take a fresh check-in and we'll guide you from there with warmth.</p>
+    </div>
+  </div>
+
+  <div class="scen-body">
+    <div class="scen-main">
+      <div class="section-label">Your session</div>
+      <div class="mock-screen">
+
+        <div class="wb wb-crisis">
+          <div class="wb-eyebrow">Welcome back</div>
+          <div class="wb-heading">Last time you visited, things were really tough.</div>
+          <div class="wb-sub">We're glad you're here again. How are you feeling today?</div>
+        </div>
+
+        <div class="return-checkin">
+          <h3>Take your time with this — there's no rush.</h3>
+          <input type="range" class="mini-slider" min="1" max="10" value="5">
+          <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Tell us how you're doing →</button>
+        </div>
+
+        <div class="crisis-return-box">
+          <h3>Support is still here if you need it</h3>
+          <p>If things still feel urgent, these are available 24/7. There's no pressure — just wanted you to know they're close.</p>
+          <div class="crisis-numbers">
+            <button class="crisis-num-btn" onclick="window.location.href='tel:131114'">📞 Lifeline 13 11 14</button>
+            <button class="crisis-secondary" onclick="window.location.href='booking.html'">💬 Talk to Nic today</button>
+          </div>
+          <p style="font-size:12px;color:#7a2020">Beyond Blue 1300 22 4636 is also available 24/7.</p>
+        </div>
+
+        <div style="padding:18px 28px;border-top:1px solid var(--border)">
+          <p style="font-size:13px;color:var(--warm-grey)">Your check-in result will guide you to the right resources for today — whatever that looks like right now.</p>
+        </div>
+
+        <!-- TOPIC BROWSER -->
+        <div style="padding:0 28px 28px;">
+          <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or browse topics when you're ready</h3>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 Crisis support</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="support.html" class="topic-chip">Really down on myself</a>
+              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="support.html" class="topic-chip">Expecting father</a>
+              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Building better habits</a>
+              <a href="support.html" class="topic-chip">Relationship pressure</a>
+              <a href="support.html" class="topic-chip">Tough with the kids</a>
+              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="support.html" class="topic-chip">Getting older</a>
+              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="support.html" class="topic-chip">Worried about someone else</a>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <a href="support.html" class="topic-chip">Money stress</a>
+              <a href="support.html" class="topic-chip">Big life change</a>
+              <a href="support.html" class="topic-chip">Stressed about the future</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="privacy-strip">
+          <p>Your previous visits are stored only on this device.</p>
+          <button>Clear all my history</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scen-sidebar">
+      <div class="sidebar-card">
+        <h3>You don't have to figure this out alone</h3>
+        <p>If things are still difficult, a free 15-minute call with Nic can help you work out what support looks like for you — no pressure, no obligation.</p>
+        <a href="booking.html" class="sidebar-link">Book a free call with Nic →</a>
+      </div>
+      <div class="sidebar-card">
+        <h3>24/7 crisis support</h3>
+        <ul>
+          <li>Lifeline — <a href="tel:131114" style="color:var(--teal)">13 11 14</a></li>
+          <li>Beyond Blue — <a href="tel:1300224636" style="color:var(--teal)">1300 22 4636</a></li>
+          <li>1800RESPECT — <a href="tel:1800737732" style="color:var(--teal)">1800 737 732</a></li>
+          <li>Emergency — <a href="tel:000" style="color:var(--teal)">000</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════ SCENARIO 4: EMPLOYER PORTAL ═══════════ -->
+<div class="scenario-view" id="scen-employer">
+  <div class="scen-header">
+    <div class="scen-icon">👔</div>
+    <div>
+      <span class="scen-tag" style="background:var(--blue-bg);color:var(--blue)">Employer · Subscription active</span>
+      <h2>Your employer dashboard</h2>
+      <p>Anonymous aggregate data only — you'll never see individual employee names, resources accessed, or personal activity. Your team's privacy is fully protected.</p>
+    </div>
+  </div>
+
+  <div class="scen-body">
+    <div class="scen-main">
+      <div class="section-label">Team usage this month</div>
+      <div class="mock-screen">
+
+        <div class="wb wb-employer">
+          <div class="wb-eyebrow" style="color:var(--blue)">Your subscription · 14 team members</div>
+          <div class="wb-heading">Welcome back.</div>
+          <div class="wb-sub">Here's how your team has been using their support this month.</div>
+        </div>
+
+        <div class="employer-dash">
+
+          <div class="anon-note">
+            🔒 All data below is anonymous and aggregated. You will never see individual employee activity, names, or specific resources accessed.
+          </div>
+
+          <div class="new-content-alert">
+            <div class="nca-num">8</div>
+            <div>
+              <div class="nca-text">New resources added since your last visit</div>
+              <div class="nca-sub">Including 3 new audio resources in financial stress and relationships</div>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="dash-card">
+              <div class="dash-num">9</div>
+              <div class="dash-label">Team members accessed resources this month</div>
+              <div class="dash-note">↑ 3 more than last month</div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-num">34</div>
+              <div class="dash-label">Total resources accessed by your team</div>
+              <div class="dash-note">Most popular: Anxiety, Financial stress</div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-num">4</div>
+              <div class="dash-label">Team members booked a session this month</div>
+              <div class="dash-note">Including 2 free chats</div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-num">67%</div>
+              <div class="dash-label">Team activation rate</div>
+              <div class="dash-note">9 of 14 members have accessed at least once</div>
+            </div>
+          </div>
+
+          <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:12px">Actions</p>
+
+          <div class="employer-action">
+            <div class="ea-icon">🔑</div>
+            <div>
+              <div class="ea-title">Manage access codes</div>
+              <div class="ea-sub">Generate new codes · share with new starters · revoke if needed</div>
+            </div>
+            <div class="ea-arrow">›</div>
+          </div>
+          <div class="employer-action">
+            <div class="ea-icon">📅</div>
+            <div>
+              <div class="ea-title">Book a team session with Nic</div>
+              <div class="ea-sub">Group session or manager check-in · 30 or 60 min</div>
+            </div>
+            <div class="ea-arrow">›</div>
+          </div>
+          <div class="employer-action">
+            <div class="ea-icon">📊</div>
+            <div>
+              <div class="ea-title">Download usage report</div>
+              <div class="ea-sub">Anonymous PDF report · useful for board or WHS reporting</div>
+            </div>
+            <div class="ea-arrow">›</div>
+          </div>
+          <div class="employer-action" style="border-color:rgba(200,117,42,0.25)">
+            <div class="ea-icon">💳</div>
+            <div>
+              <div class="ea-title">Billing &amp; subscription</div>
+              <div class="ea-sub" style="color:var(--amber)">Next billing date: 15 May 2025 · $250/month</div>
+            </div>
+            <div class="ea-arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scen-sidebar">
+      <div class="sidebar-card">
+        <h3>Your team's privacy</h3>
+        <p>Individual employee activity is never visible to you or any other employer. The data you see is anonymous and aggregated — it shows team trends only.</p>
+        <ul>
+          <li>No individual names or activity</li>
+          <li>No specific resources accessed shown</li>
+          <li>Usage data is anonymous totals only</li>
+          <li>Booking details are never shared with employers</li>
+        </ul>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+      </div>
+      <div class="sidebar-card">
+        <h3>Need help?</h3>
+        <p>Questions about your subscription, access codes, or onboarding? Book a call with Nic directly.</p>
+        <a href="booking.html" class="sidebar-link">Book a free call with Nic →</a><br>
+        <a href="business.html" class="sidebar-link">View your plan details →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Floating chat -->
+<a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+
+<!-- Footer -->
+<footer>
+  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQs</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+  </div>
+</footer>
+
+<script>
+  function showScenario(id, btn) {
+    document.querySelectorAll('.scenario-view').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('scen-' + id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  }
+</script>
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>

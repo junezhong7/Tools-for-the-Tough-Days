@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Nic — Tools for the Tough Days</title>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "waf821qhxo");
+  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal: #26777B;
+      --teal-dark: #1a5558;
+      --teal-light: #e8f4f4;
+      --teal-mid: #d0eaea;
+      --text: #1a2e2f;
+      --text-muted: #4a6566;
+      --white: #ffffff;
+      --off-white: #f7fbfb;
+      --border: #d0e6e7;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(38,119,123,0.10);
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      background: var(--off-white);
+      line-height: 1.7;
+    }
+
+    /* ── CRISIS BAR ── */
+    .crisis-bar {
+      background: var(--teal-dark);
+      color: var(--white);
+      font-size: 0.78rem;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.01em;
+    }
+    .crisis-bar a {
+      color: #a8e6e8;
+      text-decoration: none;
+      font-weight: 700;
+      margin: 0 8px;
+    }
+    .crisis-bar a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(38,119,123,0.07);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 44px;
+      width: auto;
+    }
+    .nav-logo span {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.2;
+      display: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--teal); }
+    .btn-nav {
+      background: var(--teal);
+      color: var(--white) !important;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: 0.88rem !important;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .btn-nav:hover { background: var(--teal-dark) !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 60%, #3aa0a5 100%);
+      color: var(--white);
+      padding: 80px 24px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 48px;
+      align-items: flex-end;
+    }
+    .hero-text { padding-bottom: 56px; }
+    .hero-eyebrow {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 14px;
+    }
+    .hero-text h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 22px;
+    }
+    .hero-text h1 em {
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .hero-text p {
+      font-size: 1.08rem;
+      opacity: 0.88;
+      max-width: 520px;
+      line-height: 1.75;
+    }
+    .hero-credential {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 50px;
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-top: 28px;
+      letter-spacing: 0.02em;
+    }
+    .hero-credential span { opacity: 0.75; margin: 0 4px; }
+    .hero-photo-wrap {
+      position: relative;
+      align-self: flex-end;
+    }
+    .hero-photo-wrap img {
+      width: 100%;
+      max-width: 320px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      display: block;
+      object-fit: cover;
+      filter: drop-shadow(0 -8px 32px rgba(0,0,0,0.18));
+    }
+    .hero-photo-placeholder {
+      width: 300px;
+      height: 340px;
+      background: rgba(255,255,255,0.08);
+      border-radius: var(--radius) var(--radius) 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      text-align: center;
+      gap: 12px;
+    }
+    .hero-photo-placeholder svg { opacity: 0.4; }
+
+    /* ── WAVE DIVIDER ── */
+    .wave {
+      display: block;
+      width: 100%;
+      height: 60px;
+      background: var(--teal);
+    }
+
+    /* ── MAIN CONTENT ── */
+    main { background: var(--off-white); }
+
+    .section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+
+    /* ── INTRO PULL QUOTE ── */
+    .pull-quote {
+      border-left: 5px solid var(--teal);
+      padding: 22px 28px;
+      margin: 0 0 48px;
+      background: var(--teal-light);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .pull-quote p {
+      font-family: 'Lora', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--teal-dark);
+      line-height: 1.65;
+    }
+
+    /* ── BODY COPY ── */
+    .body-copy p {
+      font-size: 1.04rem;
+      color: #2a3e3f;
+      margin-bottom: 22px;
+      line-height: 1.85;
+    }
+    .body-copy p strong {
+      color: var(--teal-dark);
+      font-weight: 700;
+    }
+
+    /* ── EXPERIENCE CARDS ── */
+    .experience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin: 48px 0;
+    }
+    .exp-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .exp-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(38,119,123,0.14);
+    }
+    .exp-icon {
+      font-size: 1.7rem;
+      margin-bottom: 10px;
+    }
+    .exp-card h3 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .exp-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── DIFFERENTIATOR BANNER ── */
+    .diff-banner {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      border-radius: var(--radius);
+      padding: 44px 40px;
+      color: var(--white);
+      text-align: center;
+      margin: 48px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .diff-banner::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .diff-banner h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .diff-banner p {
+      font-size: 1.02rem;
+      opacity: 0.9;
+      max-width: 580px;
+      margin: 0 auto 24px;
+      line-height: 1.75;
+      position: relative;
+    }
+    .diff-banner .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      position: relative;
+    }
+
+    /* ── PERSONAL SECTION ── */
+    .personal-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 36px;
+      box-shadow: var(--shadow);
+      margin: 0 0 48px;
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .personal-icons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .personal-icon {
+      width: 48px; height: 48px;
+      background: var(--teal-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .personal-section h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .personal-section p {
+      font-size: 0.97rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 64px 24px 80px;
+      background: var(--teal-light);
+      border-top: 1px solid var(--teal-mid);
+    }
+    .cta-section h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.9rem;
+      color: var(--teal-dark);
+      margin-bottom: 14px;
+    }
+    .cta-section p {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(38,119,123,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--teal-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(38,119,123,0.35);
+    }
+    .btn-secondary {
+      display: inline-block;
+      border: 2px solid var(--teal);
+      color: var(--teal);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 12px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      margin-left: 14px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--teal);
+      color: var(--white);
+    }
+
+    /* ── REGISTRATION NOTE ── */
+    .reg-note {
+      display: block;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 48px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--teal-dark);
+      color: rgba(255,255,255,0.8);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--white); }
+    .footer-links { margin-bottom: 10px; }
+    .footer-crisis {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      opacity: 0.7;
+    }
+    .footer-crisis a { color: #a8e6e8; font-weight: 700; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+      .hero-photo-wrap { display: none; }
+      .hero-text { padding-bottom: 48px; }
+      .personal-section { flex-direction: column; }
+      .personal-icons { flex-direction: row; }
+      .btn-secondary { margin-left: 0; margin-top: 12px; }
+      .nav-links { gap: 16px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-text { animation: fadeUp 0.7s ease both; }
+    .pull-quote { animation: fadeUp 0.6s 0.1s ease both; }
+  </style>
+</head>
+<body>
+
+  <!-- Crisis bar -->
+  <div class="crisis-bar">
+    If things feel urgent right now —
+    <a href="tel:131114">Lifeline 13 11 14</a>
+    <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000">Emergency 000</a>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="https://toolsforthetoughdays.com.au" class="nav-logo">
+        <!-- Replace src with actual logo path if hosting locally -->
+        <img src="https://toolsforthetoughdays.com.au/logo.png" alt="Tools for the Tough Days" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <span style="display:none;">Tools for the<br><strong>Tough Days</strong></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="support.html">For Individuals</a></li>
+        <li><a href="https://toolsforthetoughdays.com.au/business.html">For Business</a></li>
+        <li><a href="#" class="active">About Nic</a></li>
+        <li><a href="#chat" class="btn-nav">💬 Free 15-min chat</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Meet the person behind the platform</p>
+        <h1>About Nic Marcon<br><em>Registered Psychologist</em></h1>
+        <p>Over twenty years of real clinical experience — from correction facilities to private practice — distilled into practical support you can access whenever you need it.</p>
+        <div class="hero-credential">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="7.5" fill="rgba(255,255,255,0.25)"/><path d="M4 7.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          AHPRA Registered
+          <span>·</span>
+          20+ Years Experience
+          <span>·</span>
+          QUT &amp; Bond University
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <!-- Replace with actual photo of Nic -->
+        <div class="hero-photo-placeholder">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="24" r="14" fill="rgba(255,255,255,0.3)"/><ellipse cx="32" cy="52" rx="22" ry="14" fill="rgba(255,255,255,0.2)"/></svg>
+          <span>Photo of Nic<br>coming soon</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Wave -->
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style="display:block;background:#f7fbfb;">
+    <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
+  </svg>
+
+  <!-- Main content -->
+  <main>
+    <div class="section">
+
+      <!-- Pull quote -->
+      <div class="pull-quote">
+        <p>"I didn't start out as a Psychologist. That background shaped everything about the way I work — and everything about why I built this platform."</p>
+      </div>
+
+      <!-- Body copy -->
+      <div class="body-copy">
+        <p>For fifteen years, I worked in manufacturing — a world built on problem-solving, practicality, and getting things done. It taught me something I've carried into every consulting room since: <strong>most people don't ask for help until the problem is already bigger than they can manage alone.</strong></p>
+
+        <p>That insight shapes everything about Tools for the Tough Days.</p>
+
+        <p>After leaving manufacturing, I completed my undergraduate studies at Queensland University of Technology and my Postgraduate Diploma at Bond University. I've now been registered as a general Psychologist with AHPRA for over twenty years.</p>
+      </div>
+
+      <!-- Experience cards -->
+      <div class="experience-grid">
+        <div class="exp-card">
+          <div class="exp-icon">🏛️</div>
+          <h3>Correctional Facilities</h3>
+          <p>Supporting people navigating some of the most complex circumstances imaginable.</p>
+        </div>
+        <div class="exp-card">
+          <div class="exp-icon">🌿</div>
+          <h3>AOD Rehabilitation</h3>
+          <p>Alcohol and other drug rehabilitation centres and detox units for young people.</p>
+        </div>
+        <div class="exp-card">
+          <div class="exp-icon">👥</div>
+          <h3>Individuals &amp; Couples</h3>
+          <p>Private practice counselling across twenty years of clinical work.</p>
+        </div>
+        <div class="exp-card">
+          <div class="exp-icon">🧩</div>
+          <h3>Complex Trauma &amp; Disability</h3>
+          <p>Working with people managing the most deeply held impacts of difficult experiences.</p>
+        </div>
+        <div class="exp-card">
+          <div class="exp-icon">🏢</div>
+          <h3>Employee Assistance</h3>
+          <p>EAP provision across industries — supporting working Australians to stay well.</p>
+        </div>
+      </div>
+
+      <!-- More body copy -->
+      <div class="body-copy">
+        <p>What I've seen, again and again, is the same pattern: by the time someone finally reaches out, they've been carrying something heavy for a long time. Life would have looked very different — the healing would have been far less painful — <strong>if they'd had somewhere to turn earlier.</strong></p>
+
+        <p>That's why I built this platform.</p>
+      </div>
+
+      <!-- Differentiator banner -->
+      <div class="diff-banner">
+        <h2>Every resource here is written by me. Personally.</h2>
+        <p>Tools for the Tough Days exists because early support matters. Not crisis-level help, not a six-week waitlist — real, clinically grounded resources available the moment you need them. No AI-generated scripts. No generic wellness filler.</p>
+        <div class="badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="rgba(255,255,255,0.2)"/><path d="M4.5 8l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Clinically authored and reviewed by a Registered Psychologist
+        </div>
+      </div>
+
+      <!-- Personal section -->
+      <div class="personal-section">
+        <div class="personal-icons">
+          <div class="personal-icon">🎵</div>
+          <div class="personal-icon">🏃</div>
+          <div class="personal-icon">❤️</div>
+        </div>
+        <div>
+          <h3>Beyond the clinic</h3>
+          <p>When I'm not working, you'll find me making music — I'm a composer as well as a musician — spending time with my family, and staying fit. I believe the same things I encourage my clients to invest in: connection, creativity, and looking after yourself before you have to.</p>
+        </div>
+      </div>
+
+      <p class="reg-note">Nic Marcon is a registered Psychologist with the Psychology Board of Australia (AHPRA).</p>
+
+    </div><!-- /section -->
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <h2>Ready to find some support?</h2>
+      <p>Browse clinically reviewed resources whenever you need them — or book a free 15-minute chat with Nic directly.</p>
+      <a href="https://toolsforthetoughdays.com.au" class="btn-primary">Explore the Platform</a>
+      <a href="#chat" class="btn-secondary">💬 Free 15-min chat</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://toolsforthetoughdays.com.au/#individuals">For Individuals</a>
+      <a href="https://toolsforthetoughdays.com.au/business.html">For Business</a>
+      <a href="#">About Nic</a>
+      <a href="faq.html">FAQs</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+    <div class="footer-crisis">
+      <a href="tel:131114">Lifeline 13 11 14</a> is available 24/7 if you need immediate support.
+    </div>
+  </footer>
+
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>

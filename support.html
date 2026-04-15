@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Resources — Tools for the Tough Days</title>
+  <meta name="description" content="Free clinically-reviewed mental health resources from a Registered Psychologist. No waitlist, no referral. Start reading or listening right now." />
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "waf821qhxo");
+  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+  <!-- GA4 placeholder — replace G-XXXXXXXXXX with your Measurement ID -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script> -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --charcoal:      #2a2825;
+      --warm-grey:     #6b6560;
+      --sand:          #f2ede6;
+      --cream:         #faf8f4;
+      --white:         #ffffff;
+      --teal:          #26777B;
+      --teal-hover:    #1e5f63;
+      --teal-dark:     #1a4e52;
+      --teal-light:    #e8f4f4;
+      --amber:         #c8752a;
+      --amber-light:   #f5ece0;
+      --red-crisis:    #c0392b;
+      --red-crisis-bg: #fdf0ef;
+      --green:         #3a6b45;
+      --green-bg:      #edf5ef;
+      --border:        rgba(42,40,37,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+    /* CRISIS BAR */
+    .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+
+    /* NAV */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+    .nav-links a:hover { color: var(--charcoal); }
+    .nav-cta { background: var(--teal); color: #fff !important; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
+    .nav-cta:hover { background: var(--teal-hover); color: #fff !important; }
+
+  /* MOOD CHECK-IN */
+  .mood-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px; padding: 24px 28px; max-width: 500px; margin: 28px auto 0;
+  }
+  .mood-question { color: rgba(255,255,255,0.9); font-size: 15px; margin-bottom: 16px; font-weight: 400; }
+  .mood-slider-wrap { position: relative; margin-bottom: 10px; }
+  .mood-slider {
+    width: 100%; -webkit-appearance: none; appearance: none;
+    height: 6px; border-radius: 3px; outline: none; cursor: pointer;
+    background: linear-gradient(to right, #c0392b 0%, #c8752a 35%, #e8b84a 65%, #26777B 100%);
+  }
+  .mood-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px;
+    border-radius: 50%; background: #fff; border: 3px solid var(--teal);
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .mood-labels { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+  .mood-value-display { text-align: center; margin-bottom: 14px; }
+  .mood-number { font-family: 'DM Serif Display', serif; font-size: 38px; color: #fff; line-height: 1; }
+  .mood-descriptor { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .mood-submit {
+    width: 100%; background: var(--teal); color: #fff; border: none;
+    padding: 13px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; font-weight: 500; transition: background 0.15s;
+  }
+  .mood-submit:hover { background: var(--teal-hover); }
+  .crisis-alert {
+    display: none; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis);
+    border-radius: 10px; padding: 14px 18px; margin-top: 14px; margin-bottom: 14px;
+  }
+  .crisis-alert.show { display: block; }
+  .crisis-alert h4 { color: var(--red-crisis); font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .crisis-alert p { font-size: 13px; color: #7a2020; }
+  .crisis-alert a { color: var(--red-crisis); font-weight: 600; }
+
+    /* HERO */
+    .hero { background: var(--teal); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+    .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+    .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
+    .hero-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 38px); color: #fff; line-height: 1.2; margin-bottom: 12px; font-weight: 400; }
+    .hero h1 em { color: #c8f0f2; font-style: italic; }
+    .hero-sub { color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 300; }
+
+    /* CONTENT */
+    .content-section { padding: 56px 40px; }
+    .content-inner { max-width: 1020px; margin: 0 auto; }
+
+    .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .section-intro h2 { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+    .section-intro p { font-size: 15px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 8px; }
+
+    .growing-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--teal-light); border: 1px solid rgba(38,119,123,0.25); border-radius: 99px; padding: 6px 14px; font-size: 13px; color: var(--teal-dark); margin-bottom: 28px; }
+    .growing-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+    /* GRID LABELS */
+    .grid-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; padding: 8px 0; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .grid-label.instant { color: var(--teal); }
+    .grid-label.instant::after { content: ''; flex: 1; height: 1px; background: rgba(38,119,123,0.2); }
+    .grid-label.email { color: var(--amber); margin-top: 36px; }
+    .grid-label.email::after { content: ''; flex: 1; height: 1px; background: rgba(200,117,42,0.2); }
+
+    /* CARDS */
+    .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .resource-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px 18px 18px; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
+    .resource-card.instant { border-color: rgba(38,119,123,0.3); }
+    .resource-card.email-gate { border-color: rgba(200,117,42,0.3); cursor: pointer; }
+    .resource-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(42,40,37,0.1); }
+
+    .card-tag { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 99px; }
+    .card-tag.t-instant { background: var(--teal-light); color: var(--teal-dark); }
+    .card-tag.t-email { background: var(--amber-light); color: var(--amber); }
+
+    .c-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+    .card-cat { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--warm-grey); margin-bottom: 5px; }
+    .card-title { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; color: var(--charcoal); margin-bottom: 8px; line-height: 1.3; padding-right: 64px; }
+    .card-desc { font-size: 13px; color: var(--warm-grey); line-height: 1.6; margin-bottom: 16px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .format-row { display: flex; gap: 6px; }
+    .format-pill { font-size: 10px; padding: 3px 8px; border-radius: 99px; font-weight: 500; }
+    .format-pill.pdf { background: var(--teal-light); color: var(--teal-dark); }
+    .format-pill.audio { background: var(--amber-light); color: var(--amber); }
+
+    .btn-open { background: var(--teal); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; transition: background 0.15s; }
+    .btn-open:hover { background: var(--teal-hover); }
+    .btn-unlock { background: var(--amber); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+    .btn-unlock:hover { background: #b36325; }
+
+    /* TRUST STRIP */
+    .trust-strip { background: var(--sand); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 40px; }
+    .trust-inner { max-width: 1020px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
+    .trust-item { font-size: 13px; color: var(--warm-grey); display: flex; align-items: center; gap: 7px; }
+
+    /* SUBSCRIBE CTA */
+    .subscribe-cta { background: var(--teal); border-radius: 16px; padding: 40px; text-align: center; margin-top: 40px; }
+    .subscribe-cta h2 { font-family: 'DM Serif Display', serif; font-size: 28px; color: #fff; font-weight: 400; margin-bottom: 10px; }
+    .subscribe-cta > p { color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px; font-weight: 300; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 560px; margin: 0 auto 8px; }
+    .price-box { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 24px; text-align: center; }
+    .price-box.featured { background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.4); position: relative; }
+    .price-box-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+    .price-amount { font-family: 'DM Serif Display', serif; font-size: 36px; color: #fff; line-height: 1; }
+    .price-per { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 4px; }
+    .price-note { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .price-box a { display: block; background: #fff; color: var(--teal-dark); padding: 11px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; }
+    .price-box a:hover { background: var(--teal-light); }
+    .best-value-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #fff; color: var(--teal-dark); font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 99px; white-space: nowrap; }
+    .cta-link { display: inline-block; margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.8); text-decoration: none; }
+    .cta-link:hover { color: #fff; }
+    .growing-note { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 16px; }
+
+    /* WHAT YOU GET */
+    .what-strip { background: var(--teal-light); padding: 40px; }
+    .what-inner { max-width: 1020px; margin: 0 auto; }
+    .what-strip h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 24px; text-align: center; }
+    .what-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+    .what-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; text-align: center; }
+    .what-card .w-icon { font-size: 24px; margin-bottom: 8px; }
+    .what-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .what-card p { font-size: 12px; color: var(--warm-grey); margin: 0; line-height: 1.5; }
+
+    /* FLOATING CHAT */
+    .free-chat-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--teal); color: #fff; border: none; padding: 14px 22px; border-radius: 99px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; box-shadow: 0 4px 20px rgba(38,119,123,0.4); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; text-decoration: none; }
+    .free-chat-float:hover { transform: translateY(-2px); background: var(--teal-hover); }
+
+    /* EMAIL MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.6); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal-box { background: var(--white); border-radius: 16px; padding: 40px; max-width: 460px; width: 100%; position: relative; }
+    .modal-box h2 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+    .modal-tag { display: inline-block; background: var(--amber-light); color: var(--amber); font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .modal-desc { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 8px; }
+    .modal-checklist { list-style: none; margin-bottom: 20px; }
+    .modal-checklist li { font-size: 13px; color: var(--charcoal); padding: 4px 0 4px 18px; position: relative; }
+    .modal-checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--warm-grey); line-height: 1; padding: 4px; }
+    .modal-close:hover { color: var(--charcoal); }
+    .modal-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); outline: none; margin-bottom: 10px; }
+    .modal-input:focus { border-color: var(--teal); }
+    .modal-input::placeholder { color: #b0a9a3; }
+    .modal-submit { width: 100%; background: var(--teal); color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; transition: background 0.15s; }
+    .modal-submit:hover { background: var(--teal-hover); }
+    .modal-note { font-size: 11px; color: var(--warm-grey); text-align: center; margin-top: 10px; line-height: 1.5; }
+    .modal-note a { color: var(--teal); text-decoration: none; }
+    .modal-error { font-size: 13px; color: var(--red-crisis); margin-bottom: 10px; display: none; }
+    .modal-error.show { display: block; }
+
+    .modal-success { display: none; text-align: center; padding-top: 8px; }
+    .modal-success .s-icon { font-size: 40px; margin-bottom: 14px; }
+    .modal-success h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
+    .modal-success p { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 20px; }
+    .modal-success a { display: inline-block; background: var(--teal); color: #fff; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; }
+    .modal-success a:hover { background: var(--teal-hover); }
+
+    /* RESOURCE VIEWER */
+    .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.85); z-index: 600; align-items: center; justify-content: center; padding: 20px; }
+    .viewer-overlay.show { display: flex; }
+    .viewer-box { background: var(--white); border-radius: 16px; width: 100%; max-width: 740px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+    .viewer-header { background: var(--teal); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 12px; }
+    .viewer-header h3 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: #fff; line-height: 1.3; }
+    .viewer-close { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 13px; cursor: pointer; padding: 7px 14px; border-radius: 6px; font-family: 'DM Sans', sans-serif; white-space: nowrap; flex-shrink: 0; }
+    .viewer-close:hover { background: rgba(255,255,255,0.25); }
+    .viewer-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--cream); }
+    .viewer-tab { flex: 1; padding: 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; background: none; border: none; cursor: pointer; color: var(--warm-grey); border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .viewer-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+    .viewer-tab:hover:not(.active) { color: var(--charcoal); }
+    .viewer-upsell { background: var(--teal-light); border-bottom: 1px solid rgba(38,119,123,0.2); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
+    .viewer-upsell p { font-size: 12px; color: var(--teal-dark); margin: 0; }
+    .viewer-upsell a { font-size: 12px; font-weight: 500; background: var(--teal); color: #fff; padding: 6px 14px; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+    .viewer-upsell a:hover { background: var(--teal-hover); }
+    /* READ PANEL */
+    .viewer-read { padding: 32px 40px; overflow-y: auto; flex: 1; user-select: none; -webkit-user-select: none; position: relative; }
+    .viewer-read::after { content: 'toolsforthetoughdays.com.au · For personal use only'; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) rotate(-30deg); font-size: 12px; color: rgba(38,119,123,0.07); pointer-events: none; white-space: nowrap; z-index: 700; }
+    .res-title { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--teal-dark); margin-bottom: 4px; }
+    .res-byline { font-size: 11px; color: var(--warm-grey); margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .res-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--teal); font-weight: 500; margin-bottom: 8px; margin-top: 22px; }
+    .res-body { font-size: 15px; color: var(--charcoal); line-height: 1.75; margin-bottom: 14px; }
+    .res-list { list-style: none; margin-bottom: 14px; }
+    .res-list li { font-size: 15px; color: var(--charcoal); line-height: 1.7; padding: 5px 0 5px 18px; position: relative; }
+    .res-list li::before { content: '·'; position: absolute; left: 5px; color: var(--teal); font-weight: 700; font-size: 18px; line-height: 1.4; }
+    .res-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 11px; color: var(--warm-grey); line-height: 1.6; }
+    /* LISTEN PANEL */
+    .viewer-listen { padding: 32px 40px; overflow-y: auto; flex: 1; display: none; }
+    .viewer-listen.active { display: block; }
+    .audio-player-wrap { background: var(--sand); border: 1px solid var(--border); border-radius: 12px; padding: 28px 24px; margin-bottom: 20px; }
+    .audio-title { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: var(--teal-dark); margin-bottom: 4px; }
+    .audio-byline { font-size: 12px; color: var(--warm-grey); margin-bottom: 20px; }
+    .audio-player-wrap audio { width: 100%; border-radius: 6px; }
+    .audio-note { font-size: 12px; color: var(--warm-grey); line-height: 1.6; margin-top: 16px; }
+    .audio-placeholder { background: rgba(38,119,123,0.06); border: 1.5px dashed rgba(38,119,123,0.25); border-radius: 8px; padding: 20px; text-align: center; font-size: 13px; color: var(--teal-dark); margin-top: 12px; }
+
+    /* FOOTER */
+    footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    /* RESPONSIVE */
+    @media (max-width: 800px) {
+      nav { padding: 0 16px; }
+      .hero { padding: 40px 20px 36px; }
+      .content-section { padding: 40px 20px; }
+      .trust-strip, .what-strip { padding: 28px 20px; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .what-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="crisis-bar">
+    <span>If things feel urgent right now —</span>
+    <a href="tel:131114">Lifeline 13 11 14</a>
+    <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000">Emergency 000</a>
+  </div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+    <div class="nav-links">
+      <a href="index.html">For Individuals</a>
+      <a href="business.html">For Business</a>
+      <a href="about.html">About Nic</a>
+      <a href="booking.html" class="nav-cta">Free 15-min chat</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-texture"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="hero-dot"></span> Free resources — no subscription needed</div>
+      <h1>Real support,<br><em>right now.</em></h1>
+      <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral — start reading or listening today.</p>
+      <p style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.72);">Returning visitor? <a href="return.html" style="color:rgba(255,255,255,0.92);font-weight:500;">Pick up where you left off →</a></p>
+
+      <div class="mood-card">
+        <p class="mood-question">Before we start — how are you feeling right now?</p>
+        <div class="mood-value-display">
+          <div class="mood-number" id="mood-num">5</div>
+          <div class="mood-descriptor" id="mood-desc">Getting by</div>
+        </div>
+        <div class="mood-slider-wrap">
+          <input type="range" class="mood-slider" id="mood-slider" min="1" max="10" value="5" oninput="updateMood(this.value)">
+        </div>
+        <div class="mood-labels"><span>Really struggling</span><span>Doing well</span></div>
+        <div class="crisis-alert" id="crisis-alert">
+          <h4>It sounds like things are really tough right now.</h4>
+          <p>Please click the button below to access some important information.</p>
+        </div>
+        <button class="mood-submit" id="mood-btn" onclick="submitMood()">Show me what's available →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCE AREAS STRIP -->
+  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
+    <div style="max-width: 880px; margin: 0 auto;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What's covered — 21 resource areas</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🆘 Crisis support</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🏠 Domestic violence &amp; abuse</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🕊️ Grief &amp; loss</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💙 Low mood &amp; depression</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌀 Anxiety &amp; worry</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💪 Self-esteem</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">😶 Feeling flat or angry</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🍼 Postnatal struggles</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🤰 Pregnancy</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">👨‍👧 Expecting fathers</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🎲 Gambling &amp; substance use</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌱 Daily habits &amp; wellbeing</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">❤️ Relationships</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">👶 Parenting young children</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🧒 Parenting teenagers</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🧓 Getting older</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌍 Identity &amp; belonging</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🤝 Supporting someone else</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💸 Financial stress</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🔄 Big life changes</span>
+        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🔮 Stress about the future</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="content-section">
+    <div class="content-inner">
+
+      <div class="section-label">Free resources</div>
+
+      <div class="section-intro">
+        <h2>Four free resources to start with</h2>
+        <p>Two are available right now — no signup, no gate. Two more unlock with your email, covering the topics Australians are searching for most. Every resource is clinically authored and reviewed by Nic Marcon personally.</p>
+        <div class="growing-badge">
+          <span class="growing-dot"></span>
+          New resources added regularly — the library keeps growing
+        </div>
+      </div>
+
+      <!-- FREE INSTANTLY -->
+      <div class="grid-label instant">✓ Open now — no email needed</div>
+      <div class="resource-grid">
+
+        <div class="resource-card instant">
+          <span class="card-tag t-instant">Free — no signup</span>
+          <span class="c-icon">🌊</span>
+          <div class="card-cat">Crisis Support</div>
+          <h3 class="card-title">Grounding Yourself When Everything Feels Overwhelming</h3>
+          <p class="card-desc">When everything feels too much and you don't know where to start — simple, immediate grounding steps you can use right now to feel a little steadier.</p>
+          <div class="card-footer">
+            <div class="format-row">
+              <span class="format-pill pdf">📄 PDF</span>
+              <span class="format-pill audio">🎧 Audio</span>
+            </div>
+            <a href="#" class="btn-open" onclick="openViewer('crisis'); return false;">Read or listen →</a>
+          </div>
+        </div>
+
+        <div class="resource-card instant">
+          <span class="card-tag t-instant">Free — no signup</span>
+          <span class="c-icon">💓</span>
+          <div class="card-cat">Anxiety</div>
+          <h3 class="card-title">Understanding What Anxiety Is Actually Doing to Your Body</h3>
+          <p class="card-desc">Anxiety affects 2.4 million Australians. This explains what's happening in your body — the racing heart, tight chest, racing thoughts — and what actually helps.</p>
+          <div class="card-footer">
+            <div class="format-row">
+              <span class="format-pill pdf">📄 PDF</span>
+              <span class="format-pill audio">🎧 Audio</span>
+            </div>
+            <a href="#" class="btn-open" onclick="openViewer('anxiety'); return false;">Read or listen →</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FREE WITH EMAIL -->
+      <div class="grid-label email">📧 Free with your email</div>
+      <div class="resource-grid">
+
+        <div class="resource-card email-gate" onclick="openModal('financial')">
+          <span class="card-tag t-email">Email to unlock</span>
+          <span class="c-icon">💸</span>
+          <div class="card-cat">Financial Stress</div>
+          <h3 class="card-title">When Financial Stress Starts Affecting Your Mental Health</h3>
+          <p class="card-desc">Money stress is the #1 driver of mental health decline in Australia right now. Understand why financial pressure hits so hard — and what to do when it's affecting how you feel and function.</p>
+          <div class="card-footer">
+            <div class="format-row">
+              <span class="format-pill pdf">📄 PDF</span>
+              <span class="format-pill audio">🎧 Audio</span>
+            </div>
+            <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
+          </div>
+        </div>
+
+        <div class="resource-card email-gate">
+          <span class="card-tag t-email">Email to unlock</span>
+          <span class="c-icon">🔋</span>
+          <div class="card-cat">Burnout & Stress</div>
+          <h3 class="card-title">The Basics That Actually Make a Difference to Your Wellbeing</h3>
+          <p class="card-desc">Burnout doesn't fix itself. This resource cuts through the noise and gives you the fundamentals — the things that clinical research and 20+ years of practice show actually work.</p>
+          <div class="card-footer">
+            <div class="format-row">
+              <span class="format-pill pdf">📄 PDF</span>
+              <span class="format-pill audio">🎧 Audio</span>
+            </div>
+            <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Subscribe CTA -->
+      <div class="subscribe-cta">
+        <h2>Unlock the full library</h2>
+        <p>160+ clinically-reviewed PDF guides and audio resources — available any time, on any device. New topics added regularly.</p>
+        <div class="pricing-grid">
+          <div class="price-box">
+            <div class="price-box-label">Monthly</div>
+            <div class="price-amount">$10</div>
+            <div class="price-per">/month for 3 months</div>
+            <div class="price-note">then $15/month</div>
+            <a href="checkout.php?product=individual_monthly">Subscribe monthly →</a>
+          </div>
+          <div class="price-box featured">
+            <span class="best-value-tag">4 months free</span>
+            <div class="price-box-label">Annual</div>
+            <div class="price-amount">$120</div>
+            <div class="price-per">/year</div>
+            <div class="price-note">Save $60 vs monthly</div>
+            <a href="checkout.php?product=individual_yearly">Subscribe annually →</a>
+          </div>
+        </div>
+        <a href="booking.html" class="cta-link">Or book a free 15-min call with Nic first →</a>
+        <p class="growing-note">📚 The library grows regularly — new resources added every month</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Trust strip -->
+  <div class="trust-strip">
+    <div class="trust-inner">
+      <div class="trust-item">✍️ Written by a Registered Psychologist</div>
+      <div class="trust-item">✍️ Clinically authored and reviewed</div>
+      <div class="trust-item">📬 One email. Unsubscribe anytime.</div>
+      <div class="trust-item">🔒 We never share your details</div>
+    </div>
+  </div>
+
+  <!-- What you get -->
+  <div class="what-strip">
+    <div class="what-inner">
+      <h3>What you get with a subscription</h3>
+      <div class="what-grid">
+        <div class="what-card"><div class="w-icon">📚</div><h4>80+ PDF guides</h4><p>Clinically reviewed — covering 20+ problem areas, growing every month</p></div>
+        <div class="what-card"><div class="w-icon">🎧</div><h4>80+ audio guides</h4><p>Listen on the go — same content, perfect when reading isn't convenient</p></div>
+        <div class="what-card"><div class="w-icon">📅</div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
+        <div class="what-card"><div class="w-icon">🔒</div><h4>Completely private</h4><p>No employer access, no data sharing — just you and the resources</p></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+
+  <!-- STAY IN THE LOOP -->
+  <section style="background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
+    <div style="max-width:580px;margin:0 auto;text-align:center;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:16px;">Stay in the loop</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;margin-bottom:12px;line-height:1.2;">New resources added <em style="color:var(--teal);font-style:italic;">every month.</em></h2>
+      <p style="font-size:15px;color:var(--warm-grey);line-height:1.7;margin-bottom:28px;">Subscribe to hear when new clinically-reviewed resources are released. One email. No spam. Unsubscribe any time.</p>
+      <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" style="display:inline-block;background:var(--teal);color:#fff;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif;">Subscribe — it's free →</a>
+      <p style="font-size:11px;color:var(--warm-grey);margin-top:12px;">Stored securely — never shared. <a href="privacy-policy.html" style="color:var(--teal);text-decoration:none;">Privacy Policy</a>.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+    <div class="footer-links">
+      <a href="faq.html">FAQs</a>
+    <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="business.html">For Business</a>
+      <a href="about.html">About Nic</a>
+      <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+    </div>
+  </footer>
+
+  <!-- RESOURCE VIEWER MODAL -->
+  <div class="viewer-overlay" id="viewer-modal">
+    <div class="viewer-box">
+      <div class="viewer-header">
+        <h3 id="viewer-title">—</h3>
+        <button class="viewer-close" onclick="closeViewer()">✕ Close</button>
+      </div>
+      <div class="viewer-tabs">
+        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')">📄 Read</button>
+        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')">🎧 Listen</button>
+      </div>
+      <div class="viewer-upsell">
+        <p>You're reading a free resource. Subscribe to unlock all 160+.</p>
+        <a href="checkout.php?product=individual_monthly">Subscribe — from $10/month →</a>
+      </div>
+      <div class="viewer-read"   id="viewer-read"></div>
+      <div class="viewer-listen" id="viewer-listen"></div>
+    </div>
+  </div>
+
+
+  <script>
+    // ── RESOURCE CONTENT ─────────────────────────────────
+    const resourceData = {
+      crisis: {
+        title: 'Grounding Yourself When Everything Feels Overwhelming',
+        audioSrc: 'https://emotionalbalance.sharepoint.com/:v:/r/sites/ResourceCenter/Shared%20Documents/Resource%20Centre%20B2C/Audio/CRISIS-P-02-Grounding%20Yourself%20When%20Everything%20Feels%20Overwhelming.mp4?csf=1&web=1',
+        pdfSrc: '', // Add SharePoint PDF link here once confirmed
+        read: `
+          <div class="res-title">Grounding Yourself When Everything Feels Overwhelming</div>
+          <div class="res-byline">Clinically authored and reviewed by Nic Marcon — Registered Psychologist · toolsforthetoughdays.com.au</div>
+
+          <div class="res-section-title">What's happening</div>
+          <p class="res-body">When everything feels like too much at once, your nervous system goes into overdrive. Your thoughts race, your body tightens, and the world can feel loud, blurry, or unreal. This is your brain's threat response — it's trying to protect you. But it can make even simple things feel impossible.</p>
+          <p class="res-body">Grounding is the process of bringing your attention back to the present moment and your physical surroundings. It doesn't fix the problem. But it can bring you back to a place where you can think, breathe, and take a next step.</p>
+
+          <div class="res-section-title">Why it helps</div>
+          <p class="res-body">When you're overwhelmed, the part of your brain responsible for rational thinking gets bypassed by the part that manages threat responses. Grounding techniques work by activating your senses — giving your brain something concrete to focus on. This slows the stress response and allows the thinking part of your brain to come back online.</p>
+          <p class="res-body">You don't need to believe it will work. You just need to do it.</p>
+
+          <div class="res-section-title">What to do — the 5-4-3-2-1 method</div>
+          <p class="res-body">Wherever you are right now, go slowly through each of these steps. Say the answers out loud if you can.</p>
+          <ul class="res-list">
+            <li><strong>5 things you can see.</strong> Look around slowly. Name five things in your environment — a chair, a crack in the wall, your own hands.</li>
+            <li><strong>4 things you can physically feel.</strong> The weight of your body on the seat. The texture of your clothing. Your feet on the floor. The temperature of the air.</li>
+            <li><strong>3 things you can hear.</strong> Listen carefully. Distant sounds count — traffic, a fan, your own breathing.</li>
+            <li><strong>2 things you can smell.</strong> If nothing is obvious, move closer to something — your sleeve, the air near a window.</li>
+            <li><strong>1 thing you can taste.</strong> Notice whatever is present in your mouth right now.</li>
+          </ul>
+
+          <div class="res-section-title">Slow your breathing</div>
+          <p class="res-body">After the 5-4-3-2-1, try this breathing pattern: breathe in for 4 counts, hold for 2, breathe out slowly for 6. The longer exhale is important — it activates the part of your nervous system responsible for calm. Repeat this four or five times.</p>
+
+          <div class="res-section-title">Other grounding approaches</div>
+          <ul class="res-list">
+            <li><strong>Hold something cold or textured.</strong> Ice, a stone, or even just your keys. Physical sensation anchors you in the present.</li>
+            <li><strong>Plant your feet firmly on the floor</strong> and press them down. Notice the solidity beneath you.</li>
+            <li><strong>Name your surroundings.</strong> Quietly describe the room you're in — colour, size, what's in it.</li>
+            <li><strong>Splash cold water on your face or wrists.</strong> This activates the diving reflex and slows heart rate quickly.</li>
+          </ul>
+
+          <div class="res-section-title">When to get more help</div>
+          <p class="res-body">If you are having thoughts of harming yourself or ending your life, please reach out now. You do not have to get through this alone.</p>
+          <ul class="res-list">
+            <li><strong>Lifeline:</strong> 13 11 14 — available 24 hours, 7 days</li>
+            <li><strong>Beyond Blue:</strong> 1300 22 4636</li>
+            <li><strong>Emergency Services:</strong> 000</li>
+          </ul>
+          <p class="res-body">If overwhelming moments are happening regularly, speaking with a psychologist or GP can help you understand what's underneath them and build longer-term strategies.</p>
+
+          <div class="res-footer">
+            <strong>Tools for the Tough Days</strong> · toolsforthetoughdays.com.au<br>
+            Clinically authored and reviewed by Nic Marcon, Registered Psychologist.<br>
+            For personal use only. Not to be reproduced or distributed.<br><br>
+            <strong>If things feel urgent:</strong> Lifeline 13 11 14 · Beyond Blue 1300 22 4636 · Emergency 000
+          </div>
+        `
+      },
+      anxiety: {
+        title: 'Understanding What Anxiety Is Actually Doing to Your Body',
+        audioSrc: 'https://emotionalbalance.sharepoint.com/:v:/r/sites/ResourceCenter/Shared%20Documents/Resource%20Centre%20B2C/Audio/ANX-P01-Understanding%20What%20Anxiety%20Is%20Actually%20Doing%20to%20Your%20Body.mp4?csf=1&web=1',
+        pdfSrc: '', // Add SharePoint PDF link here once confirmed
+        read: `
+          <div class="res-title">Understanding What Anxiety Is Actually Doing to Your Body</div>
+          <div class="res-byline">Clinically authored and reviewed by Nic Marcon — Registered Psychologist · toolsforthetoughdays.com.au</div>
+
+          <div class="res-section-title">What's happening</div>
+          <p class="res-body">Anxiety is your body's alarm system. It is not a character flaw, a sign of weakness, or something you invented. It is a deeply wired biological response designed to protect you — and for most of human history, it did exactly that.</p>
+          <p class="res-body">The problem is that your nervous system cannot easily tell the difference between a genuine physical threat and a stressful thought about the future. So it responds the same way to both — flooding your body with the same chemicals, triggering the same physical sensations, even when there is no actual danger in the room.</p>
+
+          <div class="res-section-title">What anxiety is actually doing — physically</div>
+          <p class="res-body">When your brain detects a threat (real or perceived), it triggers a cascade of physical changes through the release of adrenaline and cortisol. Understanding each one can reduce how frightening they feel:</p>
+          <ul class="res-list">
+            <li><strong>Racing heart.</strong> Your heart pumps faster to move blood to your muscles, preparing you to run or fight. It is not a heart attack — it is your body gearing up.</li>
+            <li><strong>Tight chest or difficulty breathing.</strong> Your breathing becomes shallow and fast to take in more oxygen quickly. This is why slow breathing helps — it signals to your brain that the threat is passing.</li>
+            <li><strong>Shaking or trembling.</strong> Muscles tense and prepare for action. The trembling is excess energy with nowhere to go.</li>
+            <li><strong>Sweating.</strong> Your body temperature rises with the increased effort, so cooling begins.</li>
+            <li><strong>Nausea or an unsettled stomach.</strong> Digestion is non-essential in an emergency, so blood flow is redirected away from the gut. This is why anxiety often sits in the stomach.</li>
+            <li><strong>Dizziness or feeling detached.</strong> Blood flow changes can cause lightheadedness. The detached feeling — like watching yourself from outside — is your brain's protective response to overwhelming input.</li>
+            <li><strong>Racing thoughts.</strong> Your brain scans rapidly for threats and solutions. This is useful in a genuine emergency. In everyday anxiety, it creates a loop of worry that is hard to switch off.</li>
+          </ul>
+
+          <div class="res-section-title">Why it keeps happening</div>
+          <p class="res-body">Anxiety feeds on avoidance. When you avoid something that makes you anxious, your brain learns that the thing was dangerous — because you escaped it. This keeps the alarm system sensitive and makes anxiety grow over time. Gradual, gentle exposure — staying with discomfort rather than fleeing it — is one of the most effective ways to retrain the response.</p>
+          <p class="res-body">Chronic stress, poor sleep, high caffeine intake, and lack of physical activity all lower the threshold at which anxiety fires. Small changes in these areas can make a meaningful difference.</p>
+
+          <div class="res-section-title">What actually helps</div>
+          <ul class="res-list">
+            <li><strong>Slow your exhale.</strong> Breathe in for 4 counts, hold for 2, out for 6. The long exhale activates your parasympathetic nervous system — the brake on your stress response.</li>
+            <li><strong>Name what's happening.</strong> "This is anxiety. My body is doing what it's supposed to do. I am not in danger." Labelling reduces the brain's alarm response.</li>
+            <li><strong>Move your body.</strong> Physical activity burns off the stress hormones that anxiety produces. Even a ten-minute walk can significantly reduce symptoms.</li>
+            <li><strong>Don't avoid.</strong> Reducing avoidance is the single most effective long-term strategy. Start small — approach one thing that makes you mildly anxious.</li>
+            <li><strong>Limit caffeine.</strong> Caffeine directly stimulates adrenaline release. If anxiety is high, cutting back can have a surprisingly quick effect.</li>
+            <li><strong>Protect your sleep.</strong> Anxiety and sleep deprivation reinforce each other. Consistent sleep and wake times help regulate your nervous system.</li>
+          </ul>
+
+          <div class="res-section-title">When to get more help</div>
+          <p class="res-body">If anxiety is affecting your relationships, your work, or stopping you from doing things you want to do — it is time to speak with someone. Anxiety responds very well to psychological treatment. You do not have to manage this alone, and you do not have to wait until it becomes a crisis.</p>
+          <p class="res-body">Speak to your GP or a registered psychologist for an assessment and a treatment plan that suits you.</p>
+
+          <div class="res-footer">
+            <strong>Tools for the Tough Days</strong> · toolsforthetoughdays.com.au<br>
+            Clinically authored and reviewed by Nic Marcon, Registered Psychologist.<br>
+            For personal use only. Not to be reproduced or distributed.<br><br>
+            <strong>If things feel urgent:</strong> Lifeline 13 11 14 · Beyond Blue 1300 22 4636 · Emergency 000
+          </div>
+        `
+      }
+    };
+
+    let activeTab = 'read';
+
+    function openViewer(key) {
+      const r = resourceData[key];
+      document.getElementById('viewer-title').textContent = r.title;
+      document.getElementById('viewer-read').innerHTML = r.read;
+
+      // Build audio panel
+      document.getElementById('viewer-listen').innerHTML = `
+        <div class="audio-player-wrap">
+          <div class="audio-title">${r.title}</div>
+          <div class="audio-byline">Narrated audio · toolsforthetoughdays.com.au · Nic Marcon, Registered Psychologist</div>
+          <a href="${r.audioSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;padding:13px 22px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:16px;">
+            🎧 Listen on SharePoint →
+          </a>
+          <p class="audio-note">Opens in SharePoint in a new tab — free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
+        </div>
+        <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:16px 20px;">
+          <p style="font-size:13px;color:var(--teal-dark);margin:0 0 10px;">Want more? Subscribe for $10/month and unlock 80+ audio guides covering anxiety, relationships, sleep, financial stress, burnout, and more.</p>
+          <a href="checkout.php?product=individual_monthly" style="display:inline-block;background:var(--teal);color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe — from $10/month →</a>
+        </div>
+      `;
+
+      // Add PDF button at bottom of read panel if link exists
+      const pdfBtn = r.pdfSrc
+        ? `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
+             <a href="${r.pdfSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);color:var(--charcoal);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">
+               📄 Download PDF version →
+             </a>
+           </div>`
+        : `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--warm-grey);">
+             📄 PDF download coming soon.
+           </div>`;
+      document.getElementById('viewer-read').innerHTML += pdfBtn;
+
+      // Reset to read tab
+      switchTab('read');
+      document.getElementById('viewer-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewer() {
+      // Pause any playing audio
+      const players = document.querySelectorAll('#viewer-listen audio');
+      players.forEach(p => { p.pause(); p.currentTime = 0; });
+      document.getElementById('viewer-modal').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      document.getElementById('viewer-read').style.display   = tab === 'read'   ? 'block' : 'none';
+      document.getElementById('viewer-listen').style.display = tab === 'listen' ? 'block' : 'none';
+      document.getElementById('tab-read').classList.toggle('active',   tab === 'read');
+      document.getElementById('tab-listen').classList.toggle('active', tab === 'listen');
+    }
+
+    document.getElementById('viewer-modal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeViewer();
+    });
+
+    // ── CONFIG ────────────────────────────────────────────
+    const VISION6_API_KEY = 'YOUR_VISION6_API_KEY';
+    const VISION6_LIST_ID = 'YOUR_VISION6_LIST_ID';
+    // ─────────────────────────────────────────────────────
+
+    const resources = {
+      financial: {
+        tag: 'Financial Stress',
+        title: 'When Financial Stress Starts Affecting Your Mental Health',
+        checklist: [
+          'Why financial pressure affects mental health so directly',
+          'What to do when money stress disrupts your sleep and mood',
+          'Practical first steps when it feels out of control'
+        ]
+      },
+      burnout: {
+        tag: 'Burnout & Stress',
+        title: 'The Basics That Actually Make a Difference to Your Wellbeing',
+        checklist: [
+          'The fundamentals that clinical research shows actually work',
+          'Why willpower alone doesn\'t fix burnout',
+          'Simple, evidence-based starting points for recovery'
+        ]
+      }
+    };
+
+    let current = null;
+
+    function openModal(type) {
+      current = type;
+      const r = resources[type];
+      document.getElementById('modal-tag').textContent = r.tag;
+      document.getElementById('modal-title').textContent = r.title;
+      document.getElementById('modal-checklist').innerHTML = r.checklist.map(i => `<li>${i}</li>`).join('');
+      document.getElementById('modal-form-wrap').style.display = 'block';
+      document.getElementById('modal-success').style.display = 'none';
+      document.getElementById('modal-error').classList.remove('show');
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-email').value = '';
+      document.getElementById('email-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('input-name').focus(), 100);
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeViewer(); } });
+  </script>
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+<script>
+  const descriptors = {
+    1: "In crisis right now", 2: "Really struggling", 3: "Finding it very hard",
+    4: "Having a tough time", 5: "Getting by", 6: "Okay, but not great",
+    7: "Doing alright", 8: "Pretty good", 9: "Doing well", 10: "Really good"
+  };
+  function updateMood(val) {
+    val = parseInt(val);
+    document.getElementById('mood-num').textContent = val;
+    document.getElementById('mood-desc').textContent = descriptors[val];
+    const alert = document.getElementById('crisis-alert');
+    const btn = document.getElementById('mood-btn');
+    if (val <= 2) {
+      alert.classList.add('show');
+      btn.textContent = 'Access important information →';
+    } else {
+      alert.classList.remove('show');
+      btn.textContent = 'Show me what\'s available →';
+    }
+  }
+  function submitMood() {
+    const val = parseInt(document.getElementById('mood-slider').value);
+    if (val <= 2) {
+      window.location.href = 'crisis-support.html';
+    } else {
+      const target = document.querySelector('.content-section');
+      if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
+    }
+  }
+</script>
+
+</body>
+</html>

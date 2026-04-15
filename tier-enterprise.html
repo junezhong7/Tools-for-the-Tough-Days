@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Plan — Tools for the Tough Days</title>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "waf821qhxo");
+  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #2a2825; --warm-grey: #6b6560; --sand: #f2ede6;
+    --cream: #faf8f4; --white: #ffffff;
+    --teal: #26777B; --teal-hover: #1e5f63; --teal-dark: #1a4e52; --teal-light: #e8f4f4;
+    --red-crisis: #c0392b; --green: #3a6b45; --green-bg: #edf5ef;
+    --border: rgba(42,40,37,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+  .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+  .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; }
+
+  .hero { background: var(--charcoal); padding: 72px 40px 60px; text-align: center; position: relative; overflow: hidden; }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(38,119,123,0.2) 0%, transparent 60%); }
+  .hero-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+  .tier-badge { display: inline-block; background: rgba(38,119,123,0.3); border: 1px solid rgba(38,119,123,0.5); color: #6ecfd4; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 16px; border-radius: 99px; margin-bottom: 20px; font-weight: 500; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(30px, 4vw, 44px); color: #fff; line-height: 1.15; margin-bottom: 16px; font-weight: 400; }
+  .hero h1 em { color: #6ecfd4; font-style: italic; }
+  .hero-sub { color: rgba(255,255,255,0.7); font-size: 17px; margin-bottom: 32px; font-weight: 300; }
+  .btn-primary { background: var(--teal); color: #fff; border: none; padding: 15px 32px; border-radius: 8px; font-size: 16px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--teal-hover); }
+  .btn-back { display: inline-block; margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; }
+  .btn-back:hover { color: #fff; }
+
+  .section { padding: 64px 40px; }
+  .section-inner { max-width: 840px; margin: 0 auto; }
+  .section h2 { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  .section p { font-size: 15px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 16px; }
+
+  .feature-list { margin-top: 32px; display: flex; flex-direction: column; gap: 0; }
+  .feature-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .feature-item:last-child { border-bottom: none; }
+  .feature-item .icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .feature-item .text h4 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .feature-item .text p { font-size: 13px; color: var(--warm-grey); margin: 0; line-height: 1.6; }
+
+  .contact-section { background: var(--teal-light); }
+  .contact-box { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 40px; margin-top: 32px; }
+  .contact-box h3 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+  .contact-box p { font-size: 15px; color: var(--warm-grey); margin-bottom: 24px; line-height: 1.7; }
+  .contact-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 500; color: var(--charcoal); }
+  .form-group input, .form-group select, .form-group textarea { border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); outline: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-submit { background: var(--teal); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; width: 100%; margin-top: 8px; }
+  .form-submit:hover { background: var(--teal-hover); }
+  .form-note { font-size: 12px; color: var(--warm-grey); text-align: center; margin-top: 10px; }
+
+  .who-section { background: var(--sand); }
+  .who-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 28px; }
+  .who-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+  .who-icon { font-size: 28px; margin-bottom: 10px; }
+  .who-card h4 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .who-card p { font-size: 13px; color: var(--warm-grey); margin: 0; line-height: 1.6; }
+
+  footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+
+  @media (max-width: 700px) {
+    nav { padding: 0 16px; } .hero { padding: 48px 20px 40px; } .section { padding: 48px 20px; }
+    .contact-form-row { grid-template-columns: 1fr; } .who-grid { grid-template-columns: 1fr 1fr; }
+    footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="crisis-bar">
+  <span>If things feel urgent right now —</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <div class="nav-links">
+    <a href="support.html">For Individuals</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min call</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="tier-badge">Enterprise Plan</div>
+    <h1>Built around your <em>organisation.</em></h1>
+    <p class="hero-sub">For teams of 81 or more — custom pricing, dedicated support, and a partnership tailored to your business from day one.</p>
+    <a href="#contact" class="btn-primary">Get in touch with Nic →</a><br>
+    <a href="business.html" class="btn-back">← Back to all plans</a>
+  </div>
+</section>
+
+<section class="section" style="background: var(--cream);">
+  <div class="section-inner">
+    <h2>Everything in Enterprise</h2>
+    <p>At this scale, the platform works around you — not the other way around.</p>
+    <div class="feature-list">
+      <div class="feature-item"><span class="icon">💰</span><div class="text"><h4>Custom pricing</h4><p>Pricing is agreed directly with Nic based on your team size, structure, and needs. No off-the-shelf rate card.</p></div></div>
+      <div class="feature-item"><span class="icon">🎯</span><div class="text"><h4>Dedicated support</h4><p>A direct line to Nic — not a support inbox. Enterprise clients receive dedicated, personalised account support throughout their subscription.</p></div></div>
+      <div class="feature-item"><span class="icon">🚀</span><div class="text"><h4>Tailored onboarding</h4><p>We work with you to onboard your team in a way that fits your organisation — whether that's a briefing session, printed materials, or manager training.</p></div></div>
+      <div class="feature-item"><span class="icon">📝</span><div class="text"><h4>Sector-tailored content</h4><p>Where relevant, content can be contextualised to your specific industry, workforce, or organisation to maximise relevance and uptake.</p></div></div>
+      <div class="feature-item"><span class="icon">📞</span><div class="text"><h4>Regular check-ins with Nic</h4><p>More frequent touchpoints than the standard quarterly cadence — scheduled around what works for your organisation.</p></div></div>
+      <div class="feature-item"><span class="icon">⚡</span><div class="text"><h4>Priority response — always</h4><p>Enterprise clients are always first in the queue. Every time.</p></div></div>
+      <div class="feature-item"><span class="icon">📚</span><div class="text"><h4>Full resource &amp; audio library</h4><p>160 clinically-reviewed resources — 80 PDF guides and 80 audio guides — available to your entire team.</p></div></div>
+      <div class="feature-item"><span class="icon">🔒</span><div class="text"><h4>Full privacy protection</h4><p>Individual activity is never visible to the employer. Your team's use remains completely confidential.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: #e8f4f4;">
+  <div class="section-inner">
+    <h2>Who this plan is built for</h2>
+    <p>Tools for the Tough Days is open to <strong>any organisation</strong> with 81 or more people — regardless of industry. If your team faces pressure, stress, or tough days at work, this platform is for them. The industries below are just some of the workplaces we commonly support.</p>
+    <div class="who-grid">
+      <div class="who-card"><div class="who-icon">🔧</div><h4>Trades &amp; Construction</h4><p>Plumbers, electricians, builders and contractors</p></div>
+      <div class="who-card"><div class="who-icon">🏥</div><h4>Health Services</h4><p>GPs, specialists, nurses, hospitals and health clinics</p></div>
+      <div class="who-card"><div class="who-icon">🤝</div><h4>Allied Health &amp; Care</h4><p>Physios, OTs, psychologists, disability and aged care workers</p></div>
+      <div class="who-card"><div class="who-icon">🍽</div><h4>Hospitality &amp; Tourism</h4><p>Cafes, restaurants, hotels and tourism operators</p></div>
+      <div class="who-card"><div class="who-icon">🚛</div><h4>Transport &amp; Logistics</h4><p>Drivers, couriers, fleet operators and freight businesses</p></div>
+      <div class="who-card"><div class="who-icon">🎭</div><h4>Entertainment &amp; Events</h4><p>Production companies, venues and event businesses</p></div>
+      <div class="who-card"><div class="who-icon">💼</div><h4>Professional Services</h4><p>Accountants, legal, finance and consulting firms</p></div>
+      <div class="who-card" style="background:var(--teal-light);border-color:rgba(38,119,123,0.25);"><div class="who-icon">🏢</div><h4 style="color:var(--teal-dark);">Any organisation with 81+ people</h4><p>If your team faces tough days, this platform is for them — whatever your industry.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--cream);" id="contact">
+  <div class="section-inner">
+    <h2>Get in touch</h2>
+    <p>Tell us a bit about your organisation and Nic will be in touch within one business day to talk through the right approach for your team.</p>
+    <div class="contact-box">
+      <h3>Enterprise enquiry</h3>
+      <p>No obligation. No sales team. You'll hear directly from Nic.</p>
+      <div class="contact-form-row">
+        <div class="form-group"><label>Your name</label><input type="text" placeholder="Jane Smith"></div>
+        <div class="form-group"><label>Business name</label><input type="text" placeholder="Acme Pty Ltd"></div>
+      </div>
+      <div class="contact-form-row">
+        <div class="form-group"><label>Email address</label><input type="email" placeholder="jane@acme.com.au"></div>
+        <div class="form-group"><label>Phone number</label><input type="tel" placeholder="04XX XXX XXX"></div>
+      </div>
+      <div class="contact-form-row">
+        <div class="form-group"><label>Number of staff</label><input type="number" placeholder="e.g. 120"></div>
+        <div class="form-group"><label>Industry</label>
+          <select>
+            <option value="">Select your industry</option>
+            <option>Trades &amp; Construction</option>
+            <option>Transport &amp; Logistics</option>
+            <option>Allied Health &amp; Care</option>
+            <option>Hospitality</option>
+            <option>Entertainment &amp; Events</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0"><label>Anything else you'd like us to know?</label><textarea placeholder="Tell us about your team, any specific challenges, or what you're hoping to achieve..."></textarea></div>
+      <button class="form-submit" type="button">Send enquiry →</button>
+      <p class="form-note">Nic responds personally to every Enterprise enquiry within one business day.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div style="display:flex;gap:20px;flex-wrap:wrap">
+    <a href="faq.html">FAQs</a>
+    <a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a>
+    <a href="business.html">For Business</a><a href="about.html">About Nic</a>
+    <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+  </div>
+</footer>
+
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>

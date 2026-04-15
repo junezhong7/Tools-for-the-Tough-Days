@@ -1,0 +1,16 @@
+[13-Apr-2026 16:14:57 Australia/Sydney] PHP Warning:  require_once(/home/toolsfor/public_html/stripe-php/init.php): Failed to open stream: No such file or directory in /home/toolsfor/public_html/checkout.php on line 60
+[13-Apr-2026 16:14:57 Australia/Sydney] PHP Fatal error:  Uncaught Error: Failed opening required '/home/toolsfor/public_html/stripe-php/init.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/toolsfor/public_html/checkout.php:60
+Stack trace:
+#0 {main}
+  thrown in /home/toolsfor/public_html/checkout.php on line 60
+[13-Apr-2026 16:15:05 Australia/Sydney] PHP Warning:  require_once(/home/toolsfor/public_html/stripe-php/init.php): Failed to open stream: No such file or directory in /home/toolsfor/public_html/checkout.php on line 60
+[13-Apr-2026 16:15:05 Australia/Sydney] PHP Fatal error:  Uncaught Error: Failed opening required '/home/toolsfor/public_html/stripe-php/init.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/toolsfor/public_html/checkout.php:60
+Stack trace:
+#0 {main}
+  thrown in /home/toolsfor/public_html/checkout.php on line 60
+[13-Apr-2026 16:17:42 Australia/Sydney] Stripe error: Invalid API Key provided: YOUR_SEC********HERE
+[13-Apr-2026 16:18:06 Australia/Sydney] Stripe error: Invalid API Key provided: YOUR_SEC********HERE
+[13-Apr-2026 16:19:53 Australia/Sydney] Stripe error: Invalid API Key provided: YOUR_SEC********HERE
+[13-Apr-2026 16:20:09 Australia/Sydney] Stripe error: Invalid API Key provided: YOUR_SEC********HERE
+[13-Apr-2026 16:34:26 Australia/Sydney] Stripe error: Received unknown parameter: subscription_data[coupon]
+[13-Apr-2026 16:42:23 Australia/Sydney] Stripe error: Checkout does not support multiple prices with different billing intervals.

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome — Tools for the Tough Days</title>
+<meta name="description" content="Your business subscription is confirmed. Here's what happens next for your team.">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "waf821qhxo");
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal:   #2a2825;
+    --warm-grey:  #6b6560;
+    --sand:       #f2ede6;
+    --cream:      #faf8f4;
+    --white:      #ffffff;
+    --teal:       #26777B;
+    --teal-hover: #1e5f63;
+    --teal-dark:  #1a4e52;
+    --teal-light: #e8f4f4;
+    --amber:      #c8752a;
+    --amber-light:#f5ece0;
+    --red-crisis: #c0392b;
+    --green:      #3a6b45;
+    --green-bg:   #edf5ef;
+    --border:     rgba(42,40,37,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+  /* CRISIS BAR */
+  .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+
+  /* NAV */
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
+  .nav-cta:hover { background: var(--teal-hover); }
+
+  /* HERO */
+  .hero { background: var(--teal); padding: 56px 40px 52px; text-align: center; position: relative; overflow: hidden; }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+  .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 38px); color: #fff; line-height: 1.2; margin-bottom: 12px; font-weight: 400; }
+  .hero h1 em { color: #c8f0f2; font-style: italic; }
+  .hero-sub { color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 300; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+  /* Counselling badge - shown/hidden by JS */
+  .counselling-badge { display: none; margin-top: 16px; }
+  .counselling-badge span { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); color: rgba(255,255,255,0.9); font-size: 13px; padding: 6px 16px; border-radius: 99px; }
+
+  /* LAYOUT */
+  .main-wrap { max-width: 860px; margin: 0 auto; padding: 56px 40px 80px; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-bottom: 44px; }
+  .tl-item { display: flex; gap: 20px; align-items: flex-start; padding: 0 0 32px; position: relative; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 42px; bottom: 0; width: 2px; background: var(--border); }
+  .tl-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--teal-light); border: 2px solid var(--teal); color: var(--teal); font-size: 17px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .tl-content { padding-top: 6px; flex: 1; }
+  .tl-content h3 { font-size: 16px; font-weight: 500; margin-bottom: 5px; }
+  .tl-content p { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin: 0; }
+  .tl-tag { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 99px; margin-top: 7px; font-weight: 500; background: var(--sand); color: var(--warm-grey); }
+  .tl-tag.active { background: var(--green-bg); color: var(--green); }
+  .tl-tag.soon { background: var(--amber-light); color: var(--amber); }
+
+  /* COUNSELLING SECTION - shown/hidden by JS */
+  .counselling-section { display: none; margin-bottom: 44px; }
+  .counselling-section.show { display: block; }
+
+  .counselling-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-radius: 14px 14px 0 0; }
+  .counselling-header.bundled { background: var(--green-bg); border: 1px solid rgba(58,107,69,0.2); border-bottom: none; }
+  .counselling-header.payg { background: var(--amber-light); border: 1px solid rgba(200,117,42,0.2); border-bottom: none; }
+  .counselling-header h2 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; }
+  .counselling-header.bundled h2 { color: var(--green); }
+  .counselling-header.payg h2 { color: var(--amber); }
+
+  .counselling-body { background: var(--white); border: 1px solid var(--border); border-radius: 0 0 14px 14px; padding: 28px; }
+  .counselling-body p { font-size: 14px; color: var(--warm-grey); line-height: 1.75; margin-bottom: 20px; }
+  .counselling-body p:last-child { margin-bottom: 0; }
+
+  .session-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .session-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--cream); border-radius: 10px; border: 1px solid var(--border); }
+  .session-step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--teal); color: #fff; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .session-step h4 { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .session-step p { font-size: 13px; color: var(--warm-grey); margin: 0; line-height: 1.5; }
+
+  .note-box { border-radius: 10px; padding: 14px 16px; font-size: 13px; line-height: 1.65; }
+  .note-box.green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(58,107,69,0.15); }
+  .note-box.amber { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(200,117,42,0.15); }
+
+  /* WHAT TO TELL YOUR TEAM */
+  .tell-section { background: var(--teal-light); border: 1px solid rgba(38,119,123,0.2); border-radius: 14px; padding: 28px 32px; margin-bottom: 40px; }
+  .tell-section h3 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--teal-dark); margin-bottom: 18px; }
+  .tell-item { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid rgba(38,119,123,0.12); }
+  .tell-item:last-child { border-bottom: none; }
+  .tell-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .tell-item p { font-size: 14px; color: var(--teal-dark); line-height: 1.65; margin: 0; }
+  .tell-item strong { font-weight: 500; }
+
+  /* BOOKING CARD */
+  .booking-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 40px; }
+  .booking-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 10px; }
+  .booking-card p { font-size: 14px; color: var(--warm-grey); margin-bottom: 22px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .btn-book { display: inline-block; background: var(--teal); color: #fff; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+  .btn-book:hover { background: var(--teal-hover); }
+  .btn-book-note { font-size: 12px; color: var(--warm-grey); margin-top: 10px; }
+
+  /* BOTTOM LINKS */
+  .bottom-links { text-align: center; padding: 28px 0 0; border-top: 1px solid var(--border); }
+  .bottom-links p { font-size: 13px; color: var(--warm-grey); margin-bottom: 10px; }
+  .bottom-links a { font-size: 13px; color: var(--teal); font-weight: 500; text-decoration: none; margin: 0 10px; }
+
+  /* REASSURE STRIP */
+  .reassure-strip { background: var(--sand); border-top: 1px solid var(--border); padding: 24px 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+  .reassure-item { font-size: 13px; color: var(--warm-grey); display: flex; align-items: center; gap: 7px; }
+
+  /* FOOTER */
+  footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  @media (max-width: 700px) {
+    nav { padding: 0 16px; }
+    .hero { padding: 40px 20px 36px; }
+    .main-wrap { padding: 40px 20px 60px; }
+    .tell-section { padding: 22px 20px; }
+    .reassure-strip { padding: 20px; }
+    footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  .hero-content { animation: fadeUp 0.6s ease both; }
+  .main-wrap { animation: fadeUp 0.5s 0.1s ease both; }
+</style>
+</head>
+<body>
+
+<div class="crisis-bar">
+  <span>If things feel urgent right now —</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <div class="nav-links">
+    <a href="support.html">For Individuals</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✅ Subscription confirmed</div>
+    <h1>Your team subscription <em>is live.</em></h1>
+    <p class="hero-sub">Thank you for investing in your team's wellbeing. Here's exactly what happens next.</p>
+    <div class="counselling-badge" id="counselling-badge"></div>
+  </div>
+</section>
+
+<div class="main-wrap">
+
+  <!-- ═══ WHAT HAPPENS NEXT ═══ -->
+  <div class="section-label">What happens next</div>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-circle">✉️</div>
+      <div class="tl-content">
+        <h3>Nic will be in touch within 48 hours</h3>
+        <p>You'll receive a personal email from Nic with your team's access codes and everything you need to get started. This is a direct message from the person behind the platform — not an automated system.</p>
+        <span class="tl-tag soon">Within 48 hours</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-circle">📋</div>
+      <div class="tl-content">
+        <h3>You'll receive your team launch materials</h3>
+        <p>Alongside your access codes, you'll receive a print-ready noticeboard poster and a pre-written SMS template to share with your team. Both are ready to use immediately — no editing required unless you want to personalise them.</p>
+        <span class="tl-tag active">Included in your plan</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-circle">🔑</div>
+      <div class="tl-content">
+        <h3>Share the access code with your team</h3>
+        <p>No app to download. No accounts to create. Your team simply visit the platform on any device — phone, tablet, or computer — and enter their access code. That's the entire setup process for them.</p>
+        <span class="tl-tag">No IT setup needed</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-circle">📊</div>
+      <div class="tl-content">
+        <h3>Your employer dashboard goes live</h3>
+        <p>Once your team begins using the platform, you'll be able to see anonymous, aggregated usage data — how many team members are accessing resources and which topic areas are most used. Individual employee activity is never visible, and data is only shown where 5 or more team members have accessed a resource.</p>
+        <span class="tl-tag">Privacy protected by design</span>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+
+  <!-- ═══ COUNSELLING: BUNDLED SESSIONS ═══ -->
+  <div class="counselling-section" id="section-bundled">
+    <div class="section-label">Your counselling sessions</div>
+    <div class="counselling-header bundled">
+      <span style="font-size:22px;">🩺</span>
+      <h2>3-session bundle — included in your plan</h2>
+    </div>
+    <div class="counselling-body">
+      <p>Your plan includes a bundle of <strong>3 counselling sessions</strong> ($600 total) with a Registered Psychologist and Registered Counsellor. The 3 sessions are a shared pool — they can be used by one staff member or spread across the team, in any combination. There is no per-person limit.</p>
+
+      <div class="session-steps">
+        <div class="session-step">
+          <div class="session-step-num">1</div>
+          <div>
+            <h4>Any staff member can book</h4>
+            <p>Employees use the Calendly booking link within the platform to schedule a session at a time that suits them. No approval from you is needed or visible — they simply book and attend.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">2</div>
+          <div>
+            <h4>Sessions are held via phone or video</h4>
+            <p>Sessions are conducted by phone or video call — whichever the team member prefers. Each session is typically 50 minutes.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">3</div>
+          <div>
+            <h4>You'll be notified when sessions are running low</h4>
+            <p>When sessions are being drawn on, you'll receive a notification so you can track usage. You will never be told which team member attended — only how many sessions have been used from the bundle.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">4</div>
+          <div>
+            <h4>Top up with another bundle when needed</h4>
+            <p>Once all 3 sessions have been used, you can purchase another 3-session bundle for $600 at any time. There's no obligation to purchase more — top up only when your team needs it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box green">
+        🔒 <strong>Confidentiality is absolute.</strong> What a staff member discusses in a session is completely private — it is never reported to you, shared with the employer, or disclosed to any third party. Our practitioners operate under the same professional and ethical obligations as any registered health professional.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ COUNSELLING: PAY AS YOU GO ═══ -->
+  <div class="counselling-section" id="section-payg">
+    <div class="section-label">Your counselling sessions</div>
+    <div class="counselling-header payg">
+      <span style="font-size:22px;">🩺</span>
+      <h2>Pay as you go sessions</h2>
+    </div>
+    <div class="counselling-body">
+      <p>Your subscription includes access to pay as you go psychology and counselling sessions with Nic. There's no fixed allocation — sessions are booked and billed as they're used, giving your team access to professional support when they need it without committing to a set number upfront.</p>
+
+      <div class="session-steps">
+        <div class="session-step">
+          <div class="session-step-num">1</div>
+          <div>
+            <h4>Team members book directly</h4>
+            <p>Employees use the Calendly booking link within the platform to schedule a session with Nic at a time that suits them. No approval from you is needed or visible.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">2</div>
+          <div>
+            <h4>Sessions are held via phone or video</h4>
+            <p>Nic will conduct sessions by phone or video call — whichever the team member prefers. Sessions are typically 50 minutes.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">3</div>
+          <div>
+            <h4>Billing is handled directly with Nic</h4>
+            <p>Sessions are billed to the business on a per-session basis. Nic will send invoices directly. You will never be told which team member booked — only the number of sessions used in a billing period.</p>
+          </div>
+        </div>
+        <div class="session-step">
+          <div class="session-step-num">4</div>
+          <div>
+            <h4>You can set a usage cap if needed</h4>
+            <p>If you'd like to set a monthly session limit for budget management, let Nic know. This can be adjusted at any time.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box amber">
+        🔒 <strong>Confidentiality is absolute.</strong> What a team member discusses in a session with Nic is private — it is not reported to you, documented in a way accessible to you, or shared with any third party. Nic operates under the same professional and ethical obligations as any registered psychologist.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ WHAT TO TELL YOUR TEAM ═══ -->
+  <div class="section-label">What to tell your team</div>
+  <div class="tell-section">
+    <h3>Key points to share when you launch</h3>
+    <div class="tell-item">
+      <span class="tell-icon">🔒</span>
+      <p><strong>It's completely private.</strong> Your employer can only see anonymous team totals — never individual names, activity, or the resources any person has accessed.</p>
+    </div>
+    <div class="tell-item">
+      <span class="tell-icon">📱</span>
+      <p><strong>No app needed.</strong> The platform works on any phone, tablet, or computer — open a browser, enter the access code, and they're in.</p>
+    </div>
+    <div class="tell-item">
+      <span class="tell-icon">🕐</span>
+      <p><strong>Available any time.</strong> Resources are there at 11pm, on weekends, during a lunch break — whenever someone needs them. There's no booking, no waitlist, and no intake form.</p>
+    </div>
+    <div class="tell-item">
+      <span class="tell-icon">🩺</span>
+      <p><strong>Written by a real psychologist.</strong> Every resource has been clinically authored and reviewed by Nic Marcon — a Registered Psychologist with over 20 years of clinical experience.</p>
+    </div>
+    <div class="tell-item">
+      <span class="tell-icon">📞</span>
+      <p><strong>A real person is available.</strong> Team members can book a free 15-min call with Nic directly through the platform if they want to talk something through before committing to anything more.</p>
+    </div>
+    <div class="tell-item counselling-tell" style="display:none;" id="tell-counselling">
+      <span class="tell-icon">🩺</span>
+      <p><strong>Counselling sessions are also available.</strong> If something needs more than a self-guided resource, team members can book a session with Nic directly through the platform. What they discuss stays completely private.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══ SETUP CALL ═══ -->
+  <div class="booking-card">
+    <h3>Want to talk through the rollout?</h3>
+    <p>Book an optional setup call with Nic — a short conversation to make sure your team gets the best possible start. Nic can also answer any questions about how the platform or counselling sessions work.</p>
+    <a href="booking.html" class="btn-book">Book a setup call with Nic →</a>
+    <p class="btn-book-note">No obligation — this is part of your subscription at no extra cost.</p>
+  </div>
+
+  <!-- Bottom links -->
+  <div class="bottom-links">
+    <p>Questions about your subscription?</p>
+    <a href="faq.html#business">Read the business FAQs</a>
+    <a href="booking.html">Speak to Nic directly</a>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<!-- Reassurance strip -->
+<div class="reassure-strip">
+  <div class="reassure-item">✍️ Written by a Registered Psychologist</div>
+  <div class="reassure-item">🔒 Individual privacy protected</div>
+  <div class="reassure-item">⚡ Team access within 48 hours</div>
+  <div class="reassure-item">💳 Cancel anytime</div>
+</div>
+
+<footer>
+  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQs</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+  </div>
+</footer>
+
+<script>
+  // Detect counselling type from URL: ?counselling=bundled | ?counselling=payg | (none)
+  const params = new URLSearchParams(window.location.search);
+  const counselling = params.get('counselling'); // 'bundled', 'payg', or null
+
+  if (counselling === 'bundled') {
+    document.getElementById('section-bundled').classList.add('show');
+    document.getElementById('tell-counselling').style.display = 'flex';
+    document.getElementById('counselling-badge').style.display = 'block';
+    document.getElementById('counselling-badge').innerHTML =
+      '<span>🩺 Includes bundled counselling sessions</span>';
+
+    if (window.clarity) {
+      clarity('set', 'counselling_type', 'bundled');
+    }
+  }
+
+  if (counselling === 'payg') {
+    document.getElementById('section-payg').classList.add('show');
+    document.getElementById('tell-counselling').style.display = 'flex';
+    document.getElementById('counselling-badge').style.display = 'block';
+    document.getElementById('counselling-badge').innerHTML =
+      '<span>🩺 Includes pay as you go counselling sessions</span>';
+
+    if (window.clarity) {
+      clarity('set', 'counselling_type', 'payg');
+    }
+  }
+
+  // Clarity conversion tracking
+  if (window.clarity) {
+    clarity('set', 'subscriber_type', 'business');
+    clarity('event', 'payment_confirmed_business');
+  }
+</script>
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>

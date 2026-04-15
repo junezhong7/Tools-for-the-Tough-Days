@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome — Tools for the Tough Days</title>
+<meta name="description" content="Your subscription is confirmed. Here's how to get started with Tools for the Tough Days.">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "waf821qhxo");
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal:   #2a2825;
+    --warm-grey:  #6b6560;
+    --sand:       #f2ede6;
+    --cream:      #faf8f4;
+    --white:      #ffffff;
+    --teal:       #26777B;
+    --teal-hover: #1e5f63;
+    --teal-dark:  #1a4e52;
+    --teal-light: #e8f4f4;
+    --amber:      #c8752a;
+    --red-crisis: #c0392b;
+    --green:      #3a6b45;
+    --green-bg:   #edf5ef;
+    --border:     rgba(42,40,37,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+  /* CRISIS BAR */
+  .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+
+  /* NAV */
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
+  .nav-cta:hover { background: var(--teal-hover); }
+
+  /* HERO */
+  .hero { background: var(--teal); padding: 56px 40px 52px; text-align: center; position: relative; overflow: hidden; }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+  .hero-content { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 38px); color: #fff; line-height: 1.2; margin-bottom: 12px; font-weight: 400; }
+  .hero h1 em { color: #c8f0f2; font-style: italic; }
+  .hero-sub { color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 300; max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+  /* LAYOUT */
+  .main-wrap { max-width: 800px; margin: 0 auto; padding: 56px 40px 80px; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* STEP CARDS */
+  .steps-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+
+  .step-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: box-shadow 0.15s; }
+  .step-card:hover { box-shadow: 0 6px 24px rgba(42,40,37,0.08); }
+  .step-header { display: flex; align-items: flex-start; gap: 18px; padding: 28px 28px 0; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); color: #fff; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 3px; }
+  .step-title { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 4px; }
+  .step-sub { font-size: 13px; color: var(--warm-grey); line-height: 1.6; }
+  .step-body { padding: 20px 28px 28px 78px; }
+
+  /* VIDEO */
+  .video-placeholder { background: var(--charcoal); border-radius: 12px; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: rgba(255,255,255,0.6); font-size: 14px; position: relative; overflow: hidden; }
+  .video-placeholder::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(38,119,123,0.3) 0%, transparent 60%); }
+  .play-btn { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 22px; position: relative; z-index: 1; }
+  .video-placeholder p { position: relative; z-index: 1; }
+  /* TO ADD VIDEO: replace the .video-placeholder div with:
+     <iframe width="100%" style="aspect-ratio:16/9;border-radius:12px;border:none;"
+       src="YOUR_VIDEO_EMBED_URL" allow="autoplay; fullscreen" allowfullscreen></iframe> */
+
+  /* GUIDE LIST */
+  .guide-list { list-style: none; }
+  .guide-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .guide-item:last-child { border-bottom: none; }
+  .guide-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .guide-item h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .guide-item p { font-size: 13px; color: var(--warm-grey); line-height: 1.65; margin: 0; }
+
+  /* STEP 3 - GO TO PLATFORM */
+  .step-card.cta-card { background: var(--teal-light); border-color: rgba(38,119,123,0.25); }
+  .go-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--teal); color: #fff; padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+  .go-btn:hover { background: var(--teal-hover); }
+
+  /* PRIVACY CARD */
+  .privacy-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 28px; display: flex; gap: 16px; align-items: flex-start; margin-bottom: 40px; }
+  .privacy-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .privacy-card p { font-size: 13px; color: var(--warm-grey); line-height: 1.7; margin: 0; }
+  .privacy-card a { color: var(--teal); text-decoration: none; }
+
+  /* BOTTOM LINKS */
+  .bottom-links { text-align: center; padding: 28px 0 0; border-top: 1px solid var(--border); }
+  .bottom-links p { font-size: 13px; color: var(--warm-grey); margin-bottom: 10px; }
+  .bottom-links a { font-size: 13px; color: var(--teal); font-weight: 500; text-decoration: none; margin: 0 10px; }
+  .bottom-links a:hover { text-decoration: underline; }
+
+  /* REASSURE STRIP */
+  .reassure-strip { background: var(--sand); border-top: 1px solid var(--border); padding: 24px 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+  .reassure-item { font-size: 13px; color: var(--warm-grey); display: flex; align-items: center; gap: 7px; }
+
+  /* FOOTER */
+  footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  @media (max-width: 700px) {
+    nav { padding: 0 16px; }
+    .hero { padding: 40px 20px 36px; }
+    .main-wrap { padding: 40px 20px 60px; }
+    .step-header { padding: 22px 20px 0; }
+    .step-body { padding: 16px 20px 24px 20px; }
+    .reassure-strip { padding: 20px; }
+    footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  .hero-content { animation: fadeUp 0.6s ease both; }
+  .main-wrap { animation: fadeUp 0.5s 0.1s ease both; }
+</style>
+</head>
+<body>
+
+<div class="crisis-bar">
+  <span>If things feel urgent right now —</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <div class="nav-links">
+    <a href="support.html">For Individuals</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✅ Subscription confirmed</div>
+    <h1>You're in. Welcome to <em>Tools for the Tough Days.</em></h1>
+    <p class="hero-sub">Your subscription is active. Here's how to get the most from it — starting right now.</p>
+  </div>
+</section>
+
+<div class="main-wrap">
+
+  <div class="section-label">Getting started — three steps</div>
+
+  <div class="steps-grid">
+
+    <!-- STEP 1: Welcome video -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Watch Nic's welcome</div>
+          <div class="step-sub">A short message from Nic — what to expect, how the platform works, and why it was built the way it was.</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <!--
+          TO ADD YOUR VIDEO — replace the div below with an iframe, e.g.:
+          <iframe width="100%" style="aspect-ratio:16/9;border-radius:12px;border:none;"
+            src="YOUR_EMBED_URL" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        -->
+        <div class="video-placeholder">
+          <div class="play-btn">▶</div>
+          <p>Welcome video from Nic — coming soon</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Getting started guide -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">How to get the most from the platform</div>
+          <div class="step-sub">A few things worth knowing before you dive in — from someone who has sat with a lot of people in hard moments.</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <ul class="guide-list">
+
+          <li class="guide-item">
+            <span class="guide-icon">🎯</span>
+            <div>
+              <h4>Always start with the mood check-in</h4>
+              <p>Every visit, take the mood check-in honestly — not how you think you should feel, but how you actually feel right now. A score of 1 is not failure. It's information. The platform uses it to point you toward what's genuinely helpful for today, not what you think you should be reading.</p>
+            </div>
+          </li>
+
+          <li class="guide-item">
+            <span class="guide-icon">🗂️</span>
+            <div>
+              <h4>Let the topic pick you, not the other way around</h4>
+              <p>When you're asked what brought you here today, try to answer honestly rather than picking what sounds most acceptable. People often understate what they're dealing with. The platform is private — no one is watching. Pick what actually fits.</p>
+            </div>
+          </li>
+
+          <li class="guide-item">
+            <span class="guide-icon">📄</span>
+            <div>
+              <h4>Read or listen — try both</h4>
+              <p>Every resource has a written PDF guide and an audio version. Some people absorb better through reading; others find the audio easier — especially when concentration is low, which is often when you need support most. Try the audio version on days when reading feels like too much.</p>
+            </div>
+          </li>
+
+          <li class="guide-item">
+            <span class="guide-icon">🔁</span>
+            <div>
+              <h4>Come back before things get bad — not just when they are</h4>
+              <p>The platform is most valuable as a regular habit, not a crisis resource. Even five minutes once a week builds a kind of mental health literacy that makes it much easier to cope when things do get hard. Most people wait too long. That's exactly what this platform is designed to change.</p>
+            </div>
+          </li>
+
+          <li class="guide-item">
+            <span class="guide-icon">📬</span>
+            <div>
+              <h4>New resources are added regularly</h4>
+              <p>The library grows every month. If you've opted into email updates you'll be notified when something new arrives in an area relevant to you. If a topic you need isn't covered yet, it may well be coming — and you can always reach out and let Nic know.</p>
+            </div>
+          </li>
+
+          <li class="guide-item">
+            <span class="guide-icon">📞</span>
+            <div>
+              <h4>A real person is available if you need more</h4>
+              <p>If something comes up that you want to talk through, a free 15-minute call with Nic is always available. And if you need ongoing support beyond the platform, psychology and counselling appointments can be arranged directly — just ask.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <!-- STEP 3: Go to platform -->
+    <div class="step-card cta-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title" style="color:var(--teal-dark);">Start your first mood check-in</div>
+          <div class="step-sub" style="color:var(--teal);">You're ready. Take the check-in and the platform will guide you to the right resources for where you are right now.</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <a href="support.html" class="go-btn">Go to the platform →</a>
+        <p style="font-size:12px;color:var(--teal-dark);margin-top:12px;opacity:0.75;">You can come back to this page any time — bookmark it if it's useful.</p>
+      </div>
+    </div>
+
+  </div><!-- /steps-grid -->
+
+  <!-- Privacy reminder -->
+  <div class="privacy-card">
+    <span style="font-size:22px;flex-shrink:0;">🔒</span>
+    <div>
+      <h4>Your privacy is fully protected</h4>
+      <p>Everything you access on this platform is stored only on your device — never on our servers. No employer, insurer, or third party will ever see what you read or listen to. You can clear your history at any time. Read our full <a href="privacy-policy.html">Privacy Policy</a>.</p>
+    </div>
+  </div>
+
+  <!-- Bottom links -->
+  <div class="bottom-links">
+    <p>Questions about your subscription?</p>
+    <a href="faq.html">Read the FAQs</a>
+    <a href="booking.html">Book a free call with Nic</a>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<!-- Reassurance strip -->
+<div class="reassure-strip">
+  <div class="reassure-item">✍️ Written by a Registered Psychologist</div>
+  <div class="reassure-item">🔒 Your privacy protected</div>
+  <div class="reassure-item">📱 Works on any device</div>
+  <div class="reassure-item">💳 Cancel anytime</div>
+</div>
+
+<footer>
+  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQs</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+  </div>
+</footer>
+
+<script>
+  if (window.clarity) {
+    clarity('set', 'subscriber_type', 'individual');
+    clarity('event', 'payment_confirmed_individual');
+  }
+</script>
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>

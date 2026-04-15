@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequently Asked Questions — Tools for the Tough Days</title>
+<meta name="description" content="Answers to the most common questions about Tools for the Tough Days — including Medicare, privacy, how it differs from seeing a psychologist, and how the business subscription works.">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "waf821qhxo");
+</script>
+<!-- GA4 placeholder -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VZVJ1JE6CR');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal:      #2a2825;
+    --warm-grey:     #6b6560;
+    --sand:          #f2ede6;
+    --cream:         #faf8f4;
+    --white:         #ffffff;
+    --teal:          #26777B;
+    --teal-hover:    #1e5f63;
+    --teal-dark:     #1a4e52;
+    --teal-light:    #e8f4f4;
+    --amber:         #c8752a;
+    --amber-light:   #f5ece0;
+    --red-crisis:    #c0392b;
+    --green:         #3a6b45;
+    --green-bg:      #edf5ef;
+    --border:        rgba(42,40,37,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+  /* ── CRISIS BAR ── */
+  .crisis-bar { background: var(--red-crisis); color: #fff; padding: 10px 20px; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+
+  /* ── NAV ── */
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
+  .nav-cta:hover { background: var(--teal-hover); }
+
+  /* ── HERO ── */
+  .hero { background: var(--teal); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+  .hero-content { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.75); font-weight: 500; margin-bottom: 14px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 38px); color: #fff; line-height: 1.2; margin-bottom: 12px; font-weight: 400; }
+  .hero h1 em { color: #c8f0f2; font-style: italic; }
+  .hero-sub { color: rgba(255,255,255,0.82); font-size: 15px; font-weight: 300; max-width: 480px; margin: 0 auto; }
+
+  /* ── LAYOUT ── */
+  .page-body { max-width: 1060px; margin: 0 auto; padding: 56px 40px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+
+  /* ── STICKY SIDEBAR NAV ── */
+  .faq-nav { position: sticky; top: 84px; }
+  .faq-nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 16px; }
+  .faq-nav a { display: block; font-size: 13px; color: var(--warm-grey); text-decoration: none; padding: 7px 0 7px 14px; border-left: 2px solid var(--border); margin-bottom: 2px; transition: color 0.15s, border-color 0.15s; line-height: 1.4; }
+  .faq-nav a:hover { color: var(--charcoal); border-left-color: var(--charcoal); }
+  .faq-nav a.active { color: var(--teal); border-left-color: var(--teal); font-weight: 500; }
+
+  /* ── FAQ SECTIONS ── */
+  .faq-section { margin-bottom: 52px; scroll-margin-top: 90px; }
+  .faq-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid var(--border); }
+  .faq-section-icon { font-size: 20px; }
+  .faq-section-title { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: var(--charcoal); }
+  .faq-count { font-size: 12px; color: var(--warm-grey); background: var(--sand); padding: 2px 9px; border-radius: 99px; margin-left: auto; }
+
+  /* ── ACCORDION ── */
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item:first-of-type { border-top: 1px solid var(--border); }
+
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 0;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--charcoal);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    line-height: 1.5;
+    transition: color 0.15s;
+  }
+  .faq-question:hover { color: var(--teal); }
+  .faq-question.open { color: var(--teal); }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: background 0.15s, transform 0.25s;
+    font-size: 11px;
+    color: var(--warm-grey);
+  }
+  .faq-question.open .faq-chevron {
+    background: var(--teal-light);
+    color: var(--teal);
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-answer.open { max-height: 600px; }
+  .faq-answer-inner {
+    padding: 0 0 22px 0;
+    font-size: 14px;
+    color: var(--warm-grey);
+    line-height: 1.8;
+  }
+  .faq-answer-inner p { margin-bottom: 12px; }
+  .faq-answer-inner p:last-child { margin-bottom: 0; }
+  .faq-answer-inner a { color: var(--teal); text-decoration: none; }
+  .faq-answer-inner a:hover { text-decoration: underline; }
+  .faq-answer-inner strong { color: var(--charcoal); font-weight: 500; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .answer-highlight {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: var(--teal-dark);
+    font-weight: 500;
+  }
+  .answer-crisis {
+    background: #fdf0ef;
+    border-left: 3px solid var(--red-crisis);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #7a2020;
+  }
+
+  /* ── STILL HAVE QUESTIONS ── */
+  .still-questions {
+    background: var(--teal);
+    border-radius: 16px;
+    padding: 36px 40px;
+    text-align: center;
+    margin-top: 8px;
+  }
+  .still-questions h2 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 10px; }
+  .still-questions p { font-size: 14px; color: rgba(255,255,255,0.82); margin-bottom: 22px; font-weight: 300; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .still-btn { display: inline-block; background: #fff; color: var(--teal-dark); padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+  .still-btn:hover { background: var(--teal-light); }
+
+  /* ── FLOATING CHAT ── */
+  .free-chat-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--teal); color: #fff; border: none; padding: 14px 22px; border-radius: 99px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; box-shadow: 0 4px 20px rgba(38,119,123,0.4); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; text-decoration: none; }
+  .free-chat-float:hover { transform: translateY(-2px); background: var(--teal-hover); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 32px 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    nav { padding: 0 16px; }
+    .hero { padding: 40px 20px 32px; }
+    .page-body { grid-template-columns: 1fr; padding: 40px 20px 60px; gap: 0; }
+    .faq-nav { display: none; }
+    footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Crisis bar -->
+<div class="crisis-bar">
+  <span>If things feel urgent right now —</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <div class="nav-links">
+    <a href="support.html">For Individuals</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Questions &amp; answers</div>
+    <h1>Frequently asked <em>questions</em></h1>
+    <p class="hero-sub">Everything you need to know before getting started — for individuals and businesses.</p>
+  </div>
+</section>
+
+<!-- Body -->
+<div class="page-body">
+
+  <!-- Sidebar nav -->
+  <aside class="faq-nav">
+    <div class="faq-nav-label">Jump to section</div>
+    <a href="#about" class="active">About the platform</a>
+    <a href="#cost">Cost &amp; Medicare</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#clinical">Clinical &amp; safety</a>
+    <a href="#business">For businesses</a>
+  </aside>
+
+  <!-- FAQ content -->
+  <main>
+
+    <!-- ═══ ABOUT THE PLATFORM ═══ -->
+    <div class="faq-section" id="about">
+      <div class="faq-section-header">
+        <span class="faq-section-icon">💬</span>
+        <h2 class="faq-section-title">About the platform</h2>
+        <span class="faq-count">5 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What is Tools for the Tough Days?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Tools for the Tough Days is a subscription platform giving you access to clinically reviewed psychoeducational resources — written guides and audio — covering topics like anxiety, stress, sleep, relationships, low mood, financial pressure, and more.</p>
+            <p>Every resource is clinically authored and reviewed by Nic Marcon, a Registered Psychologist with over 20 years of clinical experience. The platform is designed to give you practical, evidence-informed support whenever you need it — without a referral, a waitlist, or a booking.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How is this different from seeing a psychologist?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Seeing a psychologist involves a clinical relationship — assessment, diagnosis, treatment planning, and ongoing sessions with a registered professional. This platform doesn't do any of that, and it's not designed to.</p>
+            <p>What it does offer is something different: high-quality psychoeducational content you can access any time, at your own pace, on your own terms. Think of it as the informed, practical knowledge you'd want before, between, or alongside professional support — not a replacement for it.</p>
+            <p>If you're dealing with something significant, we'll always encourage you to speak with a professional. And if you need more than self-guided resources, psychology and counselling appointments are available directly through the platform — so the step from self-help to professional support is as small as possible.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Who wrote the resources — are they written by AI?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <div class="answer-highlight">Every resource on this platform has been clinically authored and reviewed by Nic Marcon personally — a Registered Psychologist with over 20 years of clinical experience.</div>
+            <p>Nic writes from over 20 years of clinical experience across correctional facilities, AOD rehabilitation, complex trauma, disability, and private practice. What you read or listen to reflects real clinical knowledge and genuine care — because that's the only way this platform works.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What topics does the platform cover?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>The platform currently covers over 20 topic areas including anxiety, low mood and depression, stress and burnout, sleep, relationships and communication, self-esteem, grief and loss, financial stress, life transitions, parenting pressures, anger, domestic and family issues, health anxiety, and more.</p>
+            <p>New resources are added regularly. Every topic includes both a written PDF guide and an audio version so you can choose whichever format suits you.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Is this suitable for me if I've never sought mental health support before?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Yes — and in many ways it's built for exactly that. Most people on this platform haven't sought formal mental health support before.</p>
+            <p>The resources are written in plain language, without clinical jargon, and structured to make sense whether you're new to all of this or have been managing something for years. There's no assessment, no intake process, and no one to convince. You just pick what feels relevant and start there.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ COST & MEDICARE ═══ -->
+    <div class="faq-section" id="cost">
+      <div class="faq-section-header">
+        <span class="faq-section-icon">💳</span>
+        <h2 class="faq-section-title">Cost &amp; Medicare</h2>
+        <span class="faq-count">4 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Is this covered by Medicare?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>No. This platform is not covered by Medicare, and it doesn't claim to be a clinical service. Medicare rebates apply to sessions with registered health professionals under a Mental Health Treatment Plan — a different type of support entirely.</p>
+            <p>Tools for the Tough Days sits alongside that system, not within it. At $10 per month for individuals, it's designed to be accessible without relying on Medicare eligibility.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Is it covered by private health insurance?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>No. Private health insurance covers clinical treatments and services — this platform provides psychoeducational content, which falls outside that scope.</p>
+            <p>If you have private health cover and are looking for subsidised sessions with a psychologist, your insurer can advise what's available under your policy.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How much does it cost and can I cancel anytime?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Individual subscriptions are <strong>$10 per month</strong> for the first three months, then $15 per month. There are no contracts, no lock-in periods, and no cancellation fees.</p>
+            <p>You can cancel at any time — your access continues until the end of the billing period you've paid for. Annual subscriptions are available at <strong>$120 per year</strong>, saving you $60 compared to the standard monthly rate.</p>
+            <p>Business subscriptions start from $150 per month depending on team size.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How does the business subscription pricing work?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Business subscriptions are based on team size:</p>
+            <p><strong>Starter</strong> — $150/month · 6–20 people<br>
+            <strong>Growth</strong> — $250/month · 21–50 people · includes quarterly check-in with Nic<br>
+            <strong>Team</strong> — $300/month · 51–80 people · includes priority support<br>
+            <strong>Enterprise</strong> — custom pricing · 81+ people · <a href="booking.html">contact us directly</a></p>
+            <p>All business plans include full access to the resource library for every team member, crisis routing, and complete employee privacy protection.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ PRIVACY ═══ -->
+    <div class="faq-section" id="privacy">
+      <div class="faq-section-header">
+        <span class="faq-section-icon">🔒</span>
+        <h2 class="faq-section-title">Privacy</h2>
+        <span class="faq-count">3 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Can my employer see what I read or listen to?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <div class="answer-highlight">No — never.</div>
+            <p>If you access the platform through your employer's subscription, your employer receives only anonymous, aggregated usage data — things like how many team members accessed the platform this month. They cannot see which resources you accessed, how often you visited, what topics you searched for, or anything about your individual activity.</p>
+            <p>What you use on this platform is private to you.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Do I need to create an account or log in?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Individual subscribers access the platform through a simple subscription process — no lengthy account creation, no detailed profile to fill in.</p>
+            <p>Business subscribers access via a team code provided by their employer. Your usage history is stored locally on your device, not on our servers, so you remain in control of your own data.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How is my personal information stored and protected?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>We collect only what we need — your name, email address, and payment details (processed securely via Stripe). We don't store card details and we don't sell your information to anyone.</p>
+            <p>Your usage of specific resources is stored locally on your device only. Our third-party providers — Stripe for payments and Vision6 for email — operate under their own privacy policies and security standards.</p>
+            <p>For full details, see our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ CLINICAL & SAFETY ═══ -->
+    <div class="faq-section" id="clinical">
+      <div class="faq-section-header">
+        <span class="faq-section-icon">🩺</span>
+        <h2 class="faq-section-title">Clinical &amp; safety</h2>
+        <span class="faq-count">4 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Is this a crisis service? What if I need urgent help right now?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>This platform is not a crisis service and should not be used as one. If you or someone you know is in danger or experiencing a mental health emergency, please reach out to a crisis service immediately.</p>
+            <div class="answer-crisis">
+              <strong>Lifeline</strong> — <a href="tel:131114" style="color:#7a2020">13 11 14</a> · available 24/7<br>
+              <strong>Beyond Blue</strong> — <a href="tel:1300224636" style="color:#7a2020">1300 22 4636</a><br>
+              <strong>Emergency Services</strong> — <a href="tel:000" style="color:#7a2020">000</a>
+            </div>
+            <p>Crisis contact information is always visible throughout the platform — we never put it behind a login or a paywall.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What's the difference between this and seeing a psychologist or counsellor?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>A psychologist or counsellor works with you individually — assessing your situation, building a therapeutic relationship, and tailoring treatment to your specific needs over time. This platform doesn't do that.</p>
+            <p>It provides well-researched, clinically reviewed psychoeducational content — the kind of knowledge and practical tools that support you between appointments, before you've made a booking, or when professional support isn't immediately accessible.</p>
+            <p>Many people use it alongside existing support. Others use it as a first step toward seeking something more. Both are valid. And if you do need more, psychology and counselling appointments are available directly through the platform.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Can this platform diagnose me or recommend medication?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>No. This platform does not provide diagnoses, clinical assessments, or medication recommendations. The resources are educational and informational — they explain what conditions feel like, why they happen, and what practical strategies can help.</p>
+            <p>If you're concerned about a specific condition or want a clinical assessment, please speak with your GP or a registered health professional.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          I'm already seeing a psychologist — can I still use this?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Absolutely. Many people find the platform complements their existing support well — it gives them something practical and accessible to engage with between sessions, reinforces strategies they're working on with their psychologist, or helps them explore topics that haven't yet come up in their appointments.</p>
+            <p>If you're unsure whether it's appropriate alongside your current treatment, your psychologist is best placed to advise you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ FOR BUSINESSES ═══ -->
+    <div class="faq-section" id="business">
+      <div class="faq-section-header">
+        <span class="faq-section-icon">🏢</span>
+        <h2 class="faq-section-title">For businesses</h2>
+        <span class="faq-count">4 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How quickly can my team get access?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Typically within 48 hours of subscribing. Once your subscription is confirmed, we'll provide you with team access codes and supporting materials — including a noticeboard poster and an SMS template to share with your team.</p>
+            <p>There's no app to download and no account for each team member to create — they simply use the access code to get in.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What usage data do I receive as an employer?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>You receive anonymous, aggregated data — such as how many team members accessed the platform this month, the total number of resources accessed, and general topic popularity across your team.</p>
+            <div class="answer-highlight">You will never receive data that identifies individual employees or reveals what any specific person accessed. To protect individual privacy further, we do not display data for any resource or topic accessed by fewer than 5 team members — so there's no way to infer individual activity even from aggregate figures.</div>
+            <p>This is not negotiable — individual privacy is built into the platform at a structural level, not just a policy level.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do access codes work — do employees need to download anything?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>No download required. Employees access the platform through a web browser on any device — phone, tablet, or computer.</p>
+            <p>You'll receive simple access codes to share with your team. There's no app store, no individual account creation, and no IT setup. If a team member joins or leaves, codes can be updated accordingly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What's the difference between this and a traditional EAP?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <p>Traditional EAP services typically offer a set number of counselling sessions per year, accessed by calling a phone line or booking through a portal. They're valuable — but they usually require employees to take a significant step (making a call, booking a session) before they receive any support.</p>
+            <p>Tools for the Tough Days removes that barrier entirely. Resources are available immediately, anonymously, and without any intake process. It's not a replacement for counselling — it's the support that's there before, between, and beyond it.</p>
+            <p>And if someone does need more than self-guided resources, psychology and counselling appointments are available directly through the platform — so the step from self-help to professional support is as small as possible.</p>
+            <p>For businesses, it's also considerably more affordable than most traditional EAP providers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Still have questions -->
+    <div class="still-questions">
+      <h2>Still have a question?</h2>
+      <p>Book a free 15-minute call with Nic — no obligation, no sales pitch. Just a straightforward conversation.</p>
+      <a href="booking.html" class="still-btn">Book a free 15-min call →</a>
+    </div>
+
+  </main>
+</div>
+
+<!-- Floating chat -->
+<a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+
+<!-- Footer -->
+<footer>
+  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="business.html">For Business</a>
+    <a href="about.html">About Nic</a>
+    <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
+  </div>
+</footer>
+
+<script>
+  function toggle(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+
+    // Close all open answers
+    document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-question.open').forEach(q => q.classList.remove('open'));
+
+    // Open clicked one if it was closed
+    if (!isOpen) {
+      answer.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+
+  // Highlight active sidebar section on scroll
+  const sections = document.querySelectorAll('.faq-section');
+  const navLinks = document.querySelectorAll('.faq-nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.faq-nav a[href="#' + entry.target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+  <!-- FLOATING FEEDBACK TAB -->
+  <a href="feedback.html" style="
+    position: fixed !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 999999 !important;
+    background: #c8752a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 8px;
+    border-radius: 8px 0 0 8px;
+    text-decoration: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    display: block;
+    cursor: pointer;
+  ">Share feedback</a>
+
+</body>
+</html>
