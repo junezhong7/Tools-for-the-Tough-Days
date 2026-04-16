@@ -1,0 +1,12 @@
+.git
+.gitignore
+error_log
+stripe-php.zip
+stripe-php/.git
+stripe-php/.github
+stripe-php/tests
+stripe-php/examples
+stripe-php/README.md
+stripe-php/CHANGELOG.md
+stripe-php/justfile
+Dockerfile
