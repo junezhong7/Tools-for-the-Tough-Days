@@ -78,6 +78,13 @@
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
+  .nav-login {
+    color: var(--charcoal);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+  .nav-login:hover { border-color: rgba(42,40,37,0.22); }
   .nav-cta {
     background: var(--teal); color: #fff; border: none;
     padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif;
@@ -228,6 +235,7 @@
 
   @media (max-width: 700px) {
     nav { padding: 0 16px; }
+    .nav-links { gap: 14px; }
     .hero { padding: 48px 16px 0; }
     .sector-strip { padding: 16px; gap: 12px; }
     .two-paths { padding: 48px 16px; }
@@ -239,6 +247,9 @@
     .steps { flex-direction: column; gap: 24px; }
     .step::after { display: none; }
     footer { padding: 24px 16px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .nav-links a:not(.nav-login) { display: none; }
   }
 </style>
 </head>
@@ -259,6 +270,7 @@
     <a href="support.html">For Individuals</a>
     <a href="business.html">For Business</a>
     <a href="about.html">About Nic</a>
+    <a href="login.html" class="nav-login">Login</a>
     <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min chat</button>
   </div>
 </nav>
