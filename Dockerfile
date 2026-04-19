@@ -6,6 +6,7 @@ RUN apt-get update \
     libonig-dev \
     && docker-php-ext-install curl mbstring \
     && a2enmod rewrite headers \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
