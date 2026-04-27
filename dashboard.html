@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account — Tools for the Tough Days</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #26777B; --teal-hover: #1e5f63; --teal-dark: #1a4e52; --teal-light: #e8f4f4;
+      --amber: #c8752a; --amber-light: #f5ece0;
+      --charcoal: #2a2825; --warm-grey: #6b6560; --sand: #f2ede6; --cream: #faf8f4; --white: #fff;
+      --border: rgba(42,40,37,0.12); --shadow: 0 2px 20px rgba(42,40,37,0.08);
+      --red: #c0392b; --red-bg: #fdf0ef;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+    /* NAV */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+    .nav-logo span { color: var(--teal); }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .btn-nav { font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 6px; padding: 8px 16px; font-weight: 500; border: none; text-decoration: none; }
+    .btn-outline { border: 1px solid var(--border) !important; color: var(--charcoal); background: transparent; }
+    .btn-teal { background: var(--teal); color: #fff; }
+    .btn-teal:hover { background: var(--teal-hover); }
+
+    /* LAYOUT */
+    .page { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
+    .page-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 4px; }
+    .page-sub { color: var(--warm-grey); font-size: 14px; margin-bottom: 40px; }
+
+    /* CARDS */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
+    .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); margin-bottom: 20px; }
+
+    /* ACCOUNT INFO */
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 13px; color: var(--warm-grey); }
+    .info-value { font-size: 14px; font-weight: 500; }
+
+    /* SUBSCRIPTION CARD */
+    .sub-card { background: var(--teal-light); border: 1.5px solid rgba(38,119,123,0.25); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .sub-card.business { background: var(--amber-light); border-color: rgba(200,117,42,0.25); }
+    .sub-card.cancelled { background: var(--sand); border-color: var(--border); opacity: 0.8; }
+    .sub-badge { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
+    .sub-badge.active { background: rgba(38,119,123,0.15); color: var(--teal-dark); }
+    .sub-badge.cancelled { background: rgba(192,57,43,0.1); color: var(--red); }
+    .sub-badge.past_due { background: rgba(200,117,42,0.15); color: var(--amber); }
+    .sub-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 6px; }
+    .sub-meta { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
+    .sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-sm { font-size: 13px; padding: 8px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; border: none; }
+    .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,57,43,0.2) !important; }
+    .btn-success { background: var(--teal); color: #fff; }
+
+    /* PAYMENTS TABLE */
+    .pay-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .pay-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); border-bottom: 1px solid var(--border); }
+    .pay-table td { padding: 12px 12px; border-bottom: 1px solid var(--border); }
+    .pay-table tr:last-child td { border-bottom: none; }
+    .pay-status { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .pay-status.succeeded { background: rgba(38,119,123,0.12); color: var(--teal-dark); }
+    .pay-status.failed { background: var(--red-bg); color: var(--red); }
+    .pay-status.pending { background: rgba(200,117,42,0.1); color: var(--amber); }
+    .pay-status.refunded { background: var(--sand); color: var(--warm-grey); }
+
+    /* EMPTY STATE */
+    .empty { text-align: center; padding: 40px 20px; color: var(--warm-grey); font-size: 14px; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 60px 20px; color: var(--warm-grey); }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--charcoal); color: #fff; padding: 12px 24px; border-radius: 99px;
+      font-size: 14px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .page { padding: 32px 16px; }
+      .card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body data-auth="required">
+
+  <!-- CRISIS BAR -->
+  <div style="background:#c0392b;color:#fff;padding:8px 20px;text-align:center;font-size:12px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <span>If things feel urgent right now —</span>
+    <a href="tel:131114" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Lifeline 13 11 14</a>
+    <a href="tel:1300224636" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Emergency 000</a>
+  </div>
+
+  <nav>
+    <a class="nav-logo" href="/index.html">Tools for the <span>Tough Days</span></a>
+    <div class="nav-right">
+      <a href="/support.html" class="btn-nav btn-outline">My Resources</a>
+      <button class="btn-nav btn-teal" id="btnLogout" type="button">Sign Out</button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="loading" id="loadingState">Loading your account…</div>
+
+    <div id="dashboardContent" style="display:none">
+      <h1 class="page-title" id="welcomeTitle">My Account</h1>
+      <p class="page-sub" id="accountEmail"></p>
+
+      <!-- SUBSCRIPTION -->
+      <div class="card">
+        <div class="card-title">Subscription</div>
+        <div id="subContent"></div>
+      </div>
+
+      <!-- PAYMENT HISTORY -->
+      <div class="card">
+        <div class="card-title">Payment History</div>
+        <div id="payContent"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/auth-guard.js"></script>
+  <script>
+    const PLAN_LABELS = {
+      individual_monthly: 'Individual — Monthly',
+      individual_yearly:  'Individual — Annual',
+      starter_only:   'Business Starter — Monthly',
+      growth_only:    'Business Growth — Monthly',
+      team_only:      'Business Team — Monthly',
+      starter_bundle: 'Business Starter — Annual Bundle',
+      growth_bundle:  'Business Growth — Annual Bundle',
+      team_bundle:    'Business Team — Annual Bundle',
+      sessions_3:     'Counselling — 3 Sessions',
+      sessions_6:     'Counselling — 6 Sessions',
+    };
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3200);
+    }
+
+    function fmtDate(dt) {
+      if (!dt) return '—';
+      return new Date(dt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    async function loadDashboard() {
+      try {
+        const res  = await fetch('/api/dashboard.php', { credentials: 'same-origin' });
+
+        if (res.status === 401) {
+          window.location.href = '/login.html?redirect=/dashboard.html';
+          return;
+        }
+
+        const data = await res.json();
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        document.getElementById('welcomeTitle').textContent =
+          data.user.full_name ? `Hi, ${data.user.full_name.split(' ')[0]}` : 'My Account';
+        document.getElementById('accountEmail').textContent = data.user.email;
+
+        renderSubscriptions(data.subscriptions);
+        renderPayments(data.payments);
+
+      } catch (e) {
+        document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
+      }
+    }
+
+    function renderSubscriptions(subs) {
+      const el = document.getElementById('subContent');
+      if (!subs || subs.length === 0) {
+        el.innerHTML = `<div class="empty">
+          <p style="margin-bottom:16px">No active subscription yet.</p>
+          <a href="/support.html" class="btn-nav btn-teal" style="display:inline-block;text-decoration:none;border-radius:8px">Browse Plans →</a>
+        </div>`;
+        return;
+      }
+
+      el.innerHTML = subs.map(s => {
+        const label   = PLAN_LABELS[s.product_key] || s.product_key;
+        const cardCls = s.plan_type === 'business' ? 'sub-card business' : s.status === 'cancelled' ? 'sub-card cancelled' : 'sub-card';
+        const badge   = `<span class="sub-badge ${s.status}">${s.status.replace('_', ' ')}</span>`;
+        let meta = '';
+        if (s.current_period_end) {
+          meta = s.cancel_at_period_end
+            ? `Cancels on ${fmtDate(s.current_period_end)}`
+            : `Renews on ${fmtDate(s.current_period_end)}`;
+        }
+        const actions = s.status === 'active' && !s.cancel_at_period_end
+          ? `<button class="btn-sm btn-danger" onclick="cancelSub(${s.id}, this)">Cancel Subscription</button>`
+          : s.cancel_at_period_end
+          ? `<button class="btn-sm btn-success" onclick="resumeSub(${s.id}, this)">Keep Subscription</button>`
+          : '';
+
+        return `<div class="${cardCls}">
+          ${badge}
+          <div class="sub-name">${label}</div>
+          <div class="sub-meta">${meta}</div>
+          <div class="sub-actions">${actions}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderPayments(payments) {
+      const el = document.getElementById('payContent');
+      if (!payments || payments.length === 0) {
+        el.innerHTML = '<div class="empty">No payments on record yet.</div>';
+        return;
+      }
+      el.innerHTML = `<table class="pay-table">
+        <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          ${payments.map(p => `<tr>
+            <td>${fmtDate(p.created_at)}</td>
+            <td>${p.description || '—'}</td>
+            <td>$${p.amount} AUD</td>
+            <td><span class="pay-status ${p.status}">${p.status}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
+    async function cancelSub(subId, btn) {
+      if (!confirm('Are you sure? Your subscription will remain active until the end of the billing period.')) return;
+      btn.disabled = true;
+      btn.textContent = 'Cancelling…';
+      const res = await fetch('/api/subscriptions.php?action=cancel', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
+      });
+      const data = await res.json();
+      if (res.ok) { showToast(data.message); loadDashboard(); }
+      else { showToast(data.message || 'Could not cancel. Please try again.'); btn.disabled = false; btn.textContent = 'Cancel Subscription'; }
+    }
+
+    async function resumeSub(subId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Resuming…';
+      const res = await fetch('/api/subscriptions.php?action=resume', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
+      });
+      const data = await res.json();
+      if (res.ok) { showToast(data.message); loadDashboard(); }
+      else { showToast(data.message || 'Could not resume. Please try again.'); btn.disabled = false; btn.textContent = 'Keep Subscription'; }
+    }
+
+    // Sign out
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await fetch('/api/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' });
+      window.location.href = '/login.html';
+    });
+
+    loadDashboard();
+  </script>
+
+</body>
+</html>

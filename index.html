@@ -269,8 +269,11 @@
   <div class="nav-links">
     <a href="support.html">For Individuals</a>
     <a href="business.html">For Business</a>
-    <a href="about.html">About Nic</a>
-    <a href="login.html" class="nav-login">Login</a>
+    <a href="about-nic.html">About Nic</a>
+    <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+    <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
+    <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+    <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
     <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min chat</button>
   </div>
 </nav>
@@ -454,6 +457,9 @@
     display: block;
     cursor: pointer;
   ">Share feedback</a>
+
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
 
 </body>
 </html>

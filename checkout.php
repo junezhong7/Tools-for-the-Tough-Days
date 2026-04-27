@@ -16,8 +16,13 @@
 if (file_exists(__DIR__ . '/config.php')) {
   require_once __DIR__ . '/config.php';
 }
+  // Auth and DB (optional — if DB is unavailable we still allow checkout)
+  if (file_exists(__DIR__ . '/lib/db.php') && file_exists(__DIR__ . '/lib/auth.php')) {
+    require_once __DIR__ . '/lib/db.php';
+    require_once __DIR__ . '/lib/auth.php';
+  }
 
-if (!defined('STRIPE_SECRET_KEY')) {
+  if (!defined('STRIPE_SECRET_KEY')) {
   define('STRIPE_SECRET_KEY', getenv('STRIPE_SECRET_KEY') ?: '');
 }
 
@@ -92,6 +97,13 @@ if (STRIPE_SECRET_KEY === '') {
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 // ─────────────────────────────────────────────
+// RESOLVE AUTHENTICATED USER (if available)
+// ─────────────────────────────────────────────
+$authUser           = function_exists('current_user') ? current_user() : null;
+$authUserId         = $authUser ? (int) $authUser['id'] : null;
+$authCustomerId     = $authUser['stripe_customer_id'] ?? null;
+
+// ─────────────────────────────────────────────
 // HANDLE REQUEST
 // ─────────────────────────────────────────────
 
@@ -116,6 +128,14 @@ try {
     'currency' => 'aud',
     'cancel_url' => SITE_URL . '/checkout-cancelled.html',
   ];
+
+    // Re-use the existing Stripe customer so billing history is preserved
+    if ($authCustomerId) {
+      $session_params['customer'] = $authCustomerId;
+    }
+
+    // Pass the product key as metadata so the webhook can read it
+    $session_params['metadata'] = ['product_key' => $product];
 
   // ── INDIVIDUAL MONTHLY ──────────────────────
   if ($product === 'individual_monthly') {
@@ -189,6 +209,23 @@ try {
 
   // Create the session and redirect
   $session = \Stripe\Checkout\Session::create($session_params);
+
+    // ── RECORD PENDING SUBSCRIPTION IN DB ──────
+    if ($authUserId && function_exists('db')) {
+      $planType = in_array($product, ['individual_monthly','individual_yearly']) ? 'individual'
+                : (in_array($product, ['sessions_3','sessions_6']) ? 'counselling' : 'business');
+      try {
+        db()->prepare(
+          'INSERT INTO subscriptions
+             (user_id, stripe_checkout_session_id, product_key, plan_type, status)
+           VALUES (?, ?, ?, ?, ?)
+           ON DUPLICATE KEY UPDATE updated_at = NOW()'
+        )->execute([$authUserId, $session->id, $product, $planType, 'pending']);
+      } catch (Throwable $dbEx) {
+        error_log('checkout DB record error: ' . $dbEx->getMessage());
+      }
+    }
+
   header('Location: ' . $session->url);
   exit;
 

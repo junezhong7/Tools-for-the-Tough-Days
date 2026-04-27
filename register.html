@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Tools for the Tough Days</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #26777B;
+      --teal-dark:  #1E6C6C;
+      --teal-deep:  #155555;
+      --teal-light: #e8f4f4;
+      --teal-mist:  #f0f8f8;
+      --warm-white: #fafaf8;
+      --text:       #1a2e2e;
+      --muted:      #5a7272;
+      --border:     #cde3e3;
+      --error:      #c0392b;
+    }
+
+    html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--text); }
+
+    body { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+
+    /* ── LEFT PANEL ── */
+    .panel-left {
+      background: linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 45%, #4aafb0 100%);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 56px 52px; overflow: hidden; position: relative;
+    }
+    .panel-left::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 10% 90%, rgba(255,255,255,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 50% at 90% 10%, rgba(255,255,255,0.06) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .panel-left::after {
+      content: ''; position: absolute; width: 380px; height: 380px;
+      border: 1.5px solid rgba(255,255,255,0.12); border-radius: 50%;
+      bottom: -120px; right: -120px; pointer-events: none;
+    }
+    .brand-area { position: relative; z-index: 1; }
+    .brand-tagline {
+      font-family: 'Lora', serif; font-size: 2rem; font-weight: 500;
+      line-height: 1.35; color: #fff; margin-top: 40px; max-width: 340px;
+    }
+    .brand-sub {
+      font-size: 0.95rem; color: rgba(255,255,255,0.65);
+      margin-top: 18px; line-height: 1.6; max-width: 320px; font-weight: 300;
+    }
+    .trust-badges { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 14px; }
+    .badge { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 300; }
+    .badge-icon {
+      width: 32px; height: 32px; background: rgba(255,255,255,0.12);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .badge-icon svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.85); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── RIGHT PANEL ── */
+    .panel-right { display: flex; align-items: center; justify-content: center; padding: 48px 64px; background: var(--warm-white); }
+    .form-wrapper { width: 100%; max-width: 420px; animation: fadeUp 0.5s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-title { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 500; color: var(--teal-dark); margin-bottom: 6px; }
+    .form-subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 32px; font-weight: 300; line-height: 1.5; }
+
+    /* trial banner */
+
+
+    /* fields */
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%; padding: 13px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      color: var(--text); background: #fff; border: 1.5px solid var(--border); border-radius: 10px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(38,119,123,0.1); }
+    input::placeholder { color: #b0c4c4; }
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 44px; }
+    .toggle-pw {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 2px; color: var(--muted); display: flex; align-items: center;
+    }
+    .toggle-pw svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+    .field-error { display: none; font-size: 0.78rem; color: var(--error); margin-top: 5px; }
+    .field.has-error input { border-color: var(--error); box-shadow: 0 0 0 3px rgba(192,57,43,0.08); }
+    .field.has-error .field-error { display: block; }
+
+    /* terms */
+    .terms-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px; }
+    .terms-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--teal); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .terms-row label { font-size: 0.84rem; color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: 400; cursor: pointer; margin: 0; }
+    .terms-row a { color: var(--teal); text-decoration: none; font-weight: 500; }
+    .terms-row a:hover { text-decoration: underline; }
+
+    .business-row { margin-bottom: 18px; }
+    .business-name-wrap { display: none; }
+    .business-name-wrap.show { display: block; }
+
+    .btn-register {
+      width: 100%; padding: 14px; background: var(--teal); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 10px;
+      cursor: pointer; letter-spacing: 0.02em; transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(38,119,123,0.25); margin-bottom: 24px;
+    }
+    .btn-register:hover { background: var(--teal-dark); box-shadow: 0 4px 18px rgba(38,119,123,0.35); }
+    .btn-register:active { transform: scale(0.99); }
+    .btn-register:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    .signin-row { text-align: center; font-size: 0.88rem; color: var(--muted); }
+    .signin-row a { color: var(--teal); text-decoration: none; font-weight: 600; }
+    .signin-row a:hover { color: var(--teal-dark); text-decoration: underline; }
+
+    /* global error */
+    .alert-error {
+      display: none; background: #fdf0ef; border: 1px solid #e8b4af; border-left: 3px solid var(--error);
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; color: var(--error);
+    }
+
+    .mobile-logo { display: none; margin-bottom: 32px; text-align: center; }
+
+    @media (max-width: 860px) {
+      body { grid-template-columns: 1fr; }
+      .panel-left { display: none; }
+      .panel-right { padding: 40px 24px; align-items: flex-start; padding-top: 60px; }
+      .mobile-logo { display: block; }
+      .form-wrapper { max-width: 480px; margin: 0 auto; }
+    }
+    @media (max-width: 480px) { .panel-right { padding: 32px 20px; } }
+  </style>
+</head>
+<body data-auth="guest">
+
+  <!-- ══ LEFT PANEL ══ -->
+  <aside class="panel-left">
+    <div class="brand-area">
+      <p class="brand-tagline">Real Support.<br><em>Whenever You Need It.</em></p>
+      <p class="brand-sub">Psychologist-authored resources for stress, sleep, anxiety, relationships and more — available to you any time, day or night.</p>
+    </div>
+    <div class="trust-badges">
+      <div class="badge">
+        <div class="badge-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <span>Written &amp; reviewed by a registered psychologist</span>
+      </div>
+      <div class="badge">
+        <div class="badge-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <span>Access support any time, day or night</span>
+      </div>
+      <div class="badge">
+        <div class="badge-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <span>Private, secure and confidential</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <main class="panel-right">
+    <div class="form-wrapper">
+
+      <div class="mobile-logo">
+        <strong style="font-family: serif; font-size: 1.2rem; color: var(--teal);">Tools for the Tough Days</strong>
+      </div>
+
+      <h1 class="form-title">Create your account</h1>
+      <p class="form-subtitle">Sign up to access our support resources.</p>
+
+      <div class="alert-error" id="alertError"></div>
+
+      <div class="field" id="field-name">
+        <label for="full_name">Full name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="Nic Psychologist" autocomplete="name" />
+        <p class="field-error" id="name-error">Please enter your full name.</p>
+      </div>
+
+      <div class="field" id="field-email">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+        <p class="field-error" id="email-error">Please enter a valid email address.</p>
+      </div>
+
+      <div class="field" id="field-password">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" autocomplete="new-password" />
+          <button class="toggle-pw" type="button" id="togglePw" aria-label="Show password">
+            <svg id="eye-icon" viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <p class="field-error" id="password-error">Password must be at least 8 characters.</p>
+      </div>
+
+      <div class="terms-row business-row" id="field-business-user">
+        <input type="checkbox" id="is_business_user" name="is_business_user" />
+        <label for="is_business_user">I am signing up as a business user</label>
+      </div>
+
+      <div class="field business-name-wrap" id="businessNameWrap">
+        <label for="business_name">Business name</label>
+        <input type="text" id="business_name" name="business_name" placeholder="Your business name" autocomplete="organization" />
+        <p class="field-error" id="business-name-error">Business name is required for business users.</p>
+      </div>
+
+      <div class="terms-row" id="field-terms">
+        <input type="checkbox" id="terms" name="terms" />
+        <label for="terms">
+          I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and
+          <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button class="btn-register" id="btnRegister" type="button">Create Account</button>
+
+      <p class="signin-row">Already have an account? <a href="/login.html">Sign in →</a></p>
+
+    </div>
+  </main>
+
+  <script src="/auth-guard.js"></script>
+  <script>
+    // ── Toggle password visibility
+    const pwInput  = document.getElementById('password');
+    const toggleBtn = document.getElementById('togglePw');
+    const eyeIcon  = document.getElementById('eye-icon');
+    const eyeOpen  = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    const eyeClosed = `<line x1="17.94" y1="17.94" x2="22" y2="22"/><line x1="1" y1="1" x2="5.06" y2="5.06"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M6.53 6.53A18.5 18.5 0 0 0 1 12s4 8 11 8a9.12 9.12 0 0 0 5.76-2.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = pwInput.type === 'password';
+      pwInput.type = isPassword ? 'text' : 'password';
+      eyeIcon.innerHTML = isPassword ? eyeClosed : eyeOpen;
+    });
+
+    // ── Register form submission
+    document.getElementById('btnRegister').addEventListener('click', async () => {
+      let valid = true;
+      const alertEl = document.getElementById('alertError');
+      alertEl.style.display = 'none';
+
+      const nameEl = document.getElementById('full_name');
+      const nameField = document.getElementById('field-name');
+      const nameVal = nameEl.value.trim();
+      if (!nameVal) {
+        nameField.classList.add('has-error');
+        valid = false;
+      } else {
+        nameField.classList.remove('has-error');
+      }
+
+      const emailEl  = document.getElementById('email');
+      const emailField = document.getElementById('field-email');
+      const emailVal = emailEl.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        emailField.classList.add('has-error');
+        valid = false;
+      } else {
+        emailField.classList.remove('has-error');
+      }
+
+      const pwEl    = document.getElementById('password');
+      const pwField = document.getElementById('field-password');
+      if (pwEl.value.length < 8) {
+        pwField.classList.add('has-error');
+        valid = false;
+      } else {
+        pwField.classList.remove('has-error');
+      }
+
+      const termsEl = document.getElementById('terms');
+      if (!termsEl.checked) {
+        alertEl.textContent = 'Please agree to the Terms of Service and Privacy Policy.';
+        alertEl.style.display = 'block';
+        valid = false;
+      }
+
+      const isBusinessUser = document.getElementById('is_business_user').checked;
+      const businessNameEl = document.getElementById('business_name');
+      const businessNameField = document.getElementById('businessNameWrap');
+      if (isBusinessUser && businessNameEl.value.trim() === '') {
+        businessNameField.classList.add('has-error');
+        valid = false;
+      } else {
+        businessNameField.classList.remove('has-error');
+      }
+
+      if (!valid) return;
+
+      const btn = document.getElementById('btnRegister');
+      btn.textContent = 'Creating account…';
+      btn.disabled = true;
+
+      try {
+        const res  = await fetch('/api/auth.php?action=register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email:     emailVal,
+            password:  pwEl.value,
+            full_name: nameVal,
+            is_business_user: isBusinessUser,
+            business_name: businessNameEl.value.trim(),
+          }),
+          credentials: 'same-origin',
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alertEl.textContent = data.message || 'Registration failed. Please try again.';
+          alertEl.style.display = 'block';
+          btn.textContent = 'Create Account';
+          btn.disabled = false;
+        } else {
+          // Redirect to support page (first time users go straight to content)
+          const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
+          window.location.href = redirect;
+        }
+      } catch {
+        alertEl.textContent = 'Network error — please check your connection and try again.';
+        alertEl.style.display = 'block';
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+      }
+    });
+
+    // ── Clear errors on input
+    ['full_name','email','password'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const fieldId = id === 'full_name' ? 'field-name' : 'field-' + id;
+        document.getElementById(fieldId).classList.remove('has-error');
+      });
+    });
+
+    document.getElementById('is_business_user').addEventListener('change', (e) => {
+      const wrap = document.getElementById('businessNameWrap');
+      if (e.target.checked) {
+        wrap.classList.add('show');
+      } else {
+        wrap.classList.remove('show');
+        wrap.classList.remove('has-error');
+        document.getElementById('business_name').value = '';
+      }
+    });
+
+    document.getElementById('business_name').addEventListener('input', () => {
+      document.getElementById('businessNameWrap').classList.remove('has-error');
+    });
+  </script>
+
+</body>
+</html>
