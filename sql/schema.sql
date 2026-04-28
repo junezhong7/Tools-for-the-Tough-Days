@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   updated_at                  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_sub_stripe_id (stripe_subscription_id),
+  UNIQUE KEY uq_sub_checkout_session (stripe_checkout_session_id),
   KEY idx_sub_user (user_id),
   KEY idx_sub_customer (stripe_customer_id),
   CONSTRAINT fk_sub_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE

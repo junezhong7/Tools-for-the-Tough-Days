@@ -34,7 +34,10 @@
 
     /* CARDS */
     .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
-    .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); margin-bottom: 20px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); }
+    .card-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+    .card-link[aria-expanded="true"] { background: var(--teal-hover); }
 
     /* ACCOUNT INFO */
     .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -50,12 +53,47 @@
     .sub-badge.active { background: rgba(38,119,123,0.15); color: var(--teal-dark); }
     .sub-badge.cancelled { background: rgba(192,57,43,0.1); color: var(--red); }
     .sub-badge.past_due { background: rgba(200,117,42,0.15); color: var(--amber); }
+    .sub-badge.pending { background: rgba(200,117,42,0.12); color: var(--amber); }
     .sub-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 6px; }
     .sub-meta { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
     .sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-sm { font-size: 13px; padding: 8px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; border: none; }
+    .btn-link-soft { display: inline-flex; align-items: center; text-decoration: none; border: 1px solid rgba(38,119,123,0.2); background: rgba(255,255,255,0.8); color: var(--teal-dark); }
     .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,57,43,0.2) !important; }
     .btn-success { background: var(--teal); color: #fff; }
+
+    /* INLINE PRICING */
+    .plans-panel { display: none; margin-bottom: 24px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 24px; }
+    .plans-panel.open { display: block; }
+    .plans-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--teal-dark); text-align: center; margin-bottom: 8px; }
+    .plans-subtitle { max-width: 620px; margin: 0 auto 24px; text-align: center; color: var(--warm-grey); font-size: 14px; }
+    .plans-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 14px; }
+    .plans-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .plans-grid-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .plan-card { border-radius: 14px; overflow: hidden; border: 1px solid rgba(38,119,123,0.2); background: var(--white); box-shadow: 0 10px 30px rgba(42,40,37,0.06); }
+    .plan-card.individual { background: var(--teal); border-color: rgba(255,255,255,0.18); color: #fff; }
+    .plan-card.business { border-color: rgba(42,40,37,0.12); }
+    .plan-card.business.featured { border-color: rgba(38,119,123,0.4); box-shadow: 0 14px 36px rgba(38,119,123,0.14); }
+    .plan-top { padding: 22px 22px 20px; position: relative; }
+    .plan-card.business .plan-top { background: var(--teal); color: #fff; }
+    .plan-card.business .plan-body { padding: 18px 22px 22px; }
+    .plan-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; margin-bottom: 8px; }
+    .plan-price { font-family: 'DM Serif Display', serif; font-size: 46px; line-height: 1; }
+    .plan-price-note { font-size: 13px; margin-top: 6px; opacity: 0.88; }
+    .plan-body { padding: 0 22px 22px; }
+    .plan-copy { font-size: 13px; line-height: 1.7; color: inherit; opacity: 0.92; margin-bottom: 18px; }
+    .plan-cta { display: block; width: 100%; text-align: center; text-decoration: none; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
+    .plan-card.individual .plan-cta { background: #fff; color: var(--teal-dark); }
+    .plan-card.individual .plan-cta:hover { background: var(--teal-light); }
+    .plan-card.business .plan-cta { background: var(--teal); color: #fff; }
+    .plan-card.business .plan-cta:hover { background: var(--teal-hover); }
+    .plan-pill { position: absolute; top: 12px; right: 14px; background: #fff; color: var(--teal-dark); font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .plan-card.business .plan-copy { color: var(--warm-grey); }
+    .plan-list { list-style: none; margin: 0 0 16px; display: flex; flex-direction: column; gap: 8px; }
+    .plan-list li { font-size: 13px; color: var(--warm-grey); }
+    .plan-list strong { color: var(--charcoal); font-weight: 600; }
+    .plans-footer { margin-top: 18px; text-align: center; font-size: 13px; color: var(--warm-grey); }
+    .plans-footer a { color: var(--teal-dark); text-decoration: none; font-weight: 600; }
 
     /* PAYMENTS TABLE */
     .pay-table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -87,6 +125,10 @@
       .page { padding: 32px 16px; }
       .card { padding: 20px 16px; }
     }
+
+    @media (max-width: 860px) {
+      .plans-grid-two, .plans-grid-three { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body data-auth="required">
@@ -116,7 +158,93 @@
 
       <!-- SUBSCRIPTION -->
       <div class="card">
-        <div class="card-title">Subscription</div>
+        <div class="card-head">
+          <div class="card-title">Subscription</div>
+          <button class="btn-nav btn-teal card-link" id="btnTogglePlans" type="button" aria-expanded="false" aria-controls="plansPanel">Browse Plans</button>
+        </div>
+        <div class="plans-panel" id="plansPanel">
+          <div class="plans-title">Unlock the full library</div>
+          <p class="plans-subtitle">Choose an individual plan instantly, or start a business subscription for your team without leaving your dashboard.</p>
+
+          <div class="plans-section-title">Individual</div>
+          <div class="plans-grid-two">
+            <div class="plan-card individual">
+              <div class="plan-top">
+                <div class="plan-label">Monthly</div>
+                <div class="plan-price">$10</div>
+                <div class="plan-price-note">/month for 3 months<br>then $15/month</div>
+              </div>
+              <div class="plan-body">
+                <p class="plan-copy">Full access to the growing resource library, with new clinically reviewed topics added regularly.</p>
+                <a class="plan-cta" href="/checkout.php?product=individual_monthly">Subscribe monthly →</a>
+              </div>
+            </div>
+            <div class="plan-card individual">
+              <div class="plan-top">
+                <div class="plan-pill">4 months free</div>
+                <div class="plan-label">Annual</div>
+                <div class="plan-price">$120</div>
+                <div class="plan-price-note">/year<br>Save $60 vs monthly</div>
+              </div>
+              <div class="plan-body">
+                <p class="plan-copy">Best for uninterrupted access all year, with a simpler annual renewal and stronger savings.</p>
+                <a class="plan-cta" href="/checkout.php?product=individual_yearly">Subscribe annually →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="plans-section-title">Business</div>
+          <div class="plans-grid-three">
+            <div class="plan-card business">
+              <div class="plan-top">
+                <div class="plan-label">Starter · 6–20 staff</div>
+                <div class="plan-price">$150</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>160+ clinically reviewed resources</li>
+                  <li>Quarterly check-in with Nic</li>
+                  <li><strong>$1,350/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=starter_only">Get started →</a>
+              </div>
+            </div>
+            <div class="plan-card business featured">
+              <div class="plan-top">
+                <div class="plan-pill">Most popular</div>
+                <div class="plan-label">Growth · 21–50 staff</div>
+                <div class="plan-price">$250</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>Resources, crisis support and booking access</li>
+                  <li>Quarterly calls and monthly usage data</li>
+                  <li><strong>$2,835/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=growth_only">Get started →</a>
+              </div>
+            </div>
+            <div class="plan-card business">
+              <div class="plan-top">
+                <div class="plan-label">Team · 51–80 staff</div>
+                <div class="plan-price">$300</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>Full team access to the resource library</li>
+                  <li>Quarterly check-ins and booking access</li>
+                  <li><strong>$3,780/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=team_only">Get started →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="plans-footer">Need the full business breakdown or annual EAP bundle details? <a href="/business.html">View all business options</a></div>
+        </div>
         <div id="subContent"></div>
       </div>
 
@@ -157,6 +285,16 @@
       return new Date(dt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
     }
 
+    function bindPlansToggle() {
+      const btn = document.getElementById('btnTogglePlans');
+      const panel = document.getElementById('plansPanel');
+      btn.addEventListener('click', () => {
+        const isOpen = panel.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        btn.textContent = isOpen ? 'Hide Plans' : 'Browse Plans';
+      });
+    }
+
     async function loadDashboard() {
       try {
         const res  = await fetch('/api/dashboard.php', { credentials: 'same-origin' });
@@ -186,8 +324,7 @@
       const el = document.getElementById('subContent');
       if (!subs || subs.length === 0) {
         el.innerHTML = `<div class="empty">
-          <p style="margin-bottom:16px">No active subscription yet.</p>
-          <a href="/support.html" class="btn-nav btn-teal" style="display:inline-block;text-decoration:none;border-radius:8px">Browse Plans →</a>
+          <p>No active subscription yet.</p>
         </div>`;
         return;
       }
@@ -195,23 +332,36 @@
       el.innerHTML = subs.map(s => {
         const label   = PLAN_LABELS[s.product_key] || s.product_key;
         const cardCls = s.plan_type === 'business' ? 'sub-card business' : s.status === 'cancelled' ? 'sub-card cancelled' : 'sub-card';
-        const badge   = `<span class="sub-badge ${s.status}">${s.status.replace('_', ' ')}</span>`;
-        let meta = '';
+        const statusLabel = s.status.replace('_', ' ');
+        const badge   = `<span class="sub-badge ${s.status}">${statusLabel}</span>`;
+        const meta = [`Status: ${statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}`];
         if (s.current_period_end) {
-          meta = s.cancel_at_period_end
-            ? `Cancels on ${fmtDate(s.current_period_end)}`
-            : `Renews on ${fmtDate(s.current_period_end)}`;
+          meta.push(
+            s.status === 'cancelled'
+              ? `Ended on ${fmtDate(s.current_period_end)}`
+              : s.cancel_at_period_end
+              ? `Access ends on ${fmtDate(s.current_period_end)}`
+              : `Renews on ${fmtDate(s.current_period_end)}`
+          );
+        } else if (s.cancelled_at) {
+          meta.push(`Ended on ${fmtDate(s.cancelled_at)}`);
+        } else if (s.status === 'pending') {
+          meta.push('This checkout was started but not completed yet.');
         }
         const actions = s.status === 'active' && !s.cancel_at_period_end
           ? `<button class="btn-sm btn-danger" onclick="cancelSub(${s.id}, this)">Cancel Subscription</button>`
           : s.cancel_at_period_end
           ? `<button class="btn-sm btn-success" onclick="resumeSub(${s.id}, this)">Keep Subscription</button>`
+          : s.status === 'pending'
+          ? `<a class="btn-sm btn-link-soft" href="/support.html">Choose a Plan</a>`
+          : s.status === 'cancelled'
+          ? `<a class="btn-sm btn-link-soft" href="/support.html">Subscribe Again</a>`
           : '';
 
         return `<div class="${cardCls}">
           ${badge}
           <div class="sub-name">${label}</div>
-          <div class="sub-meta">${meta}</div>
+          <div class="sub-meta">${meta.join('<br>')}</div>
           <div class="sub-actions">${actions}</div>
         </div>`;
       }).join('');
@@ -267,6 +417,7 @@
       window.location.href = '/login.html';
     });
 
+    bindPlansToggle();
     loadDashboard();
   </script>
 
