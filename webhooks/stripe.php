@@ -103,15 +103,7 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session): void
     $customerId     = $session->customer ?? null;
     $subscriptionId = $session->subscription ?? null;
     $sessionId      = $session->id;
-    $userId         = null;
-
-    // Find user by Stripe customer ID or by session metadata
-    if ($customerId) {
-        $stmt = db()->prepare('SELECT id FROM users WHERE stripe_customer_id = ?');
-        $stmt->execute([$customerId]);
-        $user = $stmt->fetch();
-        $userId = $user ? (int) $user['id'] : null;
-    }
+    $userId         = resolve_checkout_user_id($session);
 
     // If we still can't link to a user, we skip (edge case: guest checkout)
     if (!$userId) {
@@ -270,17 +262,50 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
     $periodStart = $s->current_period_start ? date('Y-m-d H:i:s', $s->current_period_start) : null;
     $periodEnd   = $s->current_period_end   ? date('Y-m-d H:i:s', $s->current_period_end)   : null;
 
+    $existingId = subscription_row_id_from_stripe($s->id);
+    if ($existingId === null && $sessionId !== null) {
+        $existingId = subscription_row_id_from_checkout_session($sessionId);
+    }
+
+    if ($existingId !== null) {
+        db()->prepare(
+            'UPDATE subscriptions
+             SET user_id = ?,
+                 stripe_subscription_id = ?,
+                 stripe_customer_id = ?,
+                 product_key = ?,
+                 plan_type = ?,
+                 status = ?,
+                 current_period_start = ?,
+                 current_period_end = ?,
+                 cancel_at_period_end = ?,
+                 stripe_checkout_session_id = COALESCE(?, stripe_checkout_session_id),
+                 cancelled_at = CASE WHEN ? = "cancelled" THEN COALESCE(cancelled_at, NOW()) ELSE NULL END,
+                 updated_at = NOW()
+             WHERE id = ?'
+        )->execute([
+            $userId,
+            $s->id,
+            $s->customer,
+            $productKey,
+            $planType,
+            $s->status,
+            $periodStart,
+            $periodEnd,
+            $s->cancel_at_period_end ? 1 : 0,
+            $sessionId,
+            $s->status,
+            $existingId,
+        ]);
+
+        return;
+    }
+
     db()->prepare(
         'INSERT INTO subscriptions
            (user_id, stripe_subscription_id, stripe_customer_id, product_key, plan_type,
             status, current_period_start, current_period_end, cancel_at_period_end, stripe_checkout_session_id)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE
-           status                = VALUES(status),
-           current_period_start  = VALUES(current_period_start),
-           current_period_end    = VALUES(current_period_end),
-           cancel_at_period_end  = VALUES(cancel_at_period_end),
-           updated_at            = NOW()'
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     )->execute([
         $userId,
         $s->id,
@@ -300,6 +325,61 @@ function user_id_from_customer(string $customerId): ?int
     $stmt = db()->prepare('SELECT id FROM users WHERE stripe_customer_id = ?');
     $stmt->execute([$customerId]);
     $row = $stmt->fetch();
+    return $row ? (int) $row['id'] : null;
+}
+
+function resolve_checkout_user_id(\Stripe\Checkout\Session $session): ?int
+{
+    $customerId = is_string($session->customer ?? null) ? $session->customer : null;
+    if ($customerId) {
+        $userId = user_id_from_customer($customerId);
+        if ($userId !== null) {
+            return $userId;
+        }
+    }
+
+    $sessionId = $session->id ?? null;
+    if (is_string($sessionId) && $sessionId !== '') {
+        $stmt = db()->prepare(
+            'SELECT user_id FROM subscriptions WHERE stripe_checkout_session_id = ? ORDER BY id DESC LIMIT 1'
+        );
+        $stmt->execute([$sessionId]);
+        $row = $stmt->fetch();
+        if ($row) {
+            return (int) $row['user_id'];
+        }
+    }
+
+    $metadataUserId = $session->metadata['user_id'] ?? null;
+    if (is_string($metadataUserId) && ctype_digit($metadataUserId)) {
+        return (int) $metadataUserId;
+    }
+
+    $clientReferenceId = $session->client_reference_id ?? null;
+    if (is_string($clientReferenceId) && ctype_digit($clientReferenceId)) {
+        return (int) $clientReferenceId;
+    }
+
+    return null;
+}
+
+function subscription_row_id_from_stripe(string $stripeSubscriptionId): ?int
+{
+    $stmt = db()->prepare('SELECT id FROM subscriptions WHERE stripe_subscription_id = ? LIMIT 1');
+    $stmt->execute([$stripeSubscriptionId]);
+    $row = $stmt->fetch();
+
+    return $row ? (int) $row['id'] : null;
+}
+
+function subscription_row_id_from_checkout_session(string $checkoutSessionId): ?int
+{
+    $stmt = db()->prepare(
+        'SELECT id FROM subscriptions WHERE stripe_checkout_session_id = ? ORDER BY id DESC LIMIT 1'
+    );
+    $stmt->execute([$checkoutSessionId]);
+    $row = $stmt->fetch();
+
     return $row ? (int) $row['id'] : null;
 }
 

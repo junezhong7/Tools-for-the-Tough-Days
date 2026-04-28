@@ -134,8 +134,15 @@ try {
       $session_params['customer'] = $authCustomerId;
     }
 
-    // Pass the product key as metadata so the webhook can read it
-    $session_params['metadata'] = ['product_key' => $product];
+      if ($authUserId) {
+        $session_params['client_reference_id'] = (string) $authUserId;
+      }
+
+      // Pass enough context for the webhook to recover the local user on first checkout
+      $session_params['metadata'] = [
+        'product_key' => $product,
+        'user_id' => $authUserId ? (string) $authUserId : '',
+      ];
 
   // ── INDIVIDUAL MONTHLY ──────────────────────
   if ($product === 'individual_monthly') {

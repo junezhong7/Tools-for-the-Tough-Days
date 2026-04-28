@@ -18,8 +18,13 @@ $userId = (int) $user['id'];
 $subStmt = db()->prepare(
     'SELECT id, product_key, plan_type, status, current_period_start, current_period_end,
             cancel_at_period_end, cancelled_at, created_at
-     FROM subscriptions WHERE user_id = ?
-     ORDER BY created_at DESC'
+         FROM subscriptions
+         WHERE user_id = ?
+             AND (
+                 status <> "pending"
+                 OR created_at >= (NOW() - INTERVAL 30 MINUTE)
+             )
+         ORDER BY created_at DESC'
 );
 $subStmt->execute([$userId]);
 $subscriptions = $subStmt->fetchAll();
