@@ -33,6 +33,12 @@ Set these in Azure Web App application settings:
 - `STRIPE_PRICE_TEAM_BUNDLE`
 - `STRIPE_PRICE_SESSIONS_3`
 - `STRIPE_PRICE_SESSIONS_6`
+- `AZURE_STORAGE_ACCOUNT`
+- `AZURE_STORAGE_CONTAINER`
+- `AZURE_STORAGE_PREFIX`
+- `AZURE_STORAGE_ACCOUNT_KEY`
+- `RESOURCE_TOKEN_SECRET`
+- `RESOURCE_URL_TTL_SEC`
 
 Database connection settings must also be configured for [lib/db.php](lib/db.php).
 
