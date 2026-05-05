@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resource Video</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: #ffffff;
+      --ink: #202124;
+      --muted: #5f6368;
+      --accent: #c8752a;
+      --border: #dfd8cc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: radial-gradient(circle at top right, #f9f1e3, #ede3d3);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .frame {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: min(100%, 980px);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+      padding: 12px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 8px;
+      background: #000;
+    }
+
+    #status {
+      color: var(--muted);
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="btn" href="/support.html">Back</a>
+    <span id="resourceName" class="pill">Loading video...</span>
+  </div>
+
+  <div class="frame">
+    <div class="card">
+      <video id="resourceVideo" controls controlsList="nodownload" preload="metadata"></video>
+      <div id="status">Resolving secure video URL...</div>
+    </div>
+  </div>
+
+  <script>
+    (function initSecureVideoPlayer() {
+      const token = new URLSearchParams(window.location.search).get('token') || '';
+      const video = document.getElementById('resourceVideo');
+      const status = document.getElementById('status');
+      const resourceName = document.getElementById('resourceName');
+
+      function setStatus(message) {
+        status.textContent = message;
+      }
+
+      async function resolveSecureUrl() {
+        if (!token) {
+          throw new Error('Missing access token. Please open this video from the resource list.');
+        }
+
+        const response = await fetch('/api/resources.php?action=resolve&token=' + encodeURIComponent(token), {
+          credentials: 'same-origin',
+          cache: 'no-store',
+        });
+
+        const data = await response.json().catch(function () {
+          return {};
+        });
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not resolve secure video URL.');
+        }
+
+        resourceName.textContent = data.resource_name || 'Resource Video';
+        return data.url;
+      }
+
+      resolveSecureUrl()
+        .then(function (secureUrl) {
+          video.src = secureUrl;
+          setStatus('');
+          return video.play().catch(function () {
+            setStatus('Press play to start this video.');
+          });
+        })
+        .catch(function (error) {
+          setStatus(error.message || 'Unable to load video.');
+        });
+
+      video.addEventListener('error', function () {
+        setStatus('Video link expired or unavailable. Please return and open again.');
+      });
+    })();
+  </script>
+</body>
+</html>

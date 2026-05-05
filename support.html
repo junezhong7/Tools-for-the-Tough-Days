@@ -114,6 +114,100 @@
     .hero h1 em { color: #c8f0f2; font-style: italic; }
     .hero-sub { color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 300; }
 
+    #resource-topic-buttons a {
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    #resource-topic-buttons a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(42,40,37,0.12);
+    }
+    #resource-topic-note {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--warm-grey);
+    }
+
+    .topic-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(42,40,37,0.55);
+      z-index: 650;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .topic-modal-overlay.show { display: flex; }
+    .topic-modal {
+      width: 100%;
+      max-width: 520px;
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 40px rgba(42,40,37,0.16);
+      padding: 24px;
+      position: relative;
+    }
+    .topic-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      color: var(--warm-grey);
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+    }
+    .topic-modal-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      line-height: 1.2;
+      margin: 0 0 6px;
+    }
+    .topic-modal-sub {
+      font-size: 13px;
+      color: var(--warm-grey);
+      margin-bottom: 16px;
+    }
+    .topic-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .topic-option {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-decoration: none;
+      color: var(--charcoal);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .topic-option:hover { border-color: rgba(38,119,123,0.4); }
+    .topic-option.disabled {
+      color: var(--warm-grey);
+      background: #f7f4f0;
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+    .topic-option .badge {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 2px 8px;
+      color: var(--warm-grey);
+      white-space: nowrap;
+    }
+
     /* CONTENT */
     .content-section { padding: 56px 40px; }
     .content-inner { max-width: 1020px; margin: 0 auto; }
@@ -341,29 +435,16 @@
   <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
       <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What's covered — 21 resource areas</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🆘 Crisis support</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🏠 Domestic violence &amp; abuse</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🕊️ Grief &amp; loss</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💙 Low mood &amp; depression</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌀 Anxiety &amp; worry</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💪 Self-esteem</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">😶 Feeling flat or angry</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🍼 Postnatal struggles</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🤰 Pregnancy</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">👨‍👧 Expecting fathers</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🎲 Gambling &amp; substance use</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌱 Daily habits &amp; wellbeing</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">❤️ Relationships</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">👶 Parenting young children</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🧒 Parenting teenagers</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🧓 Getting older</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🌍 Identity &amp; belonging</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🤝 Supporting someone else</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">💸 Financial stress</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🔄 Big life changes</span>
-        <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal);">🔮 Stress about the future</span>
-      </div>
+      <div id="resource-topic-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+    </div>
+  </div>
+
+  <div class="topic-modal-overlay" id="topicModalOverlay" aria-hidden="true">
+    <div class="topic-modal" role="dialog" aria-modal="true" aria-labelledby="topicModalTitle">
+      <button class="topic-modal-close" id="topicModalClose" type="button" aria-label="Close">×</button>
+      <h3 class="topic-modal-title" id="topicModalTitle">Topic resources</h3>
+      <p class="topic-modal-sub">Choose your format. Access requires an active subscription.</p>
+      <div class="topic-options" id="topicOptions"></div>
     </div>
   </div>
 
@@ -793,6 +874,297 @@
 <script src="auth-nav.js"></script>
 
 <script>
+  (function initTopicResourceModal() {
+    let topicConfig = null;
+    let topicConfigPromise = null;
+
+    const topicCache = {};
+
+    const overlay = document.getElementById('topicModalOverlay');
+    const title = document.getElementById('topicModalTitle');
+    const options = document.getElementById('topicOptions');
+    const closeBtn = document.getElementById('topicModalClose');
+    const topicButtons = document.getElementById('resource-topic-buttons');
+    const topicNote = document.getElementById('resource-topic-note');
+    if (!overlay || !title || !options || !closeBtn) {
+      return;
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderTopicButtons(config) {
+      if (!topicButtons) {
+        return;
+      }
+
+      const buttonStyle = 'background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); text-decoration: none; display: inline-block;';
+      const entries = Object.entries(config || {}).sort(function (a, b) {
+        const aOrder = Number(a[1] && a[1].order ? a[1].order : 9999);
+        const bOrder = Number(b[1] && b[1].order ? b[1].order : 9999);
+        if (aOrder !== bOrder) {
+          return aOrder - bOrder;
+        }
+
+        const aTitle = String((a[1] && (a[1].label || a[1].title)) || a[0]).toLowerCase();
+        const bTitle = String((b[1] && (b[1].label || b[1].title)) || b[0]).toLowerCase();
+        return aTitle.localeCompare(bTitle);
+      });
+
+      if (entries.length === 0) {
+        topicButtons.innerHTML = '';
+        if (topicNote) {
+          topicNote.textContent = 'No resource topics available right now.';
+        }
+        return;
+      }
+
+      topicButtons.innerHTML = entries.map(function (entry) {
+        const topicKey = entry[0];
+        const topic = entry[1] || {};
+        const icon = topic.icon || '📄';
+        const label = topic.label || topic.title || topicKey;
+        return '<a href="#" data-open-topic="' + escapeHtml(topicKey) + '" style="' + buttonStyle + '">' + escapeHtml(icon + ' ' + label) + '</a>';
+      }).join('');
+
+      if (topicNote) {
+        topicNote.textContent = 'Click any topic to load matching resources from your CSV mapping.';
+      }
+    }
+
+    async function issueViewerUrl(resourceKey, kind) {
+      const query = new URLSearchParams({
+        action: 'issue',
+        resource_key: resourceKey,
+        kind: (kind || 'pdf').toLowerCase()
+      });
+
+      const response = await fetch('/api/resources.php?' + query.toString(), {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      const data = await response.json().catch(function () {
+        return {};
+      });
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Unable to open this resource right now.');
+      }
+
+      return data.viewer_url;
+    }
+
+    async function ensureTopicConfig() {
+      if (topicConfig !== null) {
+        return topicConfig;
+      }
+
+      if (topicConfigPromise) {
+        return topicConfigPromise;
+      }
+
+      topicConfigPromise = fetch('/api/resources.php?action=topics', {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      })
+        .then(function (response) {
+          return response.json().catch(function () {
+            return {};
+          }).then(function (data) {
+            if (!response.ok) {
+              throw new Error(data.message || 'Unable to load topic mapping.');
+            }
+            topicConfig = data.topics || {};
+            renderTopicButtons(topicConfig);
+            return topicConfig;
+          });
+        })
+        .finally(function () {
+          topicConfigPromise = null;
+        });
+
+      return topicConfigPromise;
+    }
+
+    async function fetchTopicResources(prefixes) {
+      const query = new URLSearchParams({
+        action: 'list',
+        prefixes: prefixes.join(',')
+      });
+
+      const response = await fetch('/api/resources.php?' + query.toString(), {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+
+      const data = await response.json().catch(function () {
+        return {};
+      });
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Unable to load resources for this topic.');
+      }
+
+      return Array.isArray(data.resources) ? data.resources : [];
+    }
+
+    function makeOption(item) {
+      const label = item && item.label ? item.label : 'Resource';
+      const icon = item && item.icon ? item.icon : '📄';
+      const resourceKey = item && item.resourceKey ? String(item.resourceKey).trim() : '';
+      const kind = item && item.kind ? item.kind.toUpperCase() : 'RESOURCE';
+
+      if (!resourceKey) {
+        return '<div class="topic-option disabled"><span>' + icon + ' ' + label + '</span><span class="badge">Soon</span></div>';
+      }
+
+      return '<a class="topic-option" href="#" data-resource-key="' + resourceKey + '" data-kind="' + kind.toLowerCase() + '"><span>' + icon + ' ' + label + '</span><span class="badge">' + kind + '</span></a>';
+    }
+
+    function expandResources(rawResources) {
+      const expanded = [];
+      (rawResources || []).forEach(function (resource) {
+        const key = String(resource.resource_key || '').trim();
+        const name = String(resource.name || key).trim();
+        if (!key) {
+          return;
+        }
+
+        if (resource.has_pdf) {
+          expanded.push({
+            label: name + ' (' + key + ')',
+            icon: '📄',
+            kind: 'pdf',
+            resourceKey: key
+          });
+        }
+        if (resource.has_video) {
+          expanded.push({
+            label: name + ' (' + key + ')',
+            icon: '🎬',
+            kind: 'video',
+            resourceKey: key
+          });
+        }
+      });
+      return expanded;
+    }
+
+    function openModal(topicKey) {
+      if (!topicConfig) {
+        return;
+      }
+
+      const topic = topicConfig[topicKey];
+      if (!topic) {
+        return;
+      }
+
+      const topicTitle = topic.title || topic.label || 'Topic';
+      const prefixes = Array.isArray(topic.prefixes) ? topic.prefixes : [];
+
+      if (prefixes.length === 0) {
+        options.innerHTML = '<div class="topic-option disabled"><span>No mapping for this topic yet</span><span class="badge">Empty</span></div>';
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
+
+      title.textContent = topicTitle + ' resources';
+      options.innerHTML = '<div class="topic-option disabled"><span>Loading resources...</span><span class="badge">Wait</span></div>';
+
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      const cacheKey = prefixes.join(',');
+      if (topicCache[cacheKey]) {
+        const cachedOptions = expandResources(topicCache[cacheKey]);
+        options.innerHTML = cachedOptions.length > 0
+          ? cachedOptions.map(makeOption).join('')
+          : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
+        return;
+      }
+
+      fetchTopicResources(prefixes)
+        .then(function (resources) {
+          topicCache[cacheKey] = resources;
+          const rendered = expandResources(resources);
+          options.innerHTML = rendered.length > 0
+            ? rendered.map(makeOption).join('')
+            : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
+        })
+        .catch(function (error) {
+          options.innerHTML = '<div class="topic-option disabled"><span>' + (error.message || 'Unable to load resources.') + '</span><span class="badge">Error</span></div>';
+        });
+    }
+
+    function closeModal() {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', function (event) {
+      const trigger = event.target.closest('[data-open-topic]');
+      if (!trigger) {
+        return;
+      }
+
+      event.preventDefault();
+      ensureTopicConfig()
+        .then(function () {
+          openModal(trigger.getAttribute('data-open-topic'));
+        })
+        .catch(function (error) {
+          alert(error.message || 'Unable to load topic mapping.');
+        });
+    });
+
+    options.addEventListener('click', function (event) {
+      const link = event.target.closest('a.topic-option[data-resource-key]');
+      if (!link || !options.contains(link)) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const resourceKey = String(link.getAttribute('data-resource-key') || '').trim();
+      const kind = String(link.getAttribute('data-kind') || 'pdf').toLowerCase();
+
+      issueViewerUrl(resourceKey, kind)
+        .then(function (viewerUrl) {
+          window.location.href = viewerUrl;
+        })
+        .catch(function (error) {
+          alert(error.message || 'Unable to open this resource.');
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (event) {
+      if (event.target === overlay) {
+        closeModal();
+      }
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    ensureTopicConfig().catch(function (error) {
+      if (topicNote) {
+        topicNote.textContent = error.message || 'Unable to load topic mapping.';
+      }
+    });
+  })();
+
   const descriptors = {
     1: "In crisis right now", 2: "Really struggling", 3: "Finding it very hard",
     4: "Having a tough time", 5: "Getting by", 6: "Okay, but not great",
