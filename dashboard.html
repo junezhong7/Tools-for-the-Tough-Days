@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account — Tools for the Tough Days</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #26777B; --teal-hover: #1e5f63; --teal-dark: #1a4e52; --teal-light: #e8f4f4;
+      --amber: #c8752a; --amber-light: #f5ece0;
+      --charcoal: #2a2825; --warm-grey: #6b6560; --sand: #f2ede6; --cream: #faf8f4; --white: #fff;
+      --border: rgba(42,40,37,0.12); --shadow: 0 2px 20px rgba(42,40,37,0.08);
+      --red: #c0392b; --red-bg: #fdf0ef;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
+
+    /* NAV */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
+    .nav-logo span { color: var(--teal); }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .btn-nav { font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 6px; padding: 8px 16px; font-weight: 500; border: none; text-decoration: none; }
+    .btn-outline { border: 1px solid var(--border) !important; color: var(--charcoal); background: transparent; }
+    .btn-teal { background: var(--teal); color: #fff; }
+    .btn-teal:hover { background: var(--teal-hover); }
+
+    /* LAYOUT */
+    .page { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
+    .page-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 4px; }
+    .page-sub { color: var(--warm-grey); font-size: 14px; margin-bottom: 40px; }
+
+    /* CARDS */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); }
+    .card-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+    .card-link[aria-expanded="true"] { background: var(--teal-hover); }
+
+    /* ACCOUNT INFO */
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 13px; color: var(--warm-grey); }
+    .info-value { font-size: 14px; font-weight: 500; }
+
+    /* SUBSCRIPTION CARD */
+    .sub-card { background: var(--teal-light); border: 1.5px solid rgba(38,119,123,0.25); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .sub-card.business { background: var(--amber-light); border-color: rgba(200,117,42,0.25); }
+    .sub-card.cancelled { background: var(--sand); border-color: var(--border); opacity: 0.8; }
+    .sub-badge { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
+    .sub-badge.active { background: rgba(38,119,123,0.15); color: var(--teal-dark); }
+    .sub-badge.cancelled { background: rgba(192,57,43,0.1); color: var(--red); }
+    .sub-badge.past_due { background: rgba(200,117,42,0.15); color: var(--amber); }
+    .sub-badge.pending { background: rgba(200,117,42,0.12); color: var(--amber); }
+    .sub-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 6px; }
+    .sub-meta { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
+    .sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-sm { font-size: 13px; padding: 8px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; border: none; }
+    .btn-link-soft { display: inline-flex; align-items: center; text-decoration: none; border: 1px solid rgba(38,119,123,0.2); background: rgba(255,255,255,0.8); color: var(--teal-dark); }
+    .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,57,43,0.2) !important; }
+    .btn-success { background: var(--teal); color: #fff; }
+
+    /* INLINE PRICING */
+    .plans-panel { display: none; margin-bottom: 24px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 24px; }
+    .plans-panel.open { display: block; }
+    .plans-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--teal-dark); text-align: center; margin-bottom: 8px; }
+    .plans-subtitle { max-width: 620px; margin: 0 auto 24px; text-align: center; color: var(--warm-grey); font-size: 14px; }
+    .plans-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 14px; }
+    .plans-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .plans-grid-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .plan-card { border-radius: 14px; overflow: hidden; border: 1px solid rgba(38,119,123,0.2); background: var(--white); box-shadow: 0 10px 30px rgba(42,40,37,0.06); }
+    .plan-card.individual { background: var(--teal); border-color: rgba(255,255,255,0.18); color: #fff; }
+    .plan-card.business { border-color: rgba(42,40,37,0.12); }
+    .plan-card.business.featured { border-color: rgba(38,119,123,0.4); box-shadow: 0 14px 36px rgba(38,119,123,0.14); }
+    .plan-top { padding: 22px 22px 20px; position: relative; }
+    .plan-card.business .plan-top { background: var(--teal); color: #fff; }
+    .plan-card.business .plan-body { padding: 18px 22px 22px; }
+    .plan-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; margin-bottom: 8px; }
+    .plan-price { font-family: 'DM Serif Display', serif; font-size: 46px; line-height: 1; }
+    .plan-price-note { font-size: 13px; margin-top: 6px; opacity: 0.88; }
+    .plan-body { padding: 0 22px 22px; }
+    .plan-copy { font-size: 13px; line-height: 1.7; color: inherit; opacity: 0.92; margin-bottom: 18px; }
+    .plan-cta { display: block; width: 100%; text-align: center; text-decoration: none; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
+    .plan-card.individual .plan-cta { background: #fff; color: var(--teal-dark); }
+    .plan-card.individual .plan-cta:hover { background: var(--teal-light); }
+    .plan-card.business .plan-cta { background: var(--teal); color: #fff; }
+    .plan-card.business .plan-cta:hover { background: var(--teal-hover); }
+    .plan-pill { position: absolute; top: 12px; right: 14px; background: #fff; color: var(--teal-dark); font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .plan-card.business .plan-copy { color: var(--warm-grey); }
+    .plan-list { list-style: none; margin: 0 0 16px; display: flex; flex-direction: column; gap: 8px; }
+    .plan-list li { font-size: 13px; color: var(--warm-grey); }
+    .plan-list strong { color: var(--charcoal); font-weight: 600; }
+    .plans-footer { margin-top: 18px; text-align: center; font-size: 13px; color: var(--warm-grey); }
+    .plans-footer a { color: var(--teal-dark); text-decoration: none; font-weight: 600; }
+
+    /* PAYMENTS TABLE */
+    .pay-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .pay-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); border-bottom: 1px solid var(--border); }
+    .pay-table td { padding: 12px 12px; border-bottom: 1px solid var(--border); }
+    .pay-table tr:last-child td { border-bottom: none; }
+    .pay-status { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .pay-status.succeeded { background: rgba(38,119,123,0.12); color: var(--teal-dark); }
+    .pay-status.failed { background: var(--red-bg); color: var(--red); }
+    .pay-status.pending { background: rgba(200,117,42,0.1); color: var(--amber); }
+    .pay-status.refunded { background: var(--sand); color: var(--warm-grey); }
+
+    /* EMPTY STATE */
+    .empty { text-align: center; padding: 40px 20px; color: var(--warm-grey); font-size: 14px; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 60px 20px; color: var(--warm-grey); }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--charcoal); color: #fff; padding: 12px 24px; border-radius: 99px;
+      font-size: 14px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .page { padding: 32px 16px; }
+      .card { padding: 20px 16px; }
+    }
+
+    @media (max-width: 860px) {
+      .plans-grid-two, .plans-grid-three { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-auth="required">
+
+  <!-- CRISIS BAR -->
+  <div style="background:#c0392b;color:#fff;padding:8px 20px;text-align:center;font-size:12px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <span>If things feel urgent right now —</span>
+    <a href="tel:131114" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Lifeline 13 11 14</a>
+    <a href="tel:1300224636" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000" style="color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.4)">Emergency 000</a>
+  </div>
+
+  <nav>
+    <a class="nav-logo" href="/index.html">Tools for the <span>Tough Days</span></a>
+    <div class="nav-right">
+      <a href="/support.html" class="btn-nav btn-outline">My Resources</a>
+      <button class="btn-nav btn-teal" id="btnLogout" type="button">Sign Out</button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="loading" id="loadingState">Loading your account…</div>
+
+    <div id="dashboardContent" style="display:none">
+      <h1 class="page-title" id="welcomeTitle">My Account</h1>
+      <p class="page-sub" id="accountEmail"></p>
+
+      <!-- SUBSCRIPTION -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Subscription</div>
+          <button class="btn-nav btn-teal card-link" id="btnTogglePlans" type="button" aria-expanded="false" aria-controls="plansPanel">Browse Plans</button>
+        </div>
+        <div class="plans-panel" id="plansPanel">
+          <div class="plans-title">Unlock the full library</div>
+          <p class="plans-subtitle">Choose an individual plan instantly, or start a business subscription for your team without leaving your dashboard.</p>
+
+          <div class="plans-section-title">Individual</div>
+          <div class="plans-grid-two">
+            <div class="plan-card individual">
+              <div class="plan-top">
+                <div class="plan-label">Monthly</div>
+                <div class="plan-price">$10</div>
+                <div class="plan-price-note">/month for 3 months<br>then $15/month</div>
+              </div>
+              <div class="plan-body">
+                <p class="plan-copy">Full access to the growing resource library, with new clinically reviewed topics added regularly.</p>
+                <a class="plan-cta" href="/checkout.php?product=individual_monthly">Subscribe monthly →</a>
+              </div>
+            </div>
+            <div class="plan-card individual">
+              <div class="plan-top">
+                <div class="plan-pill">4 months free</div>
+                <div class="plan-label">Annual</div>
+                <div class="plan-price">$120</div>
+                <div class="plan-price-note">/year<br>Save $60 vs monthly</div>
+              </div>
+              <div class="plan-body">
+                <p class="plan-copy">Best for uninterrupted access all year, with a simpler annual renewal and stronger savings.</p>
+                <a class="plan-cta" href="/checkout.php?product=individual_yearly">Subscribe annually →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="plans-section-title">Business</div>
+          <div class="plans-grid-three">
+            <div class="plan-card business">
+              <div class="plan-top">
+                <div class="plan-label">Starter · 6–20 staff</div>
+                <div class="plan-price">$150</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>160+ clinically reviewed resources</li>
+                  <li>Quarterly check-in with Nic</li>
+                  <li><strong>$1,350/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=starter_only">Get started →</a>
+              </div>
+            </div>
+            <div class="plan-card business featured">
+              <div class="plan-top">
+                <div class="plan-pill">Most popular</div>
+                <div class="plan-label">Growth · 21–50 staff</div>
+                <div class="plan-price">$250</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>Resources, crisis support and booking access</li>
+                  <li>Quarterly calls and monthly usage data</li>
+                  <li><strong>$2,835/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=growth_only">Get started →</a>
+              </div>
+            </div>
+            <div class="plan-card business">
+              <div class="plan-top">
+                <div class="plan-label">Team · 51–80 staff</div>
+                <div class="plan-price">$300</div>
+                <div class="plan-price-note">/month · resources only</div>
+              </div>
+              <div class="plan-body">
+                <ul class="plan-list">
+                  <li>Full team access to the resource library</li>
+                  <li>Quarterly check-ins and booking access</li>
+                  <li><strong>$3,780/year</strong> annual bundle option</li>
+                </ul>
+                <a class="plan-cta" href="/checkout.php?product=team_only">Get started →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="plans-footer">Need the full business breakdown or annual EAP bundle details? <a href="/business.html">View all business options</a></div>
+        </div>
+        <div id="subContent"></div>
+      </div>
+
+      <!-- PAYMENT HISTORY -->
+      <div class="card">
+        <div class="card-title">Payment History</div>
+        <div id="payContent"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/auth-guard.js"></script>
+  <script>
+    const PLAN_LABELS = {
+      individual_monthly: 'Individual — Monthly',
+      individual_yearly:  'Individual — Annual',
+      starter_only:   'Business Starter — Monthly',
+      growth_only:    'Business Growth — Monthly',
+      team_only:      'Business Team — Monthly',
+      starter_bundle: 'Business Starter — Annual Bundle',
+      growth_bundle:  'Business Growth — Annual Bundle',
+      team_bundle:    'Business Team — Annual Bundle',
+      sessions_3:     'Counselling — 3 Sessions',
+      sessions_6:     'Counselling — 6 Sessions',
+    };
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3200);
+    }
+
+    function fmtDate(dt) {
+      if (!dt) return '—';
+      return new Date(dt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function bindPlansToggle() {
+      const btn = document.getElementById('btnTogglePlans');
+      const panel = document.getElementById('plansPanel');
+      btn.addEventListener('click', () => {
+        const isOpen = panel.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        btn.textContent = isOpen ? 'Hide Plans' : 'Browse Plans';
+      });
+    }
+
+    async function loadDashboard() {
+      try {
+        const res  = await fetch('/api/dashboard.php', { credentials: 'same-origin' });
+
+        if (res.status === 401) {
+          window.location.href = '/login.html?redirect=/dashboard.html';
+          return;
+        }
+
+        const data = await res.json();
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        document.getElementById('welcomeTitle').textContent =
+          data.user.full_name ? `Hi, ${data.user.full_name.split(' ')[0]}` : 'My Account';
+        document.getElementById('accountEmail').textContent = data.user.email;
+
+        renderSubscriptions(data.subscriptions);
+        renderPayments(data.payments);
+
+      } catch (e) {
+        document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
+      }
+    }
+
+    function renderSubscriptions(subs) {
+      const el = document.getElementById('subContent');
+      if (!subs || subs.length === 0) {
+        el.innerHTML = `<div class="empty">
+          <p>No active subscription yet.</p>
+        </div>`;
+        return;
+      }
+
+      el.innerHTML = subs.map(s => {
+        const label   = PLAN_LABELS[s.product_key] || s.product_key;
+        const cardCls = s.plan_type === 'business' ? 'sub-card business' : s.status === 'cancelled' ? 'sub-card cancelled' : 'sub-card';
+        const statusLabel = s.status.replace('_', ' ');
+        const badge   = `<span class="sub-badge ${s.status}">${statusLabel}</span>`;
+        const meta = [`Status: ${statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}`];
+        if (s.current_period_end) {
+          meta.push(
+            s.status === 'cancelled'
+              ? `Ended on ${fmtDate(s.current_period_end)}`
+              : s.cancel_at_period_end
+              ? `Access ends on ${fmtDate(s.current_period_end)}`
+              : `Renews on ${fmtDate(s.current_period_end)}`
+          );
+        } else if (s.cancelled_at) {
+          meta.push(`Ended on ${fmtDate(s.cancelled_at)}`);
+        } else if (s.status === 'pending') {
+          meta.push('This checkout was started but not completed yet.');
+        }
+        const actions = s.status === 'active' && !s.cancel_at_period_end
+          ? `<button class="btn-sm btn-danger" onclick="cancelSub(${s.id}, this)">Cancel Subscription</button>`
+          : s.cancel_at_period_end
+          ? `<button class="btn-sm btn-success" onclick="resumeSub(${s.id}, this)">Keep Subscription</button>`
+          : s.status === 'pending'
+          ? `<a class="btn-sm btn-link-soft" href="/support.html">Choose a Plan</a>`
+          : s.status === 'cancelled'
+          ? `<a class="btn-sm btn-link-soft" href="/support.html">Subscribe Again</a>`
+          : '';
+
+        return `<div class="${cardCls}">
+          ${badge}
+          <div class="sub-name">${label}</div>
+          <div class="sub-meta">${meta.join('<br>')}</div>
+          <div class="sub-actions">${actions}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderPayments(payments) {
+      const el = document.getElementById('payContent');
+      if (!payments || payments.length === 0) {
+        el.innerHTML = '<div class="empty">No payments on record yet.</div>';
+        return;
+      }
+      el.innerHTML = `<table class="pay-table">
+        <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          ${payments.map(p => `<tr>
+            <td>${fmtDate(p.created_at)}</td>
+            <td>${p.description || '—'}</td>
+            <td>$${p.amount} AUD</td>
+            <td><span class="pay-status ${p.status}">${p.status}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
+    async function cancelSub(subId, btn) {
+      if (!confirm('Are you sure? Your subscription will remain active until the end of the billing period.')) return;
+      btn.disabled = true;
+      btn.textContent = 'Cancelling…';
+      const res = await fetch('/api/subscriptions.php?action=cancel', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
+      });
+      const data = await res.json();
+      if (res.ok) { showToast(data.message); loadDashboard(); }
+      else { showToast(data.message || 'Could not cancel. Please try again.'); btn.disabled = false; btn.textContent = 'Cancel Subscription'; }
+    }
+
+    async function resumeSub(subId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Resuming…';
+      const res = await fetch('/api/subscriptions.php?action=resume', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
+      });
+      const data = await res.json();
+      if (res.ok) { showToast(data.message); loadDashboard(); }
+      else { showToast(data.message || 'Could not resume. Please try again.'); btn.disabled = false; btn.textContent = 'Keep Subscription'; }
+    }
+
+    // Sign out
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await fetch('/api/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' });
+      window.location.href = '/login.html';
+    });
+
+    bindPlansToggle();
+    loadDashboard();
+  </script>
+
+</body>
+</html>

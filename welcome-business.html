@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome — Tools for the Tough Days</title>
+<title>Welcome - Tools for the Tough Days</title>
 <meta name="description" content="Your business subscription is confirmed. Here's what happens next for your team.">
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
@@ -54,6 +54,8 @@
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
+  .nav-login { color: var(--charcoal); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; background: var(--white); }
+  .nav-login:hover { border-color: rgba(42,40,37,0.22); }
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
   .nav-cta:hover { background: var(--teal-hover); }
 
@@ -154,7 +156,7 @@
     .reassure-strip { padding: 20px; }
     footer { padding: 24px 16px; flex-direction: column; text-align: center; }
   }
-  @media (max-width: 480px) { .nav-links a:not(.nav-cta) { display: none; } }
+  @media (max-width: 480px) { .nav-links a:not(.nav-cta):not(.nav-login) { display: none; } }
 
   @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
   .hero-content { animation: fadeUp 0.6s ease both; }
@@ -164,7 +166,7 @@
 <body>
 
 <div class="crisis-bar">
-  <span>If things feel urgent right now —</span>
+  <span>If things feel urgent right now -</span>
   <a href="tel:131114">Lifeline 13 11 14</a>
   <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
   <a href="tel:000">Emergency 000</a>
@@ -173,9 +175,13 @@
 <nav>
   <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
   <div class="nav-links">
-    <a href="support.html">For Individuals</a>
-    <a href="business.html">For Business</a>
+    <a href="support.html">For Personal Life</a>
+    <a href="business.html">For Workplaces</a>
     <a href="about.html">About Nic</a>
+    <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+    <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
+    <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+    <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
     <a href="booking.html" class="nav-cta">Free 15-min chat</a>
   </div>
 </nav>
@@ -183,7 +189,7 @@
 <section class="hero">
   <div class="hero-texture"></div>
   <div class="hero-content">
-    <div class="hero-badge">✅ Subscription confirmed</div>
+    <div class="hero-badge">Subscription confirmed</div>
     <h1>Your team subscription <em>is live.</em></h1>
     <p class="hero-sub">Thank you for investing in your team's wellbeing. Here's exactly what happens next.</p>
     <div class="counselling-badge" id="counselling-badge"></div>
@@ -192,7 +198,7 @@
 
 <div class="main-wrap">
 
-  <!-- ═══ WHAT HAPPENS NEXT ═══ -->
+  <!-- WHAT HAPPENS NEXT -->
   <div class="section-label">What happens next</div>
 
   <div class="timeline">
@@ -201,7 +207,7 @@
       <div class="tl-circle">✉️</div>
       <div class="tl-content">
         <h3>Nic will be in touch within 48 hours</h3>
-        <p>You'll receive a personal email from Nic with your team's access codes and everything you need to get started. This is a direct message from the person behind the platform — not an automated system.</p>
+        <p>You'll receive a personal email from Nic with your team's access codes and everything you need to get started. This is a direct message from the person behind the platform - not an automated system.</p>
         <span class="tl-tag soon">Within 48 hours</span>
       </div>
     </div>
@@ -210,7 +216,7 @@
       <div class="tl-circle">📋</div>
       <div class="tl-content">
         <h3>You'll receive your team launch materials</h3>
-        <p>Alongside your access codes, you'll receive a print-ready noticeboard poster and a pre-written SMS template to share with your team. Both are ready to use immediately — no editing required unless you want to personalise them.</p>
+        <p>Alongside your access codes, you'll receive a print-ready noticeboard poster and a pre-written SMS template to share with your team. Both are ready to use immediately - no editing required unless you want to personalise them.</p>
         <span class="tl-tag active">Included in your plan</span>
       </div>
     </div>
@@ -219,7 +225,7 @@
       <div class="tl-circle">🔑</div>
       <div class="tl-content">
         <h3>Share the access code with your team</h3>
-        <p>No app to download. No accounts to create. Your team simply visit the platform on any device — phone, tablet, or computer — and enter their access code. That's the entire setup process for them.</p>
+        <p>No app to download. No accounts to create. Your team simply visit the platform on any device - phone, tablet, or computer - and enter their access code. That's the entire setup process for them.</p>
         <span class="tl-tag">No IT setup needed</span>
       </div>
     </div>
@@ -228,7 +234,7 @@
       <div class="tl-circle">📊</div>
       <div class="tl-content">
         <h3>Your employer dashboard goes live</h3>
-        <p>Once your team begins using the platform, you'll be able to see anonymous, aggregated usage data — how many team members are accessing resources and which topic areas are most used. Individual employee activity is never visible, and data is only shown where 5 or more team members have accessed a resource.</p>
+        <p>Once your team begins using the platform, you'll be able to see anonymous, aggregated usage data - how many team members are accessing resources and which topic areas are most used. Individual employee activity is never visible, and data is only shown where 5 or more team members have accessed a resource.</p>
         <span class="tl-tag">Privacy protected by design</span>
       </div>
     </div>
@@ -236,55 +242,55 @@
   </div><!-- /timeline -->
 
 
-  <!-- ═══ COUNSELLING: BUNDLED SESSIONS ═══ -->
+  <!-- COUNSELLING: BUNDLED SESSIONS -->
   <div class="counselling-section" id="section-bundled">
     <div class="section-label">Your counselling sessions</div>
     <div class="counselling-header bundled">
       <span style="font-size:22px;">🩺</span>
-      <h2>3-session bundle — included in your plan</h2>
+      <h2>3-session bundle - included in your plan</h2>
     </div>
     <div class="counselling-body">
-      <p>Your plan includes a bundle of <strong>3 counselling sessions</strong> ($600 total) with a Registered Psychologist and Registered Counsellor. The 3 sessions are a shared pool — they can be used by one staff member or spread across the team, in any combination. There is no per-person limit.</p>
+      <p>Your plan includes a bundle of <strong>3 counselling sessions</strong> ($600 total) with a Registered Psychologist and Registered Counsellor. The 3 sessions are a shared pool - they can be used by one staff member or spread across the team, in any combination. There is no per-person limit.</p>
 
       <div class="session-steps">
         <div class="session-step">
           <div class="session-step-num">1</div>
           <div>
             <h4>Any staff member can book</h4>
-            <p>Employees use the Calendly booking link within the platform to schedule a session at a time that suits them. No approval from you is needed or visible — they simply book and attend.</p>
+            <p>Employees use the Calendly booking link within the platform to schedule a session at a time that suits them. No approval from you is needed or visible - they simply book and attend.</p>
           </div>
         </div>
         <div class="session-step">
           <div class="session-step-num">2</div>
           <div>
             <h4>Sessions are held via phone or video</h4>
-            <p>Sessions are conducted by phone or video call — whichever the team member prefers. Each session is typically 50 minutes.</p>
+            <p>Sessions are conducted by phone or video call - whichever the team member prefers. Each session is typically 50 minutes.</p>
           </div>
         </div>
         <div class="session-step">
           <div class="session-step-num">3</div>
           <div>
             <h4>You'll be notified when sessions are running low</h4>
-            <p>When sessions are being drawn on, you'll receive a notification so you can track usage. You will never be told which team member attended — only how many sessions have been used from the bundle.</p>
+            <p>When sessions are being drawn on, you'll receive a notification so you can track usage. You will never be told which team member attended - only how many sessions have been used from the bundle.</p>
           </div>
         </div>
         <div class="session-step">
           <div class="session-step-num">4</div>
           <div>
             <h4>Top up with another bundle when needed</h4>
-            <p>Once all 3 sessions have been used, you can purchase another 3-session bundle for $600 at any time. There's no obligation to purchase more — top up only when your team needs it.</p>
+            <p>Once all 3 sessions have been used, you can purchase another 3-session bundle for $600 at any time. There's no obligation to purchase more - top up only when your team needs it.</p>
           </div>
         </div>
       </div>
 
       <div class="note-box green">
-        🔒 <strong>Confidentiality is absolute.</strong> What a staff member discusses in a session is completely private — it is never reported to you, shared with the employer, or disclosed to any third party. Our practitioners operate under the same professional and ethical obligations as any registered health professional.
+        🔒 <strong>Confidentiality is absolute.</strong> What a staff member discusses in a session is completely private - it is never reported to you, shared with the employer, or disclosed to any third party. Our practitioners operate under the same professional and ethical obligations as any registered health professional.
       </div>
     </div>
   </div>
 
 
-  <!-- ═══ COUNSELLING: PAY AS YOU GO ═══ -->
+  <!-- COUNSELLING: PAY AS YOU GO -->
   <div class="counselling-section" id="section-payg">
     <div class="section-label">Your counselling sessions</div>
     <div class="counselling-header payg">
@@ -292,7 +298,7 @@
       <h2>Pay as you go sessions</h2>
     </div>
     <div class="counselling-body">
-      <p>Your subscription includes access to pay as you go psychology and counselling sessions with Nic. There's no fixed allocation — sessions are booked and billed as they're used, giving your team access to professional support when they need it without committing to a set number upfront.</p>
+      <p>Your subscription includes access to pay as you go psychology and counselling sessions with Nic. There's no fixed allocation - sessions are booked and billed as they're used, giving your team access to professional support when they need it without committing to a set number upfront.</p>
 
       <div class="session-steps">
         <div class="session-step">
@@ -306,14 +312,14 @@
           <div class="session-step-num">2</div>
           <div>
             <h4>Sessions are held via phone or video</h4>
-            <p>Nic will conduct sessions by phone or video call — whichever the team member prefers. Sessions are typically 50 minutes.</p>
+            <p>Nic will conduct sessions by phone or video call - whichever the team member prefers. Sessions are typically 50 minutes.</p>
           </div>
         </div>
         <div class="session-step">
           <div class="session-step-num">3</div>
           <div>
             <h4>Billing is handled directly with Nic</h4>
-            <p>Sessions are billed to the business on a per-session basis. Nic will send invoices directly. You will never be told which team member booked — only the number of sessions used in a billing period.</p>
+            <p>Sessions are billed to the business on a per-session basis. Nic will send invoices directly. You will never be told which team member booked - only the number of sessions used in a billing period.</p>
           </div>
         </div>
         <div class="session-step">
@@ -326,31 +332,31 @@
       </div>
 
       <div class="note-box amber">
-        🔒 <strong>Confidentiality is absolute.</strong> What a team member discusses in a session with Nic is private — it is not reported to you, documented in a way accessible to you, or shared with any third party. Nic operates under the same professional and ethical obligations as any registered psychologist.
+        🔒 <strong>Confidentiality is absolute.</strong> What a team member discusses in a session with Nic is private - it is not reported to you, documented in a way accessible to you, or shared with any third party. Nic operates under the same professional and ethical obligations as any registered psychologist.
       </div>
     </div>
   </div>
 
 
-  <!-- ═══ WHAT TO TELL YOUR TEAM ═══ -->
+  <!-- WHAT TO TELL YOUR TEAM -->
   <div class="section-label">What to tell your team</div>
   <div class="tell-section">
     <h3>Key points to share when you launch</h3>
     <div class="tell-item">
       <span class="tell-icon">🔒</span>
-      <p><strong>It's completely private.</strong> Your employer can only see anonymous team totals — never individual names, activity, or the resources any person has accessed.</p>
+      <p><strong>It's completely private.</strong> Your employer can only see anonymous team totals - never individual names, activity, or the resources any person has accessed.</p>
     </div>
     <div class="tell-item">
       <span class="tell-icon">📱</span>
-      <p><strong>No app needed.</strong> The platform works on any phone, tablet, or computer — open a browser, enter the access code, and they're in.</p>
+      <p><strong>No app needed.</strong> The platform works on any phone, tablet, or computer - open a browser, enter the access code, and they're in.</p>
     </div>
     <div class="tell-item">
       <span class="tell-icon">🕐</span>
-      <p><strong>Available any time.</strong> Resources are there at 11pm, on weekends, during a lunch break — whenever someone needs them. There's no booking, no waitlist, and no intake form.</p>
+      <p><strong>Available any time.</strong> Resources are there at 11pm, on weekends, during a lunch break - whenever someone needs them. There's no booking, no waitlist, and no intake form.</p>
     </div>
     <div class="tell-item">
       <span class="tell-icon">🩺</span>
-      <p><strong>Written by a real psychologist.</strong> Every resource has been clinically authored and reviewed by Nic Marcon — a Registered Psychologist with over 20 years of clinical experience.</p>
+      <p><strong>Written by a real psychologist.</strong> Every resource has been clinically authored and reviewed by Nic Marcon - a Registered Psychologist with over 20 years of clinical experience.</p>
     </div>
     <div class="tell-item">
       <span class="tell-icon">📞</span>
@@ -363,12 +369,12 @@
   </div>
 
 
-  <!-- ═══ SETUP CALL ═══ -->
+  <!-- SETUP CALL -->
   <div class="booking-card">
     <h3>Want to talk through the rollout?</h3>
-    <p>Book an optional setup call with Nic — a short conversation to make sure your team gets the best possible start. Nic can also answer any questions about how the platform or counselling sessions work.</p>
-    <a href="booking.html" class="btn-book">Book a setup call with Nic →</a>
-    <p class="btn-book-note">No obligation — this is part of your subscription at no extra cost.</p>
+    <p>Book an optional setup call with Nic - a short conversation to make sure your team gets the best possible start. Nic can also answer any questions about how the platform or counselling sessions work.</p>
+    <a href="booking.html" class="btn-book">Book a setup call with Nic</a>
+    <p class="btn-book-note">No obligation - this is part of your subscription at no extra cost.</p>
   </div>
 
   <!-- Bottom links -->
@@ -384,7 +390,7 @@
 <div class="reassure-strip">
   <div class="reassure-item">✍️ Written by a Registered Psychologist</div>
   <div class="reassure-item">🔒 Individual privacy protected</div>
-  <div class="reassure-item">⚡ Team access within 48 hours</div>
+  <div class="reassure-item">⏱ Team access within 48 hours</div>
   <div class="reassure-item">💳 Cancel anytime</div>
 </div>
 
@@ -394,7 +400,7 @@
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>
     <a href="terms.html">Terms</a>
-    <a href="business.html">For Business</a>
+    <a href="business.html">For Workplaces</a>
     <a href="about.html">About Nic</a>
     <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
   </div>
@@ -458,5 +464,7 @@
     cursor: pointer;
   ">Share feedback</a>
 
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
 </body>
 </html>
