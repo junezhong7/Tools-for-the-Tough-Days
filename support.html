@@ -302,7 +302,7 @@
     .modal-desc { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 8px; }
     .modal-checklist { list-style: none; margin-bottom: 20px; }
     .modal-checklist li { font-size: 13px; color: var(--charcoal); padding: 4px 0 4px 18px; position: relative; }
-    .modal-checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .modal-checklist li::before { content: '✔'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
     .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--warm-grey); line-height: 1; padding: 4px; }
     .modal-close:hover { color: var(--charcoal); }
     .modal-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); outline: none; margin-bottom: 10px; }
@@ -395,7 +395,7 @@
     <div class="nav-links">
       <a href="index.html">For Personal Life</a>
       <a href="business.html">For Workplaces</a>
-      <a href="about.html">About Nic</a>
+      <a href="about-nic.html">About Nic</a>
       <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
       <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
       <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
@@ -463,7 +463,7 @@
       </div>
 
       <!-- FREE INSTANTLY -->
-      <div class="grid-label instant">✓ Open now — no email needed</div>
+      <div class="grid-label instant">✅ Open now — no email needed</div>
       <div class="resource-grid">
 
         <div class="resource-card instant">
@@ -605,7 +605,7 @@
     <a href="privacy-policy.html">Privacy</a>
       <a href="terms.html">Terms</a>
       <a href="business.html">For Workplaces</a>
-      <a href="about.html">About Nic</a>
+      <a href="about-nic.html">About Nic</a>
       <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
     </div>
   </footer>
@@ -1178,10 +1178,10 @@
     const btn = document.getElementById('mood-btn');
     if (val <= 2) {
       alert.classList.add('show');
-      btn.textContent = 'Access important information →';
+      btn.textContent = 'Access important information →;
     } else {
       alert.classList.remove('show');
-      btn.textContent = 'Show me what\'s available →';
+      btn.textContent = 'Show me what\'s available →;
     }
   }
   function submitMood() {
