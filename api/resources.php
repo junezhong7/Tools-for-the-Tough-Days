@@ -84,6 +84,13 @@ function get_topic_prefix_map(): array
         'financial-stress' => ['title' => 'Financial stress', 'label' => 'Financial stress', 'icon' => '💸', 'order' => 190, 'prefixes' => ['FIN']],
         'big-life-changes' => ['title' => 'Big life changes', 'label' => 'Big life changes', 'icon' => '🔄', 'order' => 200, 'prefixes' => ['LT']],
         'stress-about-future' => ['title' => 'Stress about the future', 'label' => 'Stress about the future', 'icon' => '🔮', 'order' => 210, 'prefixes' => ['FUT']],
+        'trauma-difficult-memories' => ['title' => 'Trauma & difficult memories', 'label' => 'Trauma & difficult memories', 'icon' => '💭', 'order' => 215, 'prefixes' => ['TRM']],
+        'workplace-stress-pressure' => ['title' => 'Workplace stress & pressure', 'label' => 'Workplace stress & pressure', 'icon' => '📊', 'order' => 220, 'prefixes' => ['WSP']],
+        'burnout' => ['title' => 'Burnout', 'label' => 'Burnout', 'icon' => '🔋', 'order' => 230, 'prefixes' => ['BRN']],
+        'difficult-workplace-relationships' => ['title' => 'Difficult workplace relationships', 'label' => 'Difficult workplace relationships', 'icon' => '🤯', 'order' => 240, 'prefixes' => ['WPR']],
+        'work-life-balance' => ['title' => 'Work-life balance', 'label' => 'Work-life balance', 'icon' => '⚖️', 'order' => 250, 'prefixes' => ['WLB']],
+        'job-loss-unemployment' => ['title' => 'Job loss & unemployment', 'label' => 'Job loss & unemployment', 'icon' => '📉', 'order' => 260, 'prefixes' => ['JLU']],
+        'career-uncertainty-change' => ['title' => 'Career uncertainty & change', 'label' => 'Career uncertainty & change', 'icon' => '🧭', 'order' => 270, 'prefixes' => ['CUC']],
     ];
 }
 
@@ -407,27 +414,39 @@ function load_resource_map_from_csv(): array
 
     $resourceMap = [];
     $headerFound = false;
+    $headerIndexMap = [];
 
     while (($row = fgetcsv($handle)) !== false) {
         if (!$headerFound) {
             if (isset($row[0]) && trim((string) $row[0]) === 'Mood_Score_Range') {
                 $headerFound = true;
+                foreach ($row as $idx => $name) {
+                    $headerName = trim((string) $name);
+                    if ($headerName !== '') {
+                        $headerIndexMap[$headerName] = $idx;
+                    }
+                }
             }
             continue;
         }
 
-        if (count($row) < 10) {
+        if (count($row) < 5) {
             continue;
         }
 
-        $resourceCode = strtoupper(trim((string) ($row[3] ?? '')));
+        $resourceCodeIndex = $headerIndexMap['Resource_Code'] ?? 3;
+        $resourceNameIndex = $headerIndexMap['Resource_Name'] ?? 4;
+        $fileReferenceIndex = $headerIndexMap['File_Reference'] ?? 8;
+        $audioReferenceIndex = $headerIndexMap['SharePoint_Audio_Link'] ?? 9;
+
+        $resourceCode = strtoupper(trim((string) ($row[$resourceCodeIndex] ?? '')));
         if ($resourceCode === '') {
             continue;
         }
 
-        $resourceName = trim((string) ($row[4] ?? ''));
-        $pdfBlob = trim((string) ($row[7] ?? ''));
-        $videoBlob = trim((string) ($row[9] ?? ''));
+        $resourceName = trim((string) ($row[$resourceNameIndex] ?? ''));
+        $pdfBlob = trim((string) ($row[$fileReferenceIndex] ?? ''));
+        $videoBlob = trim((string) ($row[$audioReferenceIndex] ?? ''));
 
         $resourceMap[$resourceCode] = [
             'name' => $resourceName,

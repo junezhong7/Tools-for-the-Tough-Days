@@ -101,19 +101,136 @@
   .hero h1 em { color: #c8f0f2; font-style: italic; }
   .hero-sub { color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 300; }
 
-  #resource-topic-buttons a {
+  .cat-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .cat-btn {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--charcoal);
     cursor: pointer;
-    transition: transform 0.12s, box-shadow 0.12s;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
   }
-  #resource-topic-buttons a:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(42,40,37,0.12);
+  .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
+  .cat-btn.active {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal);
   }
-  #resource-topic-note {
-    margin-top: 12px;
-    text-align: center;
-    font-size: 12px;
+  .cat-btn .cat-chevron {
+    font-size: 9px;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .cat-btn.active .cat-chevron { transform: rotate(180deg); }
+  .subtopic-panel {
+    display: none;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 14px;
+  }
+  .subtopic-panel.show { display: block; }
+  .subtopic-panel-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--warm-grey);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .subtopic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .subtopic-pill {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--charcoal);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: border-color 0.12s, transform 0.12s;
+  }
+  .subtopic-pill:hover {
+    border-color: rgba(38,119,123,0.4);
+    transform: translateY(-1px);
+  }
+  .subtopic-pill.coming-soon {
+    color: var(--warm-grey);
+    background: #f7f4f0;
+    cursor: default;
+    border-style: dashed;
+    pointer-events: none;
+  }
+  .cs-badge {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 1px 6px;
+    color: var(--warm-grey);
+  }
+  .crisis-nav-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: var(--red-crisis-bg);
+    border: 1.5px solid var(--red-crisis);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .crisis-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .crisis-nav-icon { font-size: 22px; }
+  .crisis-nav-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--red-crisis);
+    margin-bottom: 2px;
+  }
+  .crisis-nav-sub {
+    font-size: 12px;
+    color: #7a2020;
+  }
+  .crisis-nav-btn {
+    background: var(--red-crisis);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .crisis-nav-btn:hover {
+    background: #a93226;
+    color: #fff;
   }
 
   .topic-modal-overlay {
@@ -382,12 +499,28 @@
   </div>
 </section>
 
-<!-- RESOURCE AREAS STRIP -->
-<div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
+<!-- CATEGORY NAVIGATION STRIP -->
+<div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
   <div style="max-width: 880px; margin: 0 auto;">
-    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What's covered — 21 resource areas</div>
-    <div id="resource-topic-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
-    <p id="resource-topic-note">Click any topic to load matching resources from your CSV mapping.</p>
+    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic — 6 areas, 30+ sub-topics</div>
+
+    <div class="cat-nav" id="cat-nav"></div>
+
+    <div class="subtopic-panel" id="subtopic-panel">
+      <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+      <div class="subtopic-list" id="subtopic-list"></div>
+    </div>
+
+    <div class="crisis-nav-card">
+      <div class="crisis-nav-left">
+        <span class="crisis-nav-icon">🆘</span>
+        <div>
+          <div class="crisis-nav-title">Crisis Support</div>
+          <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+        </div>
+      </div>
+      <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+    </div>
   </div>
 </div>
 
