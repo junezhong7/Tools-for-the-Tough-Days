@@ -365,6 +365,29 @@
     footer a:hover { color: #fff; }
     .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 
+    /* CATEGORY NAVIGATION */
+    .cat-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 7px; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+    .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
+    .cat-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .cat-btn .cat-chevron { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+    .cat-btn.active .cat-chevron { transform: rotate(180deg); }
+    .subtopic-panel { display: none; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-top: 14px; }
+    .subtopic-panel.show { display: block; }
+    .subtopic-panel-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 12px; font-weight: 500; }
+    .subtopic-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .subtopic-pill { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: border-color 0.12s, transform 0.12s; }
+    .subtopic-pill:hover { border-color: rgba(38,119,123,0.4); transform: translateY(-1px); }
+    .subtopic-pill.coming-soon { color: var(--warm-grey); background: #f7f4f0; cursor: default; border-style: dashed; pointer-events: none; }
+    .cs-badge { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 1px 6px; color: var(--warm-grey); }
+    .crisis-nav-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .crisis-nav-left { display: flex; align-items: center; gap: 12px; }
+    .crisis-nav-icon { font-size: 22px; }
+    .crisis-nav-title { font-size: 14px; font-weight: 500; color: var(--red-crisis); margin-bottom: 2px; }
+    .crisis-nav-sub { font-size: 12px; color: #7a2020; }
+    .crisis-nav-btn { background: var(--red-crisis); color: #fff; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+    .crisis-nav-btn:hover { background: #a93226; color: #fff; }
+
     /* RESPONSIVE */
     @media (max-width: 800px) {
       nav { padding: 0 16px; }
@@ -431,11 +454,31 @@
     </div>
   </section>
 
-  <!-- RESOURCE AREAS STRIP -->
-  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
+  <!-- CATEGORY NAVIGATION STRIP -->
+  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
-      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What's covered — 21 resource areas</div>
-      <div id="resource-topic-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic — 6 areas, 30+ sub-topics</div>
+
+      <!-- Category buttons -->
+      <div class="cat-nav" id="cat-nav"></div>
+
+      <!-- Sub-topic panel (shown when a category is selected) -->
+      <div class="subtopic-panel" id="subtopic-panel">
+        <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+        <div class="subtopic-list" id="subtopic-list"></div>
+      </div>
+
+      <!-- Crisis Support — persistent, outside dropdown system -->
+      <div class="crisis-nav-card">
+        <div class="crisis-nav-left">
+          <span class="crisis-nav-icon">🆘</span>
+          <div>
+            <div class="crisis-nav-title">Crisis Support</div>
+            <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+          </div>
+        </div>
+        <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+      </div>
     </div>
   </div>
 
@@ -884,8 +927,6 @@
     const title = document.getElementById('topicModalTitle');
     const options = document.getElementById('topicOptions');
     const closeBtn = document.getElementById('topicModalClose');
-    const topicButtons = document.getElementById('resource-topic-buttons');
-    const topicNote = document.getElementById('resource-topic-note');
     if (!overlay || !title || !options || !closeBtn) {
       return;
     }
@@ -899,44 +940,131 @@
         .replace(/'/g, '&#39;');
     }
 
+    const CATEGORIES = [
+      {
+        id: 'mental-health', icon: '🧠', label: 'My Mental Health',
+        subtopics: [
+          { icon: '💙', label: 'Low mood & depression',       key: 'low-mood-depression' },
+          { icon: '🌀', label: 'Anxiety & worry',              key: 'anxiety-worry' },
+          { icon: '😶', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
+          { icon: '💪', label: 'Self-esteem',                  key: 'self-esteem' },
+          { icon: '🔮', label: 'Stress about the future',      key: 'stress-about-future' },
+          { icon: '💭', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories', comingSoon: true },
+        ]
+      },
+      {
+        id: 'life-challenges', icon: '🌊', label: 'Life Challenges',
+        subtopics: [
+          { icon: '🕊️', label: 'Grief & loss',                key: 'grief-loss' },
+          { icon: '🔄', label: 'Big life changes',             key: 'big-life-changes' },
+          { icon: '💸', label: 'Financial stress',             key: 'financial-stress' },
+          { icon: '🏠', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
+          { icon: '🎲', label: 'Gambling & substance use',     key: 'gambling-substance' },
+          { icon: '🤍', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
+        ]
+      },
+      {
+        id: 'relationships', icon: '❤️', label: 'Relationships',
+        subtopics: [
+          { icon: '❤️', label: 'Relationships',               key: 'relationships' },
+          { icon: '🤝', label: 'Supporting someone else',      key: 'supporting-someone-else' },
+          { icon: '🌍', label: 'Identity & belonging',         key: 'identity-belonging' },
+          { icon: '💬', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
+        ]
+      },
+      {
+        id: 'family-parenting', icon: '👨‍👩‍👧', label: 'Family & Parenting',
+        subtopics: [
+          { icon: '👶', label: 'Parenting young children',     key: 'parenting-young-children' },
+          { icon: '🧒', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
+          { icon: '🤰', label: 'Pregnancy',                    key: 'pregnancy' },
+          { icon: '🍼', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
+          { icon: '👨‍👧', label: 'Expecting fathers',          key: 'expecting-fathers' },
+          { icon: '🧡', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
+        ]
+      },
+      {
+        id: 'work-career', icon: '💼', label: 'Work & Career',
+        subtopics: [
+          { icon: '📊', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure',      comingSoon: true },
+          { icon: '🔋', label: 'Burnout',                          key: 'burnout',                        comingSoon: true },
+          { icon: '🤯', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships',comingSoon: true },
+          { icon: '⚖️', label: 'Work-life balance',               key: 'work-life-balance',              comingSoon: true },
+          { icon: '📉', label: 'Job loss & unemployment',          key: 'job-loss-unemployment',          comingSoon: true },
+          { icon: '🧭', label: 'Career uncertainty & change',      key: 'career-uncertainty-change',      comingSoon: true },
+        ]
+      },
+      {
+        id: 'health-wellbeing', icon: '🌱', label: 'Health & Wellbeing',
+        subtopics: [
+          { icon: '🌱', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
+          { icon: '🧓', label: 'Getting older',               key: 'getting-older' },
+          { icon: '💤', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
+          { icon: '🪞', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
+        ]
+      },
+    ];
+
+    let activeCatId = null;
+
     function renderTopicButtons(config) {
-      if (!topicButtons) {
-        return;
-      }
+      // topicConfig is already set before this is called; nothing to render here —
+      // the category nav is built statically by initCategoryNav().
+    }
 
-      const buttonStyle = 'background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); text-decoration: none; display: inline-block;';
-      const entries = Object.entries(config || {}).sort(function (a, b) {
-        const aOrder = Number(a[1] && a[1].order ? a[1].order : 9999);
-        const bOrder = Number(b[1] && b[1].order ? b[1].order : 9999);
-        if (aOrder !== bOrder) {
-          return aOrder - bOrder;
-        }
+    function initCategoryNav() {
+      const catNav = document.getElementById('cat-nav');
+      if (!catNav) { return; }
 
-        const aTitle = String((a[1] && (a[1].label || a[1].title)) || a[0]).toLowerCase();
-        const bTitle = String((b[1] && (b[1].label || b[1].title)) || b[0]).toLowerCase();
-        return aTitle.localeCompare(bTitle);
-      });
-
-      if (entries.length === 0) {
-        topicButtons.innerHTML = '';
-        if (topicNote) {
-          topicNote.textContent = 'No resource topics available right now.';
-        }
-        return;
-      }
-
-      topicButtons.innerHTML = entries.map(function (entry) {
-        const topicKey = entry[0];
-        const topic = entry[1] || {};
-        const icon = topic.icon || '📄';
-        const label = topic.label || topic.title || topicKey;
-        return '<a href="#" data-open-topic="' + escapeHtml(topicKey) + '" style="' + buttonStyle + '">' + escapeHtml(icon + ' ' + label) + '</a>';
+      catNav.innerHTML = CATEGORIES.map(function (cat) {
+        return '<button class="cat-btn" data-cat-id="' + cat.id + '" type="button">'
+          + cat.icon + ' ' + cat.label
+          + ' <span class="cat-chevron">▼</span></button>';
       }).join('');
 
-      if (topicNote) {
-        topicNote.textContent = 'Click any topic to load matching resources from your CSV mapping.';
-      }
+      catNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.cat-btn');
+        if (!btn) { return; }
+        toggleCategory(btn.getAttribute('data-cat-id'));
+      });
     }
+
+    function toggleCategory(catId) {
+      var panel = document.getElementById('subtopic-panel');
+      var label = document.getElementById('subtopic-panel-label');
+      var list  = document.getElementById('subtopic-list');
+      var allBtns = document.querySelectorAll('.cat-btn');
+
+      if (activeCatId === catId) {
+        activeCatId = null;
+        panel.classList.remove('show');
+        allBtns.forEach(function (b) { b.classList.remove('active'); });
+        return;
+      }
+
+      activeCatId = catId;
+      var cat = CATEGORIES.find(function (c) { return c.id === catId; });
+      if (!cat) { return; }
+
+      allBtns.forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat-id') === catId);
+      });
+
+      label.textContent = cat.label;
+      list.innerHTML = cat.subtopics.map(function (sub) {
+        if (sub.comingSoon) {
+          return '<span class="subtopic-pill coming-soon">'
+            + sub.icon + ' ' + sub.label
+            + ' <span class="cs-badge">Soon</span></span>';
+        }
+        return '<a href="#" class="subtopic-pill" data-open-topic="' + sub.key + '">'
+          + sub.icon + ' ' + sub.label + '</a>';
+      }).join('');
+
+      panel.classList.add('show');
+    }
+
+    initCategoryNav();
 
     async function issueViewerUrl(resourceKey, kind) {
       const query = new URLSearchParams({
@@ -1159,9 +1287,7 @@
     });
 
     ensureTopicConfig().catch(function (error) {
-      if (topicNote) {
-        topicNote.textContent = error.message || 'Unable to load topic mapping.';
-      }
+      console.warn('Topic config unavailable:', error && error.message);
     });
   })();
 
@@ -1178,10 +1304,10 @@
     const btn = document.getElementById('mood-btn');
     if (val <= 2) {
       alert.classList.add('show');
-      btn.textContent = 'Access important information →;
+      btn.textContent = 'Access important information →';
     } else {
       alert.classList.remove('show');
-      btn.textContent = 'Show me what\'s available →;
+      btn.textContent = 'Show me what\'s available →';
     }
   }
   function submitMood() {
