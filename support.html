@@ -302,7 +302,7 @@
     .modal-desc { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 8px; }
     .modal-checklist { list-style: none; margin-bottom: 20px; }
     .modal-checklist li { font-size: 13px; color: var(--charcoal); padding: 4px 0 4px 18px; position: relative; }
-    .modal-checklist li::before { content: '✔'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .modal-checklist li::before { content: ''; position: absolute; left: 0; color: var(--green); font-weight: 700; }
     .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--warm-grey); line-height: 1; padding: 4px; }
     .modal-close:hover { color: var(--charcoal); }
     .modal-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); outline: none; margin-bottom: 10px; }
@@ -471,7 +471,7 @@
       <!-- Crisis Support — persistent, outside dropdown system -->
       <div class="crisis-nav-card">
         <div class="crisis-nav-left">
-          <span class="crisis-nav-icon">🆘</span>
+          <span class="crisis-nav-icon"></span>
           <div>
             <div class="crisis-nav-title">Crisis Support</div>
             <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
@@ -507,19 +507,19 @@
       </div>
 
       <!-- FREE INSTANTLY -->
-      <div class="grid-label instant">✅ Open now, no email needed</div>
+      <div class="grid-label instant"> Open now, no email needed</div>
       <div class="resource-grid">
 
         <div class="resource-card instant">
           <span class="card-tag t-instant">Free — no signup</span>
-          <span class="c-icon">🌊</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Crisis Support</div>
           <h3 class="card-title">Grounding Yourself When Everything Feels Overwhelming</h3>
           <p class="card-desc">When everything feels too much and you don't know where to start — simple, immediate grounding steps you can use right now to feel a little steadier.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="#" class="btn-open" onclick="openViewer('crisis'); return false;">Read or listen →</a>
           </div>
@@ -527,14 +527,14 @@
 
         <div class="resource-card instant">
           <span class="card-tag t-instant">Free — no signup</span>
-          <span class="c-icon">💓</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Anxiety</div>
           <h3 class="card-title">Understanding What Anxiety Is Actually Doing to Your Body</h3>
           <p class="card-desc">Anxiety affects 2.4 million Australians. This explains what's happening in your body — the racing heart, tight chest, racing thoughts — and what actually helps.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="#" class="btn-open" onclick="openViewer('anxiety'); return false;">Read or listen →</a>
           </div>
@@ -543,19 +543,19 @@
       </div>
 
       <!-- FREE WITH EMAIL -->
-      <div class="grid-label email">📧 Free with your email</div>
+      <div class="grid-label email"> Free with your email</div>
       <div class="resource-grid">
 
         <div class="resource-card email-gate" onclick="openModal('financial')">
           <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon">💸</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Financial Stress</div>
           <h3 class="card-title">When Financial Stress Starts Affecting Your Mental Health</h3>
           <p class="card-desc">Money stress is the #1 driver of mental health decline in Australia right now. Understand why financial pressure hits so hard — and what to do when it's affecting how you feel and function.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
           </div>
@@ -563,14 +563,14 @@
 
         <div class="resource-card email-gate">
           <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon">🔋</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Burnout & Stress</div>
           <h3 class="card-title">The Basics That Actually Make a Difference to Your Wellbeing</h3>
           <p class="card-desc">Burnout doesn't fix itself. This resource cuts through the noise and gives you the fundamentals — the things that clinical research and 20+ years of practice show actually work.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
           </div>
@@ -602,7 +602,7 @@
           </div>
         </div>
         <a href="booking.html" class="cta-link">Or book a free 15-min call with Nic first →</a>
-        <p class="growing-note">📚 The library grows regularly — new resources added every month</p>
+        <p class="growing-note"> The library grows regularly — new resources added every month</p>
       </div>
 
     </div>
@@ -611,10 +611,10 @@
   <!-- Trust strip -->
   <div class="trust-strip">
     <div class="trust-inner">
-      <div class="trust-item">✍️ Written by a Registered Psychologist</div>
-      <div class="trust-item">✍️ Clinically authored and reviewed</div>
-      <div class="trust-item">📬 One email. Unsubscribe anytime.</div>
-      <div class="trust-item">🔒 We never share your details</div>
+      <div class="trust-item"> Written by a Registered Psychologist</div>
+      <div class="trust-item"> Clinically authored and reviewed</div>
+      <div class="trust-item"> One email. Unsubscribe anytime.</div>
+      <div class="trust-item"> We never share your details</div>
     </div>
   </div>
 
@@ -623,15 +623,15 @@
     <div class="what-inner">
       <h3>What you get with a subscription</h3>
       <div class="what-grid">
-        <div class="what-card"><div class="w-icon">📚</div><h4>80+ PDF guides</h4><p>Clinically reviewed — covering 20+ problem areas, growing every month</p></div>
-        <div class="what-card"><div class="w-icon">🎧</div><h4>80+ audio guides</h4><p>Listen on the go — same content, perfect when reading isn't convenient</p></div>
-        <div class="what-card"><div class="w-icon">📅</div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
-        <div class="what-card"><div class="w-icon">🔒</div><h4>Completely private</h4><p>No employer access, no data sharing — just you and the resources</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>80+ PDF guides</h4><p>Clinically reviewed — covering 20+ problem areas, growing every month</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>80+ audio guides</h4><p>Listen on the go — same content, perfect when reading isn't convenient</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>Completely private</h4><p>No employer access, no data sharing — just you and the resources</p></div>
       </div>
     </div>
   </div>
 
-  <a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+  <a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
 
   <!-- STAY IN THE LOOP -->
   <section style="background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
@@ -661,11 +661,11 @@
     <div class="viewer-box">
       <div class="viewer-header">
         <h3 id="viewer-title">—</h3>
-        <button class="viewer-close" onclick="closeViewer()">✕ Close</button>
+        <button class="viewer-close" onclick="closeViewer()"> Close</button>
       </div>
       <div class="viewer-tabs">
-        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')">📄 Read</button>
-        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')">🎧 Listen</button>
+        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')"> Read</button>
+        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')"> Listen</button>
       </div>
       <div class="viewer-upsell">
         <p>You're reading a free resource. Subscribe to unlock all 160+.</p>
@@ -799,7 +799,7 @@
           <div class="audio-title">${r.title}</div>
           <div class="audio-byline">Narrated audio · toolsforthetoughdays.com.au · Nic Marcon, Registered Psychologist</div>
           <a href="${r.audioSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;padding:13px 22px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:16px;">
-            🎧 Listen on SharePoint →
+             Listen on SharePoint →
           </a>
           <p class="audio-note">Opens in SharePoint in a new tab — free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
         </div>
@@ -813,11 +813,11 @@
       const pdfBtn = r.pdfSrc
         ? `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
              <a href="${r.pdfSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);color:var(--charcoal);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">
-               📄 Download PDF version →
+                Download PDF version →
              </a>
            </div>`
         : `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--warm-grey);">
-             📄 PDF download coming soon.
+              PDF download coming soon.
            </div>`;
       document.getElementById('viewer-read').innerHTML += pdfBtn;
 
@@ -945,65 +945,65 @@
 
     const CATEGORIES = [
       {
-        id: 'mental-health', icon: '🧠', label: 'My Mental Health',
+        id: 'mental-health', icon: '', label: 'My Mental Health',
         subtopics: [
-          { icon: '💙', label: 'Low mood & depression',       key: 'low-mood-depression' },
-          { icon: '🌀', label: 'Anxiety & worry',              key: 'anxiety-worry' },
-          { icon: '😶', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
-          { icon: '💪', label: 'Self-esteem',                  key: 'self-esteem' },
-          { icon: '🔮', label: 'Stress about the future',      key: 'stress-about-future' },
-          { icon: '💭', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories' },
+          { icon: '', label: 'Low mood & depression',       key: 'low-mood-depression' },
+          { icon: '', label: 'Anxiety & worry',              key: 'anxiety-worry' },
+          { icon: '', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
+          { icon: '', label: 'Self-esteem',                  key: 'self-esteem' },
+          { icon: '', label: 'Stress about the future',      key: 'stress-about-future' },
+          { icon: '', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories' },
         ]
       },
       {
-        id: 'life-challenges', icon: '🌊', label: 'Life Challenges',
+        id: 'life-challenges', icon: '', label: 'Life Challenges',
         subtopics: [
-          { icon: '🕊️', label: 'Grief & loss',                key: 'grief-loss' },
-          { icon: '🔄', label: 'Big life changes',             key: 'big-life-changes' },
-          { icon: '💸', label: 'Financial stress',             key: 'financial-stress' },
-          { icon: '🏠', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
-          { icon: '🎲', label: 'Gambling & substance use',     key: 'gambling-substance' },
-          { icon: '🤍', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
+          { icon: '', label: 'Grief & loss',                key: 'grief-loss' },
+          { icon: '', label: 'Big life changes',             key: 'big-life-changes' },
+          { icon: '', label: 'Financial stress',             key: 'financial-stress' },
+          { icon: '', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
+          { icon: '', label: 'Gambling & substance use',     key: 'gambling-substance' },
+          { icon: '', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
         ]
       },
       {
-        id: 'relationships', icon: '❤️', label: 'Relationships',
+        id: 'relationships', icon: '', label: 'Relationships',
         subtopics: [
-          { icon: '❤️', label: 'Relationships',               key: 'relationships' },
-          { icon: '🤝', label: 'Supporting someone else',      key: 'supporting-someone-else' },
-          { icon: '🌍', label: 'Identity & belonging',         key: 'identity-belonging' },
-          { icon: '💬', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
+          { icon: '', label: 'Relationships',               key: 'relationships' },
+          { icon: '', label: 'Supporting someone else',      key: 'supporting-someone-else' },
+          { icon: '', label: 'Identity & belonging',         key: 'identity-belonging' },
+          { icon: '', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
         ]
       },
       {
-        id: 'family-parenting', icon: '👨‍👩‍👧', label: 'Family & Parenting',
+        id: 'family-parenting', icon: '', label: 'Family & Parenting',
         subtopics: [
-          { icon: '👶', label: 'Parenting young children',     key: 'parenting-young-children' },
-          { icon: '🧒', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
-          { icon: '🤰', label: 'Pregnancy',                    key: 'pregnancy' },
-          { icon: '🍼', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
-          { icon: '👨‍👧', label: 'Expecting fathers',          key: 'expecting-fathers' },
-          { icon: '🧡', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
+          { icon: '', label: 'Parenting young children',     key: 'parenting-young-children' },
+          { icon: '', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
+          { icon: '', label: 'Pregnancy',                    key: 'pregnancy' },
+          { icon: '', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
+          { icon: '', label: 'Expecting fathers',          key: 'expecting-fathers' },
+          { icon: '', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
         ]
       },
       {
-        id: 'work-career', icon: '💼', label: 'Work & Career',
+        id: 'work-career', icon: '', label: 'Work & Career',
         subtopics: [
-          { icon: '📊', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure' },
-          { icon: '🔋', label: 'Burnout',                          key: 'burnout' },
-          { icon: '🤯', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships' },
-          { icon: '⚖️', label: 'Work-life balance',               key: 'work-life-balance' },
-          { icon: '📉', label: 'Job loss & unemployment',          key: 'job-loss-unemployment' },
-          { icon: '🧭', label: 'Career uncertainty & change',      key: 'career-uncertainty-change' },
+          { icon: '', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure' },
+          { icon: '', label: 'Burnout',                          key: 'burnout' },
+          { icon: '', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships' },
+          { icon: '', label: 'Work-life balance',               key: 'work-life-balance' },
+          { icon: '', label: 'Job loss & unemployment',          key: 'job-loss-unemployment' },
+          { icon: '', label: 'Career uncertainty & change',      key: 'career-uncertainty-change' },
         ]
       },
       {
-        id: 'health-wellbeing', icon: '🌱', label: 'Health & Wellbeing',
+        id: 'health-wellbeing', icon: '', label: 'Health & Wellbeing',
         subtopics: [
-          { icon: '🌱', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
-          { icon: '🧓', label: 'Getting older',               key: 'getting-older' },
-          { icon: '💤', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
-          { icon: '🪞', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
+          { icon: '', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
+          { icon: '', label: 'Getting older',               key: 'getting-older' },
+          { icon: '', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
+          { icon: '', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
         ]
       },
     ];
@@ -1148,7 +1148,7 @@
 
     function makeOption(item) {
       const label = item && item.label ? item.label : 'Resource';
-      const icon = item && item.icon ? item.icon : '📄';
+      const icon = item && item.icon ? item.icon : '';
       const resourceKey = item && item.resourceKey ? String(item.resourceKey).trim() : '';
       const kind = item && item.kind ? item.kind.toUpperCase() : 'RESOURCE';
 
@@ -1171,7 +1171,7 @@
         if (resource.has_pdf) {
           expanded.push({
             label: name + ' (' + key + ')',
-            icon: '📄',
+            icon: '',
             kind: 'pdf',
             resourceKey: key
           });
@@ -1179,7 +1179,7 @@
         if (resource.has_video) {
           expanded.push({
             label: name + ' (' + key + ')',
-            icon: '🎬',
+            icon: '',
             kind: 'video',
             resourceKey: key
           });
