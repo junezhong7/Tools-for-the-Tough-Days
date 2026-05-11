@@ -436,6 +436,7 @@ function load_resource_map_from_csv(): array
 
         $resourceCodeIndex = $headerIndexMap['Resource_Code'] ?? 3;
         $resourceNameIndex = $headerIndexMap['Resource_Name'] ?? 4;
+        $formatIndex = $headerIndexMap['Format'] ?? 5;
         $fileReferenceIndex = $headerIndexMap['File_Reference'] ?? 8;
         $audioReferenceIndex = $headerIndexMap['SharePoint_Audio_Link'] ?? 9;
 
@@ -445,14 +446,42 @@ function load_resource_map_from_csv(): array
         }
 
         $resourceName = trim((string) ($row[$resourceNameIndex] ?? ''));
-        $pdfBlob = trim((string) ($row[$fileReferenceIndex] ?? ''));
-        $videoBlob = trim((string) ($row[$audioReferenceIndex] ?? ''));
+        $format = strtoupper(trim((string) ($row[$formatIndex] ?? '')));
+        $fileReference = trim((string) ($row[$fileReferenceIndex] ?? ''));
+        $legacyAudioReference = trim((string) ($row[$audioReferenceIndex] ?? ''));
 
-        $resourceMap[$resourceCode] = [
-            'name' => $resourceName,
-            'pdf_blob' => $pdfBlob,
-            'video_blob' => $videoBlob,
-        ];
+        if (!isset($resourceMap[$resourceCode])) {
+            $resourceMap[$resourceCode] = [
+                'name' => $resourceName,
+                'pdf_blob' => '',
+                'video_blob' => '',
+            ];
+        } elseif ($resourceMap[$resourceCode]['name'] === '' && $resourceName !== '') {
+            $resourceMap[$resourceCode]['name'] = $resourceName;
+        }
+
+        if ($format === 'PDF') {
+            if ($resourceMap[$resourceCode]['pdf_blob'] === '' && $fileReference !== '') {
+                $resourceMap[$resourceCode]['pdf_blob'] = $fileReference;
+            }
+        } elseif ($format === 'VIDEO' || $format === 'AUDIO' || $format === 'MP4') {
+            if ($resourceMap[$resourceCode]['video_blob'] === '' && $fileReference !== '') {
+                $resourceMap[$resourceCode]['video_blob'] = $fileReference;
+            }
+        } else {
+            // Backward compatibility for legacy CSV files without reliable Format values.
+            if ($resourceMap[$resourceCode]['pdf_blob'] === '' && $fileReference !== '') {
+                if (preg_match('/\.(mp4|mov|m4v|webm)(\?.*)?$/i', $fileReference) === 1) {
+                    $resourceMap[$resourceCode]['video_blob'] = $fileReference;
+                } else {
+                    $resourceMap[$resourceCode]['pdf_blob'] = $fileReference;
+                }
+            }
+        }
+
+        if ($resourceMap[$resourceCode]['video_blob'] === '' && $legacyAudioReference !== '') {
+            $resourceMap[$resourceCode]['video_blob'] = $legacyAudioReference;
+        }
     }
 
     fclose($handle);

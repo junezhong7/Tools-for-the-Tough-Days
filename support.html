@@ -190,7 +190,17 @@
       justify-content: space-between;
       gap: 10px;
     }
+    .topic-option[data-kind="video"] {
+      background: #c8f0f2;
+      border-color: rgba(38,119,123,0.35);
+    }
+    .topic-option[data-kind="video"] .badge {
+      background: rgba(255,255,255,0.7);
+      border-color: rgba(38,119,123,0.35);
+      color: var(--teal-dark);
+    }
     .topic-option:hover { border-color: rgba(38,119,123,0.4); }
+    .topic-option[data-kind="video"]:hover { background: #bce8eb; border-color: rgba(38,119,123,0.5); }
     .topic-option.disabled {
       color: var(--warm-grey);
       background: #f7f4f0;
