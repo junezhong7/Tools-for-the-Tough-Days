@@ -366,8 +366,8 @@
     .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 
     /* CATEGORY NAVIGATION */
-    .cat-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 7px; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+    .cat-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto; }
+    .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 22px; font-size: 15px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: border-color 0.15s, background 0.15s, color 0.15s; width: 100%; text-align: center; }
     .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
     .cat-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
     .cat-btn .cat-chevron { font-size: 9px; transition: transform 0.2s; display: inline-block; }
