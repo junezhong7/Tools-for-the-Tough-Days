@@ -155,7 +155,7 @@
         <a href="support.html" class="btn-outline">See plans →</a>
       </div>
 
-      <div class="option-card">
+      <div class="option-card" id="cancelled-free-resource-card">
         <span class="option-icon">📚</span>
         <div class="option-title">Try a free resource first</div>
         <p class="option-desc">Not ready to subscribe? Start with one of the free resources, no email, no signup required.</p>
@@ -204,6 +204,38 @@
 
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
+
+<script>
+  (function hideFreeResourceCardForSubscribedUsers() {
+    const freeResourceCard = document.getElementById('cancelled-free-resource-card');
+    if (!freeResourceCard) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          freeResourceCard.style.display = 'none';
+        }
+      })
+      .catch(function () {
+        // Keep this visible if auth check fails.
+      });
+  })();
+</script>
 
 </body>
 </html>

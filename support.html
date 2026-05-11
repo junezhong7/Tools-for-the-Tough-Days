@@ -430,7 +430,7 @@
   <section class="hero">
     <div class="hero-texture"></div>
     <div class="hero-content">
-      <div class="hero-badge"><span class="hero-dot"></span> Free resources, no subscription needed</div>
+      <div class="hero-badge" id="hero-free-badge"><span class="hero-dot"></span> Free resources, no subscription needed</div>
       <h1>Real support,<br><em>right now.</em></h1>
       <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral, start reading or listening today.</p>
       <p style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.72);">Returning visitor? <a href="return.html" style="color:rgba(255,255,255,0.92);font-weight:500;">Pick up where you left off →</a></p>
@@ -494,6 +494,7 @@
   <section class="content-section">
     <div class="content-inner">
 
+      <div id="free-resources-block">
       <div class="section-label">Free resources</div>
 
       <div class="section-intro">
@@ -574,6 +575,8 @@
             <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
           </div>
         </div>
+
+      </div>
 
       </div>
 
@@ -1319,6 +1322,42 @@
       if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
     }
   }
+
+  (function hideFreeResourcesForSubscribedUsers() {
+    const freeBlock = document.getElementById('free-resources-block');
+    const heroBadge = document.getElementById('hero-free-badge');
+    if (!freeBlock && !heroBadge) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          if (freeBlock) {
+            freeBlock.style.display = 'none';
+          }
+          if (heroBadge) {
+            heroBadge.style.display = 'none';
+          }
+        }
+      })
+      .catch(function () {
+        // Keep free resources visible if auth check fails.
+      });
+  })();
 </script>
 
 </body>

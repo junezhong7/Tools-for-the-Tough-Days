@@ -398,7 +398,7 @@
       <div class="sidebar-card">
         <h3>Want to unlock more?</h3>
         <p>Subscribe for $10/month and access all 160+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
-        <a href="support.html" class="sidebar-link">See all free resources →</a><br>
+        <a href="support.html" class="sidebar-link" id="return-free-resources-link">See all free resources →</a><br>
         <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe — 10/month →</a>
       </div>
     </div>
@@ -844,6 +844,38 @@
 
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
+
+<script>
+  (function hideFreeResourceLinkForSubscribedUsers() {
+    const freeResourcesLink = document.getElementById('return-free-resources-link');
+    if (!freeResourcesLink) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          freeResourcesLink.style.display = 'none';
+        }
+      })
+      .catch(function () {
+        // Keep this visible if auth check fails.
+      });
+  })();
+</script>
 
 </body>
 </html>
