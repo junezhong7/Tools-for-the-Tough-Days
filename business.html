@@ -170,6 +170,45 @@
   footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
   footer a:hover { color: #fff; }
 
+  /* CATEGORY NAVIGATION */
+  .cat-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto; }
+  .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 22px; font-size: 15px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: border-color 0.15s, background 0.15s, color 0.15s; width: 100%; text-align: center; }
+  .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
+  .cat-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .cat-btn .cat-chevron { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+  .cat-btn.active .cat-chevron { transform: rotate(180deg); }
+  .subtopic-panel { display: none; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-top: 14px; }
+  .subtopic-panel.show { display: block; }
+  .subtopic-panel-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 12px; font-weight: 500; }
+  .subtopic-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .subtopic-pill { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: border-color 0.12s, transform 0.12s; }
+  .subtopic-pill:hover { border-color: rgba(38,119,123,0.4); transform: translateY(-1px); }
+  .subtopic-pill.coming-soon { color: var(--warm-grey); background: #f7f4f0; cursor: default; border-style: dashed; pointer-events: none; }
+  .cs-badge { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 1px 6px; color: var(--warm-grey); }
+  .crisis-nav-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+  .crisis-nav-left { display: flex; align-items: center; gap: 12px; }
+  .crisis-nav-icon { font-size: 22px; }
+  .crisis-nav-title { font-size: 14px; font-weight: 500; color: var(--red-crisis); margin-bottom: 2px; }
+  .crisis-nav-sub { font-size: 12px; color: #7a2020; }
+  .crisis-nav-btn { background: var(--red-crisis); color: #fff; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .crisis-nav-btn:hover { background: #a93226; color: #fff; }
+
+  /* TOPIC MODAL */
+  .topic-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.55); z-index: 650; align-items: center; justify-content: center; padding: 20px; }
+  .topic-modal-overlay.show { display: flex; }
+  .topic-modal { width: 100%; max-width: 520px; background: var(--white); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 14px 40px rgba(42,40,37,0.16); padding: 24px; position: relative; }
+  .topic-modal-close { position: absolute; top: 10px; right: 10px; border: 0; background: transparent; font-size: 22px; color: var(--warm-grey); cursor: pointer; line-height: 1; padding: 2px 6px; }
+  .topic-modal-title { font-family: 'DM Serif Display', serif; font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
+  .topic-modal-sub { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
+  .topic-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .topic-option { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--charcoal); background: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .topic-option[data-kind="video"] { background: #c8f0f2; border-color: rgba(38,119,123,0.35); }
+  .topic-option[data-kind="video"] .badge { background: rgba(255,255,255,0.7); border-color: rgba(38,119,123,0.35); color: var(--teal-dark); }
+  .topic-option:hover { border-color: rgba(38,119,123,0.4); }
+  .topic-option[data-kind="video"]:hover { background: #bce8eb; border-color: rgba(38,119,123,0.5); }
+  .topic-option.disabled { color: var(--warm-grey); background: #f7f4f0; cursor: not-allowed; border-style: dashed; }
+  .topic-option .badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--warm-grey); white-space: nowrap; }
+
   @media (max-width: 700px) {
     nav { padding: 0 16px; }
     .hero { padding: 60px 20px 40px; }
@@ -179,6 +218,7 @@
     .val-grid[style*="1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
     .final-cta { padding: 48px 20px; }
     footer { padding: 24px 16px; flex-direction: column; gap: 16px; text-align: center; }
+    .cat-nav { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -221,33 +261,40 @@
   </div>
 </section>
 
-<!-- RESOURCE AREAS STRIP -->
-<div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
+<!-- CATEGORY NAVIGATION STRIP -->
+<div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
   <div style="max-width: 880px; margin: 0 auto;">
-    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What your team can access, 21 resource areas covered</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Crisis support</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Domestic violence &amp; abuse</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Grief &amp; loss</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Low mood &amp; depression</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Anxiety &amp; worry</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Self-esteem</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Feeling flat or angry</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Postnatal struggles</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Pregnancy</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Expecting fathers</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Gambling &amp; substance use</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Daily habits &amp; wellbeing</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Relationships</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Parenting young children</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Parenting teenagers</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Getting older</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Identity &amp; belonging</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Supporting someone else</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Financial stress</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Big life changes</span>
-      <span style="background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); font-weight: 400;"> Stress about the future</span>
+    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
+
+    <!-- Category buttons -->
+    <div class="cat-nav" id="cat-nav"></div>
+
+    <!-- Sub-topic panel (shown when a category is selected) -->
+    <div class="subtopic-panel" id="subtopic-panel">
+      <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+      <div class="subtopic-list" id="subtopic-list"></div>
     </div>
+
+    <!-- Crisis Support — persistent, outside dropdown system -->
+    <div class="crisis-nav-card">
+      <div class="crisis-nav-left">
+        <span class="crisis-nav-icon"></span>
+        <div>
+          <div class="crisis-nav-title">Crisis Support</div>
+          <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+        </div>
+      </div>
+      <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+    </div>
+  </div>
+</div>
+
+<div class="topic-modal-overlay" id="topicModalOverlay" aria-hidden="true">
+  <div class="topic-modal" role="dialog" aria-modal="true" aria-labelledby="topicModalTitle">
+    <button class="topic-modal-close" id="topicModalClose" type="button" aria-label="Close">×</button>
+    <h3 class="topic-modal-title" id="topicModalTitle">Topic resources</h3>
+    <p class="topic-modal-sub">Choose your format. Access requires an active subscription.</p>
+    <div class="topic-options" id="topicOptions"></div>
   </div>
 </div>
 
@@ -316,7 +363,7 @@
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
-          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">160+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
+          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
           <a href="checkout.php?product=starter_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);flex:1;display:flex;flex-direction:column;">
@@ -367,7 +414,7 @@
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
-          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">160+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
+          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
           <a href="checkout.php?product=growth_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);">
@@ -415,7 +462,7 @@
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
-          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">160+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
+          <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
           <a href="checkout.php?product=team_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);flex:1;display:flex;flex-direction:column;">
@@ -675,6 +722,256 @@
 
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
+
+<script>
+  (function initCategoryNavAndModal() {
+    const CATEGORIES = [
+      {
+        id: 'mental-health', icon: '', label: 'My Mental Health',
+        subtopics: [
+          { icon: '', label: 'Low mood & depression',       key: 'low-mood-depression' },
+          { icon: '', label: 'Anxiety & worry',              key: 'anxiety-worry' },
+          { icon: '', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
+          { icon: '', label: 'Self-esteem',                  key: 'self-esteem' },
+          { icon: '', label: 'Stress about the future',      key: 'stress-about-future' },
+          { icon: '', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories' },
+        ]
+      },
+      {
+        id: 'life-challenges', icon: '', label: 'Life Challenges',
+        subtopics: [
+          { icon: '', label: 'Grief & loss',                key: 'grief-loss' },
+          { icon: '', label: 'Big life changes',             key: 'big-life-changes' },
+          { icon: '', label: 'Financial stress',             key: 'financial-stress' },
+          { icon: '', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
+          { icon: '', label: 'Gambling & substance use',     key: 'gambling-substance' },
+          { icon: '', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
+        ]
+      },
+      {
+        id: 'relationships', icon: '', label: 'Relationships',
+        subtopics: [
+          { icon: '', label: 'Relationships',               key: 'relationships' },
+          { icon: '', label: 'Supporting someone else',      key: 'supporting-someone-else' },
+          { icon: '', label: 'Identity & belonging',         key: 'identity-belonging' },
+          { icon: '', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
+        ]
+      },
+      {
+        id: 'family-parenting', icon: '', label: 'Family & Parenting',
+        subtopics: [
+          { icon: '', label: 'Parenting young children',     key: 'parenting-young-children' },
+          { icon: '', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
+          { icon: '', label: 'Pregnancy',                    key: 'pregnancy' },
+          { icon: '', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
+          { icon: '', label: 'Expecting fathers',            key: 'expecting-fathers' },
+          { icon: '', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
+        ]
+      },
+      {
+        id: 'work-career', icon: '', label: 'Work & Career',
+        subtopics: [
+          { icon: '', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure' },
+          { icon: '', label: 'Burnout',                          key: 'burnout' },
+          { icon: '', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships' },
+          { icon: '', label: 'Work-life balance',               key: 'work-life-balance' },
+          { icon: '', label: 'Job loss & unemployment',          key: 'job-loss-unemployment' },
+          { icon: '', label: 'Career uncertainty & change',      key: 'career-uncertainty-change' },
+        ]
+      },
+      {
+        id: 'health-wellbeing', icon: '', label: 'Health & Wellbeing',
+        subtopics: [
+          { icon: '', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
+          { icon: '', label: 'Getting older',               key: 'getting-older' },
+          { icon: '', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
+          { icon: '', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
+        ]
+      },
+    ];
+
+    var activeCatId = null;
+
+    // --- Category nav ---
+    var catNav = document.getElementById('cat-nav');
+    if (catNav) {
+      catNav.innerHTML = CATEGORIES.map(function (cat) {
+        return '<button class="cat-btn" data-cat-id="' + cat.id + '" type="button">'
+          + cat.icon + ' ' + cat.label
+          + ' <span class="cat-chevron">▼</span></button>';
+      }).join('');
+
+      catNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.cat-btn');
+        if (!btn) { return; }
+        toggleCategory(btn.getAttribute('data-cat-id'));
+      });
+    }
+
+    function toggleCategory(catId) {
+      var panel = document.getElementById('subtopic-panel');
+      var label = document.getElementById('subtopic-panel-label');
+      var list  = document.getElementById('subtopic-list');
+      var allBtns = document.querySelectorAll('.cat-btn');
+
+      if (activeCatId === catId) {
+        activeCatId = null;
+        panel.classList.remove('show');
+        allBtns.forEach(function (b) { b.classList.remove('active'); });
+        return;
+      }
+
+      activeCatId = catId;
+      var cat = CATEGORIES.find(function (c) { return c.id === catId; });
+      if (!cat) { return; }
+
+      allBtns.forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat-id') === catId);
+      });
+
+      label.textContent = cat.label;
+      list.innerHTML = cat.subtopics.map(function (sub) {
+        if (sub.comingSoon) {
+          return '<span class="subtopic-pill coming-soon">'
+            + sub.icon + ' ' + sub.label
+            + ' <span class="cs-badge">Soon</span></span>';
+        }
+        return '<a href="#" class="subtopic-pill" data-open-topic="' + sub.key + '">'
+          + sub.icon + ' ' + sub.label + '</a>';
+      }).join('');
+
+      panel.classList.add('show');
+    }
+
+    // --- Topic modal ---
+    var topicConfig = null;
+    var topicConfigPromise = null;
+    var topicCache = {};
+
+    var overlay = document.getElementById('topicModalOverlay');
+    var titleEl = document.getElementById('topicModalTitle');
+    var optionsEl = document.getElementById('topicOptions');
+    var closeBtn = document.getElementById('topicModalClose');
+    if (!overlay || !titleEl || !optionsEl || !closeBtn) { return; }
+
+    function closeModal() {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function makeOption(item) {
+      var label = item && item.label ? item.label : 'Resource';
+      var icon = item && item.icon ? item.icon : '';
+      var resourceKey = item && item.resourceKey ? String(item.resourceKey).trim() : '';
+      var kind = item && item.kind ? item.kind.toUpperCase() : 'RESOURCE';
+      if (!resourceKey) {
+        return '<div class="topic-option disabled"><span>' + icon + ' ' + label + '</span><span class="badge">Soon</span></div>';
+      }
+      return '<a class="topic-option" href="#" data-resource-key="' + resourceKey + '" data-kind="' + kind.toLowerCase() + '"><span>' + icon + ' ' + label + '</span><span class="badge">' + kind + '</span></a>';
+    }
+
+    function expandResources(rawResources) {
+      var expanded = [];
+      (rawResources || []).forEach(function (resource) {
+        var key = String(resource.resource_key || '').trim();
+        var name = String(resource.name || key).trim();
+        if (!key) { return; }
+        if (resource.has_pdf) {
+          expanded.push({ label: name + ' (' + key + ')', icon: '', kind: 'pdf', resourceKey: key });
+        }
+        if (resource.has_video) {
+          expanded.push({ label: name + ' (' + key + ')', icon: '', kind: 'video', resourceKey: key });
+        }
+      });
+      return expanded;
+    }
+
+    function ensureTopicConfig() {
+      if (topicConfig !== null) { return Promise.resolve(topicConfig); }
+      if (topicConfigPromise) { return topicConfigPromise; }
+      topicConfigPromise = fetch('/api/resources.php?action=topics', { credentials: 'same-origin', cache: 'no-store' })
+        .then(function (response) { return response.json().catch(function () { return {}; }); })
+        .then(function (data) {
+          topicConfig = (data && typeof data === 'object') ? data : {};
+          return topicConfig;
+        })
+        .finally(function () { topicConfigPromise = null; });
+      return topicConfigPromise;
+    }
+
+    function fetchTopicResources(prefixes) {
+      var query = new URLSearchParams({ action: 'list', prefixes: prefixes.join(',') });
+      return fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
+        .then(function (response) {
+          return response.json().catch(function () { return {}; }).then(function (data) {
+            if (!response.ok) { throw new Error(data.message || 'Unable to load resources for this topic.'); }
+            return Array.isArray(data.resources) ? data.resources : [];
+          });
+        });
+    }
+
+    function openModal(topicKey) {
+      if (!topicConfig) { return; }
+      var topic = topicConfig[topicKey];
+      if (!topic) { return; }
+      var topicTitle = topic.title || topic.label || 'Topic';
+      var prefixes = Array.isArray(topic.prefixes) ? topic.prefixes : [];
+      if (prefixes.length === 0) {
+        optionsEl.innerHTML = '<div class="topic-option disabled"><span>No mapping for this topic yet</span><span class="badge">Empty</span></div>';
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
+      titleEl.textContent = topicTitle + ' resources';
+      optionsEl.innerHTML = '<div class="topic-option disabled"><span>Loading resources...</span><span class="badge">Wait</span></div>';
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      var cacheKey = prefixes.join(',');
+      if (topicCache[cacheKey]) {
+        var cached = expandResources(topicCache[cacheKey]);
+        optionsEl.innerHTML = cached.length > 0 ? cached.map(makeOption).join('') : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
+        return;
+      }
+      fetchTopicResources(prefixes).then(function (resources) {
+        topicCache[cacheKey] = resources;
+        var rendered = expandResources(resources);
+        optionsEl.innerHTML = rendered.length > 0 ? rendered.map(makeOption).join('') : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
+      }).catch(function (error) {
+        optionsEl.innerHTML = '<div class="topic-option disabled"><span>' + (error.message || 'Unable to load resources.') + '</span><span class="badge">Error</span></div>';
+      });
+    }
+
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest('[data-open-topic]');
+      if (!trigger) { return; }
+      event.preventDefault();
+      ensureTopicConfig().then(function () {
+        openModal(trigger.getAttribute('data-open-topic'));
+      }).catch(function (error) {
+        alert(error.message || 'Unable to load topic mapping.');
+      });
+    });
+
+    optionsEl.addEventListener('click', function (event) {
+      var link = event.target.closest('a.topic-option[data-resource-key]');
+      if (!link || !optionsEl.contains(link)) { return; }
+      event.preventDefault();
+      var resourceKey = String(link.getAttribute('data-resource-key') || '').trim();
+      var kind = String(link.getAttribute('data-kind') || 'pdf').toLowerCase();
+      var query = new URLSearchParams({ action: 'issue', resource_key: resourceKey, kind: kind });
+      fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) { throw new Error(d.message || 'Unable to open this resource right now.'); } return d; }); })
+        .then(function (data) { window.location.href = data.viewer_url; })
+        .catch(function (error) { alert(error.message || 'Unable to open this resource.'); });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (event) { if (event.target === overlay) { closeModal(); } });
+    document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeModal(); } });
+
+    ensureTopicConfig().catch(function (error) { console.warn('Topic config unavailable:', error && error.message); });
+  })();
+</script>
 
 </body>
 </html>
