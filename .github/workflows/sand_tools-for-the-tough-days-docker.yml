@@ -30,7 +30,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
 
       - name: Login to Azure Container Registry
-        run: az acr login --name $ACR_NAME
+        run: az acr login --name $ACR_LOGIN_SERVER
 
       - name: Build Docker image with sand tag
         run: |
