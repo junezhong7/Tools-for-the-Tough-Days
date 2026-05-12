@@ -889,7 +889,7 @@
     function ensureTopicConfig() {
       if (topicConfig !== null) { return Promise.resolve(topicConfig); }
       if (topicConfigPromise) { return topicConfigPromise; }
-      topicConfigPromise = fetch('/api/resources.php?action=topics', { credentials: 'same-origin', cache: 'no-store' })
+      topicConfigPromise = fetch('/api/resources.php?action=topics&catalog=workplace', { credentials: 'same-origin', cache: 'no-store' })
         .then(function (response) { return response.json().catch(function () { return {}; }); })
         .then(function (data) {
           topicConfig = (data && typeof data === 'object') ? data : {};
@@ -900,7 +900,7 @@
     }
 
     function fetchTopicResources(prefixes) {
-      var query = new URLSearchParams({ action: 'list', prefixes: prefixes.join(',') });
+      var query = new URLSearchParams({ action: 'list', catalog: 'workplace', prefixes: prefixes.join(',') });
       return fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
         .then(function (response) {
           return response.json().catch(function () { return {}; }).then(function (data) {
@@ -958,7 +958,7 @@
       event.preventDefault();
       var resourceKey = String(link.getAttribute('data-resource-key') || '').trim();
       var kind = String(link.getAttribute('data-kind') || 'pdf').toLowerCase();
-      var query = new URLSearchParams({ action: 'issue', resource_key: resourceKey, kind: kind });
+      var query = new URLSearchParams({ action: 'issue', catalog: 'workplace', resource_key: resourceKey, kind: kind });
       fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) { throw new Error(d.message || 'Unable to open this resource right now.'); } return d; }); })
         .then(function (data) { window.location.href = data.viewer_url; })

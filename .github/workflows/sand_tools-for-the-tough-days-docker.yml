@@ -1,0 +1,43 @@
+name: Build and Push Docker Image to ACR (SAND)
+
+on:
+  push:
+    branches:
+      - sand
+  workflow_dispatch:
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      ACR_NAME: acrtoolsforthetoughdays-baa3ghbcfdfjdghw
+      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      IMAGE_NAME: tools-for-the-tough-days
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A7E6A4D7A5AF4F79BBCE42A6C3DB6424 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name $ACR_NAME
+
+      - name: Build Docker image with sand tag
+        run: |
+          docker build \
+            -t $ACR_LOGIN_SERVER/$IMAGE_NAME:sand \
+            .
+
+      - name: Push Docker image sand tag
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:sand
