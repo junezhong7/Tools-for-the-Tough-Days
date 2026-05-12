@@ -48,9 +48,11 @@ function handle_topics(int $userId): never
         json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
     }
 
-    $topics = get_topic_prefix_map();
+    $catalog = get_resource_catalog();
+    $topics = get_topic_prefix_map($catalog);
 
     audit('resource.topics.ok', $userId, [
+        'catalog' => $catalog,
         'count' => count($topics),
     ]);
 
@@ -60,7 +62,7 @@ function handle_topics(int $userId): never
     ]);
 }
 
-function get_topic_prefix_map(): array
+function get_topic_prefix_map(string $catalog = 'personal'): array
 {
     return [
         'crisis-support' => ['title' => 'Crisis support', 'label' => 'Crisis support', 'icon' => '🆘', 'order' => 10, 'prefixes' => ['CRISIS']],
@@ -101,6 +103,7 @@ function handle_list(int $userId): never
         json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
     }
 
+    $catalog = get_resource_catalog();
     $prefixesRaw = trim((string) ($_GET['prefixes'] ?? ''));
     if ($prefixesRaw === '') {
         json_error(422, 'MISSING_PREFIXES', 'prefixes is required.');
@@ -118,7 +121,7 @@ function handle_list(int $userId): never
         json_error(422, 'INVALID_PREFIXES', 'No valid prefixes were provided.');
     }
 
-    $resourceMap = load_resource_map_from_csv();
+    $resourceMap = load_resource_map_from_csv($catalog);
     $items = [];
 
     foreach ($resourceMap as $resourceKey => $resource) {
@@ -143,6 +146,7 @@ function handle_list(int $userId): never
     });
 
     audit('resource.list.ok', $userId, [
+        'catalog' => $catalog,
         'prefixes' => array_values($requestedPrefixes),
         'count' => count($items),
     ]);
@@ -163,20 +167,21 @@ function handle_issue(int $userId): never
 
     $resourceKey = strtoupper(trim((string) ($_GET['resource_key'] ?? '')));
     $kind = normalize_kind((string) ($_GET['kind'] ?? 'pdf'));
+    $catalog = get_resource_catalog();
 
     if ($resourceKey === '') {
         json_error(422, 'MISSING_RESOURCE', 'resource_key is required.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.issue.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.issue.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.issue.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.issue.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -185,6 +190,7 @@ function handle_issue(int $userId): never
         'uid' => $userId,
         'key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'exp' => $expiresAt,
     ]);
 
@@ -193,12 +199,14 @@ function handle_issue(int $userId): never
     audit('resource.issue.ok', $userId, [
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'exp' => $expiresAt,
     ]);
 
     json_ok([
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'resource_name' => $resource['name'],
         'expires_at' => gmdate('c', $expiresAt),
         'viewer_url' => $viewerPath . '?token=' . rawurlencode($token),
@@ -222,6 +230,7 @@ function handle_resolve(int $userId): never
     $tokenUserId = (int) ($payload['uid'] ?? 0);
     $resourceKey = strtoupper(trim((string) ($payload['key'] ?? '')));
     $kind = normalize_kind((string) ($payload['kind'] ?? 'pdf'));
+    $catalog = normalize_resource_catalog((string) ($payload['catalog'] ?? 'personal'));
     $exp = (int) ($payload['exp'] ?? 0);
 
     if ($tokenUserId !== $userId) {
@@ -234,15 +243,15 @@ function handle_resolve(int $userId): never
         json_error(410, 'TOKEN_EXPIRED', 'Resource link has expired.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.resolve.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.resolve.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.resolve.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.resolve.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -251,11 +260,13 @@ function handle_resolve(int $userId): never
     audit('resource.resolve.ok', $userId, [
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
     ]);
 
     json_ok([
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'resource_name' => $resource['name'],
         'expires_at' => gmdate('c', time() + get_resource_token_ttl()),
         'url' => $streamUrl,
@@ -276,6 +287,7 @@ function handle_stream(): never
     $tokenUserId = (int) ($payload['uid'] ?? 0);
     $resourceKey = strtoupper(trim((string) ($payload['key'] ?? '')));
     $kind = normalize_kind((string) ($payload['kind'] ?? 'pdf'));
+    $catalog = normalize_resource_catalog((string) ($payload['catalog'] ?? 'personal'));
     $exp = (int) ($payload['exp'] ?? 0);
 
     if ($tokenUserId <= 0 || $resourceKey === '') {
@@ -287,15 +299,15 @@ function handle_stream(): never
         json_error(410, 'TOKEN_EXPIRED', 'Resource link has expired.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.stream.not_found', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.stream.not_found', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.stream.missing_blob', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.stream.missing_blob', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -390,19 +402,19 @@ function normalize_kind(string $kind): string
     return 'pdf';
 }
 
-function get_resource_by_key(string $resourceKey): ?array
+function get_resource_by_key(string $resourceKey, string $catalog = 'personal'): ?array
 {
-    static $resourceMap = null;
-    if ($resourceMap === null) {
-        $resourceMap = load_resource_map_from_csv();
+    static $resourceMapByCatalog = [];
+    if (!array_key_exists($catalog, $resourceMapByCatalog)) {
+        $resourceMapByCatalog[$catalog] = load_resource_map_from_csv($catalog);
     }
 
-    return $resourceMap[$resourceKey] ?? null;
+    return $resourceMapByCatalog[$catalog][$resourceKey] ?? null;
 }
 
-function load_resource_map_from_csv(): array
+function load_resource_map_from_csv(string $catalog = 'personal'): array
 {
-    $path = __DIR__ . '/../data/Tools_for_Tough_Days_Personal_Support_Glide - Latest.csv';
+    $path = resource_csv_path_for_catalog($catalog);
     if (!is_readable($path)) {
         throw new RuntimeException('Resource CSV file is not readable: ' . $path);
     }
@@ -487,6 +499,29 @@ function load_resource_map_from_csv(): array
     fclose($handle);
 
     return $resourceMap;
+}
+
+function get_resource_catalog(): string
+{
+    return normalize_resource_catalog((string) ($_GET['catalog'] ?? 'personal'));
+}
+
+function normalize_resource_catalog(string $catalog): string
+{
+    $value = strtolower(trim($catalog));
+    if ($value === 'workplace' || $value === 'business') {
+        return 'workplace';
+    }
+    return 'personal';
+}
+
+function resource_csv_path_for_catalog(string $catalog): string
+{
+    if ($catalog === 'workplace') {
+        return __DIR__ . '/../data/Tools_for_Tough_Days_Workplace_Support_Glide - Latest.csv';
+    }
+
+    return __DIR__ . '/../data/Tools_for_Tough_Days_Personal_Support_Glide - Latest.csv';
 }
 
 function create_resource_token(array $payload): string
