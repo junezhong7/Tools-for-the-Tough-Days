@@ -30,9 +30,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
 
       - name: Login to Azure Container Registry
-        run: |
-          TOKEN=$(az account get-access-token --resource https://containerregistry.azure.net/ --query accessToken -o tsv)
-          echo "$TOKEN" | docker login $ACR_LOGIN_SERVER --username 00000000-0000-0000-0000-000000000000 --password-stdin
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login $ACR_LOGIN_SERVER --username ${{ secrets.ACR_USERNAME }} --password-stdin
 
       - name: Build Docker image with sand tag
         run: |

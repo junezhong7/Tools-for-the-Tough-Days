@@ -64,7 +64,7 @@ function handle_topics(int $userId): never
 
 function get_topic_prefix_map(string $catalog = 'personal'): array
 {
-    return [
+    $map = [
         'crisis-support' => ['title' => 'Crisis support', 'label' => 'Crisis support', 'icon' => '🆘', 'order' => 10, 'prefixes' => ['CRISIS']],
         'domestic-violence-abuse' => ['title' => 'Domestic violence & abuse', 'label' => 'Domestic violence & abuse', 'icon' => '', 'order' => 20, 'prefixes' => ['DMV']],
         'grief-loss' => ['title' => 'Grief & loss', 'label' => 'Grief & loss', 'icon' => '', 'order' => 30, 'prefixes' => ['GRIEF']],
@@ -94,6 +94,30 @@ function get_topic_prefix_map(string $catalog = 'personal'): array
         'job-loss-unemployment' => ['title' => 'Job loss & unemployment', 'label' => 'Job loss & unemployment', 'icon' => '', 'order' => 260, 'prefixes' => ['JLU']],
         'career-uncertainty-change' => ['title' => 'Career uncertainty & change', 'label' => 'Career uncertainty & change', 'icon' => '', 'order' => 270, 'prefixes' => ['CUC']],
     ];
+
+    if ($catalog === 'workplace') {
+        $map['workplace-stress-pressure']['prefixes'] = array_values(array_unique(array_merge(
+            $map['workplace-stress-pressure']['prefixes'],
+            ['CICR', 'LPM', 'SBC', 'SHC', 'SLG', 'SMF']
+        )));
+
+        $map['supporting-someone-else']['prefixes'] = array_values(array_unique(array_merge(
+            $map['supporting-someone-else']['prefixes'],
+            ['SBC', 'SHC', 'SLG']
+        )));
+
+        $map['relationships']['prefixes'] = array_values(array_unique(array_merge(
+            $map['relationships']['prefixes'],
+            ['RFP']
+        )));
+
+        $map['parenting-young-children']['prefixes'] = array_values(array_unique(array_merge(
+            $map['parenting-young-children']['prefixes'],
+            ['RFP']
+        )));
+    }
+
+    return $map;
 }
 
 function handle_list(int $userId): never
@@ -430,10 +454,15 @@ function load_resource_map_from_csv(string $catalog = 'personal'): array
 
     while (($row = fgetcsv($handle)) !== false) {
         if (!$headerFound) {
-            if (isset($row[0]) && trim((string) $row[0]) === 'Mood_Score_Range') {
+            $firstCell = isset($row[0]) ? (string) $row[0] : '';
+            // Be resilient to UTF-8 BOM when the CSV header is on the first line.
+            $firstCell = preg_replace('/^\xEF\xBB\xBF/', '', $firstCell) ?? $firstCell;
+
+            if (trim($firstCell) === 'Mood_Score_Range') {
                 $headerFound = true;
                 foreach ($row as $idx => $name) {
                     $headerName = trim((string) $name);
+                    $headerName = preg_replace('/^\xEF\xBB\xBF/', '', $headerName) ?? $headerName;
                     if ($headerName !== '') {
                         $headerIndexMap[$headerName] = $idx;
                     }

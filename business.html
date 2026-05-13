@@ -844,9 +844,42 @@
     }
 
     // --- Topic modal ---
-    var topicConfig = null;
-    var topicConfigPromise = null;
     var topicCache = {};
+
+    var TOPIC_CONFIG = {
+      'low-mood-depression': { title: 'Low mood & depression', prefixes: ['DEP'] },
+      'anxiety-worry': { title: 'Anxiety & worry', prefixes: ['ANX'] },
+      'feeling-flat-angry': { title: 'Feeling flat or angry', prefixes: ['MHW'] },
+      'self-esteem': { title: 'Self-esteem', prefixes: ['EST'] },
+      'stress-about-future': { title: 'Stress about the future', prefixes: ['FUT'] },
+      'trauma-difficult-memories': { title: 'Trauma & difficult memories', prefixes: ['TRM'] },
+      'grief-loss': { title: 'Grief & loss', prefixes: ['GRIEF'] },
+      'big-life-changes': { title: 'Big life changes', prefixes: ['LT'] },
+      'financial-stress': { title: 'Financial stress', prefixes: ['FIN'] },
+      'domestic-violence-abuse': { title: 'Domestic violence & abuse', prefixes: ['DMV'] },
+      'gambling-substance': { title: 'Gambling & substance use', prefixes: ['GSA'] },
+      'loneliness-social-isolation': { title: 'Loneliness & social isolation', prefixes: [] },
+      'relationships': { title: 'Relationships', prefixes: ['REL'] },
+      'supporting-someone-else': { title: 'Supporting someone else', prefixes: ['AOK'] },
+      'identity-belonging': { title: 'Identity & belonging', prefixes: ['IDN'] },
+      'conflict-communication': { title: 'Conflict & communication', prefixes: [] },
+      'parenting-young-children': { title: 'Parenting young children', prefixes: ['PYC'] },
+      'parenting-teenagers': { title: 'Parenting teenagers', prefixes: ['PTN'] },
+      'pregnancy': { title: 'Pregnancy', prefixes: ['PRG'] },
+      'postnatal-struggles': { title: 'Postnatal struggles', prefixes: ['PNN'] },
+      'expecting-fathers': { title: 'Expecting fathers', prefixes: ['DAD'] },
+      'single-parenting': { title: 'Single parenting', prefixes: [] },
+      'workplace-stress-pressure': { title: 'Workplace stress & pressure', prefixes: ['WSP', 'CICR', 'LPM', 'SBC', 'SHC', 'SLG', 'SMF'] },
+      'burnout': { title: 'Burnout', prefixes: ['BRN'] },
+      'difficult-workplace-relationships': { title: 'Difficult workplace relationships', prefixes: ['WPR'] },
+      'work-life-balance': { title: 'Work-life balance', prefixes: ['WLB'] },
+      'job-loss-unemployment': { title: 'Job loss & unemployment', prefixes: ['JLU'] },
+      'career-uncertainty-change': { title: 'Career uncertainty & change', prefixes: ['CUC'] },
+      'daily-habits-wellbeing': { title: 'Daily habits & wellbeing', prefixes: ['WB', 'MHW'] },
+      'getting-older': { title: 'Getting older', prefixes: ['AGE'] },
+      'sleep-rest': { title: 'Sleep & rest', prefixes: ['MHW'] },
+      'body-image-self-care': { title: 'Body image & self-care', prefixes: [] }
+    };
 
     var overlay = document.getElementById('topicModalOverlay');
     var titleEl = document.getElementById('topicModalTitle');
@@ -886,19 +919,6 @@
       return expanded;
     }
 
-    function ensureTopicConfig() {
-      if (topicConfig !== null) { return Promise.resolve(topicConfig); }
-      if (topicConfigPromise) { return topicConfigPromise; }
-      topicConfigPromise = fetch('/api/resources.php?action=topics&catalog=workplace', { credentials: 'same-origin', cache: 'no-store' })
-        .then(function (response) { return response.json().catch(function () { return {}; }); })
-        .then(function (data) {
-          topicConfig = (data && typeof data === 'object') ? data : {};
-          return topicConfig;
-        })
-        .finally(function () { topicConfigPromise = null; });
-      return topicConfigPromise;
-    }
-
     function fetchTopicResources(prefixes) {
       var query = new URLSearchParams({ action: 'list', catalog: 'workplace', prefixes: prefixes.join(',') });
       return fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
@@ -911,8 +931,7 @@
     }
 
     function openModal(topicKey) {
-      if (!topicConfig) { return; }
-      var topic = topicConfig[topicKey];
+      var topic = TOPIC_CONFIG[topicKey];
       if (!topic) { return; }
       var topicTitle = topic.title || topic.label || 'Topic';
       var prefixes = Array.isArray(topic.prefixes) ? topic.prefixes : [];
@@ -927,13 +946,15 @@
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
       var cacheKey = prefixes.join(',');
-      if (topicCache[cacheKey]) {
+      if (topicCache[cacheKey] && Array.isArray(topicCache[cacheKey]) && topicCache[cacheKey].length > 0) {
         var cached = expandResources(topicCache[cacheKey]);
         optionsEl.innerHTML = cached.length > 0 ? cached.map(makeOption).join('') : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
-        return;
       }
+
       fetchTopicResources(prefixes).then(function (resources) {
-        topicCache[cacheKey] = resources;
+        if (Array.isArray(resources) && resources.length > 0) {
+          topicCache[cacheKey] = resources;
+        }
         var rendered = expandResources(resources);
         optionsEl.innerHTML = rendered.length > 0 ? rendered.map(makeOption).join('') : '<div class="topic-option disabled"><span>No resources found yet</span><span class="badge">Empty</span></div>';
       }).catch(function (error) {
@@ -945,11 +966,7 @@
       var trigger = event.target.closest('[data-open-topic]');
       if (!trigger) { return; }
       event.preventDefault();
-      ensureTopicConfig().then(function () {
-        openModal(trigger.getAttribute('data-open-topic'));
-      }).catch(function (error) {
-        alert(error.message || 'Unable to load topic mapping.');
-      });
+      openModal(trigger.getAttribute('data-open-topic'));
     });
 
     optionsEl.addEventListener('click', function (event) {
@@ -969,7 +986,6 @@
     overlay.addEventListener('click', function (event) { if (event.target === overlay) { closeModal(); } });
     document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeModal(); } });
 
-    ensureTopicConfig().catch(function (error) { console.warn('Topic config unavailable:', error && error.message); });
   })();
 </script>
 
