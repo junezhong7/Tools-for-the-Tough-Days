@@ -14,7 +14,7 @@ jobs:
       id-token: write
 
     env:
-      ACR_NAME: acrtoolsforthetoughdays-baa3ghbcfdfjdghw
+      ACR_NAME: ACRToolsfortheToughDays
       ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
 
@@ -30,7 +30,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
 
       - name: Login to Azure Container Registry
-        run: az acr login --name $ACR_LOGIN_SERVER
+        run: az acr login --name $ACR_NAME
 
       - name: Build Docker image with sand tag
         run: |
