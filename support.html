@@ -462,7 +462,7 @@
   </section>
 
   <!-- CATEGORY NAVIGATION STRIP -->
-  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
+  <div id="browse-topics" style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
       <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
@@ -1350,8 +1350,8 @@
     if (val <= 2) {
       window.location.href = 'crisis-support.html';
     } else {
-      const target = document.querySelector('.content-section');
-      if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
+      const target = document.getElementById('browse-topics') || document.querySelector('.content-section');
+      if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
   }
 
