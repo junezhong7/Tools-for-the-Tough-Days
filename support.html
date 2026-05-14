@@ -409,9 +409,6 @@
       .pricing-grid { grid-template-columns: 1fr; }
       footer { padding: 24px 16px; flex-direction: column; text-align: center; }
     }
-    @media (max-width: 480px) {
-      .nav-links a:not(.nav-cta):not(.nav-login) { display: none; }
-    }
   </style>
 </head>
 <body>
@@ -1323,8 +1320,33 @@
       btn.textContent = 'Show me what\'s available →';
     }
   }
+
+  function logMoodSubmission(score) {
+    try {
+      fetch('/api/mood.php?action=submit', {
+        method: 'POST',
+        credentials: 'same-origin',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          score: score,
+          page: 'support.html',
+          client_ts: new Date().toISOString()
+        })
+      }).catch(function () {
+        // Do not block the core support flow on analytics failure.
+      });
+    } catch (_error) {
+      // Keep UX intact if request creation fails.
+    }
+  }
+
   function submitMood() {
     const val = parseInt(document.getElementById('mood-slider').value);
+    logMoodSubmission(val);
     if (val <= 2) {
       window.location.href = 'crisis-support.html';
     } else {
@@ -1370,5 +1392,6 @@
   })();
 </script>
 
+<script src="scripts/nav-mobile.js"></script>
 </body>
 </html>

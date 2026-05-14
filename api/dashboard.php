@@ -44,6 +44,77 @@ foreach ($payments as &$p) {
 }
 unset($p);
 
+$mood = [
+    'daily' => [],
+    'summary' => [
+        'total_checkins_30' => 0,
+        'avg_score_30' => null,
+        'min_score_30' => null,
+        'max_score_30' => null,
+    ],
+    'open_alerts' => [],
+];
+
+try {
+    $dailyStmt = db()->prepare(
+        'SELECT DATE(me.checkin_at) AS score_date,
+                SUBSTRING_INDEX(GROUP_CONCAT(me.mood_score ORDER BY me.checkin_at DESC, me.id DESC), ",", 1) AS mood_score
+         FROM mood_events me
+         WHERE me.user_id = ?
+           AND me.checkin_at >= (CURDATE() - INTERVAL 180 DAY)
+         GROUP BY DATE(me.checkin_at)
+         ORDER BY score_date DESC'
+    );
+    $dailyStmt->execute([$userId]);
+    foreach ($dailyStmt->fetchAll() as $row) {
+        $mood['daily'][] = [
+            'date' => (string) $row['score_date'],
+            'score' => (int) $row['mood_score'],
+        ];
+    }
+
+    $summaryStmt = db()->prepare(
+        'SELECT
+            COUNT(*) AS total_checkins,
+            ROUND(AVG(mood_score), 2) AS avg_score_30,
+            MIN(mood_score) AS min_score_30,
+            MAX(mood_score) AS max_score_30
+         FROM mood_events
+         WHERE user_id = ?
+           AND checkin_at >= (CURDATE() - INTERVAL 30 DAY)'
+    );
+    $summaryStmt->execute([$userId]);
+    $summaryRow = $summaryStmt->fetch() ?: [];
+    $mood['summary'] = [
+        'total_checkins_30' => (int) ($summaryRow['total_checkins'] ?? 0),
+        'avg_score_30' => isset($summaryRow['avg_score_30']) ? (float) $summaryRow['avg_score_30'] : null,
+        'min_score_30' => isset($summaryRow['min_score_30']) ? (int) $summaryRow['min_score_30'] : null,
+        'max_score_30' => isset($summaryRow['max_score_30']) ? (int) $summaryRow['max_score_30'] : null,
+    ];
+
+    $alertsStmt = db()->prepare(
+        'SELECT id, alert_type, status, rule_window_start, rule_window_end, meta, triggered_at
+         FROM mood_alerts
+         WHERE user_id = ? AND status = "open"
+         ORDER BY triggered_at DESC'
+    );
+    $alertsStmt->execute([$userId]);
+    foreach ($alertsStmt->fetchAll() as $row) {
+        $mood['open_alerts'][] = [
+            'id' => (int) $row['id'],
+            'type' => (string) $row['alert_type'],
+            'status' => (string) $row['status'],
+            'window_start' => $row['rule_window_start'],
+            'window_end' => $row['rule_window_end'],
+            'meta' => json_decode((string) ($row['meta'] ?? ''), true) ?? [],
+            'triggered_at' => $row['triggered_at'],
+        ];
+    }
+} catch (Throwable $e) {
+    // Keep dashboard available even if mood tables are not migrated yet.
+    error_log('dashboard mood query failed: ' . $e->getMessage());
+}
+
 json_ok([
     'user' => [
         'id'               => (int) $user['id'],
@@ -54,4 +125,5 @@ json_ok([
     ],
     'subscriptions' => $subscriptions,
     'payments'      => $payments,
+    'mood'          => $mood,
 ]);
