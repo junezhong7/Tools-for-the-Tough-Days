@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resource Reader</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: #ffffff;
+      --ink: #202124;
+      --muted: #5f6368;
+      --accent: #c8752a;
+      --border: #dfd8cc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: linear-gradient(120deg, #f7f2e9, #efe7da);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn:hover { border-color: var(--accent); }
+
+    .viewer-wrap {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .canvas-shell {
+      width: min(100%, 980px);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+      padding: 12px;
+      overflow: auto;
+    }
+
+    #pdfCanvas {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      height: auto;
+    }
+
+    .status {
+      text-align: center;
+      color: var(--muted);
+      padding: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="btn" href="/support.html">Back</a>
+    <span id="resourceName" class="pill">Loading resource...</span>
+    <button id="prevBtn" class="btn" type="button">Prev</button>
+    <button id="nextBtn" class="btn" type="button">Next</button>
+    <button id="zoomOutBtn" class="btn" type="button">A-</button>
+    <button id="zoomInBtn" class="btn" type="button">A+</button>
+    <span id="pageInfo" class="pill">Page -</span>
+  </div>
+
+  <div class="viewer-wrap">
+    <div class="canvas-shell">
+      <canvas id="pdfCanvas"></canvas>
+      <div id="status" class="status">Resolving secure document...</div>
+    </div>
+  </div>
+
+  <script src="/assets/vendor/pdfjs/pdf.min.js"></script>
+  <script>
+    (function initSecurePdfViewer() {
+      if (!window.pdfjsLib) {
+        const status = document.getElementById('status');
+        status.textContent = 'PDF viewer failed to load. Please refresh the page.';
+        return;
+      }
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/assets/vendor/pdfjs/pdf.worker.min.js';
+
+      const token = new URLSearchParams(window.location.search).get('token') || '';
+      const canvas = document.getElementById('pdfCanvas');
+      const status = document.getElementById('status');
+      const pageInfo = document.getElementById('pageInfo');
+      const resourceName = document.getElementById('resourceName');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const zoomOutBtn = document.getElementById('zoomOutBtn');
+      const zoomInBtn = document.getElementById('zoomInBtn');
+
+      let pdfDoc = null;
+      let pageNum = 1;
+      let scale = 1.15;
+      let renderInProgress = false;
+      let pendingPage = null;
+
+      function setStatus(message) {
+        status.textContent = message;
+      }
+
+      function updatePageInfo() {
+        const total = pdfDoc ? pdfDoc.numPages : '-';
+        pageInfo.textContent = 'Page ' + pageNum + ' / ' + total;
+      }
+
+      async function renderPage(num) {
+        if (!pdfDoc) {
+          return;
+        }
+
+        renderInProgress = true;
+        const page = await pdfDoc.getPage(num);
+        const viewport = page.getViewport({ scale: scale });
+        const context = canvas.getContext('2d');
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({
+          canvasContext: context,
+          viewport: viewport,
+        }).promise;
+
+        renderInProgress = false;
+        updatePageInfo();
+
+        if (pendingPage !== null) {
+          const requested = pendingPage;
+          pendingPage = null;
+          renderPage(requested);
+        }
+      }
+
+      function queueRenderPage(num) {
+        if (renderInProgress) {
+          pendingPage = num;
+        } else {
+          renderPage(num);
+        }
+      }
+
+      async function resolveSecureUrl() {
+        if (!token) {
+          throw new Error('Missing access token. Please open this document from the resource list.');
+        }
+
+        const response = await fetch('/api/resources.php?action=resolve&token=' + encodeURIComponent(token), {
+          credentials: 'same-origin',
+          cache: 'no-store',
+        });
+
+        const data = await response.json().catch(function () {
+          return {};
+        });
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not resolve secure PDF URL.');
+        }
+
+        resourceName.textContent = data.resource_name || 'Resource Reader';
+        return data.url;
+      }
+
+      function attachGuards() {
+        document.addEventListener('contextmenu', function (event) {
+          event.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (event) {
+          const key = (event.key || '').toLowerCase();
+          if ((event.ctrlKey || event.metaKey) && (key === 'p' || key === 's')) {
+            event.preventDefault();
+          }
+        });
+      }
+
+      prevBtn.addEventListener('click', function () {
+        if (!pdfDoc || pageNum <= 1) {
+          return;
+        }
+        pageNum -= 1;
+        queueRenderPage(pageNum);
+      });
+
+      nextBtn.addEventListener('click', function () {
+        if (!pdfDoc || pageNum >= pdfDoc.numPages) {
+          return;
+        }
+        pageNum += 1;
+        queueRenderPage(pageNum);
+      });
+
+      zoomOutBtn.addEventListener('click', function () {
+        scale = Math.max(0.7, scale - 0.1);
+        queueRenderPage(pageNum);
+      });
+
+      zoomInBtn.addEventListener('click', function () {
+        scale = Math.min(2.2, scale + 0.1);
+        queueRenderPage(pageNum);
+      });
+
+      attachGuards();
+
+      resolveSecureUrl()
+        .then(function (secureUrl) {
+          setStatus('Loading PDF...');
+          return pdfjsLib.getDocument({ url: secureUrl }).promise;
+        })
+        .then(function (doc) {
+          pdfDoc = doc;
+          setStatus('');
+          updatePageInfo();
+          return renderPage(pageNum);
+        })
+        .catch(function (error) {
+          setStatus(error.message || 'Unable to load document.');
+        });
+    })();
+  </script>
+<script src="scripts/nav-mobile.js"></script>
+</body>
+</html>

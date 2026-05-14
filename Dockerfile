@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev \
     libonig-dev \
-    && docker-php-ext-install curl mbstring \
+    && docker-php-ext-install curl mbstring pdo_mysql \
     && a2enmod rewrite headers \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && rm -rf /var/lib/apt/lists/*

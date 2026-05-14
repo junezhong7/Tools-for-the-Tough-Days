@@ -56,6 +56,8 @@
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
+  .nav-login { color: var(--charcoal); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; background: var(--white); }
+  .nav-login:hover { border-color: rgba(42,40,37,0.22); }
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
   .nav-cta:hover { background: var(--teal-hover); }
 
@@ -200,9 +202,6 @@
     .faq-nav { display: none; }
     footer { padding: 24px 16px; flex-direction: column; text-align: center; }
   }
-  @media (max-width: 480px) {
-    .nav-links a:not(.nav-cta) { display: none; }
-  }
 </style>
 </head>
 <body>
@@ -219,9 +218,13 @@
 <nav>
   <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
   <div class="nav-links">
-    <a href="support.html">For Individuals</a>
-    <a href="business.html">For Business</a>
-    <a href="about.html">About Nic</a>
+    <a href="support.html">For Personal Life</a>
+    <a href="business.html">For Workplaces</a>
+    <a href="about-nic.html">About Nic</a>
+    <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+    <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
+    <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+    <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
     <a href="booking.html" class="nav-cta">Free 15-min chat</a>
   </div>
 </nav>
@@ -252,10 +255,10 @@
   <!-- FAQ content -->
   <main>
 
-    <!-- ═══ ABOUT THE PLATFORM ═══ -->
+    <!-- ═══ABOUT THE PLATFORM ═══-->
     <div class="faq-section" id="about">
       <div class="faq-section-header">
-        <span class="faq-section-icon">💬</span>
+        <span class="faq-section-icon"></span>
         <h2 class="faq-section-title">About the platform</h2>
         <span class="faq-count">5 questions</span>
       </div>
@@ -263,7 +266,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           What is Tools for the Tough Days?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -276,7 +279,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How is this different from seeing a psychologist?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -290,7 +293,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Who wrote the resources — are they written by AI?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -303,7 +306,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           What topics does the platform cover?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -316,7 +319,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Is this suitable for me if I've never sought mental health support before?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -328,10 +331,10 @@
     </div>
 
 
-    <!-- ═══ COST & MEDICARE ═══ -->
+    <!-- ═══COST & MEDICARE ═══-->
     <div class="faq-section" id="cost">
       <div class="faq-section-header">
-        <span class="faq-section-icon">💳</span>
+        <span class="faq-section-icon"></span>
         <h2 class="faq-section-title">Cost &amp; Medicare</h2>
         <span class="faq-count">4 questions</span>
       </div>
@@ -339,7 +342,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Is this covered by Medicare?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -352,7 +355,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Is it covered by private health insurance?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -365,7 +368,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How much does it cost and can I cancel anytime?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -379,14 +382,14 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How does the business subscription pricing work?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
             <p>Business subscriptions are based on team size:</p>
-            <p><strong>Starter</strong> — $150/month · 6–20 people<br>
-            <strong>Growth</strong> — $250/month · 21–50 people · includes quarterly check-in with Nic<br>
-            <strong>Team</strong> — $300/month · 51–80 people · includes priority support<br>
+            <p><strong>Starter</strong> — 150/month · 6— 0 people<br>
+            <strong>Growth</strong> — 250/month · 21— 0 people · includes quarterly check-in with Nic<br>
+            <strong>Team</strong> — 300/month · 51— 0 people · includes priority support<br>
             <strong>Enterprise</strong> — custom pricing · 81+ people · <a href="booking.html">contact us directly</a></p>
             <p>All business plans include full access to the resource library for every team member, crisis routing, and complete employee privacy protection.</p>
           </div>
@@ -395,10 +398,10 @@
     </div>
 
 
-    <!-- ═══ PRIVACY ═══ -->
+    <!-- ═══PRIVACY ═══-->
     <div class="faq-section" id="privacy">
       <div class="faq-section-header">
-        <span class="faq-section-icon">🔒</span>
+        <span class="faq-section-icon"></span>
         <h2 class="faq-section-title">Privacy</h2>
         <span class="faq-count">3 questions</span>
       </div>
@@ -406,7 +409,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Can my employer see what I read or listen to?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -420,7 +423,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Do I need to create an account or log in?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -433,7 +436,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How is my personal information stored and protected?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -446,10 +449,10 @@
     </div>
 
 
-    <!-- ═══ CLINICAL & SAFETY ═══ -->
+    <!-- ═══CLINICAL & SAFETY ═══-->
     <div class="faq-section" id="clinical">
       <div class="faq-section-header">
-        <span class="faq-section-icon">🩺</span>
+        <span class="faq-section-icon"></span>
         <h2 class="faq-section-title">Clinical &amp; safety</h2>
         <span class="faq-count">4 questions</span>
       </div>
@@ -457,15 +460,15 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Is this a crisis service? What if I need urgent help right now?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
             <p>This platform is not a crisis service and should not be used as one. If you or someone you know is in danger or experiencing a mental health emergency, please reach out to a crisis service immediately.</p>
             <div class="answer-crisis">
-              <strong>Lifeline</strong> — <a href="tel:131114" style="color:#7a2020">13 11 14</a> · available 24/7<br>
-              <strong>Beyond Blue</strong> — <a href="tel:1300224636" style="color:#7a2020">1300 22 4636</a><br>
-              <strong>Emergency Services</strong> — <a href="tel:000" style="color:#7a2020">000</a>
+              <strong>Lifeline</strong> — a href="tel:131114" style="color:#7a2020">13 11 14</a> · available 24/7<br>
+              <strong>Beyond Blue</strong> — a href="tel:1300224636" style="color:#7a2020">1300 22 4636</a><br>
+              <strong>Emergency Services</strong> — a href="tel:000" style="color:#7a2020">000</a>
             </div>
             <p>Crisis contact information is always visible throughout the platform — we never put it behind a login or a paywall.</p>
           </div>
@@ -475,7 +478,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           What's the difference between this and seeing a psychologist or counsellor?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -489,7 +492,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           Can this platform diagnose me or recommend medication?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -502,7 +505,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           I'm already seeing a psychologist — can I still use this?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -514,10 +517,10 @@
     </div>
 
 
-    <!-- ═══ FOR BUSINESSES ═══ -->
+    <!-- ═══FOR BUSINESSES ═══-->
     <div class="faq-section" id="business">
       <div class="faq-section-header">
-        <span class="faq-section-icon">🏢</span>
+        <span class="faq-section-icon"></span>
         <h2 class="faq-section-title">For businesses</h2>
         <span class="faq-count">4 questions</span>
       </div>
@@ -525,7 +528,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How quickly can my team get access?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -538,7 +541,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           What usage data do I receive as an employer?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -552,7 +555,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           How do access codes work — do employees need to download anything?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -565,7 +568,7 @@
       <div class="faq-item">
         <button class="faq-question" onclick="toggle(this)">
           What's the difference between this and a traditional EAP?
-          <span class="faq-chevron">▾</span>
+          <span class="faq-chevron">—</span>
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
@@ -589,7 +592,7 @@
 </div>
 
 <!-- Floating chat -->
-<a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+<a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
 
 <!-- Footer -->
 <footer>
@@ -597,8 +600,8 @@
   <div class="footer-links">
     <a href="privacy-policy.html">Privacy</a>
     <a href="terms.html">Terms</a>
-    <a href="business.html">For Business</a>
-    <a href="about.html">About Nic</a>
+    <a href="business.html">For Workplaces</a>
+    <a href="about-nic.html">About Nic</a>
     <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
   </div>
 </footer>
@@ -658,5 +661,9 @@
     cursor: pointer;
   ">Share feedback</a>
 
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
+
+<script src="scripts/nav-mobile.js"></script>
 </body>
 </html>

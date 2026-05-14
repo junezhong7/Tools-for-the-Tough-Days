@@ -54,6 +54,8 @@
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
+  .nav-login { color: var(--charcoal); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; background: var(--white); }
+  .nav-login:hover { border-color: rgba(42,40,37,0.22); }
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; }
   .nav-cta:hover { background: var(--teal-hover); }
 
@@ -140,7 +142,6 @@
     .reason-grid { grid-template-columns: 1fr; }
     footer { padding: 24px 16px; flex-direction: column; text-align: center; }
   }
-  @media (max-width: 480px) { .nav-links a:not(.nav-cta) { display: none; } }
 </style>
 </head>
 <body>
@@ -155,9 +156,13 @@
 <nav>
   <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
   <div class="nav-links">
-    <a href="support.html">For Individuals</a>
-    <a href="business.html">For Business</a>
-    <a href="about.html">About Nic</a>
+    <a href="support.html">For Personal Life</a>
+    <a href="business.html">For Workplaces</a>
+    <a href="about-nic.html">About Nic</a>
+    <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+    <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
+    <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+    <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
     <a href="booking.html" class="nav-cta">Free 15-min chat</a>
   </div>
 </nav>
@@ -179,25 +184,25 @@
     <div class="reason-grid">
 
       <button class="reason-card" onclick="selectReason('cancel')">
-        <span class="reason-icon">👋</span>
+        <span class="reason-icon"></span>
         <div class="reason-title">I'm cancelling my subscription</div>
         <div class="reason-sub">Tell us why you're leaving — it helps us improve for everyone.</div>
       </button>
 
       <button class="reason-card" onclick="selectReason('missing')">
-        <span class="reason-icon">🔍</span>
+        <span class="reason-icon"></span>
         <div class="reason-title">I couldn't find what I needed</div>
         <div class="reason-sub">Let us know what you were looking for so we can close the gap.</div>
       </button>
 
       <button class="reason-card" onclick="selectReason('suggestion')">
-        <span class="reason-icon">💡</span>
+        <span class="reason-icon"></span>
         <div class="reason-title">I have a suggestion</div>
         <div class="reason-sub">An idea for a new resource, feature, or improvement — we're listening.</div>
       </button>
 
       <button class="reason-card" onclick="selectReason('general')">
-        <span class="reason-icon">💬</span>
+        <span class="reason-icon"></span>
         <div class="reason-title">General feedback</div>
         <div class="reason-sub">Something else you'd like to share — good or not so good.</div>
       </button>
@@ -207,7 +212,7 @@
 
   <!-- SUCCESS STATE (shown after submission) -->
   <div class="success-state" id="success-state">
-    <div class="s-icon">🙏</div>
+    <div class="s-icon"></div>
     <h2>Thank you — that really helps.</h2>
     <p>Nic reads every response personally. Your feedback directly shapes what gets built and improved on this platform.</p>
     <a href="index.html">Back to the platform</a>
@@ -236,11 +241,11 @@
     <div class="form-group">
       <label>How would you rate your overall experience? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-cancel">
-        <button class="star-btn" onclick="setStars('cancel',1)">⭐</button>
-        <button class="star-btn" onclick="setStars('cancel',2)">⭐</button>
-        <button class="star-btn" onclick="setStars('cancel',3)">⭐</button>
-        <button class="star-btn" onclick="setStars('cancel',4)">⭐</button>
-        <button class="star-btn" onclick="setStars('cancel',5)">⭐</button>
+        <button class="star-btn" onclick="setStars('cancel',1)">→</button>
+        <button class="star-btn" onclick="setStars('cancel',2)">→</button>
+        <button class="star-btn" onclick="setStars('cancel',3)">→</button>
+        <button class="star-btn" onclick="setStars('cancel',4)">→</button>
+        <button class="star-btn" onclick="setStars('cancel',5)">→</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>
@@ -292,11 +297,11 @@
     <div class="form-group">
       <label>How would you rate what was available? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-missing">
-        <button class="star-btn" onclick="setStars('missing',1)">⭐</button>
-        <button class="star-btn" onclick="setStars('missing',2)">⭐</button>
-        <button class="star-btn" onclick="setStars('missing',3)">⭐</button>
-        <button class="star-btn" onclick="setStars('missing',4)">⭐</button>
-        <button class="star-btn" onclick="setStars('missing',5)">⭐</button>
+        <button class="star-btn" onclick="setStars('missing',1)">→</button>
+        <button class="star-btn" onclick="setStars('missing',2)">→</button>
+        <button class="star-btn" onclick="setStars('missing',3)">→</button>
+        <button class="star-btn" onclick="setStars('missing',4)">→</button>
+        <button class="star-btn" onclick="setStars('missing',5)">→</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>
@@ -354,11 +359,11 @@
     <div class="form-group">
       <label>How would you rate your overall experience? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-general">
-        <button class="star-btn" onclick="setStars('general',1)">⭐</button>
-        <button class="star-btn" onclick="setStars('general',2)">⭐</button>
-        <button class="star-btn" onclick="setStars('general',3)">⭐</button>
-        <button class="star-btn" onclick="setStars('general',4)">⭐</button>
-        <button class="star-btn" onclick="setStars('general',5)">⭐</button>
+        <button class="star-btn" onclick="setStars('general',1)">→</button>
+        <button class="star-btn" onclick="setStars('general',2)">→</button>
+        <button class="star-btn" onclick="setStars('general',3)">→</button>
+        <button class="star-btn" onclick="setStars('general',4)">→</button>
+        <button class="star-btn" onclick="setStars('general',5)">→</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>
@@ -380,8 +385,8 @@
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>
     <a href="terms.html">Terms</a>
-    <a href="business.html">For Business</a>
-    <a href="about.html">About Nic</a>
+    <a href="business.html">For Workplaces</a>
+    <a href="about-nic.html">About Nic</a>
     <a href="tel:131114" style="color:rgba(255,255,255,0.8)">Lifeline 13 11 14</a>
   </div>
 </footer>
@@ -441,5 +446,9 @@
     }
   }
 </script>
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
+
+<script src="scripts/nav-mobile.js"></script>
 </body>
 </html>
