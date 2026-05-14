@@ -106,6 +106,36 @@
     .pay-status.pending { background: rgba(200,117,42,0.1); color: var(--amber); }
     .pay-status.refunded { background: var(--sand); color: var(--warm-grey); }
 
+    /* MOOD TRACKER */
+    .mood-wrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
+    .mood-panel { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); }
+    .mood-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .mood-month { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--teal-dark); }
+    .mood-nav { display: flex; gap: 8px; }
+    .mood-nav-btn { border: 1px solid rgba(38,119,123,0.25); background: #fff; color: var(--teal-dark); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+    .mood-nav-btn:hover { background: var(--teal-light); }
+    .mood-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .mood-weekday { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); text-align: center; padding-bottom: 4px; }
+    .mood-day { min-height: 56px; border: 1px solid rgba(42,40,37,0.1); border-radius: 8px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; cursor: default; }
+    .mood-day.has-score { cursor: pointer; border-color: rgba(38,119,123,0.3); }
+    .mood-day.is-selected { outline: 2px solid rgba(38,119,123,0.5); }
+    .mood-date { font-size: 11px; color: var(--warm-grey); }
+    .mood-score { font-size: 16px; font-weight: 600; color: var(--charcoal); text-align: right; }
+    .mood-legend { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--warm-grey); }
+    .mood-swatches { display: flex; gap: 4px; }
+    .mood-swatch { width: 18px; height: 10px; border-radius: 4px; border: 1px solid rgba(42,40,37,0.12); }
+    .mood-side-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); margin-bottom: 8px; }
+    .mood-detail-date { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .mood-detail-score { font-family: 'DM Serif Display', serif; font-size: 32px; line-height: 1; color: var(--teal-dark); margin-bottom: 10px; }
+    .mood-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .mood-kpi { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+    .mood-kpi-label { font-size: 11px; color: var(--warm-grey); margin-bottom: 4px; }
+    .mood-kpi-value { font-size: 16px; font-weight: 600; }
+    .mood-alert-list { display: flex; flex-direction: column; gap: 8px; }
+    .mood-alert { background: #fff; border: 1px solid rgba(200,117,42,0.3); border-radius: 10px; padding: 10px; }
+    .mood-alert-type { font-size: 12px; font-weight: 600; color: var(--amber); margin-bottom: 4px; text-transform: capitalize; }
+    .mood-alert-meta { font-size: 12px; color: var(--warm-grey); }
+
     /* EMPTY STATE */
     .empty { text-align: center; padding: 40px 20px; color: var(--warm-grey); font-size: 14px; }
 
@@ -128,6 +158,8 @@
 
     @media (max-width: 860px) {
       .plans-grid-two, .plans-grid-three { grid-template-columns: 1fr; }
+      .mood-wrap { grid-template-columns: 1fr; }
+      .mood-day { min-height: 52px; }
     }
   </style>
 </head>
@@ -253,6 +285,14 @@
         <div class="card-title">Payment History</div>
         <div id="payContent"></div>
       </div>
+
+      <!-- MOOD TRACKER -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Mood Tracker</div>
+        </div>
+        <div id="moodContent"></div>
+      </div>
     </div>
   </main>
 
@@ -271,6 +311,19 @@
       team_bundle:    'Business Team — Annual Bundle',
       sessions_3:     'Counselling — 3 Sessions',
       sessions_6:     'Counselling — 6 Sessions',
+    };
+
+    const MOOD_ALERT_LABELS = {
+      low_streak: 'Low mood streak',
+      downward_trend: 'Downward trend',
+    };
+
+    const moodState = {
+      scoreByDate: Object.create(null),
+      currentMonth: null,
+      selectedDate: null,
+      summary: null,
+      alerts: [],
     };
 
     function showToast(msg) {
@@ -314,6 +367,7 @@
 
         renderSubscriptions(data.subscriptions);
         renderPayments(data.payments);
+        renderMoodTracker(data.mood || null);
 
       } catch (e) {
         document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
@@ -384,6 +438,171 @@
           </tr>`).join('')}
         </tbody>
       </table>`;
+    }
+
+    function renderMoodTracker(moodPayload) {
+      const container = document.getElementById('moodContent');
+      if (!container) return;
+
+      const daily = Array.isArray(moodPayload && moodPayload.daily) ? moodPayload.daily : [];
+      moodState.scoreByDate = Object.create(null);
+      daily.forEach(item => {
+        if (item && item.date) {
+          moodState.scoreByDate[item.date] = Number(item.score || 0);
+        }
+      });
+      moodState.summary = moodPayload && moodPayload.summary ? moodPayload.summary : null;
+      moodState.alerts = Array.isArray(moodPayload && moodPayload.open_alerts) ? moodPayload.open_alerts : [];
+
+      const now = new Date();
+      moodState.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      moodState.selectedDate = daily.length ? daily[0].date : null;
+
+      container.innerHTML = `
+        <div class="mood-wrap">
+          <div class="mood-panel">
+            <div class="mood-head">
+              <div class="mood-month" id="moodMonthLabel"></div>
+              <div class="mood-nav">
+                <button class="mood-nav-btn" id="moodPrevMonth" type="button">← Prev</button>
+                <button class="mood-nav-btn" id="moodNextMonth" type="button">Next →</button>
+              </div>
+            </div>
+            <div class="mood-grid" id="moodCalendarGrid"></div>
+            <div class="mood-legend">
+              <span>Low</span>
+              <div class="mood-swatches">
+                <span class="mood-swatch" style="background:${getMoodColor(1)}"></span>
+                <span class="mood-swatch" style="background:${getMoodColor(3)}"></span>
+                <span class="mood-swatch" style="background:${getMoodColor(5)}"></span>
+                <span class="mood-swatch" style="background:${getMoodColor(7)}"></span>
+                <span class="mood-swatch" style="background:${getMoodColor(10)}"></span>
+              </div>
+              <span>High</span>
+            </div>
+          </div>
+          <div class="mood-panel" id="moodSidePanel"></div>
+        </div>
+      `;
+
+      document.getElementById('moodPrevMonth').addEventListener('click', function () {
+        moodState.currentMonth = new Date(moodState.currentMonth.getFullYear(), moodState.currentMonth.getMonth() - 1, 1);
+        drawMoodCalendar();
+      });
+
+      document.getElementById('moodNextMonth').addEventListener('click', function () {
+        moodState.currentMonth = new Date(moodState.currentMonth.getFullYear(), moodState.currentMonth.getMonth() + 1, 1);
+        drawMoodCalendar();
+      });
+
+      drawMoodCalendar();
+      renderMoodSidePanel();
+    }
+
+    function drawMoodCalendar() {
+      const monthLabel = document.getElementById('moodMonthLabel');
+      const grid = document.getElementById('moodCalendarGrid');
+      if (!monthLabel || !grid) return;
+
+      const monthStart = moodState.currentMonth;
+      monthLabel.textContent = monthStart.toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
+
+      const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const cells = [];
+      weekdays.forEach(day => {
+        cells.push(`<div class="mood-weekday">${day}</div>`);
+      });
+
+      const jsDay = monthStart.getDay();
+      const mondayBasedOffset = (jsDay + 6) % 7;
+      for (let i = 0; i < mondayBasedOffset; i++) {
+        cells.push('<div class="mood-day"></div>');
+      }
+
+      const month = monthStart.getMonth();
+      for (let day = 1; day <= 31; day++) {
+        const dt = new Date(monthStart.getFullYear(), month, day);
+        if (dt.getMonth() !== month) break;
+
+        const dateKey = toDateKey(dt);
+        const score = moodState.scoreByDate[dateKey];
+        const hasScore = Number.isFinite(score) && score > 0;
+        const bgColor = hasScore ? getMoodColor(score) : '#ffffff';
+        const selectedCls = moodState.selectedDate === dateKey ? ' is-selected' : '';
+        const scoreHtml = hasScore ? `<div class="mood-score">${score}</div>` : '<div class="mood-score">·</div>';
+
+        cells.push(`
+          <button class="mood-day${hasScore ? ' has-score' : ''}${selectedCls}" data-date="${dateKey}" style="background:${bgColor}" type="button">
+            <div class="mood-date">${day}</div>
+            ${scoreHtml}
+          </button>
+        `);
+      }
+
+      grid.innerHTML = cells.join('');
+
+      grid.querySelectorAll('.mood-day.has-score').forEach(function (el) {
+        el.addEventListener('click', function () {
+          moodState.selectedDate = el.getAttribute('data-date');
+          drawMoodCalendar();
+          renderMoodSidePanel();
+        });
+      });
+    }
+
+    function renderMoodSidePanel() {
+      const side = document.getElementById('moodSidePanel');
+      if (!side) return;
+
+      const summary = moodState.summary || {};
+      const score = moodState.selectedDate ? moodState.scoreByDate[moodState.selectedDate] : null;
+      const selectedDateLabel = moodState.selectedDate
+        ? new Date(moodState.selectedDate + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+        : 'No day selected';
+
+      const alerts = moodState.alerts;
+      const alertHtml = alerts.length
+        ? `<div class="mood-alert-list">${alerts.map(function (a) {
+            const label = MOOD_ALERT_LABELS[a.type] || a.type;
+            return `<div class="mood-alert">
+              <div class="mood-alert-type">${label}</div>
+              <div class="mood-alert-meta">Window: ${fmtDate(a.window_start)} to ${fmtDate(a.window_end)}</div>
+            </div>`;
+          }).join('')}</div>`
+        : '<div class="empty" style="padding:14px 10px;">No active follow-up alerts.</div>';
+
+      side.innerHTML = `
+        <div class="mood-side-title">Selected Day</div>
+        <div class="mood-detail-date">${selectedDateLabel}</div>
+        <div class="mood-detail-score">${score || '—'}</div>
+
+        <div class="mood-side-title" style="margin-top:4px;">Last 30 Days</div>
+        <div class="mood-summary">
+          <div class="mood-kpi"><div class="mood-kpi-label">Check-ins</div><div class="mood-kpi-value">${summary.total_checkins_30 || 0}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Average</div><div class="mood-kpi-value">${summary.avg_score_30 ?? '—'}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Lowest</div><div class="mood-kpi-value">${summary.min_score_30 ?? '—'}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Highest</div><div class="mood-kpi-value">${summary.max_score_30 ?? '—'}</div></div>
+        </div>
+
+        <div class="mood-side-title">Follow-up Alerts</div>
+        ${alertHtml}
+      `;
+    }
+
+    function getMoodColor(score) {
+      const s = Math.max(1, Math.min(10, Number(score) || 0));
+      if (s <= 2) return '#f5c8bf';
+      if (s <= 4) return '#f2d9b7';
+      if (s <= 6) return '#e4e7bc';
+      if (s <= 8) return '#c6e2c8';
+      return '#a8d7c6';
+    }
+
+    function toDateKey(dt) {
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     async function cancelSub(subId, btn) {
