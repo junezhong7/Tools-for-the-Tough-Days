@@ -48,9 +48,11 @@ function handle_topics(int $userId): never
         json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
     }
 
-    $topics = get_topic_prefix_map();
+    $catalog = get_resource_catalog();
+    $topics = get_topic_prefix_map($catalog);
 
     audit('resource.topics.ok', $userId, [
+        'catalog' => $catalog,
         'count' => count($topics),
     ]);
 
@@ -60,31 +62,62 @@ function handle_topics(int $userId): never
     ]);
 }
 
-function get_topic_prefix_map(): array
+function get_topic_prefix_map(string $catalog = 'personal'): array
 {
-    return [
+    $map = [
         'crisis-support' => ['title' => 'Crisis support', 'label' => 'Crisis support', 'icon' => '🆘', 'order' => 10, 'prefixes' => ['CRISIS']],
-        'domestic-violence-abuse' => ['title' => 'Domestic violence & abuse', 'label' => 'Domestic violence & abuse', 'icon' => '🏠', 'order' => 20, 'prefixes' => ['DMV']],
-        'grief-loss' => ['title' => 'Grief & loss', 'label' => 'Grief & loss', 'icon' => '🕊️', 'order' => 30, 'prefixes' => ['GRIEF']],
-        'low-mood-depression' => ['title' => 'Low mood & depression', 'label' => 'Low mood & depression', 'icon' => '💙', 'order' => 40, 'prefixes' => ['DEP']],
-        'anxiety-worry' => ['title' => 'Anxiety & worry', 'label' => 'Anxiety & worry', 'icon' => '🌀', 'order' => 50, 'prefixes' => ['ANX']],
-        'self-esteem' => ['title' => 'Self-esteem', 'label' => 'Self-esteem', 'icon' => '💪', 'order' => 60, 'prefixes' => ['EST']],
-        'feeling-flat-angry' => ['title' => 'Feeling flat or angry', 'label' => 'Feeling flat or angry', 'icon' => '😶', 'order' => 70, 'prefixes' => ['MHW']],
-        'postnatal-struggles' => ['title' => 'Postnatal struggles', 'label' => 'Postnatal struggles', 'icon' => '🍼', 'order' => 80, 'prefixes' => ['PNN']],
-        'pregnancy' => ['title' => 'Pregnancy', 'label' => 'Pregnancy', 'icon' => '🤰', 'order' => 90, 'prefixes' => ['PRG']],
-        'expecting-fathers' => ['title' => 'Expecting fathers', 'label' => 'Expecting fathers', 'icon' => '👨‍👧', 'order' => 100, 'prefixes' => ['DAD']],
-        'gambling-substance' => ['title' => 'Gambling & substance use', 'label' => 'Gambling & substance use', 'icon' => '🎲', 'order' => 110, 'prefixes' => ['GSA']],
-        'daily-habits-wellbeing' => ['title' => 'Daily habits & wellbeing', 'label' => 'Daily habits & wellbeing', 'icon' => '🌱', 'order' => 120, 'prefixes' => ['WB', 'MHW']],
-        'relationships' => ['title' => 'Relationships', 'label' => 'Relationships', 'icon' => '❤️', 'order' => 130, 'prefixes' => ['REL']],
-        'parenting-young-children' => ['title' => 'Parenting young children', 'label' => 'Parenting young children', 'icon' => '👶', 'order' => 140, 'prefixes' => ['PYC']],
-        'parenting-teenagers' => ['title' => 'Parenting teenagers', 'label' => 'Parenting teenagers', 'icon' => '🧒', 'order' => 150, 'prefixes' => ['PTN']],
-        'getting-older' => ['title' => 'Getting older', 'label' => 'Getting older', 'icon' => '🧓', 'order' => 160, 'prefixes' => ['AGE']],
-        'identity-belonging' => ['title' => 'Identity & belonging', 'label' => 'Identity & belonging', 'icon' => '🌍', 'order' => 170, 'prefixes' => ['IDN']],
-        'supporting-someone-else' => ['title' => 'Supporting someone else', 'label' => 'Supporting someone else', 'icon' => '🤝', 'order' => 180, 'prefixes' => ['AOK']],
-        'financial-stress' => ['title' => 'Financial stress', 'label' => 'Financial stress', 'icon' => '💸', 'order' => 190, 'prefixes' => ['FIN']],
-        'big-life-changes' => ['title' => 'Big life changes', 'label' => 'Big life changes', 'icon' => '🔄', 'order' => 200, 'prefixes' => ['LT']],
-        'stress-about-future' => ['title' => 'Stress about the future', 'label' => 'Stress about the future', 'icon' => '🔮', 'order' => 210, 'prefixes' => ['FUT']],
+        'domestic-violence-abuse' => ['title' => 'Domestic violence & abuse', 'label' => 'Domestic violence & abuse', 'icon' => '', 'order' => 20, 'prefixes' => ['DMV']],
+        'grief-loss' => ['title' => 'Grief & loss', 'label' => 'Grief & loss', 'icon' => '', 'order' => 30, 'prefixes' => ['GRIEF']],
+        'low-mood-depression' => ['title' => 'Low mood & depression', 'label' => 'Low mood & depression', 'icon' => '', 'order' => 40, 'prefixes' => ['DEP']],
+        'anxiety-worry' => ['title' => 'Anxiety & worry', 'label' => 'Anxiety & worry', 'icon' => '', 'order' => 50, 'prefixes' => ['ANX']],
+        'self-esteem' => ['title' => 'Self-esteem', 'label' => 'Self-esteem', 'icon' => '', 'order' => 60, 'prefixes' => ['EST']],
+        'feeling-flat-angry' => ['title' => 'Feeling flat or angry', 'label' => 'Feeling flat or angry', 'icon' => '', 'order' => 70, 'prefixes' => ['MHW']],
+        'postnatal-struggles' => ['title' => 'Postnatal struggles', 'label' => 'Postnatal struggles', 'icon' => '', 'order' => 80, 'prefixes' => ['PNN']],
+        'pregnancy' => ['title' => 'Pregnancy', 'label' => 'Pregnancy', 'icon' => '', 'order' => 90, 'prefixes' => ['PRG']],
+        'expecting-fathers' => ['title' => 'Expecting fathers', 'label' => 'Expecting fathers', 'icon' => '', 'order' => 100, 'prefixes' => ['DAD']],
+        'gambling-substance' => ['title' => 'Gambling & substance use', 'label' => 'Gambling & substance use', 'icon' => '', 'order' => 110, 'prefixes' => ['GSA']],
+        'daily-habits-wellbeing' => ['title' => 'Daily habits & wellbeing', 'label' => 'Daily habits & wellbeing', 'icon' => '', 'order' => 120, 'prefixes' => ['WB', 'MHW']],
+        'relationships' => ['title' => 'Relationships', 'label' => 'Relationships', 'icon' => '', 'order' => 130, 'prefixes' => ['REL']],
+        'parenting-young-children' => ['title' => 'Parenting young children', 'label' => 'Parenting young children', 'icon' => '', 'order' => 140, 'prefixes' => ['PYC']],
+        'parenting-teenagers' => ['title' => 'Parenting teenagers', 'label' => 'Parenting teenagers', 'icon' => '', 'order' => 150, 'prefixes' => ['PTN']],
+        'getting-older' => ['title' => 'Getting older', 'label' => 'Getting older', 'icon' => '', 'order' => 160, 'prefixes' => ['AGE']],
+        'identity-belonging' => ['title' => 'Identity & belonging', 'label' => 'Identity & belonging', 'icon' => '', 'order' => 170, 'prefixes' => ['IDN']],
+        'supporting-someone-else' => ['title' => 'Supporting someone else', 'label' => 'Supporting someone else', 'icon' => '', 'order' => 180, 'prefixes' => ['AOK']],
+        'financial-stress' => ['title' => 'Financial stress', 'label' => 'Financial stress', 'icon' => '', 'order' => 190, 'prefixes' => ['FIN']],
+        'big-life-changes' => ['title' => 'Big life changes', 'label' => 'Big life changes', 'icon' => '', 'order' => 200, 'prefixes' => ['LT']],
+        'stress-about-future' => ['title' => 'Stress about the future', 'label' => 'Stress about the future', 'icon' => '', 'order' => 210, 'prefixes' => ['FUT']],
+        'trauma-difficult-memories' => ['title' => 'Trauma & difficult memories', 'label' => 'Trauma & difficult memories', 'icon' => '', 'order' => 215, 'prefixes' => ['TRM']],
+        'workplace-stress-pressure' => ['title' => 'Workplace stress & pressure', 'label' => 'Workplace stress & pressure', 'icon' => '', 'order' => 220, 'prefixes' => ['WSP']],
+        'burnout' => ['title' => 'Burnout', 'label' => 'Burnout', 'icon' => '', 'order' => 230, 'prefixes' => ['BRN']],
+        'difficult-workplace-relationships' => ['title' => 'Difficult workplace relationships', 'label' => 'Difficult workplace relationships', 'icon' => '', 'order' => 240, 'prefixes' => ['WPR']],
+        'work-life-balance' => ['title' => 'Work-life balance', 'label' => 'Work-life balance', 'icon' => '⚖', 'order' => 250, 'prefixes' => ['WLB']],
+        'job-loss-unemployment' => ['title' => 'Job loss & unemployment', 'label' => 'Job loss & unemployment', 'icon' => '', 'order' => 260, 'prefixes' => ['JLU']],
+        'career-uncertainty-change' => ['title' => 'Career uncertainty & change', 'label' => 'Career uncertainty & change', 'icon' => '', 'order' => 270, 'prefixes' => ['CUC']],
     ];
+
+    if ($catalog === 'workplace') {
+        $map['workplace-stress-pressure']['prefixes'] = array_values(array_unique(array_merge(
+            $map['workplace-stress-pressure']['prefixes'],
+            ['CICR', 'LPM', 'SBC', 'SHC', 'SLG', 'SMF']
+        )));
+
+        $map['supporting-someone-else']['prefixes'] = array_values(array_unique(array_merge(
+            $map['supporting-someone-else']['prefixes'],
+            ['SBC', 'SHC', 'SLG']
+        )));
+
+        $map['relationships']['prefixes'] = array_values(array_unique(array_merge(
+            $map['relationships']['prefixes'],
+            ['RFP']
+        )));
+
+        $map['parenting-young-children']['prefixes'] = array_values(array_unique(array_merge(
+            $map['parenting-young-children']['prefixes'],
+            ['RFP']
+        )));
+    }
+
+    return $map;
 }
 
 function handle_list(int $userId): never
@@ -94,6 +127,7 @@ function handle_list(int $userId): never
         json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
     }
 
+    $catalog = get_resource_catalog();
     $prefixesRaw = trim((string) ($_GET['prefixes'] ?? ''));
     if ($prefixesRaw === '') {
         json_error(422, 'MISSING_PREFIXES', 'prefixes is required.');
@@ -111,7 +145,7 @@ function handle_list(int $userId): never
         json_error(422, 'INVALID_PREFIXES', 'No valid prefixes were provided.');
     }
 
-    $resourceMap = load_resource_map_from_csv();
+    $resourceMap = load_resource_map_from_csv($catalog);
     $items = [];
 
     foreach ($resourceMap as $resourceKey => $resource) {
@@ -136,6 +170,7 @@ function handle_list(int $userId): never
     });
 
     audit('resource.list.ok', $userId, [
+        'catalog' => $catalog,
         'prefixes' => array_values($requestedPrefixes),
         'count' => count($items),
     ]);
@@ -156,20 +191,21 @@ function handle_issue(int $userId): never
 
     $resourceKey = strtoupper(trim((string) ($_GET['resource_key'] ?? '')));
     $kind = normalize_kind((string) ($_GET['kind'] ?? 'pdf'));
+    $catalog = get_resource_catalog();
 
     if ($resourceKey === '') {
         json_error(422, 'MISSING_RESOURCE', 'resource_key is required.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.issue.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.issue.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.issue.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.issue.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -178,6 +214,7 @@ function handle_issue(int $userId): never
         'uid' => $userId,
         'key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'exp' => $expiresAt,
     ]);
 
@@ -186,12 +223,14 @@ function handle_issue(int $userId): never
     audit('resource.issue.ok', $userId, [
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'exp' => $expiresAt,
     ]);
 
     json_ok([
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'resource_name' => $resource['name'],
         'expires_at' => gmdate('c', $expiresAt),
         'viewer_url' => $viewerPath . '?token=' . rawurlencode($token),
@@ -215,6 +254,7 @@ function handle_resolve(int $userId): never
     $tokenUserId = (int) ($payload['uid'] ?? 0);
     $resourceKey = strtoupper(trim((string) ($payload['key'] ?? '')));
     $kind = normalize_kind((string) ($payload['kind'] ?? 'pdf'));
+    $catalog = normalize_resource_catalog((string) ($payload['catalog'] ?? 'personal'));
     $exp = (int) ($payload['exp'] ?? 0);
 
     if ($tokenUserId !== $userId) {
@@ -227,15 +267,15 @@ function handle_resolve(int $userId): never
         json_error(410, 'TOKEN_EXPIRED', 'Resource link has expired.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.resolve.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.resolve.not_found', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.resolve.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.resolve.missing_blob', $userId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -244,11 +284,13 @@ function handle_resolve(int $userId): never
     audit('resource.resolve.ok', $userId, [
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
     ]);
 
     json_ok([
         'resource_key' => $resourceKey,
         'kind' => $kind,
+        'catalog' => $catalog,
         'resource_name' => $resource['name'],
         'expires_at' => gmdate('c', time() + get_resource_token_ttl()),
         'url' => $streamUrl,
@@ -269,6 +311,7 @@ function handle_stream(): never
     $tokenUserId = (int) ($payload['uid'] ?? 0);
     $resourceKey = strtoupper(trim((string) ($payload['key'] ?? '')));
     $kind = normalize_kind((string) ($payload['kind'] ?? 'pdf'));
+    $catalog = normalize_resource_catalog((string) ($payload['catalog'] ?? 'personal'));
     $exp = (int) ($payload['exp'] ?? 0);
 
     if ($tokenUserId <= 0 || $resourceKey === '') {
@@ -280,15 +323,15 @@ function handle_stream(): never
         json_error(410, 'TOKEN_EXPIRED', 'Resource link has expired.');
     }
 
-    $resource = get_resource_by_key($resourceKey);
+    $resource = get_resource_by_key($resourceKey, $catalog);
     if ($resource === null) {
-        audit('resource.stream.not_found', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.stream.not_found', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_NOT_FOUND', 'Resource is not available.');
     }
 
     $blobName = $kind === 'video' ? ($resource['video_blob'] ?? '') : ($resource['pdf_blob'] ?? '');
     if ($blobName === '') {
-        audit('resource.stream.missing_blob', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind]);
+        audit('resource.stream.missing_blob', $tokenUserId, ['resource_key' => $resourceKey, 'kind' => $kind, 'catalog' => $catalog]);
         json_error(404, 'RESOURCE_FORMAT_NOT_FOUND', 'Requested format is not available.');
     }
 
@@ -383,19 +426,19 @@ function normalize_kind(string $kind): string
     return 'pdf';
 }
 
-function get_resource_by_key(string $resourceKey): ?array
+function get_resource_by_key(string $resourceKey, string $catalog = 'personal'): ?array
 {
-    static $resourceMap = null;
-    if ($resourceMap === null) {
-        $resourceMap = load_resource_map_from_csv();
+    static $resourceMapByCatalog = [];
+    if (!array_key_exists($catalog, $resourceMapByCatalog)) {
+        $resourceMapByCatalog[$catalog] = load_resource_map_from_csv($catalog);
     }
 
-    return $resourceMap[$resourceKey] ?? null;
+    return $resourceMapByCatalog[$catalog][$resourceKey] ?? null;
 }
 
-function load_resource_map_from_csv(): array
+function load_resource_map_from_csv(string $catalog = 'personal'): array
 {
-    $path = __DIR__ . '/../data/Tools_for_Tough_Days_Personal_Support_Glide - Latest.csv';
+    $path = resource_csv_path_for_catalog($catalog);
     if (!is_readable($path)) {
         throw new RuntimeException('Resource CSV file is not readable: ' . $path);
     }
@@ -407,38 +450,107 @@ function load_resource_map_from_csv(): array
 
     $resourceMap = [];
     $headerFound = false;
+    $headerIndexMap = [];
 
     while (($row = fgetcsv($handle)) !== false) {
         if (!$headerFound) {
-            if (isset($row[0]) && trim((string) $row[0]) === 'Mood_Score_Range') {
+            $firstCell = isset($row[0]) ? (string) $row[0] : '';
+            // Be resilient to UTF-8 BOM when the CSV header is on the first line.
+            $firstCell = preg_replace('/^\xEF\xBB\xBF/', '', $firstCell) ?? $firstCell;
+
+            if (trim($firstCell) === 'Mood_Score_Range') {
                 $headerFound = true;
+                foreach ($row as $idx => $name) {
+                    $headerName = trim((string) $name);
+                    $headerName = preg_replace('/^\xEF\xBB\xBF/', '', $headerName) ?? $headerName;
+                    if ($headerName !== '') {
+                        $headerIndexMap[$headerName] = $idx;
+                    }
+                }
             }
             continue;
         }
 
-        if (count($row) < 10) {
+        if (count($row) < 5) {
             continue;
         }
 
-        $resourceCode = strtoupper(trim((string) ($row[3] ?? '')));
+        $resourceCodeIndex = $headerIndexMap['Resource_Code'] ?? 3;
+        $resourceNameIndex = $headerIndexMap['Resource_Name'] ?? 4;
+        $formatIndex = $headerIndexMap['Format'] ?? 5;
+        $fileReferenceIndex = $headerIndexMap['File_Reference'] ?? 8;
+        $audioReferenceIndex = $headerIndexMap['SharePoint_Audio_Link'] ?? 9;
+
+        $resourceCode = strtoupper(trim((string) ($row[$resourceCodeIndex] ?? '')));
         if ($resourceCode === '') {
             continue;
         }
 
-        $resourceName = trim((string) ($row[4] ?? ''));
-        $pdfBlob = trim((string) ($row[7] ?? ''));
-        $videoBlob = trim((string) ($row[9] ?? ''));
+        $resourceName = trim((string) ($row[$resourceNameIndex] ?? ''));
+        $format = strtoupper(trim((string) ($row[$formatIndex] ?? '')));
+        $fileReference = trim((string) ($row[$fileReferenceIndex] ?? ''));
+        $legacyAudioReference = trim((string) ($row[$audioReferenceIndex] ?? ''));
 
-        $resourceMap[$resourceCode] = [
-            'name' => $resourceName,
-            'pdf_blob' => $pdfBlob,
-            'video_blob' => $videoBlob,
-        ];
+        if (!isset($resourceMap[$resourceCode])) {
+            $resourceMap[$resourceCode] = [
+                'name' => $resourceName,
+                'pdf_blob' => '',
+                'video_blob' => '',
+            ];
+        } elseif ($resourceMap[$resourceCode]['name'] === '' && $resourceName !== '') {
+            $resourceMap[$resourceCode]['name'] = $resourceName;
+        }
+
+        if ($format === 'PDF') {
+            if ($resourceMap[$resourceCode]['pdf_blob'] === '' && $fileReference !== '') {
+                $resourceMap[$resourceCode]['pdf_blob'] = $fileReference;
+            }
+        } elseif ($format === 'VIDEO' || $format === 'AUDIO' || $format === 'MP4') {
+            if ($resourceMap[$resourceCode]['video_blob'] === '' && $fileReference !== '') {
+                $resourceMap[$resourceCode]['video_blob'] = $fileReference;
+            }
+        } else {
+            // Backward compatibility for legacy CSV files without reliable Format values.
+            if ($resourceMap[$resourceCode]['pdf_blob'] === '' && $fileReference !== '') {
+                if (preg_match('/\.(mp4|mov|m4v|webm)(\?.*)?$/i', $fileReference) === 1) {
+                    $resourceMap[$resourceCode]['video_blob'] = $fileReference;
+                } else {
+                    $resourceMap[$resourceCode]['pdf_blob'] = $fileReference;
+                }
+            }
+        }
+
+        if ($resourceMap[$resourceCode]['video_blob'] === '' && $legacyAudioReference !== '') {
+            $resourceMap[$resourceCode]['video_blob'] = $legacyAudioReference;
+        }
     }
 
     fclose($handle);
 
     return $resourceMap;
+}
+
+function get_resource_catalog(): string
+{
+    return normalize_resource_catalog((string) ($_GET['catalog'] ?? 'personal'));
+}
+
+function normalize_resource_catalog(string $catalog): string
+{
+    $value = strtolower(trim($catalog));
+    if ($value === 'workplace' || $value === 'business') {
+        return 'workplace';
+    }
+    return 'personal';
+}
+
+function resource_csv_path_for_catalog(string $catalog): string
+{
+    if ($catalog === 'workplace') {
+        return __DIR__ . '/../data/Tools_for_Tough_Days_Workplace_Support_Glide - Latest.csv';
+    }
+
+    return __DIR__ . '/../data/Tools_for_Tough_Days_Personal_Support_Glide - Latest.csv';
 }
 
 function create_resource_token(array $payload): string

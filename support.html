@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Resources — Tools for the Tough Days</title>
+  <title>Free Resources, Tools for the Tough Days</title>
   <meta name="description" content="Free clinically-reviewed mental health resources from a Registered Psychologist. No waitlist, no referral. Start reading or listening right now." />
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
@@ -190,7 +190,17 @@
       justify-content: space-between;
       gap: 10px;
     }
+    .topic-option[data-kind="video"] {
+      background: #c8f0f2;
+      border-color: rgba(38,119,123,0.35);
+    }
+    .topic-option[data-kind="video"] .badge {
+      background: rgba(255,255,255,0.7);
+      border-color: rgba(38,119,123,0.35);
+      color: var(--teal-dark);
+    }
     .topic-option:hover { border-color: rgba(38,119,123,0.4); }
+    .topic-option[data-kind="video"]:hover { background: #bce8eb; border-color: rgba(38,119,123,0.5); }
     .topic-option.disabled {
       color: var(--warm-grey);
       background: #f7f4f0;
@@ -302,7 +312,7 @@
     .modal-desc { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 8px; }
     .modal-checklist { list-style: none; margin-bottom: 20px; }
     .modal-checklist li { font-size: 13px; color: var(--charcoal); padding: 4px 0 4px 18px; position: relative; }
-    .modal-checklist li::before { content: '✔'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .modal-checklist li::before { content: ''; position: absolute; left: 0; color: var(--green); font-weight: 700; }
     .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--warm-grey); line-height: 1; padding: 4px; }
     .modal-close:hover { color: var(--charcoal); }
     .modal-input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); outline: none; margin-bottom: 10px; }
@@ -365,6 +375,29 @@
     footer a:hover { color: #fff; }
     .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 
+    /* CATEGORY NAVIGATION */
+    .cat-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto; }
+    .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 22px; font-size: 15px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: border-color 0.15s, background 0.15s, color 0.15s; width: 100%; text-align: center; }
+    .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
+    .cat-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .cat-btn .cat-chevron { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+    .cat-btn.active .cat-chevron { transform: rotate(180deg); }
+    .subtopic-panel { display: none; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-top: 14px; }
+    .subtopic-panel.show { display: block; }
+    .subtopic-panel-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 12px; font-weight: 500; }
+    .subtopic-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .subtopic-pill { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--charcoal); cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: border-color 0.12s, transform 0.12s; }
+    .subtopic-pill:hover { border-color: rgba(38,119,123,0.4); transform: translateY(-1px); }
+    .subtopic-pill.coming-soon { color: var(--warm-grey); background: #f7f4f0; cursor: default; border-style: dashed; pointer-events: none; }
+    .cs-badge { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 1px 6px; color: var(--warm-grey); }
+    .crisis-nav-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .crisis-nav-left { display: flex; align-items: center; gap: 12px; }
+    .crisis-nav-icon { font-size: 22px; }
+    .crisis-nav-title { font-size: 14px; font-weight: 500; color: var(--red-crisis); margin-bottom: 2px; }
+    .crisis-nav-sub { font-size: 12px; color: #7a2020; }
+    .crisis-nav-btn { background: var(--red-crisis); color: #fff; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+    .crisis-nav-btn:hover { background: #a93226; color: #fff; }
+
     /* RESPONSIVE */
     @media (max-width: 800px) {
       nav { padding: 0 16px; }
@@ -375,9 +408,6 @@
       .what-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
       footer { padding: 24px 16px; flex-direction: column; text-align: center; }
-    }
-    @media (max-width: 480px) {
-      .nav-links a:not(.nav-cta):not(.nav-login) { display: none; }
     }
   </style>
 </head>
@@ -407,13 +437,13 @@
   <section class="hero">
     <div class="hero-texture"></div>
     <div class="hero-content">
-      <div class="hero-badge"><span class="hero-dot"></span> Free resources — no subscription needed</div>
+      <div class="hero-badge" id="hero-free-badge"><span class="hero-dot"></span> Free resources, no subscription needed</div>
       <h1>Real support,<br><em>right now.</em></h1>
-      <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral — start reading or listening today.</p>
+      <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral, start reading or listening today.</p>
       <p style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.72);">Returning visitor? <a href="return.html" style="color:rgba(255,255,255,0.92);font-weight:500;">Pick up where you left off →</a></p>
 
       <div class="mood-card">
-        <p class="mood-question">Before we start — how are you feeling right now?</p>
+        <p class="mood-question">Before we start, how are you feeling right now?</p>
         <div class="mood-value-display">
           <div class="mood-number" id="mood-num">5</div>
           <div class="mood-descriptor" id="mood-desc">Getting by</div>
@@ -431,11 +461,31 @@
     </div>
   </section>
 
-  <!-- RESOURCE AREAS STRIP -->
-  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 40px;">
+  <!-- CATEGORY NAVIGATION STRIP -->
+  <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
-      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">What's covered — 21 resource areas</div>
-      <div id="resource-topic-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
+
+      <!-- Category buttons -->
+      <div class="cat-nav" id="cat-nav"></div>
+
+      <!-- Sub-topic panel (shown when a category is selected) -->
+      <div class="subtopic-panel" id="subtopic-panel">
+        <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+        <div class="subtopic-list" id="subtopic-list"></div>
+      </div>
+
+      <!-- Crisis Support — persistent, outside dropdown system -->
+      <div class="crisis-nav-card">
+        <div class="crisis-nav-left">
+          <span class="crisis-nav-icon"></span>
+          <div>
+            <div class="crisis-nav-title">Crisis Support</div>
+            <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+          </div>
+        </div>
+        <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+      </div>
     </div>
   </div>
 
@@ -451,6 +501,7 @@
   <section class="content-section">
     <div class="content-inner">
 
+      <div id="free-resources-block">
       <div class="section-label">Free resources</div>
 
       <div class="section-intro">
@@ -463,19 +514,19 @@
       </div>
 
       <!-- FREE INSTANTLY -->
-      <div class="grid-label instant">✅ Open now — no email needed</div>
+      <div class="grid-label instant"> Open now, no email needed</div>
       <div class="resource-grid">
 
         <div class="resource-card instant">
           <span class="card-tag t-instant">Free — no signup</span>
-          <span class="c-icon">🌊</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Crisis Support</div>
           <h3 class="card-title">Grounding Yourself When Everything Feels Overwhelming</h3>
           <p class="card-desc">When everything feels too much and you don't know where to start — simple, immediate grounding steps you can use right now to feel a little steadier.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="#" class="btn-open" onclick="openViewer('crisis'); return false;">Read or listen →</a>
           </div>
@@ -483,14 +534,14 @@
 
         <div class="resource-card instant">
           <span class="card-tag t-instant">Free — no signup</span>
-          <span class="c-icon">💓</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Anxiety</div>
           <h3 class="card-title">Understanding What Anxiety Is Actually Doing to Your Body</h3>
           <p class="card-desc">Anxiety affects 2.4 million Australians. This explains what's happening in your body — the racing heart, tight chest, racing thoughts — and what actually helps.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="#" class="btn-open" onclick="openViewer('anxiety'); return false;">Read or listen →</a>
           </div>
@@ -499,19 +550,19 @@
       </div>
 
       <!-- FREE WITH EMAIL -->
-      <div class="grid-label email">📧 Free with your email</div>
+      <div class="grid-label email"> Free with your email</div>
       <div class="resource-grid">
 
         <div class="resource-card email-gate" onclick="openModal('financial')">
           <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon">💸</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Financial Stress</div>
           <h3 class="card-title">When Financial Stress Starts Affecting Your Mental Health</h3>
           <p class="card-desc">Money stress is the #1 driver of mental health decline in Australia right now. Understand why financial pressure hits so hard — and what to do when it's affecting how you feel and function.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
           </div>
@@ -519,14 +570,14 @@
 
         <div class="resource-card email-gate">
           <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon">🔋</span>
+          <span class="c-icon"></span>
           <div class="card-cat">Burnout & Stress</div>
           <h3 class="card-title">The Basics That Actually Make a Difference to Your Wellbeing</h3>
           <p class="card-desc">Burnout doesn't fix itself. This resource cuts through the noise and gives you the fundamentals — the things that clinical research and 20+ years of practice show actually work.</p>
           <div class="card-footer">
             <div class="format-row">
-              <span class="format-pill pdf">📄 PDF</span>
-              <span class="format-pill audio">🎧 Audio</span>
+              <span class="format-pill pdf"> PDF</span>
+              <span class="format-pill audio"> Audio</span>
             </div>
             <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free →</a>
           </div>
@@ -534,10 +585,12 @@
 
       </div>
 
+      </div>
+
       <!-- Subscribe CTA -->
       <div class="subscribe-cta">
         <h2>Unlock the full library</h2>
-        <p>160+ clinically-reviewed PDF guides and audio resources — available any time, on any device. New topics added regularly.</p>
+        <p>370+ clinically-reviewed PDF guides and audio resources — available any time, on any device. New topics added regularly.</p>
         <div class="pricing-grid">
           <div class="price-box">
             <div class="price-box-label">Monthly</div>
@@ -556,7 +609,7 @@
           </div>
         </div>
         <a href="booking.html" class="cta-link">Or book a free 15-min call with Nic first →</a>
-        <p class="growing-note">📚 The library grows regularly — new resources added every month</p>
+        <p class="growing-note"> The library grows regularly — new resources added every month</p>
       </div>
 
     </div>
@@ -565,10 +618,10 @@
   <!-- Trust strip -->
   <div class="trust-strip">
     <div class="trust-inner">
-      <div class="trust-item">✍️ Written by a Registered Psychologist</div>
-      <div class="trust-item">✍️ Clinically authored and reviewed</div>
-      <div class="trust-item">📬 One email. Unsubscribe anytime.</div>
-      <div class="trust-item">🔒 We never share your details</div>
+      <div class="trust-item"> Written by a Registered Psychologist</div>
+      <div class="trust-item"> Clinically authored and reviewed</div>
+      <div class="trust-item"> One email. Unsubscribe anytime.</div>
+      <div class="trust-item"> We never share your details</div>
     </div>
   </div>
 
@@ -577,15 +630,15 @@
     <div class="what-inner">
       <h3>What you get with a subscription</h3>
       <div class="what-grid">
-        <div class="what-card"><div class="w-icon">📚</div><h4>80+ PDF guides</h4><p>Clinically reviewed — covering 20+ problem areas, growing every month</p></div>
-        <div class="what-card"><div class="w-icon">🎧</div><h4>80+ audio guides</h4><p>Listen on the go — same content, perfect when reading isn't convenient</p></div>
-        <div class="what-card"><div class="w-icon">📅</div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
-        <div class="what-card"><div class="w-icon">🔒</div><h4>Completely private</h4><p>No employer access, no data sharing — just you and the resources</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>240+ PDF guides</h4><p>Clinically reviewed — covering 20+ problem areas, growing every month</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>130+ MP4 guides</h4><p>Watch or listen on the go — same support when reading isn't convenient</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>Completely private</h4><p>No employer access, no data sharing — just you and the resources</p></div>
       </div>
     </div>
   </div>
 
-  <a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+  <a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
 
   <!-- STAY IN THE LOOP -->
   <section style="background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
@@ -615,14 +668,14 @@
     <div class="viewer-box">
       <div class="viewer-header">
         <h3 id="viewer-title">—</h3>
-        <button class="viewer-close" onclick="closeViewer()">✕ Close</button>
+        <button class="viewer-close" onclick="closeViewer()"> Close</button>
       </div>
       <div class="viewer-tabs">
-        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')">📄 Read</button>
-        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')">🎧 Listen</button>
+        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')"> Read</button>
+        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')"> Listen</button>
       </div>
       <div class="viewer-upsell">
-        <p>You're reading a free resource. Subscribe to unlock all 160+.</p>
+        <p>You're reading a free resource. Subscribe to unlock all 370+.</p>
         <a href="checkout.php?product=individual_monthly">Subscribe — from $10/month →</a>
       </div>
       <div class="viewer-read"   id="viewer-read"></div>
@@ -753,12 +806,12 @@
           <div class="audio-title">${r.title}</div>
           <div class="audio-byline">Narrated audio · toolsforthetoughdays.com.au · Nic Marcon, Registered Psychologist</div>
           <a href="${r.audioSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;padding:13px 22px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:16px;">
-            🎧 Listen on SharePoint →
+             Listen on SharePoint →
           </a>
           <p class="audio-note">Opens in SharePoint in a new tab — free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
         </div>
         <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:16px 20px;">
-          <p style="font-size:13px;color:var(--teal-dark);margin:0 0 10px;">Want more? Subscribe for $10/month and unlock 80+ audio guides covering anxiety, relationships, sleep, financial stress, burnout, and more.</p>
+          <p style="font-size:13px;color:var(--teal-dark);margin:0 0 10px;">Want more? Subscribe for $10/month and unlock 130+ MP4 guides covering anxiety, relationships, sleep, financial stress, burnout, and more.</p>
           <a href="checkout.php?product=individual_monthly" style="display:inline-block;background:var(--teal);color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe — from $10/month →</a>
         </div>
       `;
@@ -767,11 +820,11 @@
       const pdfBtn = r.pdfSrc
         ? `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
              <a href="${r.pdfSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);color:var(--charcoal);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">
-               📄 Download PDF version →
+                Download PDF version →
              </a>
            </div>`
         : `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--warm-grey);">
-             📄 PDF download coming soon.
+              PDF download coming soon.
            </div>`;
       document.getElementById('viewer-read').innerHTML += pdfBtn;
 
@@ -884,8 +937,6 @@
     const title = document.getElementById('topicModalTitle');
     const options = document.getElementById('topicOptions');
     const closeBtn = document.getElementById('topicModalClose');
-    const topicButtons = document.getElementById('resource-topic-buttons');
-    const topicNote = document.getElementById('resource-topic-note');
     if (!overlay || !title || !options || !closeBtn) {
       return;
     }
@@ -899,44 +950,131 @@
         .replace(/'/g, '&#39;');
     }
 
+    const CATEGORIES = [
+      {
+        id: 'mental-health', icon: '', label: 'My Mental Health',
+        subtopics: [
+          { icon: '', label: 'Low mood & depression',       key: 'low-mood-depression' },
+          { icon: '', label: 'Anxiety & worry',              key: 'anxiety-worry' },
+          { icon: '', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
+          { icon: '', label: 'Self-esteem',                  key: 'self-esteem' },
+          { icon: '', label: 'Stress about the future',      key: 'stress-about-future' },
+          { icon: '', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories' },
+        ]
+      },
+      {
+        id: 'life-challenges', icon: '', label: 'Life Challenges',
+        subtopics: [
+          { icon: '', label: 'Grief & loss',                key: 'grief-loss' },
+          { icon: '', label: 'Big life changes',             key: 'big-life-changes' },
+          { icon: '', label: 'Financial stress',             key: 'financial-stress' },
+          { icon: '', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
+          { icon: '', label: 'Gambling & substance use',     key: 'gambling-substance' },
+          { icon: '', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
+        ]
+      },
+      {
+        id: 'relationships', icon: '', label: 'Relationships',
+        subtopics: [
+          { icon: '', label: 'Relationships',               key: 'relationships' },
+          { icon: '', label: 'Supporting someone else',      key: 'supporting-someone-else' },
+          { icon: '', label: 'Identity & belonging',         key: 'identity-belonging' },
+          { icon: '', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
+        ]
+      },
+      {
+        id: 'family-parenting', icon: '', label: 'Family & Parenting',
+        subtopics: [
+          { icon: '', label: 'Parenting young children',     key: 'parenting-young-children' },
+          { icon: '', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
+          { icon: '', label: 'Pregnancy',                    key: 'pregnancy' },
+          { icon: '', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
+          { icon: '', label: 'Expecting fathers',          key: 'expecting-fathers' },
+          { icon: '', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
+        ]
+      },
+      {
+        id: 'work-career', icon: '', label: 'Work & Career',
+        subtopics: [
+          { icon: '', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure' },
+          { icon: '', label: 'Burnout',                          key: 'burnout' },
+          { icon: '', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships' },
+          { icon: '', label: 'Work-life balance',               key: 'work-life-balance' },
+          { icon: '', label: 'Job loss & unemployment',          key: 'job-loss-unemployment' },
+          { icon: '', label: 'Career uncertainty & change',      key: 'career-uncertainty-change' },
+        ]
+      },
+      {
+        id: 'health-wellbeing', icon: '', label: 'Health & Wellbeing',
+        subtopics: [
+          { icon: '', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
+          { icon: '', label: 'Getting older',               key: 'getting-older' },
+          { icon: '', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
+          { icon: '', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
+        ]
+      },
+    ];
+
+    let activeCatId = null;
+
     function renderTopicButtons(config) {
-      if (!topicButtons) {
-        return;
-      }
+      // topicConfig is already set before this is called; nothing to render here —
+      // the category nav is built statically by initCategoryNav().
+    }
 
-      const buttonStyle = 'background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: var(--charcoal); text-decoration: none; display: inline-block;';
-      const entries = Object.entries(config || {}).sort(function (a, b) {
-        const aOrder = Number(a[1] && a[1].order ? a[1].order : 9999);
-        const bOrder = Number(b[1] && b[1].order ? b[1].order : 9999);
-        if (aOrder !== bOrder) {
-          return aOrder - bOrder;
-        }
+    function initCategoryNav() {
+      const catNav = document.getElementById('cat-nav');
+      if (!catNav) { return; }
 
-        const aTitle = String((a[1] && (a[1].label || a[1].title)) || a[0]).toLowerCase();
-        const bTitle = String((b[1] && (b[1].label || b[1].title)) || b[0]).toLowerCase();
-        return aTitle.localeCompare(bTitle);
-      });
-
-      if (entries.length === 0) {
-        topicButtons.innerHTML = '';
-        if (topicNote) {
-          topicNote.textContent = 'No resource topics available right now.';
-        }
-        return;
-      }
-
-      topicButtons.innerHTML = entries.map(function (entry) {
-        const topicKey = entry[0];
-        const topic = entry[1] || {};
-        const icon = topic.icon || '📄';
-        const label = topic.label || topic.title || topicKey;
-        return '<a href="#" data-open-topic="' + escapeHtml(topicKey) + '" style="' + buttonStyle + '">' + escapeHtml(icon + ' ' + label) + '</a>';
+      catNav.innerHTML = CATEGORIES.map(function (cat) {
+        return '<button class="cat-btn" data-cat-id="' + cat.id + '" type="button">'
+          + cat.icon + ' ' + cat.label
+          + ' <span class="cat-chevron">▼</span></button>';
       }).join('');
 
-      if (topicNote) {
-        topicNote.textContent = 'Click any topic to load matching resources from your CSV mapping.';
-      }
+      catNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.cat-btn');
+        if (!btn) { return; }
+        toggleCategory(btn.getAttribute('data-cat-id'));
+      });
     }
+
+    function toggleCategory(catId) {
+      var panel = document.getElementById('subtopic-panel');
+      var label = document.getElementById('subtopic-panel-label');
+      var list  = document.getElementById('subtopic-list');
+      var allBtns = document.querySelectorAll('.cat-btn');
+
+      if (activeCatId === catId) {
+        activeCatId = null;
+        panel.classList.remove('show');
+        allBtns.forEach(function (b) { b.classList.remove('active'); });
+        return;
+      }
+
+      activeCatId = catId;
+      var cat = CATEGORIES.find(function (c) { return c.id === catId; });
+      if (!cat) { return; }
+
+      allBtns.forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat-id') === catId);
+      });
+
+      label.textContent = cat.label;
+      list.innerHTML = cat.subtopics.map(function (sub) {
+        if (sub.comingSoon) {
+          return '<span class="subtopic-pill coming-soon">'
+            + sub.icon + ' ' + sub.label
+            + ' <span class="cs-badge">Soon</span></span>';
+        }
+        return '<a href="#" class="subtopic-pill" data-open-topic="' + sub.key + '">'
+          + sub.icon + ' ' + sub.label + '</a>';
+      }).join('');
+
+      panel.classList.add('show');
+    }
+
+    initCategoryNav();
 
     async function issueViewerUrl(resourceKey, kind) {
       const query = new URLSearchParams({
@@ -1017,7 +1155,7 @@
 
     function makeOption(item) {
       const label = item && item.label ? item.label : 'Resource';
-      const icon = item && item.icon ? item.icon : '📄';
+      const icon = item && item.icon ? item.icon : '';
       const resourceKey = item && item.resourceKey ? String(item.resourceKey).trim() : '';
       const kind = item && item.kind ? item.kind.toUpperCase() : 'RESOURCE';
 
@@ -1040,7 +1178,7 @@
         if (resource.has_pdf) {
           expanded.push({
             label: name + ' (' + key + ')',
-            icon: '📄',
+            icon: '',
             kind: 'pdf',
             resourceKey: key
           });
@@ -1048,7 +1186,7 @@
         if (resource.has_video) {
           expanded.push({
             label: name + ' (' + key + ')',
-            icon: '🎬',
+            icon: '',
             kind: 'video',
             resourceKey: key
           });
@@ -1159,9 +1297,7 @@
     });
 
     ensureTopicConfig().catch(function (error) {
-      if (topicNote) {
-        topicNote.textContent = error.message || 'Unable to load topic mapping.';
-      }
+      console.warn('Topic config unavailable:', error && error.message);
     });
   })();
 
@@ -1178,10 +1314,10 @@
     const btn = document.getElementById('mood-btn');
     if (val <= 2) {
       alert.classList.add('show');
-      btn.textContent = 'Access important information →;
+      btn.textContent = 'Access important information →';
     } else {
       alert.classList.remove('show');
-      btn.textContent = 'Show me what\'s available →;
+      btn.textContent = 'Show me what\'s available →';
     }
   }
   function submitMood() {
@@ -1193,7 +1329,44 @@
       if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
     }
   }
+
+  (function hideFreeResourcesForSubscribedUsers() {
+    const freeBlock = document.getElementById('free-resources-block');
+    const heroBadge = document.getElementById('hero-free-badge');
+    if (!freeBlock && !heroBadge) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          if (freeBlock) {
+            freeBlock.style.display = 'none';
+          }
+          if (heroBadge) {
+            heroBadge.style.display = 'none';
+          }
+        }
+      })
+      .catch(function () {
+        // Keep free resources visible if auth check fails.
+      });
+  })();
 </script>
 
+<script src="scripts/nav-mobile.js"></script>
 </body>
 </html>

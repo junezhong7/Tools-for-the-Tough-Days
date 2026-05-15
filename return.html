@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -261,17 +261,17 @@
 
 <!-- Scenario Tabs -->
 <div class="scenario-tabs">
-  <button class="tab-btn active" onclick="showScenario('anon', this)">👤 Returning visitor</button>
-  <button class="tab-btn" onclick="showScenario('employee', this)">🏢 Team member</button>
-  <button class="tab-btn" onclick="showScenario('crisis', this)">🚨 After a difficult visit</button>
-  <button class="tab-btn" onclick="showScenario('employer', this)">👔 Employer portal</button>
+  <button class="tab-btn active" onclick="showScenario('anon', this)"> Returning visitor</button>
+  <button class="tab-btn" onclick="showScenario('employee', this)"> Team member</button>
+  <button class="tab-btn" onclick="showScenario('crisis', this)"> After a difficult visit</button>
+  <button class="tab-btn" onclick="showScenario('employer', this)"> Employer portal</button>
 </div>
 
 
 <!-- ═══════════SCENARIO 1: ANONYMOUS RETURN ═══════════-->
 <div class="scenario-view active" id="scen-anon">
   <div class="scen-header">
-    <div class="scen-icon">👤</div>
+    <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--sand);color:var(--warm-grey)">General public · No login required</span>
       <h2>Welcome back</h2>
@@ -300,10 +300,10 @@
         <div class="continue-section">
           <h3>Pick up where you left off</h3>
           <div class="continue-card">
-            <div class="continue-icon">📄</div>
+            <div class="continue-icon"></div>
             <div>
               <div class="continue-title">Anxiety and avoidance — breaking the cycle</div>
-              <div class="continue-meta">😰 Anxiety · ANX-P04</div>
+              <div class="continue-meta"> Anxiety · ANX-P04</div>
             </div>
             <div class="continue-progress">
               <div class="prog-bar"><div class="prog-fill" style="width:35%"></div></div>
@@ -318,9 +318,9 @@
             <span class="new-chip">New</span>
             <div class="new-resource-title">Small steps for getting through an anxious day</div>
             <div class="new-resource-meta">
-              😰 Anxiety · ANX-P03
-              <span class="fmt-tag">📄 Read</span>
-              <span class="fmt-tag">🎧 Listen</span>
+               Anxiety · ANX-P03
+              <span class="fmt-tag"> Read</span>
+              <span class="fmt-tag"> Listen</span>
             </div>
           </div>
         </div>
@@ -335,7 +335,7 @@
           <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or explore a different topic</h3>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 I need help right now</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> I need help right now</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
               <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
@@ -344,7 +344,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Feeling low or depressed</a>
               <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
@@ -358,7 +358,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Building better habits</a>
               <a href="support.html" class="topic-chip">Relationship pressure</a>
@@ -371,7 +371,7 @@
           </div>
 
           <div>
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Money stress</a>
               <a href="support.html" class="topic-chip">Big life change</a>
@@ -397,8 +397,8 @@
       </div>
       <div class="sidebar-card">
         <h3>Want to unlock more?</h3>
-        <p>Subscribe for $10/month and access all 160+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
-        <a href="support.html" class="sidebar-link">See all free resources →</a><br>
+        <p>Subscribe for $10/month and access all 370+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
+        <a href="support.html" class="sidebar-link" id="return-free-resources-link">See all free resources →</a><br>
         <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe — 10/month →</a>
       </div>
     </div>
@@ -409,7 +409,7 @@
 <!-- ═══════════SCENARIO 2: EMPLOYEE WITH ACCESS CODE ═══════════-->
 <div class="scenario-view" id="scen-employee">
   <div class="scen-header">
-    <div class="scen-icon">🏢</div>
+    <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--teal-light);color:var(--teal)">Team member · Access code recognised</span>
       <h2>Welcome back, team member</h2>
@@ -438,10 +438,10 @@
         <div class="continue-section">
           <h3>Continue where you left off</h3>
           <div class="continue-card">
-            <div class="continue-icon">🎧</div>
+            <div class="continue-icon"></div>
             <div>
               <div class="continue-title">When worry won't switch off</div>
-              <div class="continue-meta">😰 Anxiety · ANX-P02 · 3 min remaining</div>
+              <div class="continue-meta"> Anxiety · ANX-P02 · 3 min remaining</div>
             </div>
             <div class="continue-progress">
               <div class="prog-bar"><div class="prog-fill" style="width:60%"></div></div>
@@ -449,10 +449,10 @@
             </div>
           </div>
           <div class="continue-card">
-            <div class="continue-icon">📄</div>
+            <div class="continue-icon"></div>
             <div>
               <div class="continue-title">Practical steps when money feels out of control</div>
-              <div class="continue-meta">💸 Financial stress · FIN-P03</div>
+              <div class="continue-meta"> Financial stress · FIN-P03</div>
             </div>
             <div class="continue-progress">
               <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
@@ -467,9 +467,9 @@
             <span class="new-chip">New</span>
             <div class="new-resource-title">Understanding your anger and what's underneath it</div>
             <div class="new-resource-meta">
-              😔 Feeling flat · MHW-P02
-              <span class="fmt-tag">📄</span>
-              <span class="fmt-tag">🎧</span>
+               Feeling flat · MHW-P02
+              <span class="fmt-tag"></span>
+              <span class="fmt-tag"></span>
             </div>
           </div>
         </div>
@@ -484,7 +484,7 @@
           <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or explore a different topic</h3>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 I need help right now</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> I need help right now</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
               <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
@@ -493,7 +493,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Feeling low or depressed</a>
               <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
@@ -507,7 +507,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Building better habits</a>
               <a href="support.html" class="topic-chip">Relationship pressure</a>
@@ -520,7 +520,7 @@
           </div>
 
           <div>
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Money stress</a>
               <a href="support.html" class="topic-chip">Big life change</a>
@@ -557,7 +557,7 @@
 <!-- ═══════════SCENARIO 3: RETURN AFTER CRISIS ═══════════-->
 <div class="scenario-view" id="scen-crisis">
   <div class="scen-header">
-    <div class="scen-icon">🚨</div>
+    <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--red-light);color:var(--red-crisis)">Previous visit: crisis support accessed</span>
       <h2>We're glad you're back</h2>
@@ -587,8 +587,8 @@
           <h3>Support is still here if you need it</h3>
           <p>If things still feel urgent, these are available 24/7. There's no pressure — just wanted you to know they're close.</p>
           <div class="crisis-numbers">
-            <button class="crisis-num-btn" onclick="window.location.href='tel:131114'">📞 Lifeline 13 11 14</button>
-            <button class="crisis-secondary" onclick="window.location.href='booking.html'">💬 Talk to Nic today</button>
+            <button class="crisis-num-btn" onclick="window.location.href='tel:131114'"> Lifeline 13 11 14</button>
+            <button class="crisis-secondary" onclick="window.location.href='booking.html'"> Talk to Nic today</button>
           </div>
           <p style="font-size:12px;color:#7a2020">Beyond Blue 1300 22 4636 is also available 24/7.</p>
         </div>
@@ -602,7 +602,7 @@
           <h3 style="font-size:12px;font-weight:500;color:var(--warm-grey);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;">Or browse topics when you're ready</h3>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;">🆘 Crisis support</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> Crisis support</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
               <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
@@ -611,7 +611,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🧠 My mental health</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Feeling low or depressed</a>
               <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
@@ -625,7 +625,7 @@
           </div>
 
           <div style="margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🌱 My wellbeing</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Building better habits</a>
               <a href="support.html" class="topic-chip">Relationship pressure</a>
@@ -638,7 +638,7 @@
           </div>
 
           <div>
-            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">🔧 Life outside of work</div>
+            <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
               <a href="support.html" class="topic-chip">Money stress</a>
               <a href="support.html" class="topic-chip">Big life change</a>
@@ -677,7 +677,7 @@
 <!-- ═══════════SCENARIO 4: EMPLOYER PORTAL ═══════════-->
 <div class="scenario-view" id="scen-employer">
   <div class="scen-header">
-    <div class="scen-icon">👔</div>
+    <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--blue-bg);color:var(--blue)">Employer · Subscription active</span>
       <h2>Your employer dashboard</h2>
@@ -699,7 +699,7 @@
         <div class="employer-dash">
 
           <div class="anon-note">
-            🔒 All data below is anonymous and aggregated. You will never see individual employee activity, names, or specific resources accessed.
+             All data below is anonymous and aggregated. You will never see individual employee activity, names, or specific resources accessed.
           </div>
 
           <div class="new-content-alert">
@@ -736,7 +736,7 @@
           <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:12px">Actions</p>
 
           <div class="employer-action">
-            <div class="ea-icon">🔑</div>
+            <div class="ea-icon"></div>
             <div>
               <div class="ea-title">Manage access codes</div>
               <div class="ea-sub">Generate new codes · share with new starters · revoke if needed</div>
@@ -744,7 +744,7 @@
             <div class="ea-arrow">—</div>
           </div>
           <div class="employer-action">
-            <div class="ea-icon">📅</div>
+            <div class="ea-icon"></div>
             <div>
               <div class="ea-title">Book a team session with Nic</div>
               <div class="ea-sub">Group session or manager check-in · 30 or 60 min</div>
@@ -752,7 +752,7 @@
             <div class="ea-arrow">—</div>
           </div>
           <div class="employer-action">
-            <div class="ea-icon">📊</div>
+            <div class="ea-icon"></div>
             <div>
               <div class="ea-title">Download usage report</div>
               <div class="ea-sub">Anonymous PDF report · useful for board or WHS reporting</div>
@@ -760,7 +760,7 @@
             <div class="ea-arrow">—</div>
           </div>
           <div class="employer-action" style="border-color:rgba(200,117,42,0.25)">
-            <div class="ea-icon">💳</div>
+            <div class="ea-icon"></div>
             <div>
               <div class="ea-title">Billing &amp; subscription</div>
               <div class="ea-sub" style="color:var(--amber)">Next billing date: 15 May 2025 · $250/month</div>
@@ -795,7 +795,7 @@
 
 
 <!-- Floating chat -->
-<a href="booking.html" class="free-chat-float">💬 Free 15-min chat</a>
+<a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
 
 <!-- Footer -->
 <footer>
@@ -845,5 +845,38 @@
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
 
+<script>
+  (function hideFreeResourceLinkForSubscribedUsers() {
+    const freeResourcesLink = document.getElementById('return-free-resources-link');
+    if (!freeResourcesLink) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          freeResourcesLink.style.display = 'none';
+        }
+      })
+      .catch(function () {
+        // Keep this visible if auth check fails.
+      });
+  })();
+</script>
+
+<script src="scripts/nav-mobile.js"></script>
 </body>
 </html>
