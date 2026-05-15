@@ -489,8 +489,15 @@
     @media (max-width: 768px) {
       .hero-inner {
         grid-template-columns: 1fr;
+        gap: 0;
       }
-      .hero-photo-wrap { display: none; }
+      .hero-photo-wrap {
+        display: flex;
+        justify-content: center;
+      }
+      .hero-photo-wrap img {
+        max-width: 220px;
+      }
       .hero-text { padding-bottom: 48px; }
       .personal-section { flex-direction: column; }
       .personal-icons { flex-direction: row; }
@@ -551,11 +558,10 @@
         </div>
       </div>
       <div class="hero-photo-wrap">
-        <!-- Replace with actual photo of Nic -->
-        <div class="hero-photo-placeholder">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="24" r="14" fill="rgba(255,255,255,0.3)"/><ellipse cx="32" cy="52" rx="22" ry="14" fill="rgba(255,255,255,0.2)"/></svg>
-          <span>Photo of Nic<br>coming soon</span>
-        </div>
+        <picture>
+          <source srcset="data/Nic%20Marcon%20photo.webp" type="image/webp" />
+          <img src="data/Nic%20Marcon%20photo.jpg" alt="Nic Marcon" width="341" height="349" loading="eager" decoding="async" />
+        </picture>
       </div>
     </div>
   </header>
