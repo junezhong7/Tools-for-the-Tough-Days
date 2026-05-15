@@ -14,6 +14,8 @@
       --charcoal: #2a2825; --warm-grey: #6b6560; --sand: #f2ede6; --cream: #faf8f4; --white: #fff;
       --border: rgba(42,40,37,0.12); --shadow: 0 2px 20px rgba(42,40,37,0.08);
       --red: #c0392b; --red-bg: #fdf0ef;
+      --page-space: 24px;
+      --page-space-mobile: 18px;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
 
@@ -28,13 +30,13 @@
     .btn-teal:hover { background: var(--teal-hover); }
 
     /* LAYOUT */
-    .page { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
-    .page-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 4px; }
-    .page-sub { color: var(--warm-grey); font-size: 14px; margin-bottom: 40px; }
+    .page { max-width: 880px; margin: 0 auto; padding: var(--page-space) 20px; }
+    .page-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 2px; }
+    .page-sub { color: var(--warm-grey); font-size: 14px; margin-bottom: 28px; }
 
     /* CARDS */
-    .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
-    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
     .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); }
     .card-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
     .card-link[aria-expanded="true"] { background: var(--teal-hover); }
@@ -46,7 +48,7 @@
     .info-value { font-size: 14px; font-weight: 500; }
 
     /* SUBSCRIPTION CARD */
-    .sub-card { background: var(--teal-light); border: 1.5px solid rgba(38,119,123,0.25); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .sub-card { background: var(--teal-light); border: 1.5px solid rgba(38,119,123,0.25); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
     .sub-card.business { background: var(--amber-light); border-color: rgba(200,117,42,0.25); }
     .sub-card.cancelled { background: var(--sand); border-color: var(--border); opacity: 0.8; }
     .sub-badge { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
@@ -54,8 +56,8 @@
     .sub-badge.cancelled { background: rgba(192,57,43,0.1); color: var(--red); }
     .sub-badge.past_due { background: rgba(200,117,42,0.15); color: var(--amber); }
     .sub-badge.pending { background: rgba(200,117,42,0.12); color: var(--amber); }
-    .sub-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 6px; }
-    .sub-meta { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
+    .sub-name { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; margin-bottom: 4px; }
+    .sub-meta { font-size: 13px; color: var(--warm-grey); margin-bottom: 12px; }
     .sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-sm { font-size: 13px; padding: 8px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; border: none; }
     .btn-link-soft { display: inline-flex; align-items: center; text-decoration: none; border: 1px solid rgba(38,119,123,0.2); background: rgba(255,255,255,0.8); color: var(--teal-dark); }
@@ -63,24 +65,24 @@
     .btn-success { background: var(--teal); color: #fff; }
 
     /* INLINE PRICING */
-    .plans-panel { display: none; margin-bottom: 24px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 24px; }
+    .plans-panel { display: none; margin-bottom: 16px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 16px; }
     .plans-panel.open { display: block; }
     .plans-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--teal-dark); text-align: center; margin-bottom: 8px; }
     .plans-subtitle { max-width: 620px; margin: 0 auto 24px; text-align: center; color: var(--warm-grey); font-size: 14px; }
     .plans-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 14px; }
-    .plans-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px; }
-    .plans-grid-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .plans-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .plans-grid-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .plan-card { border-radius: 14px; overflow: hidden; border: 1px solid rgba(38,119,123,0.2); background: var(--white); box-shadow: 0 10px 30px rgba(42,40,37,0.06); }
     .plan-card.individual { background: var(--teal); border-color: rgba(255,255,255,0.18); color: #fff; }
     .plan-card.business { border-color: rgba(42,40,37,0.12); }
     .plan-card.business.featured { border-color: rgba(38,119,123,0.4); box-shadow: 0 14px 36px rgba(38,119,123,0.14); }
-    .plan-top { padding: 22px 22px 20px; position: relative; }
+    .plan-top { padding: 16px 16px 14px; position: relative; }
     .plan-card.business .plan-top { background: var(--teal); color: #fff; }
     .plan-card.business .plan-body { padding: 18px 22px 22px; }
     .plan-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; margin-bottom: 8px; }
-    .plan-price { font-family: 'DM Serif Display', serif; font-size: 46px; line-height: 1; }
+    .plan-price { font-family: 'DM Serif Display', serif; font-size: 40px; line-height: 1; }
     .plan-price-note { font-size: 13px; margin-top: 6px; opacity: 0.88; }
-    .plan-body { padding: 0 22px 22px; }
+    .plan-body { padding: 0 16px 16px; }
     .plan-copy { font-size: 13px; line-height: 1.7; color: inherit; opacity: 0.92; margin-bottom: 18px; }
     .plan-cta { display: block; width: 100%; text-align: center; text-decoration: none; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
     .plan-card.individual .plan-cta { background: #fff; color: var(--teal-dark); }
@@ -107,14 +109,14 @@
     .pay-status.refunded { background: var(--sand); color: var(--warm-grey); }
 
     /* MOOD TRACKER */
-    .mood-wrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
-    .mood-panel { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); }
+    .mood-wrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; }
+    .mood-panel { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); }
     .mood-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
     .mood-month { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--teal-dark); }
     .mood-nav { display: flex; gap: 8px; }
     .mood-nav-btn { border: 1px solid rgba(38,119,123,0.25); background: #fff; color: var(--teal-dark); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
     .mood-nav-btn:hover { background: var(--teal-light); }
-    .mood-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .mood-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
     .mood-weekday { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); text-align: center; padding-bottom: 4px; }
     .mood-day { min-height: 56px; border: 1px solid rgba(42,40,37,0.1); border-radius: 8px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; cursor: default; }
     .mood-day.has-score { cursor: pointer; border-color: rgba(38,119,123,0.3); }
