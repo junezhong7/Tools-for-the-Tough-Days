@@ -40,6 +40,8 @@
     --green:         #3a6b45;
     --green-bg:      #edf5ef;
     --border:        rgba(42,40,37,0.12);
+    --page-space: 32px;
+    --page-space-mobile: 18px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,7 +73,7 @@
   .hero-sub { color: rgba(255,255,255,0.82); font-size: 15px; font-weight: 300; max-width: 480px; margin: 0 auto; }
 
   /* ── LAYOUT ── */
-  .page-body { max-width: 1060px; margin: 0 auto; padding: 56px 40px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+  .page-body { max-width: 1060px; margin: 0 auto; padding: var(--page-space) 40px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
 
   /* ── STICKY SIDEBAR NAV ── */
   .faq-nav { position: sticky; top: 84px; }

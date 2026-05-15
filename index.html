@@ -45,6 +45,10 @@
     --red-crisis: #c0392b;
     --red-crisis-bg: #fdf0ef;
 
+    /* Global section spacing control */
+    --section-space: 24px;
+    --section-space-mobile: 20px;
+
     --border: rgba(42,40,37,0.12);
     --shadow: 0 2px 20px rgba(42,40,37,0.08);
   }
@@ -93,13 +97,28 @@
   .nav-cta:hover { background: var(--teal-hover); }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--teal); padding: 22px 40px 18px; text-align: center; position: relative; overflow: hidden; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
-  .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-  .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 20px; }
-  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 38px); color: #fff; line-height: 1.2; margin-bottom: 12px; font-weight: 400; }
+  .hero-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 8px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3.4vw, 34px); color: #fff; line-height: 1.15; margin-bottom: 8px; font-weight: 400; }
   .hero h1 em { color: #c8f0f2; font-style: italic; }
-  .hero-sub { color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 300; }
+  .hero-sub { color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 300; }
+
+  .topic-strip {
+    background: var(--sand);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px 20px;
+  }
+  .topic-strip-inner { max-width: 880px; margin: 0 auto; }
+  .topic-strip-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--warm-grey);
+    text-align: center;
+    margin-bottom: 14px;
+  }
 
   .cat-nav {
     display: flex;
@@ -327,15 +346,15 @@
   }
 
   /* TWO PATH SECTION */
-  .two-paths { padding: 72px 40px; }
+  .two-paths { padding: var(--section-space) 40px 20px; }
   .two-paths h2 {
     font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400;
-    text-align: center; margin-bottom: 8px;
+    text-align: center; margin-bottom: 4px;
   }
-  .two-paths .section-sub { text-align: center; color: var(--warm-grey); font-size: 15px; margin-bottom: 48px; }
-  .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 860px; margin: 0 auto; }
+  .two-paths .section-sub { text-align: center; color: var(--warm-grey); font-size: 15px; margin-bottom: 18px; }
+  .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 860px; margin: 0 auto; }
   .path-card {
-    border-radius: 16px; padding: 36px 32px;
+    border-radius: 16px; padding: 18px 18px;
     cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
     position: relative; overflow: hidden;
   }
@@ -343,10 +362,10 @@
   .path-card.individual { background: var(--teal-light); border: 1.5px solid rgba(38,119,123,0.25); }
   .path-card.business { background: var(--amber-light); border: 1.5px solid rgba(200,117,42,0.25); }
   .path-icon { font-size: 36px; margin-bottom: 16px; }
-  .path-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 10px; }
+  .path-card h3 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
   .path-card.individual h3 { color: var(--teal-dark); }
   .path-card.business h3 { color: var(--amber); }
-  .path-card p { font-size: 14px; color: var(--warm-grey); margin-bottom: 24px; line-height: 1.6; }
+  .path-card p { font-size: 14px; color: var(--warm-grey); margin-bottom: 16px; line-height: 1.6; }
   .path-btn {
     display: inline-block; padding: 11px 22px; border-radius: 8px;
     font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; border: none;
@@ -357,7 +376,7 @@
   .business .path-btn { background: var(--amber); color: #fff; }
   .business .path-btn:hover { background: var(--amber-hover); }
   .path-tag {
-    position: absolute; top: 20px; right: 20px;
+    position: absolute; top: 14px; right: 14px;
     font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
     padding: 4px 10px; border-radius: 99px; font-weight: 500;
   }
@@ -367,10 +386,10 @@
   /* TRUST STRIP */
   .trust-strip {
     background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    padding: 32px 40px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: nowrap;
+    padding: 12px 40px; display: flex; gap: 12px; align-items: flex-start; flex-wrap: nowrap;
     justify-content: center;
   }
-  .trust-item { text-align: center; max-width: 160px; flex: 1; }
+  .trust-item { text-align: center; max-width: 140px; flex: 1; }
   .trust-item .t-num {
     font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--teal);
     display: flex; align-items: flex-end; justify-content: center; line-height: 1;
@@ -382,12 +401,12 @@
     margin-right: 2px; margin-bottom: 6px;
     font-style: italic;
   }
-  .trust-item .t-label { font-size: 13px; color: var(--warm-grey); margin-top: 4px; }
+  .trust-item .t-label { font-size: 12px; color: var(--warm-grey); margin-top: 2px; }
 
   /* HOW IT WORKS */
-  .how-preview { padding: 72px 40px; background: #e8f4f4; }
-  .how-preview h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; text-align: center; margin-bottom: 48px; }
-  .steps { display: flex; gap: 0; max-width: 760px; margin: 0 auto; }
+  .how-preview { padding: var(--section-space) 40px; background: #e8f4f4; }
+  .how-preview h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; text-align: center; margin-bottom: 28px; }
+  .steps { display: flex; gap: 0; max-width: 760px; margin: 0 auto; padding: 0 20px; }
   .step { flex: 1; text-align: center; padding: 0 20px; position: relative; }
   .step:not(:last-child)::after {
     content: ''; position: absolute; top: 22px; right: -4px;
@@ -401,16 +420,16 @@
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 16px;
   }
-  .step h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-  .step p { font-size: 12px; color: var(--warm-grey); }
+  .step h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .step p { font-size: 12px; color: var(--warm-grey); line-height: 1.4; }
 
   /* NIC SECTION */
   .nic-section {
-    padding: 72px 40px; display: grid;
-    grid-template-columns: 1fr 340px; gap: 60px; align-items: center; max-width: 960px; margin: 0 auto;
+    padding: var(--section-space) 40px; display: grid;
+    grid-template-columns: 1fr 340px; gap: 40px; align-items: center; max-width: 960px; margin: 0 auto;
   }
-  .nic-text h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; margin-bottom: 16px; }
-  .nic-text p { color: var(--warm-grey); font-size: 15px; margin-bottom: 24px; line-height: 1.7; }
+  .nic-text h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; margin-bottom: 12px; }
+  .nic-text p { color: var(--warm-grey); font-size: 15px; margin-bottom: 18px; line-height: 1.7; }
   .nic-cta {
     background: var(--teal); color: #fff; border: none;
     padding: 12px 24px; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif;
@@ -447,14 +466,16 @@
   @media (max-width: 700px) {
     nav { padding: 0 16px; }
     .nav-links { gap: 14px; }
-    .hero { padding: 48px 16px 0; }
+    .hero { padding: 18px 16px 14px; }
+    .topic-strip { padding: 12px 16px 14px; }
+    .topic-strip-title { margin-bottom: 10px; }
     .sector-strip { padding: 16px; gap: 12px; }
-    .two-paths { padding: 48px 16px; }
+    .two-paths { padding: var(--section-space-mobile) 16px 14px; }
     .path-grid { grid-template-columns: 1fr; }
-    .nic-section { grid-template-columns: 1fr; padding: 48px 16px; }
+    .nic-section { grid-template-columns: 1fr; padding: var(--section-space-mobile) 16px; }
     .nic-photo { display: none; }
-    .trust-strip { padding: 24px 16px; gap: 20px; }
-    .how-preview { padding: 48px 16px; }
+    .trust-strip { padding: 14px 16px; gap: 14px; }
+    .how-preview { padding: var(--section-space-mobile) 16px; }
     .steps { flex-direction: column; gap: 24px; }
     .step::after { display: none; }
     footer { padding: 24px 16px; flex-direction: column; gap: 16px; text-align: center; }
@@ -496,31 +517,6 @@
   </div>
 </section>
 
-<!-- CATEGORY NAVIGATION STRIP -->
-<div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
-  <div style="max-width: 880px; margin: 0 auto;">
-    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
-
-    <div class="cat-nav" id="cat-nav"></div>
-
-    <div class="subtopic-panel" id="subtopic-panel">
-      <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
-      <div class="subtopic-list" id="subtopic-list"></div>
-    </div>
-
-    <div class="crisis-nav-card">
-      <div class="crisis-nav-left">
-        <span class="crisis-nav-icon"></span>
-        <div>
-          <div class="crisis-nav-title">Crisis Support</div>
-          <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
-        </div>
-      </div>
-      <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
-    </div>
-  </div>
-</div>
-
 <!-- TWO PATHS -->
 <section class="two-paths" id="paths">
   <h2>Who do you want support for today?</h2>
@@ -542,6 +538,31 @@
     </div>
   </div>
 </section>
+
+<!-- CATEGORY NAVIGATION STRIP -->
+<div class="topic-strip">
+  <div class="topic-strip-inner">
+    <div class="topic-strip-title">Browse by topic: 6 areas, 30+ sub-topics</div>
+
+    <div class="cat-nav" id="cat-nav"></div>
+
+    <div class="subtopic-panel" id="subtopic-panel">
+      <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+      <div class="subtopic-list" id="subtopic-list"></div>
+    </div>
+
+    <div class="crisis-nav-card">
+      <div class="crisis-nav-left">
+        <span class="crisis-nav-icon"></span>
+        <div>
+          <div class="crisis-nav-title">Crisis Support</div>
+          <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+        </div>
+      </div>
+      <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+    </div>
+  </div>
+</div>
 
 <div class="topic-modal-overlay" id="topicModalOverlay" aria-hidden="true">
   <div class="topic-modal" role="dialog" aria-modal="true" aria-labelledby="topicModalTitle">
