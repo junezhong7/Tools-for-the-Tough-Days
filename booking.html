@@ -28,6 +28,9 @@
     --teal: #26777B; --teal-hover: #1e5f63; --teal-dark: #1a4e52; --teal-light: #e8f4f4;
     --red-crisis: #c0392b; --green: #3a6b45; --green-bg: #edf5ef;
     --border: rgba(42,40,37,0.12);
+    --section-space: 24px;
+    --hero-space-top: 32px;
+    --hero-space-bottom: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
@@ -46,7 +49,7 @@
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 64px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--teal); padding: var(--hero-space-top) 40px var(--hero-space-bottom); text-align: center; position: relative; overflow: hidden; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
   .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
   .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 16px; }
@@ -58,7 +61,7 @@
   .booking-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 0; max-width: 1100px; margin: 0 auto; }
 
   /* LEFT PANEL */
-  .booking-info { background: var(--cream); padding: 48px 40px; border-right: 1px solid var(--border); }
+  .booking-info { background: var(--cream); padding: var(--section-space) 40px; border-right: 1px solid var(--border); }
   .booking-info h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
   .booking-info p { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 24px; }
 
@@ -78,7 +81,7 @@
   .booking-embed iframe { width: 100%; height: 100%; min-height: 700px; border: none; display: block; }
 
   /* BELOW BOOKING */
-  .below-booking { background: #e8f4f4; padding: 56px 40px; }
+  .below-booking { background: #e8f4f4; padding: var(--section-space) 40px; }
   .below-inner { max-width: 840px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
   .below-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; }
   .below-icon { font-size: 28px; margin-bottom: 10px; }

@@ -29,6 +29,8 @@
     --amber: #c8752a; --amber-light: #f5ece0;
     --red-crisis: #c0392b; --green: #3a6b45; --green-bg: #edf5ef;
     --border: rgba(42,40,37,0.12);
+    --section-space: 24px;
+    --hero-space-top: 36px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
@@ -45,7 +47,7 @@
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 72px 40px 60px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--teal); padding: var(--hero-space-top) 40px 60px; text-align: center; position: relative; overflow: hidden; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
   .hero-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
   .tier-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 16px; border-radius: 99px; margin-bottom: 20px; font-weight: 500; }
@@ -61,7 +63,7 @@
   .btn-back:hover { color: #fff; }
 
   /* CONTENT */
-  .section { padding: 64px 40px; }
+  .section { padding: var(--section-space) 40px; }
   .section-inner { max-width: 840px; margin: 0 auto; }
   .section h2 { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
   .section p { font-size: 15px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 16px; }
