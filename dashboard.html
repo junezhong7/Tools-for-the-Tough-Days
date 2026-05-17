@@ -163,7 +163,13 @@
       .mood-wrap { grid-template-columns: 1fr; }
       .mood-day { min-height: 52px; }
     }
+
+    /* MOOD CHART */
+    .mood-chart-container { margin-bottom: 20px; }
+    .mood-chart-wrapper { position: relative; height: 320px; background: var(--sand); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+    .mood-chart-wrapper canvas { max-height: 280px; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body data-auth="required">
 
@@ -455,12 +461,18 @@
       });
       moodState.summary = moodPayload && moodPayload.summary ? moodPayload.summary : null;
       moodState.alerts = Array.isArray(moodPayload && moodPayload.open_alerts) ? moodPayload.open_alerts : [];
+      moodState.allDaily = daily.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const now = new Date();
       moodState.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       moodState.selectedDate = daily.length ? daily[0].date : null;
 
       container.innerHTML = `
+        <div class="mood-chart-container">
+          <div class="mood-chart-wrapper">
+            <canvas id="moodChart"></canvas>
+          </div>
+        </div>
         <div class="mood-wrap">
           <div class="mood-panel">
             <div class="mood-head">
@@ -497,6 +509,7 @@
         drawMoodCalendar();
       });
 
+      drawMoodChart();
       drawMoodCalendar();
       renderMoodSidePanel();
     }
@@ -605,6 +618,131 @@
       const m = String(dt.getMonth() + 1).padStart(2, '0');
       const d = String(dt.getDate()).padStart(2, '0');
       return `${y}-${m}-${d}`;
+    }
+
+    function drawMoodChart() {
+      const canvas = document.getElementById('moodChart');
+      if (!canvas) return;
+      if (!moodState.allDaily || moodState.allDaily.length === 0) {
+        canvas.parentElement.innerHTML = '<div style="padding:40px;text-align:center;color:var(--warm-grey);">No mood data yet. Start tracking to see your timeline.</div>';
+        return;
+      }
+
+      const granularity = selectGranularity(moodState.allDaily.length);
+      let chartData = [];
+      let labels = [];
+
+      if (granularity === 'day') {
+        chartData = moodState.allDaily.map(d => ({ x: d.date, y: d.score }));
+        labels = moodState.allDaily.map(d => {
+          const dt = new Date(d.date + 'T00:00:00');
+          return dt.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' });
+        });
+      } else if (granularity === 'week') {
+        const weekly = aggregateByWeek(moodState.allDaily);
+        chartData = weekly.map(w => ({ x: w.weekStart, y: w.avgScore }));
+        labels = weekly.map(w => {
+          const dt = new Date(w.weekStart + 'T00:00:00');
+          return 'W' + String(Math.floor((dt - new Date(dt.getFullYear(), 0, 1)) / (7 * 24 * 60 * 60 * 1000)) + 1).padStart(2, '0');
+        });
+      } else {
+        const monthly = aggregateByMonth(moodState.allDaily);
+        chartData = monthly.map(m => ({ x: m.monthStart, y: m.avgScore }));
+        labels = monthly.map(m => {
+          const dt = new Date(m.monthStart + 'T00:00:00');
+          return dt.toLocaleDateString('en-AU', { month: 'short', year: '2-digit' });
+        });
+      }
+
+      const ctx = canvas.getContext('2d');
+      if (window.moodChartInstance) {
+        window.moodChartInstance.destroy();
+      }
+      window.moodChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Mood Score',
+            data: chartData.map(d => d.y),
+            borderColor: '#26777B',
+            backgroundColor: 'rgba(38, 119, 123, 0.05)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: granularity === 'day' ? 3 : 5,
+            pointBackgroundColor: chartData.map(d => getMoodColor(d.y)),
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(42,40,37,0.9)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(42,40,37,0.2)',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  return 'Score: ' + context.parsed.y.toFixed(1);
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              min: 0, max: 10,
+              ticks: { stepSize: 2 },
+              grid: { color: 'rgba(42,40,37,0.06)' },
+            },
+            x: {
+              grid: { display: false },
+            },
+          },
+        },
+      });
+    }
+
+    function selectGranularity(dataPointCount) {
+      if (dataPointCount < 7) return 'day';
+      if (dataPointCount < 28) return 'week';
+      return 'month';
+    }
+
+    function aggregateByWeek(daily) {
+      const weeks = Object.create(null);
+      daily.forEach(d => {
+        const dt = new Date(d.date + 'T00:00:00');
+        const weekStart = new Date(dt);
+        weekStart.setDate(dt.getDate() - dt.getDay());
+        const key = toDateKey(weekStart);
+        if (!weeks[key]) weeks[key] = { weekStart: key, scores: [] };
+        weeks[key].scores.push(d.score);
+      });
+      return Object.values(weeks).map(w => ({
+        weekStart: w.weekStart,
+        avgScore: w.scores.length ? w.scores.reduce((a, b) => a + b, 0) / w.scores.length : 0,
+      }));
+    }
+
+    function aggregateByMonth(daily) {
+      const months = Object.create(null);
+      daily.forEach(d => {
+        const [y, m] = d.date.split('-');
+        const key = `${y}-${m}-01`;
+        if (!months[key]) months[key] = { monthStart: key, scores: [] };
+        months[key].scores.push(d.score);
+      });
+      return Object.values(months).map(m => ({
+        monthStart: m.monthStart,
+        avgScore: m.scores.length ? m.scores.reduce((a, b) => a + b, 0) / m.scores.length : 0,
+      }));
     }
 
     async function cancelSub(subId, btn) {
