@@ -61,7 +61,7 @@ try {
                 SUBSTRING_INDEX(GROUP_CONCAT(me.mood_score ORDER BY me.checkin_at DESC, me.id DESC), ",", 1) AS mood_score
          FROM mood_events me
          WHERE me.user_id = ?
-           AND me.checkin_at >= (CURDATE() - INTERVAL 180 DAY)
+           AND me.checkin_at >= (CURDATE() - INTERVAL 365 DAY)
          GROUP BY DATE(me.checkin_at)
          ORDER BY score_date DESC'
     );
