@@ -326,6 +326,8 @@
       downward_trend: 'Downward trend',
     };
 
+    const APP_TIMEZONE = 'Australia/Brisbane';
+
     const moodState = {
       scoreByDate: Object.create(null),
       currentMonth: null,
@@ -343,7 +345,34 @@
 
     function fmtDate(dt) {
       if (!dt) return '—';
-      return new Date(dt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+      return new Date(dt).toLocaleDateString('en-AU', { timeZone: APP_TIMEZONE, day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function parseDateKey(dateKey) {
+      if (!dateKey || typeof dateKey !== 'string') return null;
+      const parts = dateKey.split('-');
+      if (parts.length !== 3) return null;
+      const y = Number(parts[0]);
+      const m = Number(parts[1]);
+      const d = Number(parts[2]);
+      if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) return null;
+      return new Date(y, m - 1, d);
+    }
+
+    function getBrisbaneToday() {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: APP_TIMEZONE,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).formatToParts(new Date());
+      const values = Object.create(null);
+      parts.forEach(function (part) {
+        if (part.type !== 'literal') {
+          values[part.type] = part.value;
+        }
+      });
+      return new Date(Number(values.year), Number(values.month) - 1, Number(values.day));
     }
 
     function bindPlansToggle() {
@@ -461,11 +490,11 @@
       });
       moodState.summary = moodPayload && moodPayload.summary ? moodPayload.summary : null;
       moodState.alerts = Array.isArray(moodPayload && moodPayload.open_alerts) ? moodPayload.open_alerts : [];
-      moodState.allDaily = daily.sort((a, b) => new Date(a.date) - new Date(b.date));
+      moodState.allDaily = daily.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
 
-      const now = new Date();
+      const now = getBrisbaneToday();
       moodState.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      moodState.selectedDate = daily.length ? daily[0].date : null;
+      moodState.selectedDate = moodState.allDaily.length ? moodState.allDaily[moodState.allDaily.length - 1].date : null;
 
       container.innerHTML = `
         <div class="mood-chart-container">
@@ -571,9 +600,13 @@
 
       const summary = moodState.summary || {};
       const score = moodState.selectedDate ? moodState.scoreByDate[moodState.selectedDate] : null;
-      const selectedDateLabel = moodState.selectedDate
-        ? new Date(moodState.selectedDate + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
-        : 'No day selected';
+      let selectedDateLabel = 'No day selected';
+      if (moodState.selectedDate) {
+        const selectedDt = parseDateKey(moodState.selectedDate);
+        if (selectedDt) {
+          selectedDateLabel = selectedDt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+      }
 
       const alerts = moodState.alerts;
       const alertHtml = alerts.length
@@ -635,21 +668,24 @@
       if (granularity === 'day') {
         chartData = moodState.allDaily.map(d => ({ x: d.date, y: d.score }));
         labels = moodState.allDaily.map(d => {
-          const dt = new Date(d.date + 'T00:00:00');
+          const dt = parseDateKey(d.date);
+          if (!dt) return d.date;
           return dt.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' });
         });
       } else if (granularity === 'week') {
         const weekly = aggregateByWeek(moodState.allDaily);
         chartData = weekly.map(w => ({ x: w.weekStart, y: w.avgScore }));
         labels = weekly.map(w => {
-          const dt = new Date(w.weekStart + 'T00:00:00');
+          const dt = parseDateKey(w.weekStart);
+          if (!dt) return w.weekStart;
           return 'W' + String(Math.floor((dt - new Date(dt.getFullYear(), 0, 1)) / (7 * 24 * 60 * 60 * 1000)) + 1).padStart(2, '0');
         });
       } else {
         const monthly = aggregateByMonth(moodState.allDaily);
         chartData = monthly.map(m => ({ x: m.monthStart, y: m.avgScore }));
         labels = monthly.map(m => {
-          const dt = new Date(m.monthStart + 'T00:00:00');
+          const dt = parseDateKey(m.monthStart);
+          if (!dt) return m.monthStart;
           return dt.toLocaleDateString('en-AU', { month: 'short', year: '2-digit' });
         });
       }
@@ -718,7 +754,8 @@
     function aggregateByWeek(daily) {
       const weeks = Object.create(null);
       daily.forEach(d => {
-        const dt = new Date(d.date + 'T00:00:00');
+        const dt = parseDateKey(d.date);
+        if (!dt) return;
         const weekStart = new Date(dt);
         weekStart.setDate(dt.getDate() - dt.getDay());
         const key = toDateKey(weekStart);
