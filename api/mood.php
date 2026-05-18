@@ -12,6 +12,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 
+const MOOD_BRISBANE_OFFSET_HOURS = 10;
+
 $user = require_auth();
 $userId = (int) ($user['id'] ?? 0);
 
@@ -77,9 +79,11 @@ function handle_submit(int $userId, array $body): never
         }
     }
 
+    $checkinAtUtc = gmdate('Y-m-d H:i:s');
+
     db()->prepare(
-        'INSERT INTO mood_events (user_id, mood_score, source_page, client_ts) VALUES (?, ?, ?, ?)'
-    )->execute([$userId, $score, $sourcePage, $clientTs]);
+        'INSERT INTO mood_events (user_id, mood_score, source_page, client_ts, checkin_at) VALUES (?, ?, ?, ?, ?)'
+    )->execute([$userId, $score, $sourcePage, $clientTs, $checkinAtUtc]);
 
     audit('mood.submit', $userId, [
         'score' => $score,
@@ -115,16 +119,20 @@ function handle_alerts(int $userId): never
 
 function get_daily_scores(int $userId, int $days): array
 {
+        $brisbaneCutoffDate = (new DateTimeImmutable('now', new DateTimeZone('Australia/Brisbane')))
+                ->modify('-' . $days . ' days')
+                ->format('Y-m-d');
+
     $stmt = db()->prepare(
-        'SELECT DATE(me.checkin_at) AS score_date,
+                'SELECT DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) AS score_date,
                 SUBSTRING_INDEX(GROUP_CONCAT(me.mood_score ORDER BY me.checkin_at DESC, me.id DESC), ",", 1) AS mood_score
          FROM mood_events me
          WHERE me.user_id = ?
-           AND me.checkin_at >= (CURDATE() - INTERVAL ? DAY)
-         GROUP BY DATE(me.checkin_at)
+                     AND DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) >= ?
+                 GROUP BY DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR))
          ORDER BY score_date DESC'
     );
-    $stmt->execute([$userId, $days]);
+        $stmt->execute([$userId, $brisbaneCutoffDate]);
 
     $rows = [];
     foreach ($stmt->fetchAll() as $row) {
@@ -165,6 +173,10 @@ function get_open_alerts(int $userId): array
 
 function get_summary(int $userId): array
 {
+    $brisbaneCutoffDate = (new DateTimeImmutable('now', new DateTimeZone('Australia/Brisbane')))
+        ->modify('-30 days')
+        ->format('Y-m-d');
+
     $stmt = db()->prepare(
         'SELECT
             COUNT(*) AS total_checkins,
@@ -173,9 +185,9 @@ function get_summary(int $userId): array
             MAX(mood_score) AS max_score_30
          FROM mood_events
          WHERE user_id = ?
-           AND checkin_at >= (CURDATE() - INTERVAL 30 DAY)'
+           AND DATE(DATE_ADD(checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) >= ?'
     );
-    $stmt->execute([$userId]);
+    $stmt->execute([$userId, $brisbaneCutoffDate]);
     $row = $stmt->fetch() ?: [];
 
     return [

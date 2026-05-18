@@ -11,6 +11,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 
+const MOOD_BRISBANE_OFFSET_HOURS = 10;
+
 $user   = require_auth();
 $userId = (int) $user['id'];
 
@@ -56,16 +58,20 @@ $mood = [
 ];
 
 try {
+        $brisbaneNow = new DateTimeImmutable('now', new DateTimeZone('Australia/Brisbane'));
+        $dailyCutoffDate = $brisbaneNow->modify('-365 days')->format('Y-m-d');
+        $summaryCutoffDate = $brisbaneNow->modify('-30 days')->format('Y-m-d');
+
     $dailyStmt = db()->prepare(
-        'SELECT DATE(me.checkin_at) AS score_date,
+                'SELECT DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) AS score_date,
                 SUBSTRING_INDEX(GROUP_CONCAT(me.mood_score ORDER BY me.checkin_at DESC, me.id DESC), ",", 1) AS mood_score
          FROM mood_events me
          WHERE me.user_id = ?
-           AND me.checkin_at >= (CURDATE() - INTERVAL 365 DAY)
-         GROUP BY DATE(me.checkin_at)
+                     AND DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) >= ?
+                 GROUP BY DATE(DATE_ADD(me.checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR))
          ORDER BY score_date DESC'
     );
-    $dailyStmt->execute([$userId]);
+        $dailyStmt->execute([$userId, $dailyCutoffDate]);
     foreach ($dailyStmt->fetchAll() as $row) {
         $mood['daily'][] = [
             'date' => (string) $row['score_date'],
@@ -81,9 +87,9 @@ try {
             MAX(mood_score) AS max_score_30
          FROM mood_events
          WHERE user_id = ?
-           AND checkin_at >= (CURDATE() - INTERVAL 30 DAY)'
+                     AND DATE(DATE_ADD(checkin_at, INTERVAL ' . MOOD_BRISBANE_OFFSET_HOURS . ' HOUR)) >= ?'
     );
-    $summaryStmt->execute([$userId]);
+        $summaryStmt->execute([$userId, $summaryCutoffDate]);
     $summaryRow = $summaryStmt->fetch() ?: [];
     $mood['summary'] = [
         'total_checkins_30' => (int) ($summaryRow['total_checkins'] ?? 0),
