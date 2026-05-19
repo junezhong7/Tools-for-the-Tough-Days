@@ -592,7 +592,7 @@
       </div>
 
       <!-- Subscribe CTA -->
-      <div class="subscribe-cta">
+      <div class="subscribe-cta" id="subscribe-cta-block">
         <h2>Unlock the full library</h2>
         <p>370+ clinically-reviewed PDF guides and audio resources — available any time, on any device. New topics added regularly.</p>
         <div class="pricing-grid">
@@ -620,7 +620,7 @@
   </section>
 
   <!-- Trust strip -->
-  <div class="trust-strip">
+  <div class="trust-strip" id="trust-strip-block">
     <div class="trust-inner">
       <div class="trust-item"> Written by a Registered Psychologist</div>
       <div class="trust-item"> Clinically authored and reviewed</div>
@@ -630,7 +630,7 @@
   </div>
 
   <!-- What you get -->
-  <div class="what-strip">
+  <div class="what-strip" id="what-strip-block">
     <div class="what-inner">
       <h3>What you get with a subscription</h3>
       <div class="what-grid">
@@ -1362,7 +1362,10 @@
   (function hideFreeResourcesForSubscribedUsers() {
     const freeBlock = document.getElementById('free-resources-block');
     const heroBadge = document.getElementById('hero-free-badge');
-    if (!freeBlock && !heroBadge) {
+    const subscribeCta = document.getElementById('subscribe-cta-block');
+    const trustStrip = document.getElementById('trust-strip-block');
+    const whatStrip = document.getElementById('what-strip-block');
+    if (!freeBlock && !heroBadge && !subscribeCta && !trustStrip && !whatStrip) {
       return;
     }
 
@@ -1387,6 +1390,15 @@
           }
           if (heroBadge) {
             heroBadge.style.display = 'none';
+          }
+          if (subscribeCta) {
+            subscribeCta.style.display = 'none';
+          }
+          if (trustStrip) {
+            trustStrip.style.display = 'none';
+          }
+          if (whatStrip) {
+            whatStrip.style.display = 'none';
           }
         }
       })

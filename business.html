@@ -252,13 +252,13 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero-section">
   <div class="hero-texture"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">For small &amp; medium businesses</div>
     <h1>The EAP built for the businesses <em>most EAPs forget.</em></h1>
-    <p class="hero-sub">Pay as you go. $150, 300 per month. Built for trades, care, hospitality, transport, and every business in between. No contracts. No HR department needed.</p>
-    <div class="hero-ctas">
+    <p class="hero-sub" id="hero-sub-text">Pay as you go. $150, 300 per month. Built for trades, care, hospitality, transport, and every business in between. No contracts. No HR department needed.</p>
+    <div class="hero-ctas" id="hero-ctas-block">
       <a href="booking.html" class="btn-primary">Book a 15-min call with Nic →</a>
       <a href="#what-your-team-gets" class="btn-secondary">See what your team gets</a>
     </div>
@@ -303,7 +303,7 @@
 </div>
 
 <!-- THE PROBLEM -->
-<section class="section" style="background: var(--cream);">
+<section class="section" id="problem-section" style="background: var(--cream);">
   <div class="section-inner">
     <div class="section-label">The problem</div>
     <h2>"Traditional EAPs are designed for <em>big companies.</em>"</h2>
@@ -320,7 +320,7 @@
 </section>
 
 <!-- WHY IT'S DIFFERENT -->
-<section class="section" style="background: #e8f4f4;">
+<section class="section" id="why-different-section" style="background: #e8f4f4;">
   <div class="section-inner">
     <div class="section-label">Why it's different</div>
     <h2>Built around what small businesses actually need</h2>
@@ -350,7 +350,7 @@
 </section>
 
 <!-- PRICING -->
-<section class="section" style="background: var(--cream);">
+<section class="section" id="pricing-section" style="background: var(--cream);">
   <div class="section-inner" style="max-width:1000px;">
     <div class="section-label">Pricing</div>
     <h2>Transparent pricing, no quote required</h2>
@@ -510,7 +510,7 @@
     </div>
 
     <!-- ENTERPRISE -->
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <div id="enterprise-section" style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
       <div>
         <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:6px;">Enterprise · 81+ staff</div>
         <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--charcoal);">Custom pricing</div>
@@ -726,6 +726,60 @@
 
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
+
+<script>
+  (function hideMarketingForSubscribedUsers() {
+    const heroSubText = document.getElementById('hero-sub-text');
+    const heroCtasBlock = document.getElementById('hero-ctas-block');
+    const problemSection = document.getElementById('problem-section');
+    const whyDifferentSection = document.getElementById('why-different-section');
+    const pricingSection = document.getElementById('pricing-section');
+    const enterpriseSection = document.getElementById('enterprise-section');
+    if (!heroSubText && !heroCtasBlock && !problemSection && !whyDifferentSection && !pricingSection && !enterpriseSection) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.subscription) {
+          if (heroSubText) {
+            heroSubText.style.display = 'none';
+          }
+          if (heroCtasBlock) {
+            heroCtasBlock.style.display = 'none';
+          }
+          if (problemSection) {
+            problemSection.style.display = 'none';
+          }
+          if (whyDifferentSection) {
+            whyDifferentSection.style.display = 'none';
+          }
+          if (pricingSection) {
+            pricingSection.style.display = 'none';
+          }
+          if (enterpriseSection) {
+            enterpriseSection.style.display = 'none';
+          }
+        }
+      })
+      .catch(function () {
+        // Keep marketing visible if auth check fails.
+      });
+  })();
+</script>
 
 <script>
   (function initCategoryNavAndModal() {
