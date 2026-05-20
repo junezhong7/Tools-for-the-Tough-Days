@@ -712,60 +712,6 @@
 <script src="auth-nav.js"></script>
 
 <script>
-  (function hideMarketingForSubscribedUsers() {
-    const heroSubText = document.getElementById('hero-sub-text');
-    const heroCtasBlock = document.getElementById('hero-ctas-block');
-    const problemSection = document.getElementById('problem-section');
-    const whyDifferentSection = document.getElementById('why-different-section');
-    const pricingSection = document.getElementById('pricing-section');
-    const enterpriseSection = document.getElementById('enterprise-section');
-    if (!heroSubText && !heroCtasBlock && !problemSection && !whyDifferentSection && !pricingSection && !enterpriseSection) {
-      return;
-    }
-
-    fetch('/api/auth.php?action=me', {
-      method: 'GET',
-      credentials: 'same-origin',
-      cache: 'no-store',
-      headers: {
-        'Accept': 'application/json'
-      }
-    })
-      .then(function (response) {
-        if (!response.ok) {
-          return null;
-        }
-        return response.json().catch(function () { return null; });
-      })
-      .then(function (data) {
-        if (data && data.subscription) {
-          if (heroSubText) {
-            heroSubText.style.display = 'none';
-          }
-          if (heroCtasBlock) {
-            heroCtasBlock.style.display = 'none';
-          }
-          if (problemSection) {
-            problemSection.style.display = 'none';
-          }
-          if (whyDifferentSection) {
-            whyDifferentSection.style.display = 'none';
-          }
-          if (pricingSection) {
-            pricingSection.style.display = 'none';
-          }
-          if (enterpriseSection) {
-            enterpriseSection.style.display = 'none';
-          }
-        }
-      })
-      .catch(function () {
-        // Keep marketing visible if auth check fails.
-      });
-  })();
-</script>
-
-<script>
   (function initCategoryNavAndModal() {
     const CATEGORIES = [
       {
