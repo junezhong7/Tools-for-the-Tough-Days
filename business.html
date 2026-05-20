@@ -92,6 +92,55 @@
   .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
   .btn-primary { background: var(--teal); color: #fff; border: none; padding: 13px 26px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; display: inline-block; }
   .btn-primary:hover { background: var(--teal-hover); }
+  a[data-tooltip] { position: relative; }
+  a[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%) translateY(6px);
+    background: #fff;
+    color: var(--teal-dark);
+    border: 1px solid rgba(38,119,123,0.28);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(42,40,37,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 20;
+  }
+  a[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-left: 1px solid rgba(38,119,123,0.28);
+    border-top: 1px solid rgba(38,119,123,0.28);
+    transform: translateX(-50%) rotate(225deg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease;
+    z-index: 19;
+  }
+  a[data-tooltip]:hover::after,
+  a[data-tooltip]:hover::before,
+  a[data-tooltip]:focus-visible::after,
+  a[data-tooltip]:focus-visible::before {
+    opacity: 1;
+  }
+  a[data-tooltip]:hover::after,
+  a[data-tooltip]:focus-visible::after {
+    transform: translateX(-50%) translateY(0);
+  }
   .btn-secondary { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.2); padding: 13px 24px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none; display: inline-block; }
   .btn-secondary:hover { background: rgba(255,255,255,0.18); }
   .sector-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -246,7 +295,7 @@
     <h1>The EAP built for the businesses <em>most EAPs forget.</em></h1>
     <p class="hero-sub" id="hero-sub-text">Pay as you go. $150, 300 per month. Built for trades, care, hospitality, transport, and every business in between. No contracts. No HR department needed.</p>
     <div class="hero-ctas" id="hero-ctas-block">
-      <a href="booking.html" class="btn-primary">Book a 15-min call with Nic →</a>
+      <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" class="btn-primary" data-tooltip="Learn more about our service.">Book a 30-min call with Nic →</a>
       <a href="#what-your-team-gets" class="btn-secondary">See what your team gets</a>
     </div>
   </div>
@@ -609,10 +658,10 @@
         <div class="step-num-circle">1</div>
         <div class="step-text">
           <h4>Choose how you'd like to get started</h4>
-          <p>You have two options, subscribe directly online and get set up straight away, or book a free 15-min call with Nic first if you'd like to talk it through before committing to anything.</p>
+          <p>You have two options, subscribe directly online and get set up straight away, or book a free 30-min call with Nic first if you'd like to talk it through before committing to anything.</p>
           <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
             <a href="tier-starter.html" style="background:var(--teal);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Subscribe now →</a>
-            <a href="booking.html" style="background:var(--white);color:var(--teal);border:1.5px solid var(--teal);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Book a free 15-min call →</a>
+            <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" style="background:var(--white);color:var(--teal);border:1.5px solid var(--teal);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" data-tooltip="Learn more about our service.">Book a free 30-min call →</a>
           </div>
         </div>
       </div>
@@ -667,8 +716,8 @@
 <!-- FINAL CTA -->
 <section class="final-cta">
   <h2>Ready to give your team somewhere to turn?</h2>
-    <p>Book a 15-min call with Nic, no obligation, no contract, just a conversation.</p>
-  <a href="booking.html" class="btn-primary">Book a free 15-min call →</a>
+    <p>Book a 30-min call with Nic, no obligation, no contract, just a conversation.</p>
+  <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" class="btn-primary" data-tooltip="Learn more about our service.">Book a free 30-min call →</a>
   <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.7);">Still have questions? <a href="faq.html" style="color:rgba(255,255,255,0.9);font-weight:500;">Read the FAQs →</a></p>
 </section>
 
