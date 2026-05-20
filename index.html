@@ -442,18 +442,6 @@
     border: 1px solid rgba(38,119,123,0.2); position: relative; overflow: hidden;
   }
 
-  /* FLOATING CTA */
-  .free-chat-float {
-    position: fixed; bottom: 24px; right: 24px; z-index: 200;
-    background: var(--teal); color: #fff; border: none;
-    padding: 14px 22px; border-radius: 99px; font-size: 14px;
-    font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500;
-    box-shadow: 0 4px 20px rgba(38,119,123,0.4);
-    display: flex; align-items: center; gap: 8px;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .free-chat-float:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(38,119,123,0.45); background: var(--teal-hover); }
-
   /* FOOTER */
   footer {
     background: var(--charcoal); color: rgba(255,255,255,0.5);
@@ -503,7 +491,6 @@
     <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
     <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
     <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-    <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min chat</button>
   </div>
 </nav>
 
@@ -650,9 +637,6 @@
   <p style="font-size:15px;color:var(--warm-grey);margin-bottom:22px;max-width:480px;margin-left:auto;margin-right:auto;font-weight:300;">From Medicare and privacy to how this compares to seeing a psychologist, it's all in the FAQ.</p>
   <a href="faq.html" style="display:inline-block;background:var(--teal);color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif;">Read the FAQs -></a>
 </section>
-
-<!-- FLOATING CTA -->
-<button class="free-chat-float" onclick="window.location.href='booking.html'"> Free 15-min chat</button>
 
 <!-- FOOTER -->
 <footer>

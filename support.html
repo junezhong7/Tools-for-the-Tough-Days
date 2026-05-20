@@ -303,10 +303,6 @@
     .what-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
     .what-card p { font-size: 12px; color: var(--warm-grey); margin: 0; line-height: 1.5; }
 
-    /* FLOATING CHAT */
-    .free-chat-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--teal); color: #fff; border: none; padding: 14px 22px; border-radius: 99px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; box-shadow: 0 4px 20px rgba(38,119,123,0.4); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; text-decoration: none; }
-    .free-chat-float:hover { transform: translateY(-2px); background: var(--teal-hover); }
-
     /* EMAIL MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.6); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.show { display: flex; }
@@ -434,7 +430,6 @@
       <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
       <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
       <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-      <a href="booking.html" class="nav-cta">Free 15-min chat</a>
     </div>
   </nav>
 
@@ -641,8 +636,6 @@
       </div>
     </div>
   </div>
-
-  <a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
 
   <!-- STAY IN THE LOOP -->
   <section style="background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
