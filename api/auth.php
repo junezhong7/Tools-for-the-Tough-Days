@@ -6,6 +6,7 @@
  * POST /api/auth.php?action=login
  * POST /api/auth.php?action=logout
  * POST /api/auth.php?action=delete-account
+ * POST /api/auth.php?action=change-password
  * GET  /api/auth.php?action=me
  */
 
@@ -46,6 +47,9 @@ switch ($action) {
         break;
     case 'delete-account':
         handle_delete_account($body);
+        break;
+    case 'change-password':
+        handle_change_password($body);
         break;
     case 'me':
         handle_me();
@@ -252,6 +256,64 @@ function handle_delete_account(array $body): never
 
         error_log('delete account error for user ' . $userId . ': ' . $e->getMessage());
         json_error(500, 'DELETE_ACCOUNT_FAILED', 'We could not delete your account right now. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
+// CHANGE PASSWORD
+// ─────────────────────────────────────────────
+function handle_change_password(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $user   = require_auth();
+    $userId = (int) $user['id'];
+
+    $currentPassword = (string) ($body['current_password'] ?? '');
+    $newPassword     = (string) ($body['new_password'] ?? '');
+
+    if (trim($currentPassword) === '') {
+        json_error(422, 'MISSING_CURRENT_PASSWORD', 'Current password is required.');
+    }
+
+    if (strlen($newPassword) < 8) {
+        json_error(422, 'WEAK_PASSWORD', 'New password must be at least 8 characters.');
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT password_hash FROM users WHERE id = ? LIMIT 1');
+        $stmt->execute([$userId]);
+        $row = $stmt->fetch();
+
+        if (!$row) {
+            json_error(404, 'NOT_FOUND', 'Account not found.');
+        }
+
+        if (!password_verify($currentPassword, (string) $row['password_hash'])) {
+            usleep(random_int(100_000, 300_000));
+            json_error(401, 'INVALID_CREDENTIALS', 'Current password is incorrect.');
+        }
+
+        $newHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+        db()->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$newHash, $userId]);
+
+        // Invalidate all other sessions so old sessions can no longer access the account
+        $currentToken = $_COOKIE['tttd_session'] ?? '';
+        if ($currentToken !== '') {
+            db()->prepare('DELETE FROM user_sessions WHERE user_id = ? AND id != ?')
+               ->execute([$userId, $currentToken]);
+        } else {
+            db()->prepare('DELETE FROM user_sessions WHERE user_id = ?')->execute([$userId]);
+        }
+
+        audit('user.change_password', $userId);
+        json_ok(['message' => 'Password updated successfully.']);
+
+    } catch (Throwable $e) {
+        error_log('change password error for user ' . $userId . ': ' . $e->getMessage());
+        json_error(500, 'SERVER_ERROR', 'Could not update password. Please try again.');
     }
 }
 

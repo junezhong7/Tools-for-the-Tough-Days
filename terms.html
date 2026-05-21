@@ -86,7 +86,9 @@
     .nav-logo-text { font-size: 1rem; font-weight: 800; color: var(--teal); line-height: 1.2; }
     .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
     .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: color 0.2s; }
+    .nav-links button { color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: color 0.2s; border: 0; background: none; font-family: inherit; cursor: pointer; padding: 0; }
     .nav-links a:hover { color: var(--teal); }
+    .nav-links button:hover { color: var(--teal); }
     .btn-nav { background: var(--teal); color: var(--white) !important; padding: 9px 20px; border-radius: 50px; font-size: 0.88rem !important; }
     .btn-nav:hover { background: var(--teal-dark) !important; }
 
@@ -173,6 +175,10 @@
         <li><a href="support.html">For Personal Life</a></li>
         <li><a href="business.html">For Workplaces</a></li>
         <li><a href="about-nic.html">About Nic</a></li>
+        <li><a href="login.html" id="navSignIn" class="nav-login">Sign In</a></li>
+        <li><a href="register.html" id="navSignUp" class="nav-login">Sign Up</a></li>
+        <li><a href="dashboard.html" id="navDashboard" class="nav-login" style="display:none;">Dashboard</a></li>
+        <li><button id="navSignOut" class="nav-login" type="button" style="display:none;">Sign Out</button></li>
       </ul>
     </div>
   </nav>
@@ -354,11 +360,12 @@
       <a href="business.html">For Workplaces</a>
       <a href="about-nic.html">About Nic</a>
       <a href="faq.html">FAQs</a>
-    <a href="feedback.html">Feedback</a>
-    <a href="privacy-policy.html">Privacy</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="privacy-policy.html">Privacy</a>
       <a href="terms.html">Terms</a>
     </div>
-    <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</di
+    <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  </footer>
 
   <!-- FLOATING FEEDBACK TAB -->
   <a href="feedback.html" style="
@@ -381,4 +388,9 @@
     display: block;
     cursor: pointer;
   ">Share feedback</a>
+
+<script src="auth-nav.js"></script>
+<script src="scripts/nav-mobile.js"></script>
+</body>
+</html>
 
