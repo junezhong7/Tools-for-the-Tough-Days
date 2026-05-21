@@ -1,9 +1,9 @@
 name: Build, Push, and Deploy Docker Image (SAND)
 
 on:
-  #push:
-  #  branches:
-  #    - sand
+  push:
+    branches:
+      - sand
   workflow_dispatch:
 
 jobs:
