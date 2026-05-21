@@ -1,27 +1,54 @@
 name: Build, Push, and Deploy Docker Image (SAND)
 
 on:
-  #push:
-  #  branches:
-  #    - sand
+  push:
+    branches:
+      - sand
   workflow_dispatch:
 
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
 
     env:
-      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      ACR_NAME: ${{ vars.ACR_NAME }}
+      ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
+      AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Azure Container Registry
-        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login $ACR_LOGIN_SERVER --username "${{ secrets.ACR_USERNAME }}" --password-stdin
+      - name: Validate Azure OIDC config exists
+        shell: bash
+        run: |
+          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_NAME}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
+            echo "Missing one or more required values:"
+            echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
+            echo "- AZURE_TENANTID (repository variable)"
+            echo "- AZURE_SUBSCRIPTIONID (repository variable)"
+            echo "- ACR_NAME (repository variable)"
+            echo "- ACR_LOGIN_SERVER (repository variable)"
+            exit 1
+          fi
+
+      - name: Login to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to Azure Container Registry (OIDC test)
+        shell: bash
+        run: |
+          az acr login --name "$ACR_NAME"
 
       - name: Build Docker image with sand tag
         run: |
@@ -39,21 +66,22 @@ jobs:
       contents: read
 
     env:
-      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
-      AZURE_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID }}
 
     steps:
-      - name: Validate Azure OIDC secrets exist
+      - name: Validate Azure OIDC config exists
         shell: bash
         run: |
-          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ]; then
-            echo "Missing one or more Azure OIDC secrets:"
+          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
+            echo "Missing one or more Azure OIDC config values:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
-            echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
-            echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
+            echo "- AZURE_TENANTID (repository variable)"
+            echo "- AZURE_SUBSCRIPTIONID (repository variable)"
+            echo "- ACR_LOGIN_SERVER (repository variable)"
             exit 1
           fi
       - name: Login to Azure (OIDC)
