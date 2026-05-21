@@ -13,6 +13,15 @@
     element.style.display = visible ? '' : 'none';
   }
 
+  function getFirstName(fullName) {
+    var trimmed = String(fullName || '').trim();
+    if (!trimmed) {
+      return '';
+    }
+
+    return trimmed.split(/\s+/)[0];
+  }
+
   async function getAuthState() {
     if (window.AuthGuard && typeof window.AuthGuard.getState === 'function') {
       return window.AuthGuard.getState();
@@ -73,11 +82,16 @@
 
     var auth = await getAuthState();
     var loggedIn = !!auth.authenticated;
+    var firstName = getFirstName(auth.user && auth.user.full_name);
 
     setVisible(signIn, !loggedIn);
     setVisible(signUp, !loggedIn);
     setVisible(dashboard, loggedIn);
     setVisible(signOut, loggedIn);
+
+    if (dashboard) {
+      dashboard.textContent = (loggedIn && firstName) ? ('Hi, ' + firstName) : 'Dashboard';
+    }
 
     if (signOut) {
       signOut.addEventListener('click', function () {

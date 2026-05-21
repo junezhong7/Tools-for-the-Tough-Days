@@ -82,6 +82,16 @@
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
+  @media (min-width: 701px) {
+    #navDashboard {
+      display: inline-block;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+  }
   .nav-login {
     color: var(--charcoal);
     border: 1px solid var(--border);
@@ -454,6 +464,12 @@
   @media (max-width: 700px) {
     nav { padding: 0 16px; }
     .nav-links { gap: 14px; }
+    #navDashboard {
+      max-width: none;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
     .hero { padding: 18px 16px 14px; }
     .topic-strip { padding: 12px 16px 14px; }
     .topic-strip-title { margin-bottom: 10px; }
