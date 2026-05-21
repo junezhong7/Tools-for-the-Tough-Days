@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
 
     env:
-      ACR_NAME: ACRToolsfortheToughDays
       ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
 
@@ -22,15 +20,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A7E6A4D7A5AF4F79BBCE42A6C3DB6424 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
-
       - name: Login to Azure Container Registry
-        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login $ACR_LOGIN_SERVER --username ${{ secrets.ACR_USERNAME }} --password-stdin
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login $ACR_LOGIN_SERVER --username "${{ secrets.ACR_USERNAME }}" --password-stdin
 
       - name: Build Docker image with sand tag
         run: |
