@@ -37,7 +37,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker-build-and-push
     permissions:
-      id-token: write
       contents: read
 
     env:
@@ -45,16 +44,10 @@ jobs:
       IMAGE_NAME: tools-for-the-tough-days
 
     steps:
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A7E6A4D7A5AF4F79BBCE42A6C3DB6424 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
-
       - name: Deploy container image to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: Tools-for-the-Tough-Days-SAND
           slot-name: Production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:sand
