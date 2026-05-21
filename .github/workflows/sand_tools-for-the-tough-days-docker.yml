@@ -98,7 +98,7 @@ jobs:
       contents: read
 
     env:
-      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdjfdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
       AZURE_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
