@@ -16,6 +16,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/db.php';
+require_once __DIR__ . '/../lib/mailer.php';
 
 // Load Stripe and config
 if (file_exists(__DIR__ . '/../config.php')) {
@@ -62,7 +63,7 @@ try {
     switch ($event->type) {
 
         case 'checkout.session.completed':
-            handle_checkout_completed($event->data->object);
+            handle_checkout_completed($event->data->object, $event->id ?? null);
             break;
 
         case 'customer.subscription.updated':
@@ -74,7 +75,7 @@ try {
             break;
 
         case 'invoice.payment_succeeded':
-            handle_invoice_paid($event->data->object);
+            handle_invoice_paid($event->data->object, $event->id ?? null);
             break;
 
         case 'invoice.payment_failed':
@@ -98,7 +99,7 @@ try {
 // ─────────────────────────────────────────────
 // checkout.session.completed
 // ─────────────────────────────────────────────
-function handle_checkout_completed(\Stripe\Checkout\Session $session): void
+function handle_checkout_completed(\Stripe\Checkout\Session $session, ?string $eventId = null): void
 {
     $customerId     = $session->customer ?? null;
     $subscriptionId = $session->subscription ?? null;
@@ -119,6 +120,8 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session): void
         // Fetch full subscription from Stripe
         $stripeSub = \Stripe\Subscription::retrieve($subscriptionId);
         upsert_subscription($userId, $stripeSub, $sessionId);
+
+        send_initial_subscription_email_once($userId, $sessionId, $subscriptionId, $eventId);
     } elseif ($session->mode === 'payment') {
         // One-off payment (counselling sessions)
         $productKey = $session->metadata['product_key'] ?? 'counselling';
@@ -172,7 +175,7 @@ function handle_subscription_deleted(\Stripe\Subscription $stripeSub): void
 // ─────────────────────────────────────────────
 // invoice.payment_succeeded
 // ─────────────────────────────────────────────
-function handle_invoice_paid(\Stripe\Invoice $invoice): void
+function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null): void
 {
     $customerId = $invoice->customer;
     $userId     = user_id_from_customer($customerId);
@@ -210,6 +213,10 @@ function handle_invoice_paid(\Stripe\Invoice $invoice): void
             "UPDATE subscriptions SET status = 'active'
              WHERE stripe_subscription_id = ? AND status = 'past_due'"
         )->execute([$invoice->subscription]);
+
+        if (should_send_renewal_emails()) {
+            send_subscription_renewal_email_once($userId, (string) $invoice->id, (string) $invoice->subscription, $eventId);
+        }
     }
 
     audit_webhook('invoice.payment_succeeded', $userId, ['invoice_id' => $invoice->id]);
@@ -396,4 +403,128 @@ function audit_webhook(string $action, ?int $userId, array $details = []): void
     } catch (Throwable $e) {
         error_log('audit_webhook() failed: ' . $e->getMessage());
     }
+}
+
+function send_initial_subscription_email_once(
+    int $userId,
+    ?string $checkoutSessionId,
+    string $stripeSubscriptionId,
+    ?string $eventId
+): void {
+    $uniq = $checkoutSessionId ?: $stripeSubscriptionId;
+    if ($uniq === '') {
+        return;
+    }
+
+    $action = 'email.subscription.initial.' . $uniq;
+    if (audit_action_exists($action)) {
+        return;
+    }
+
+    $contact = load_user_contact($userId);
+    if (!$contact) {
+        return;
+    }
+
+    $stmt = db()->prepare(
+        'SELECT product_key, plan_type, current_period_end
+         FROM subscriptions
+         WHERE stripe_subscription_id = ?
+         ORDER BY id DESC
+         LIMIT 1'
+    );
+    $stmt->execute([$stripeSubscriptionId]);
+    $sub = $stmt->fetch() ?: [];
+
+    $sent = false;
+    try {
+        $sent = send_subscription_email(
+            $contact['email'],
+            $contact['full_name'] ?? null,
+            (string) ($sub['product_key'] ?? 'unknown'),
+            (string) ($sub['plan_type'] ?? 'individual'),
+            isset($sub['current_period_end']) ? (string) $sub['current_period_end'] : null,
+            false
+        );
+    } catch (Throwable $e) {
+        error_log('initial subscription email failed for user ' . $userId . ': ' . $e->getMessage());
+    }
+
+    audit_webhook($action, $userId, [
+        'stripe_subscription_id' => $stripeSubscriptionId,
+        'session_id' => $checkoutSessionId,
+        'event_id' => $eventId,
+        'sent' => $sent,
+    ]);
+}
+
+function send_subscription_renewal_email_once(
+    int $userId,
+    string $invoiceId,
+    string $stripeSubscriptionId,
+    ?string $eventId
+): void {
+    $action = 'email.subscription.renewal.' . $invoiceId;
+    if (audit_action_exists($action)) {
+        return;
+    }
+
+    $contact = load_user_contact($userId);
+    if (!$contact) {
+        return;
+    }
+
+    $stmt = db()->prepare(
+        'SELECT product_key, plan_type, current_period_end
+         FROM subscriptions
+         WHERE stripe_subscription_id = ?
+         ORDER BY id DESC
+         LIMIT 1'
+    );
+    $stmt->execute([$stripeSubscriptionId]);
+    $sub = $stmt->fetch() ?: [];
+
+    $sent = false;
+    try {
+        $sent = send_subscription_email(
+            $contact['email'],
+            $contact['full_name'] ?? null,
+            (string) ($sub['product_key'] ?? 'unknown'),
+            (string) ($sub['plan_type'] ?? 'individual'),
+            isset($sub['current_period_end']) ? (string) $sub['current_period_end'] : null,
+            true
+        );
+    } catch (Throwable $e) {
+        error_log('renewal email failed for user ' . $userId . ': ' . $e->getMessage());
+    }
+
+    audit_webhook($action, $userId, [
+        'stripe_subscription_id' => $stripeSubscriptionId,
+        'invoice_id' => $invoiceId,
+        'event_id' => $eventId,
+        'sent' => $sent,
+    ]);
+}
+
+function load_user_contact(int $userId): ?array
+{
+    $stmt = db()->prepare('SELECT email, full_name FROM users WHERE id = ? LIMIT 1');
+    $stmt->execute([$userId]);
+    $row = $stmt->fetch();
+
+    if (!$row || !isset($row['email'])) {
+        return null;
+    }
+
+    return [
+        'email' => (string) $row['email'],
+        'full_name' => isset($row['full_name']) ? (string) $row['full_name'] : null,
+    ];
+}
+
+function audit_action_exists(string $action): bool
+{
+    $stmt = db()->prepare('SELECT id FROM audit_logs WHERE action = ? LIMIT 1');
+    $stmt->execute([$action]);
+    return (bool) $stmt->fetch();
 }

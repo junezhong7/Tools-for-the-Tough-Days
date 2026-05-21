@@ -152,6 +152,63 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* DELETE ACCOUNT */
+    .danger-zone {
+      border: 1px solid rgba(192,57,43,0.35);
+      background: var(--red-bg);
+    }
+    .danger-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .danger-copy {
+      font-size: 13px;
+      color: #7a2020;
+      margin-bottom: 12px;
+    }
+    .danger-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .danger-input {
+      flex: 1;
+      min-width: 240px;
+      max-width: 360px;
+      padding: 10px 12px;
+      border: 1px solid rgba(192,57,43,0.3);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .danger-input:focus {
+      border-color: rgba(192,57,43,0.6);
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+    }
+    .btn-delete-account {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-delete-account:hover {
+      background: #a93226;
+    }
+    .btn-delete-account:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 600px) {
       nav { padding: 0 16px; }
       .page { padding: 32px 16px; }
@@ -300,6 +357,16 @@
       <div class="card">
         <div class="card-title">Payment History</div>
         <div id="payContent"></div>
+      </div>
+
+      <!-- DANGER ZONE -->
+      <div class="card danger-zone">
+        <div class="danger-title">Danger Zone</div>
+        <p class="danger-copy">Permanently delete your account and all related data. This cannot be undone. Active subscriptions are cancelled before deletion.</p>
+        <div class="danger-controls">
+          <input type="password" id="deleteAccountPassword" class="danger-input" placeholder="Enter your password to confirm" autocomplete="current-password" />
+          <button id="btnDeleteAccount" class="btn-delete-account" type="button">Delete My Account</button>
+        </div>
       </div>
     </div>
   </main>
@@ -811,6 +878,52 @@
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await fetch('/api/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' });
       window.location.href = '/login.html';
+    });
+
+    // Permanent account deletion
+    document.getElementById('btnDeleteAccount').addEventListener('click', async () => {
+      const passwordEl = document.getElementById('deleteAccountPassword');
+      const btn = document.getElementById('btnDeleteAccount');
+      const password = (passwordEl.value || '').trim();
+
+      if (password === '') {
+        showToast('Please enter your password to continue.');
+        passwordEl.focus();
+        return;
+      }
+
+      const confirmDelete = window.confirm(
+        'This will permanently delete your account and cannot be undone. Continue?'
+      );
+      if (!confirmDelete) {
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+
+      try {
+        const res = await fetch('/api/auth.php?action=delete-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ password: password }),
+        });
+
+        const data = await res.json().catch(function () { return {}; });
+        if (!res.ok) {
+          showToast(data.message || 'Could not delete account. Please try again.');
+          btn.disabled = false;
+          btn.textContent = 'Delete My Account';
+          return;
+        }
+
+        window.location.href = '/index.html?account_deleted=1';
+      } catch (_e) {
+        showToast('Network error while deleting account. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Delete My Account';
+      }
     });
 
     bindPlansToggle();
