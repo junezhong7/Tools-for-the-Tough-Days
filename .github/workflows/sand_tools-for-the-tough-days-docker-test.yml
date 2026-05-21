@@ -18,21 +18,21 @@ jobs:
       ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
-      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID || secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
-      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID || secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Validate Azure OIDC secrets exist
+      - name: Validate Azure OIDC config exists
         shell: bash
         run: |
           if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_NAME}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
             echo "Missing one or more required values:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
-            echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
-            echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
+            echo "- AZURE_TENANTID (repository variable)"
+            echo "- AZURE_SUBSCRIPTIONID (repository variable)"
             echo "- ACR_NAME (repository variable)"
             echo "- ACR_LOGIN_SERVER (repository variable)"
             exit 1
@@ -44,19 +44,6 @@ jobs:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Diagnose Azure context and ACR visibility
-        shell: bash
-        run: |
-          echo "Active Azure account context:"
-          az account show --query "{id:id,name:name,tenantId:tenantId}" -o jsonc
-
-          echo "ACR details by resource name:"
-          az acr show --name "$ACR_NAME" --query "{name:name,loginServer:loginServer,id:id}" -o jsonc
-
-          ACTUAL_LOGIN_SERVER=$(az acr show --name "$ACR_NAME" --query loginServer -o tsv)
-          echo "Expected ACR login server: $ACR_LOGIN_SERVER"
-          echo "Actual ACR login server:   $ACTUAL_LOGIN_SERVER"
 
       - name: Login to Azure Container Registry (OIDC test)
         shell: bash
@@ -82,18 +69,18 @@ jobs:
       ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
-      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID || secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
-      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID || secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANTID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTIONID }}
 
     steps:
-      - name: Validate Azure OIDC secrets exist
+      - name: Validate Azure OIDC config exists
         shell: bash
         run: |
           if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
-            echo "Missing one or more Azure OIDC secrets:"
+            echo "Missing one or more Azure OIDC config values:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
-            echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
-            echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
+            echo "- AZURE_TENANTID (repository variable)"
+            echo "- AZURE_SUBSCRIPTIONID (repository variable)"
             echo "- ACR_LOGIN_SERVER (repository variable)"
             exit 1
           fi
