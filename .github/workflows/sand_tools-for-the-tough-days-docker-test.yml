@@ -15,7 +15,7 @@ jobs:
 
     env:
       ACR_NAME: ${{ vars.ACR_NAME }}
-      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
       AZURE_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
@@ -28,12 +28,13 @@ jobs:
       - name: Validate Azure OIDC secrets exist
         shell: bash
         run: |
-          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_NAME}" ]; then
+          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_NAME}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
             echo "Missing one or more required values:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
             echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
             echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
             echo "- ACR_NAME (repository variable)"
+            echo "- ACR_LOGIN_SERVER (repository variable)"
             exit 1
           fi
 
@@ -65,7 +66,7 @@ jobs:
       contents: read
 
     env:
-      ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
+      ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
       AZURE_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF }}
@@ -75,11 +76,12 @@ jobs:
       - name: Validate Azure OIDC secrets exist
         shell: bash
         run: |
-          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ]; then
+          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_LOGIN_SERVER}" ]; then
             echo "Missing one or more Azure OIDC secrets:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
             echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
             echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
+            echo "- ACR_LOGIN_SERVER (repository variable)"
             exit 1
           fi
       - name: Login to Azure (OIDC)
