@@ -89,8 +89,17 @@
     setVisible(dashboard, loggedIn);
     setVisible(signOut, loggedIn);
 
-    if (dashboard) {
-      dashboard.textContent = (loggedIn && firstName) ? ('Hi, ' + firstName) : 'Dashboard';
+    // Show a greeting alongside the Dashboard link — don't overwrite its label.
+    var existingGreeting = byId('navGreeting');
+    if (existingGreeting) {
+      existingGreeting.parentNode.removeChild(existingGreeting);
+    }
+    if (loggedIn && firstName && dashboard) {
+      var greeting = document.createElement('span');
+      greeting.id = 'navGreeting';
+      greeting.textContent = 'Hi, ' + firstName;
+      greeting.style.cssText = 'font-size:13px; color:var(--warm-grey); white-space:nowrap;';
+      dashboard.parentNode.insertBefore(greeting, dashboard);
     }
 
     if (signOut) {
