@@ -42,43 +42,8 @@ jobs:
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Resolve and login Azure Container Registry
-        shell: bash
-        run: |
-          RAW_NAME="${ACR_LOGIN_SERVER%%.azurecr.io}"
-          NORMALIZED_NAME="${RAW_NAME//-/}"
-          RESOLVED_NAME=""
-          RESOLVED_LOGIN_SERVER=""
-          ZERO_GUID="00000000-0000-0000-0000-000000000000"
-
-          for CANDIDATE in "$RAW_NAME" "$NORMALIZED_NAME"; do
-            if [ -z "$CANDIDATE" ]; then
-              continue
-            fi
-            if ! [[ "$CANDIDATE" =~ ^[a-zA-Z0-9]{5,50}$ ]]; then
-              continue
-            fi
-
-            ACCESS_TOKEN=$(az acr login --name "$CANDIDATE" --expose-token --output tsv --query accessToken 2>/dev/null || true)
-            if [ -n "$ACCESS_TOKEN" ]; then
-              RESOLVED_NAME="$CANDIDATE"
-              RESOLVED_LOGIN_SERVER="${CANDIDATE}.azurecr.io"
-
-              echo "$ACCESS_TOKEN" | docker login "$RESOLVED_LOGIN_SERVER" \
-                --username "$ZERO_GUID" \
-                --password-stdin
-              break
-            fi
-          done
-
-          if [ -z "$RESOLVED_NAME" ] || [ -z "$RESOLVED_LOGIN_SERVER" ]; then
-            echo "Unable to resolve ACR from configured login server: ${ACR_LOGIN_SERVER}"
-            echo "Please verify the registry in Azure and set the correct value in this workflow."
-            exit 1
-          fi
-
-          echo "ACR_NAME=${RESOLVED_NAME}" >> "$GITHUB_ENV"
-          echo "ACR_LOGIN_SERVER=${RESOLVED_LOGIN_SERVER}" >> "$GITHUB_ENV"
+      - name: Login to Azure Container Registry
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login "$ACR_LOGIN_SERVER" --username "${{ secrets.ACR_USERNAME }}" --password-stdin
 
       - name: Build Docker image with sand tag
         run: |
@@ -122,35 +87,6 @@ jobs:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Resolve Azure Container Registry details
-        shell: bash
-        run: |
-          RAW_NAME="${ACR_LOGIN_SERVER%%.azurecr.io}"
-          NORMALIZED_NAME="${RAW_NAME//-/}"
-          RESOLVED_LOGIN_SERVER=""
-
-          for CANDIDATE in "$RAW_NAME" "$NORMALIZED_NAME"; do
-            if [ -z "$CANDIDATE" ]; then
-              continue
-            fi
-            if ! [[ "$CANDIDATE" =~ ^[a-zA-Z0-9]{5,50}$ ]]; then
-              continue
-            fi
-
-            ACCESS_TOKEN=$(az acr login --name "$CANDIDATE" --expose-token --output tsv --query accessToken 2>/dev/null || true)
-            if [ -n "$ACCESS_TOKEN" ]; then
-              RESOLVED_LOGIN_SERVER="${CANDIDATE}.azurecr.io"
-              break
-            fi
-          done
-
-          if [ -z "$RESOLVED_LOGIN_SERVER" ]; then
-            echo "Unable to resolve ACR from configured login server: ${ACR_LOGIN_SERVER}"
-            exit 1
-          fi
-
-          echo "ACR_LOGIN_SERVER=${RESOLVED_LOGIN_SERVER}" >> "$GITHUB_ENV"
 
       - name: Deploy container image to Azure Web App
         uses: azure/webapps-deploy@v3
