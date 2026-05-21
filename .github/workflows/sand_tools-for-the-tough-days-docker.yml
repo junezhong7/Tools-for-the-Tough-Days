@@ -14,7 +14,6 @@ jobs:
       contents: read
 
     env:
-      ACR_NAME: acrtoolsforthetoughdays-baa3ghbcfdfjdghw
       ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
@@ -43,8 +42,18 @@ jobs:
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Resolve Azure Container Registry name
+        shell: bash
+        run: |
+          ACR_NAME=$(az acr list --query "[?loginServer=='${ACR_LOGIN_SERVER}'].name | [0]" -o tsv)
+          if [ -z "${ACR_NAME}" ]; then
+            echo "Unable to resolve ACR name from login server: ${ACR_LOGIN_SERVER}"
+            exit 1
+          fi
+          echo "ACR_NAME=${ACR_NAME}" >> "$GITHUB_ENV"
+
       - name: Login to Azure Container Registry
-        run: az acr login --name $ACR_NAME
+        run: az acr login --name "$ACR_NAME"
 
       - name: Build Docker image with sand tag
         run: |
