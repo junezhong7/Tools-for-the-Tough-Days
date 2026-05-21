@@ -42,12 +42,23 @@ jobs:
     env:
       ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
+      WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE || secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A7E6A4D7A5AF4F79BBCE42A6C3DB6424 }}
 
     steps:
+      - name: Validate publish profile secret exists
+        shell: bash
+        run: |
+          if [ -z "${WEBAPP_PUBLISH_PROFILE}" ]; then
+            echo "Missing publish profile secret. Configure one of:"
+            echo "- AZURE_WEBAPP_PUBLISH_PROFILE"
+            echo "- AZUREAPPSERVICE_PUBLISHPROFILE_A7E6A4D7A5AF4F79BBCE42A6C3DB6424"
+            exit 1
+          fi
+
       - name: Deploy container image to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: Tools-for-the-Tough-Days-SAND
           slot-name: Production
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ env.WEBAPP_PUBLISH_PROFILE }}
           images: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:sand
