@@ -14,6 +14,7 @@ jobs:
       contents: read
 
     env:
+      ACR_NAME: ${{ vars.ACR_NAME }}
       ACR_LOGIN_SERVER: acrtoolsforthetoughdays-baa3ghbcfdfjdghw.azurecr.io
       IMAGE_NAME: tools-for-the-tough-days
       AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DOCKER }}
@@ -27,11 +28,12 @@ jobs:
       - name: Validate Azure OIDC secrets exist
         shell: bash
         run: |
-          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ]; then
-            echo "Missing one or more Azure OIDC secrets:"
+          if [ -z "${AZURE_CLIENT_ID}" ] || [ -z "${AZURE_TENANT_ID}" ] || [ -z "${AZURE_SUBSCRIPTION_ID}" ] || [ -z "${ACR_NAME}" ]; then
+            echo "Missing one or more required values:"
             echo "- AZUREAPPSERVICE_CLIENTID_DOCKER"
             echo "- AZUREAPPSERVICE_TENANTID_640FDCE7414E488197DE8F47BFFAD2AF"
             echo "- AZUREAPPSERVICE_SUBSCRIPTIONID_CCEBAD204FC346A1BEE10CD18DB058DF"
+            echo "- ACR_NAME (repository variable)"
             exit 1
           fi
 
@@ -45,10 +47,7 @@ jobs:
       - name: Login to Azure Container Registry (OIDC test)
         shell: bash
         run: |
-          RAW_NAME="${ACR_LOGIN_SERVER%%.azurecr.io}"
-          CLEAN_NAME="${RAW_NAME//-/}"
-
-          az acr login --name "$RAW_NAME" || az acr login --name "$CLEAN_NAME"
+          az acr login --name "$ACR_NAME"
 
       - name: Build Docker image with sand tag
         run: |
