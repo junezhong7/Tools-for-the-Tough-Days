@@ -17,15 +17,26 @@ function mailer_is_configured(): bool
 function send_registration_welcome_email(string $toEmail, ?string $fullName = null): bool
 {
     $name = trim((string) $fullName);
-    $greeting = $name !== '' ? "Hi {$name}," : 'Hi there,';
+    $firstName = $name;
+    if ($name !== '') {
+        $parts = preg_split('/\s+/', $name) ?: [];
+        $firstName = $parts[0] ?? $name;
+    }
 
-    $subject = 'Welcome to Tools for the Tough Days';
+    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+
+    $subject = 'Great to have you with us';
     $body = $greeting . "\n\n"
-        . "Thanks for creating your account. Your support space is now ready.\n\n"
-        . "You can sign in anytime to explore resources tailored to how you are feeling.\n\n"
-        . "If you have any questions, just reply to this email.\n\n"
-        . "Warmly,\n"
-        . "Tools for the Tough Days";
+        . "Thank you for joining. Welcome to the Tools for the Tough Days community.\n\n"
+        . "I am Nic Marcon, a Registered Psychologist with over 20 years of clinical experience. I created this platform because I believe that good mental health support should not be hard to access.\n\n"
+        . "As part of our community, you will be among the first to hear about new resources, tips and insights from my clinical practice, upcoming events, and special offers including our founding member rate. We also have a few exciting things in the pipeline so stay tuned for those announcements.\n\n"
+        . "We are always looking to grow and add new topics, so if there is something you would like to see covered that you cannot find, please let us know. Your feedback genuinely helps shape what we work on next.\n\n"
+        . "Looking forward to being part of your journey.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "toolsforthetoughdays.com.au";
 
     return send_transactional_email($toEmail, $subject, $body);
 }
@@ -39,9 +50,16 @@ function send_subscription_email(
     bool $isRenewal
 ): bool {
     $name = trim((string) $fullName);
-    $greeting = $name !== '' ? "Hi {$name}," : 'Hi there,';
+    $firstName = $name;
+    if ($name !== '') {
+        $parts = preg_split('/\s+/', $name) ?: [];
+        $firstName = $parts[0] ?? $name;
+    }
+
+    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $planLabel = subscription_label_from_product_key($productKey, $planType);
     $periodLine = '';
+    $htmlBody = null;
 
     if ($periodEnd) {
         $ts = strtotime($periodEnd);
@@ -59,16 +77,41 @@ function send_subscription_email(
             . "Warmly,\n"
             . "Tools for the Tough Days";
     } else {
-        $subject = 'Subscription confirmed - Tools for the Tough Days';
+        $videoUrl = 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQC5aZu51NRPRIwA-NbnwgPyAVzxFltV33r9xK1zbLZ7CE4?e=zwyljM';
+        $subject = 'Welcome to Tools for the Tough Days';
         $body = $greeting . "\n\n"
-            . "Thanks for subscribing. Your {$planLabel} plan is now active.\n\n"
-            . $periodLine
-            . "You can now access your subscriber resources.\n\n"
-            . "Warmly,\n"
-            . "Tools for the Tough Days";
+            . "Thank you so much for joining Tools for the Tough Days. It genuinely means a lot that you have taken this step, and I want to make sure you feel right at home from day one.\n\n"
+            . "You now have full access to the platform, including a library of resources designed to support you through the moments that feel a little harder than usual. Whether you are navigating stress, sleep, relationships, for a mate or simply trying to feel more like yourself, there is something in there for you.\n\n"
+            . "Before you dive in, I have put together a short welcome video to give you a feel for what is here for you.\n\n"
+            . "Welcome to Tools for the Tough Days\n"
+            . "{$videoUrl}\n\n"
+            . "We are always working to add new topics, so if you ever cannot find what you are looking for, please let us know. Your feedback helps shape what we work on next. Also, we have a few exciting things in the pipeline, so keep an eye out for updates.\n\n"
+            . "If you have any questions or need a hand finding the right resource, just reply to this email. I am glad you are here.\n\n"
+            . "Warm regards,\n"
+            . "Nic Marcon\n"
+            . "Registered Psychologist\n"
+            . "Tools for the Tough Days\n"
+            . "toolsforthetoughdays.com.au";
+
+        $htmlGreeting = $firstName !== ''
+            ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+            : 'Hi there,';
+        $safeVideoUrl = htmlspecialchars($videoUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $htmlBody = '<p>' . $htmlGreeting . '</p>'
+            . '<p>Thank you so much for joining Tools for the Tough Days. It genuinely means a lot that you have taken this step, and I want to make sure you feel right at home from day one.</p>'
+            . '<p>You now have full access to the platform, including a library of resources designed to support you through the moments that feel a little harder than usual. Whether you are navigating stress, sleep, relationships, for a mate or simply trying to feel more like yourself, there is something in there for you.</p>'
+            . '<p>Before you dive in, I have put together a short welcome video to give you a feel for what is here for you.</p>'
+            . '<p><a href="' . $safeVideoUrl . '">Welcome to Tools for the Tough Days</a></p>'
+            . '<p>We are always working to add new topics, so if you ever cannot find what you are looking for, please let us know. Your feedback helps shape what we work on next. Also, we have a few exciting things in the pipeline, so keep an eye out for updates.</p>'
+            . '<p>If you have any questions or need a hand finding the right resource, just reply to this email. I am glad you are here.</p>'
+            . '<p>Warm regards,<br>'
+            . 'Nic Marcon<br>'
+            . 'Registered Psychologist<br>'
+            . 'Tools for the Tough Days<br>'
+            . 'toolsforthetoughdays.com.au</p>';
     }
 
-    return send_transactional_email($toEmail, $subject, $body);
+    return send_transactional_email($toEmail, $subject, $body, $htmlBody);
 }
 
 function should_send_renewal_emails(): bool
@@ -77,7 +120,7 @@ function should_send_renewal_emails(): bool
     return $scope === 'include_renewals';
 }
 
-function send_transactional_email(string $toEmail, string $subject, string $body): bool
+function send_transactional_email(string $toEmail, string $subject, string $body, ?string $htmlBody = null): bool
 {
     if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
         return false;
@@ -95,11 +138,11 @@ function send_transactional_email(string $toEmail, string $subject, string $body
         }
     }
 
-    smtp_send_mail($recipients, $subject, $body);
+    smtp_send_mail($recipients, $subject, $body, $htmlBody);
     return true;
 }
 
-function smtp_send_mail(array $recipients, string $subject, string $textBody): void
+function smtp_send_mail(array $recipients, string $subject, string $textBody, ?string $htmlBody = null): void
 {
     $host = smtp_host();
     $port = smtp_port();
@@ -159,7 +202,7 @@ function smtp_send_mail(array $recipients, string $subject, string $textBody): v
         }
 
         smtp_command($socket, 'DATA', [354]);
-        smtp_write($socket, build_rfc822_message($from, $cleanRecipients, $replyTo, $subject, $textBody));
+        smtp_write($socket, build_rfc822_message($from, $cleanRecipients, $replyTo, $subject, $textBody, $htmlBody));
         smtp_write($socket, "\r\n.\r\n");
         smtp_expect_code($socket, [250]);
 
@@ -214,13 +257,11 @@ function build_rfc822_message(
     array $to,
     string $replyTo,
     string $subject,
-    string $textBody
+    string $textBody,
+    ?string $htmlBody = null
 ): string {
     $safeSubject = preg_replace('/[\r\n]+/', ' ', $subject) ?? 'Message';
-    $safeBody = preg_replace('/\r\n|\r|\n/', "\r\n", $textBody) ?? '';
-
-    // SMTP DATA escaping: lines beginning with a dot must be doubled.
-    $safeBody = preg_replace('/(^|\r\n)\./', '$1..', $safeBody) ?? $safeBody;
+    $safeTextBody = preg_replace('/\r\n|\r|\n/', "\r\n", $textBody) ?? '';
 
     $headers = [
         'Date: ' . gmdate('D, d M Y H:i:s') . ' +0000',
@@ -230,11 +271,36 @@ function build_rfc822_message(
         'Reply-To: <' . $replyTo . '>',
         'Subject: ' . $safeSubject,
         'MIME-Version: 1.0',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
     ];
 
-    return implode("\r\n", $headers) . "\r\n\r\n" . $safeBody;
+    $safeHtmlBody = '';
+    if ($htmlBody !== null) {
+        $safeHtmlBody = preg_replace('/\r\n|\r|\n/', "\r\n", $htmlBody) ?? '';
+    }
+
+    if ($safeHtmlBody !== '') {
+        $boundary = '=_Part_' . bin2hex(random_bytes(12));
+        $headers[] = 'Content-Type: multipart/alternative; boundary="' . $boundary . '"';
+
+        $payload = '--' . $boundary . "\r\n"
+            . 'Content-Type: text/plain; charset=UTF-8' . "\r\n"
+            . 'Content-Transfer-Encoding: 8bit' . "\r\n\r\n"
+            . $safeTextBody . "\r\n\r\n"
+            . '--' . $boundary . "\r\n"
+            . 'Content-Type: text/html; charset=UTF-8' . "\r\n"
+            . 'Content-Transfer-Encoding: 8bit' . "\r\n\r\n"
+            . $safeHtmlBody . "\r\n\r\n"
+            . '--' . $boundary . "--";
+    } else {
+        $headers[] = 'Content-Type: text/plain; charset=UTF-8';
+        $headers[] = 'Content-Transfer-Encoding: 8bit';
+        $payload = $safeTextBody;
+    }
+
+    // SMTP DATA escaping: lines beginning with a dot must be doubled.
+    $payload = preg_replace('/(^|\r\n)\./', '$1..', $payload) ?? $payload;
+
+    return implode("\r\n", $headers) . "\r\n\r\n" . $payload;
 }
 
 function subscription_label_from_product_key(string $productKey, string $planType): string
