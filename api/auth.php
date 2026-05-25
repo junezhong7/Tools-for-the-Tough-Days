@@ -5,6 +5,8 @@
  * POST /api/auth.php?action=register
  * POST /api/auth.php?action=login
  * POST /api/auth.php?action=logout
+ * POST /api/auth.php?action=delete-account
+ * POST /api/auth.php?action=change-password
  * GET  /api/auth.php?action=me
  */
 
@@ -12,6 +14,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
+require_once __DIR__ . '/../lib/mailer.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -41,6 +44,12 @@ switch ($action) {
         break;
     case 'logout':
         handle_logout();
+        break;
+    case 'delete-account':
+        handle_delete_account($body);
+        break;
+    case 'change-password':
+        handle_change_password($body);
         break;
     case 'me':
         handle_me();
@@ -108,6 +117,12 @@ function handle_register(array $body): never
 
         $token = create_session($userId);
         audit('user.register', $userId, ['email' => $email]);
+
+        try {
+            send_registration_welcome_email($email, $fullName ?: null);
+        } catch (Throwable $mailErr) {
+            error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
 
         json_ok([
             'user' => [
@@ -193,6 +208,116 @@ function handle_logout(): never
 }
 
 // ─────────────────────────────────────────────
+// DELETE ACCOUNT
+// ─────────────────────────────────────────────
+function handle_delete_account(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $user = require_auth();
+    $userId = (int) $user['id'];
+    $password = (string) ($body['password'] ?? '');
+
+    if (trim($password) === '') {
+        json_error(422, 'MISSING_PASSWORD', 'Password is required to delete your account.');
+    }
+
+    try {
+        $userStmt = db()->prepare('SELECT email, password_hash FROM users WHERE id = ? LIMIT 1');
+        $userStmt->execute([$userId]);
+        $dbUser = $userStmt->fetch();
+
+        if (!$dbUser) {
+            json_error(404, 'NOT_FOUND', 'Account not found.');
+        }
+
+        if (!password_verify($password, (string) $dbUser['password_hash'])) {
+            usleep(random_int(100_000, 300_000));
+            json_error(401, 'INVALID_CREDENTIALS', 'Password is incorrect.');
+        }
+
+        cancel_active_stripe_subscriptions_or_fail($userId);
+
+        db()->beginTransaction();
+
+        db()->prepare('DELETE FROM users WHERE id = ?')->execute([$userId]);
+        audit('user.delete', $userId, ['email' => (string) $dbUser['email']]);
+
+        db()->commit();
+
+        destroy_session();
+        json_ok(['message' => 'Your account has been permanently deleted.']);
+    } catch (Throwable $e) {
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
+
+        error_log('delete account error for user ' . $userId . ': ' . $e->getMessage());
+        json_error(500, 'DELETE_ACCOUNT_FAILED', 'We could not delete your account right now. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
+// CHANGE PASSWORD
+// ─────────────────────────────────────────────
+function handle_change_password(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $user   = require_auth();
+    $userId = (int) $user['id'];
+
+    $currentPassword = (string) ($body['current_password'] ?? '');
+    $newPassword     = (string) ($body['new_password'] ?? '');
+
+    if (trim($currentPassword) === '') {
+        json_error(422, 'MISSING_CURRENT_PASSWORD', 'Current password is required.');
+    }
+
+    if (strlen($newPassword) < 8) {
+        json_error(422, 'WEAK_PASSWORD', 'New password must be at least 8 characters.');
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT password_hash FROM users WHERE id = ? LIMIT 1');
+        $stmt->execute([$userId]);
+        $row = $stmt->fetch();
+
+        if (!$row) {
+            json_error(404, 'NOT_FOUND', 'Account not found.');
+        }
+
+        if (!password_verify($currentPassword, (string) $row['password_hash'])) {
+            usleep(random_int(100_000, 300_000));
+            json_error(401, 'INVALID_CREDENTIALS', 'Current password is incorrect.');
+        }
+
+        $newHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+        db()->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$newHash, $userId]);
+
+        // Invalidate all other sessions so old sessions can no longer access the account
+        $currentToken = $_COOKIE['tttd_session'] ?? '';
+        if ($currentToken !== '') {
+            db()->prepare('DELETE FROM user_sessions WHERE user_id = ? AND id != ?')
+               ->execute([$userId, $currentToken]);
+        } else {
+            db()->prepare('DELETE FROM user_sessions WHERE user_id = ?')->execute([$userId]);
+        }
+
+        audit('user.change_password', $userId);
+        json_ok(['message' => 'Password updated successfully.']);
+
+    } catch (Throwable $e) {
+        error_log('change password error for user ' . $userId . ': ' . $e->getMessage());
+        json_error(500, 'SERVER_ERROR', 'Could not update password. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
 // ME  (current user info)
 // ─────────────────────────────────────────────
 function handle_me(): never
@@ -240,4 +365,58 @@ function normalize_bool(mixed $value): bool
     }
 
     return false;
+}
+
+function cancel_active_stripe_subscriptions_or_fail(int $userId): void
+{
+    $subStmt = db()->prepare(
+        "SELECT stripe_subscription_id
+         FROM subscriptions
+         WHERE user_id = ?
+           AND stripe_subscription_id IS NOT NULL
+           AND status IN ('active','trialing','past_due','unpaid')"
+    );
+    $subStmt->execute([$userId]);
+    $rows = $subStmt->fetchAll() ?: [];
+
+    $subscriptionIds = [];
+    foreach ($rows as $row) {
+        $id = trim((string) ($row['stripe_subscription_id'] ?? ''));
+        if ($id !== '') {
+            $subscriptionIds[] = $id;
+        }
+    }
+
+    if ($subscriptionIds === []) {
+        return;
+    }
+
+    if (file_exists(__DIR__ . '/../config.php')) {
+        require_once __DIR__ . '/../config.php';
+    }
+
+    if (!defined('STRIPE_SECRET_KEY') || STRIPE_SECRET_KEY === '') {
+        throw new RuntimeException('Active subscription exists but STRIPE_SECRET_KEY is missing.');
+    }
+
+    require_once __DIR__ . '/../stripe-php/init.php';
+    \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
+
+    foreach ($subscriptionIds as $subscriptionId) {
+        try {
+            $stripeSub = \Stripe\Subscription::retrieve($subscriptionId);
+            $stripeSub->cancel();
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            throw new RuntimeException('Failed to cancel Stripe subscription before account deletion: ' . $e->getMessage());
+        }
+
+        db()->prepare(
+            "UPDATE subscriptions
+             SET status = 'cancelled',
+                 cancelled_at = COALESCE(cancelled_at, NOW()),
+                 cancel_at_period_end = 0,
+                 updated_at = NOW()
+             WHERE stripe_subscription_id = ?"
+        )->execute([$subscriptionId]);
+    }
 }

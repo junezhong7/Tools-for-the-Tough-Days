@@ -13,6 +13,15 @@
     element.style.display = visible ? '' : 'none';
   }
 
+  function getFirstName(fullName) {
+    var trimmed = String(fullName || '').trim();
+    if (!trimmed) {
+      return '';
+    }
+
+    return trimmed.split(/\s+/)[0];
+  }
+
   async function getAuthState() {
     if (window.AuthGuard && typeof window.AuthGuard.getState === 'function') {
       return window.AuthGuard.getState();
@@ -73,11 +82,25 @@
 
     var auth = await getAuthState();
     var loggedIn = !!auth.authenticated;
+    var firstName = getFirstName(auth.user && auth.user.full_name);
 
     setVisible(signIn, !loggedIn);
     setVisible(signUp, !loggedIn);
     setVisible(dashboard, loggedIn);
     setVisible(signOut, loggedIn);
+
+    // Show a greeting alongside the Dashboard link — don't overwrite its label.
+    var existingGreeting = byId('navGreeting');
+    if (existingGreeting) {
+      existingGreeting.parentNode.removeChild(existingGreeting);
+    }
+    if (loggedIn && firstName && dashboard) {
+      var greeting = document.createElement('span');
+      greeting.id = 'navGreeting';
+      greeting.textContent = 'Hi, ' + firstName;
+      greeting.style.cssText = 'font-size:13px; color:var(--warm-grey); white-space:nowrap;';
+      dashboard.parentNode.insertBefore(greeting, dashboard);
+    }
 
     if (signOut) {
       signOut.addEventListener('click', function () {

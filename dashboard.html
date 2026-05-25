@@ -152,6 +152,90 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* DELETE ACCOUNT */
+    .danger-zone {
+      border: 1px solid rgba(192,57,43,0.35);
+      background: var(--red-bg);
+    }
+    .danger-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .danger-copy {
+      font-size: 13px;
+      color: #7a2020;
+      margin-bottom: 12px;
+    }
+    .danger-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .danger-input {
+      flex: 1;
+      min-width: 240px;
+      max-width: 360px;
+      padding: 10px 12px;
+      border: 1px solid rgba(192,57,43,0.3);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .danger-input:focus {
+      border-color: rgba(192,57,43,0.6);
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+    }
+    .btn-delete-account {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-delete-account:hover {
+      background: #a93226;
+    }
+    .btn-delete-account:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* CHANGE PASSWORD */
+    .pw-form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; }
+    .pw-field { display: flex; flex-direction: column; gap: 5px; }
+    .pw-label { font-size: 12px; font-weight: 500; color: var(--warm-grey); text-transform: uppercase; letter-spacing: 0.05em; }
+    .pw-input {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      font-size: 14px;
+      outline: none;
+    }
+    .pw-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(38,119,123,0.1); }
+    .btn-change-pw {
+      align-self: flex-start;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-change-pw:hover { background: var(--teal-hover); }
+    .btn-change-pw:disabled { opacity: 0.65; cursor: not-allowed; }
+
     @media (max-width: 600px) {
       nav { padding: 0 16px; }
       .page { padding: 32px 16px; }
@@ -300,6 +384,36 @@
       <div class="card">
         <div class="card-title">Payment History</div>
         <div id="payContent"></div>
+      </div>
+
+      <!-- CHANGE PASSWORD -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom:14px;">Change Password</div>
+        <div class="pw-form">
+          <div class="pw-field">
+            <label class="pw-label" for="currentPassword">Current password</label>
+            <input type="password" id="currentPassword" class="pw-input" autocomplete="current-password" placeholder="Enter current password" />
+          </div>
+          <div class="pw-field">
+            <label class="pw-label" for="newPassword">New password</label>
+            <input type="password" id="newPassword" class="pw-input" autocomplete="new-password" placeholder="At least 8 characters" />
+          </div>
+          <div class="pw-field">
+            <label class="pw-label" for="confirmPassword">Confirm new password</label>
+            <input type="password" id="confirmPassword" class="pw-input" autocomplete="new-password" placeholder="Repeat new password" />
+          </div>
+          <button id="btnChangePassword" class="btn-change-pw" type="button">Update Password</button>
+        </div>
+      </div>
+
+      <!-- DANGER ZONE -->
+      <div class="card danger-zone">
+        <div class="danger-title">Danger Zone</div>
+        <p class="danger-copy">Permanently delete your account and all related data. This cannot be undone. Active subscriptions are cancelled before deletion.</p>
+        <div class="danger-controls">
+          <input type="password" id="deleteAccountPassword" class="danger-input" placeholder="Enter your password to confirm" autocomplete="current-password" />
+          <button id="btnDeleteAccount" class="btn-delete-account" type="button">Delete My Account</button>
+        </div>
       </div>
     </div>
   </main>
@@ -811,6 +925,94 @@
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await fetch('/api/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' });
       window.location.href = '/login.html';
+    });
+
+    // Change password
+    document.getElementById('btnChangePassword').addEventListener('click', async () => {
+      const currentEl  = document.getElementById('currentPassword');
+      const newEl      = document.getElementById('newPassword');
+      const confirmEl  = document.getElementById('confirmPassword');
+      const btn        = document.getElementById('btnChangePassword');
+
+      const current = (currentEl.value || '').trim();
+      const newPw   = newEl.value || '';
+      const confirm = confirmEl.value || '';
+
+      if (!current) { showToast('Please enter your current password.'); currentEl.focus(); return; }
+      if (newPw.length < 8) { showToast('New password must be at least 8 characters.'); newEl.focus(); return; }
+      if (newPw !== confirm) { showToast('New passwords do not match.'); confirmEl.focus(); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating…';
+
+      try {
+        const res = await fetch('/api/auth.php?action=change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ current_password: current, new_password: newPw }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          showToast(data.message || 'Could not update password. Please try again.');
+        } else {
+          showToast('Password updated successfully.');
+          currentEl.value = '';
+          newEl.value = '';
+          confirmEl.value = '';
+        }
+      } catch (_e) {
+        showToast('Network error. Please try again.');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Update Password';
+    });
+
+    // Permanent account deletion
+    document.getElementById('btnDeleteAccount').addEventListener('click', async () => {
+      const passwordEl = document.getElementById('deleteAccountPassword');
+      const btn = document.getElementById('btnDeleteAccount');
+      const password = (passwordEl.value || '').trim();
+
+      if (password === '') {
+        showToast('Please enter your password to continue.');
+        passwordEl.focus();
+        return;
+      }
+
+      const confirmDelete = window.confirm(
+        'This will permanently delete your account and cannot be undone. Continue?'
+      );
+      if (!confirmDelete) {
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+
+      try {
+        const res = await fetch('/api/auth.php?action=delete-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ password: password }),
+        });
+
+        const data = await res.json().catch(function () { return {}; });
+        if (!res.ok) {
+          showToast(data.message || 'Could not delete account. Please try again.');
+          btn.disabled = false;
+          btn.textContent = 'Delete My Account';
+          return;
+        }
+
+        window.location.href = '/index.html?account_deleted=1';
+      } catch (_e) {
+        showToast('Network error while deleting account. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Delete My Account';
+      }
     });
 
     bindPlansToggle();

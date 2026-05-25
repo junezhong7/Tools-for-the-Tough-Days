@@ -54,8 +54,25 @@
     nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
     .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
     .nav-logo span { color: var(--teal); }
-    .nav-back { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
-    .nav-back:hover { color: var(--charcoal); }
+    .nav-links { display: flex; align-items: center; gap: 16px; }
+    .nav-links a,
+    .nav-links button {
+      font-size: 13px;
+      color: var(--warm-grey);
+      text-decoration: none;
+      border: 0;
+      background: none;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+    }
+    .nav-links a:hover,
+    .nav-links button:hover { color: var(--charcoal); }
+    .nav-login {
+      color: var(--charcoal);
+      border: 1px solid var(--border) !important;
+      padding: 8px 14px;
+      border-radius: 6px;
+    }
 
     /* HERO */
     .hero { background: var(--teal); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
@@ -149,7 +166,13 @@
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
-  <a href="support.html" class="nav-back">→Back to resources</a>
+  <div class="nav-links">
+    <a href="support.html">→Back to resources</a>
+    <a href="login.html" id="navSignIn" class="nav-login">Sign In</a>
+    <a href="register.html" id="navSignUp" class="nav-login">Sign Up</a>
+    <a href="dashboard.html" id="navDashboard" class="nav-login" style="display:none;">Dashboard</a>
+    <button id="navSignOut" class="nav-login" type="button" style="display:none;">Sign Out</button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -316,6 +339,7 @@
   box-shadow: -4px 0 10px rgba(0,0,0,0.2); display: block; cursor: pointer;
 ">Share feedback</a>
 
+<script src="auth-nav.js"></script>
 <script src="scripts/nav-mobile.js"></script>
 </body>
 </html>
