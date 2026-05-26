@@ -508,7 +508,7 @@
             type="password"
             id="password"
             name="password"
-            placeholder="•••••••�?
+            placeholder="••••••••"
             autocomplete="current-password"
           />
           <button class="toggle-pw" type="button" id="togglePw" aria-label="Show password">
@@ -586,7 +586,7 @@
 
       if (valid) {
         const btn = document.getElementById('btnSignIn');
-        btn.textContent = 'Signing in�?;
+        btn.textContent = 'Signing in?;
         btn.disabled = true;
 
           fetch('/api/auth.php?action=login', {

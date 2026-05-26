@@ -275,7 +275,7 @@
   </nav>
 
   <main class="page">
-    <div class="loading" id="loadingState">Loading your account鈥?/div>
+    <div class="loading" id="loadingState">Loading your account</div>
 
     <div id="dashboardContent" style="display:none">
       <h1 class="page-title" id="welcomeTitle">My Account</h1>
@@ -311,7 +311,7 @@
               </div>
               <div class="plan-body">
                 <p class="plan-copy">Full access to the growing resource library, with new clinically reviewed topics added regularly.</p>
-                <a class="plan-cta" href="/checkout.php?product=individual_monthly">Subscribe monthly 鈫?/a>
+                <a class="plan-cta" href="/checkout.php?product=individual_monthly">Subscribe monthly </a>
               </div>
             </div>
             <div class="plan-card individual">
@@ -323,7 +323,7 @@
               </div>
               <div class="plan-body">
                 <p class="plan-copy">Best for uninterrupted access all year, with a simpler annual renewal and stronger savings.</p>
-                <a class="plan-cta" href="/checkout.php?product=individual_yearly">Subscribe annually 鈫?/a>
+                <a class="plan-cta" href="/checkout.php?product=individual_yearly">Subscribe annually </a>
               </div>
             </div>
           </div>
@@ -332,7 +332,7 @@
           <div class="plans-grid-three">
             <div class="plan-card business">
               <div class="plan-top">
-                <div class="plan-label">Starter 路 6鈥?0 staff</div>
+                <div class="plan-label">Starter 路 6?0 staff</div>
                 <div class="plan-price">$150</div>
                 <div class="plan-price-note">/month 路 resources only</div>
               </div>
@@ -342,13 +342,13 @@
                   <li>Quarterly check-in with Nic</li>
                   <li><strong>$1,350/year</strong> annual bundle option</li>
                 </ul>
-                <a class="plan-cta" href="/checkout.php?product=starter_only">Get started 鈫?/a>
+                <a class="plan-cta" href="/checkout.php?product=starter_only">Get started </a>
               </div>
             </div>
             <div class="plan-card business featured">
               <div class="plan-top">
                 <div class="plan-pill">Most popular</div>
-                <div class="plan-label">Growth 路 21鈥?0 staff</div>
+                <div class="plan-label">Growth 路 21?0 staff</div>
                 <div class="plan-price">$250</div>
                 <div class="plan-price-note">/month 路 resources only</div>
               </div>
@@ -358,12 +358,12 @@
                   <li>Quarterly calls and monthly usage data</li>
                   <li><strong>$2,835/year</strong> annual bundle option</li>
                 </ul>
-                <a class="plan-cta" href="/checkout.php?product=growth_only">Get started 鈫?/a>
+                <a class="plan-cta" href="/checkout.php?product=growth_only">Get started </a>
               </div>
             </div>
             <div class="plan-card business">
               <div class="plan-top">
-                <div class="plan-label">Team 路 51鈥?0 staff</div>
+                <div class="plan-label">Team 路 51?0 staff</div>
                 <div class="plan-price">$300</div>
                 <div class="plan-price-note">/month 路 resources only</div>
               </div>
@@ -373,7 +373,7 @@
                   <li>Quarterly check-ins and booking access</li>
                   <li><strong>$3,780/year</strong> annual bundle option</li>
                 </ul>
-                <a class="plan-cta" href="/checkout.php?product=team_only">Get started 鈫?/a>
+                <a class="plan-cta" href="/checkout.php?product=team_only">Get started </a>
               </div>
             </div>
           </div>
@@ -426,16 +426,16 @@
   <script src="/auth-guard.js"></script>
   <script>
     const PLAN_LABELS = {
-      individual_monthly: 'Individual 鈥?Monthly',
-      individual_yearly:  'Individual 鈥?Annual',
-      starter_only:   'Business Starter 鈥?Monthly',
-      growth_only:    'Business Growth 鈥?Monthly',
-      team_only:      'Business Team 鈥?Monthly',
-      starter_bundle: 'Business Starter 鈥?Annual Bundle',
-      growth_bundle:  'Business Growth 鈥?Annual Bundle',
-      team_bundle:    'Business Team 鈥?Annual Bundle',
-      sessions_3:     'Counselling 鈥?3 Sessions',
-      sessions_6:     'Counselling 鈥?6 Sessions',
+      individual_monthly: 'Individual ?Monthly',
+      individual_yearly:  'Individual ?Annual',
+      starter_only:   'Business Starter ?Monthly',
+      growth_only:    'Business Growth ?Monthly',
+      team_only:      'Business Team ?Monthly',
+      starter_bundle: 'Business Starter ?Annual Bundle',
+      growth_bundle:  'Business Growth ?Annual Bundle',
+      team_bundle:    'Business Team ?Annual Bundle',
+      sessions_3:     'Counselling ?3 Sessions',
+      sessions_6:     'Counselling ?6 Sessions',
     };
 
     const MOOD_ALERT_LABELS = {
@@ -461,7 +461,7 @@
     }
 
     function fmtDate(dt) {
-      if (!dt) return '鈥?;
+      if (!dt) return '?;
       return new Date(dt).toLocaleDateString('en-AU', { timeZone: APP_TIMEZONE, day: 'numeric', month: 'short', year: 'numeric' });
     }
 
@@ -586,7 +586,7 @@
         <tbody>
           ${payments.map(p => `<tr>
             <td>${fmtDate(p.created_at)}</td>
-            <td>${p.description || '鈥?}</td>
+            <td>${p.description || '?}</td>
             <td>$${p.amount} AUD</td>
             <td><span class="pay-status ${p.status}">${p.status}</span></td>
           </tr>`).join('')}
@@ -624,8 +624,8 @@
             <div class="mood-head">
               <div class="mood-month" id="moodMonthLabel"></div>
               <div class="mood-nav">
-                <button class="mood-nav-btn" id="moodPrevMonth" type="button">鈫?Prev</button>
-                <button class="mood-nav-btn" id="moodNextMonth" type="button">Next 鈫?/button>
+                <button class="mood-nav-btn" id="moodPrevMonth" type="button">?Prev</button>
+                <button class="mood-nav-btn" id="moodNextMonth" type="button">Next </button>
               </div>
             </div>
             <div class="mood-grid" id="moodCalendarGrid"></div>
@@ -739,14 +739,14 @@
       side.innerHTML = `
         <div class="mood-side-title">Selected Day</div>
         <div class="mood-detail-date">${selectedDateLabel}</div>
-        <div class="mood-detail-score">${score || '鈥?}</div>
+        <div class="mood-detail-score">${score || '?}</div>
 
         <div class="mood-side-title" style="margin-top:4px;">Last 30 Days</div>
         <div class="mood-summary">
           <div class="mood-kpi"><div class="mood-kpi-label">Check-ins</div><div class="mood-kpi-value">${summary.total_checkins_30 || 0}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Average</div><div class="mood-kpi-value">${summary.avg_score_30 ?? '鈥?}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Lowest</div><div class="mood-kpi-value">${summary.min_score_30 ?? '鈥?}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Highest</div><div class="mood-kpi-value">${summary.max_score_30 ?? '鈥?}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Average</div><div class="mood-kpi-value">${summary.avg_score_30 ?? '?}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Lowest</div><div class="mood-kpi-value">${summary.min_score_30 ?? '?}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Highest</div><div class="mood-kpi-value">${summary.max_score_30 ?? '?}</div></div>
         </div>
 
         <div class="mood-side-title">Follow-up Alerts</div>
@@ -902,7 +902,7 @@
     async function cancelSub(subId, btn) {
       if (!confirm('Are you sure? Your subscription will remain active until the end of the billing period.')) return;
       btn.disabled = true;
-      btn.textContent = 'Cancelling鈥?;
+      btn.textContent = 'Cancelling?;
       const res = await fetch('/api/subscriptions.php?action=cancel', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
@@ -914,7 +914,7 @@
 
     async function resumeSub(subId, btn) {
       btn.disabled = true;
-      btn.textContent = 'Resuming鈥?;
+      btn.textContent = 'Resuming?;
       const res = await fetch('/api/subscriptions.php?action=resume', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
@@ -946,7 +946,7 @@
       if (newPw !== confirm) { showToast('New passwords do not match.'); confirmEl.focus(); return; }
 
       btn.disabled = true;
-      btn.textContent = 'Updating鈥?;
+      btn.textContent = 'Updating?;
 
       try {
         const res = await fetch('/api/auth.php?action=change-password', {
@@ -992,7 +992,7 @@
       }
 
       btn.disabled = true;
-      btn.textContent = 'Deleting鈥?;
+      btn.textContent = 'Deleting?;
 
       try {
         const res = await fetch('/api/auth.php?action=delete-account', {
