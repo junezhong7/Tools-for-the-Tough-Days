@@ -45,6 +45,7 @@ Set these in Azure Web App application settings:
 - `SMTP_PASSWORD`
 - `MAIL_FROM`
 - `MAIL_REPLY_TO`
+- `PASSWORD_RESET_TTL_MIN` (optional, default 60, min 10, max 180)
 - `SUBSCRIPTION_EMAIL_SCOPE` (`include_renewals` to send renewal emails, anything else for initial subscription only)
 - `TEST_RECIPIENTS` (optional comma/space separated monitor recipients)
 
@@ -55,6 +56,8 @@ Database connection settings must also be configured for [lib/db.php](lib/db.php
 For a new environment, run [sql/schema.sql](sql/schema.sql).
 
 For an existing environment that already has subscription data, run [sql/2026-04-28-add-checkout-session-unique-index.sql](sql/2026-04-28-add-checkout-session-unique-index.sql) before deploying the updated webhook. It clears duplicate `stripe_checkout_session_id` values on older duplicate rows and then adds the unique index needed to keep one Checkout session mapped to one local subscription record.
+
+To enable forgot-password reset links in existing environments, also run [sql/2026-05-27-add-password-reset-tokens.sql](sql/2026-05-27-add-password-reset-tokens.sql).
 
 ## Stripe Webhook Configuration
 
@@ -112,6 +115,7 @@ az webapp config appsettings set --resource-group <resource-group> --name <webap
 The app now sends transactional emails for:
 
 - user registration success
+- password reset links (`/api/auth.php?action=request-password-reset`)
 - subscription activation (`checkout.session.completed`)
 - subscription renewals when `SUBSCRIPTION_EMAIL_SCOPE=include_renewals`
 

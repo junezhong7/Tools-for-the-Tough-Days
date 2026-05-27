@@ -41,6 +41,46 @@ function send_registration_welcome_email(string $toEmail, ?string $fullName = nu
     return send_transactional_email($toEmail, $subject, $body);
 }
 
+function send_password_reset_email(
+    string $toEmail,
+    ?string $fullName,
+    string $resetUrl,
+    int $expiresMinutes
+): bool {
+    $name = trim((string) $fullName);
+    $firstName = $name;
+    if ($name !== '') {
+        $parts = preg_split('/\s+/', $name) ?: [];
+        $firstName = $parts[0] ?? $name;
+    }
+
+    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $safeUrl = htmlspecialchars($resetUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+    $subject = 'Reset your password';
+    $body = $greeting . "\n\n"
+        . "We received a request to reset your Tools for the Tough Days password.\n\n"
+        . "Reset your password here:\n"
+        . $resetUrl . "\n\n"
+        . "This link will expire in {$expiresMinutes} minutes and can only be used once.\n\n"
+        . "If you did not request this, you can ignore this email.\n\n"
+        . "Warm regards,\n"
+        . "Tools for the Tough Days";
+
+    $htmlGreeting = $firstName !== ''
+        ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+        : 'Hi there,';
+
+    $htmlBody = '<p>' . $htmlGreeting . '</p>'
+        . '<p>We received a request to reset your Tools for the Tough Days password.</p>'
+        . '<p><a href="' . $safeUrl . '">Reset your password</a></p>'
+        . '<p>This link will expire in ' . (int) $expiresMinutes . ' minutes and can only be used once.</p>'
+        . '<p>If you did not request this, you can ignore this email.</p>'
+        . '<p>Warm regards,<br>Tools for the Tough Days</p>';
+
+    return send_transactional_email($toEmail, $subject, $body, $htmlBody);
+}
+
 function send_subscription_email(
     string $toEmail,
     ?string $fullName,
