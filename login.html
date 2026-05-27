@@ -522,7 +522,7 @@
       </div>
 
       <div class="forgot-row">
-        <a href="mailto:support@toolsforthetoughdays.com.au?subject=Password+Reset+Request">Forgot your password?</a>
+        <a href="/forgot-password.html">Forgot your password?</a>
       </div>
 
       <div class="check-row">
@@ -586,7 +586,7 @@
 
       if (valid) {
         const btn = document.getElementById('btnSignIn');
-        btn.textContent = 'Signing in?;
+        btn.textContent = 'Signing in...';
         btn.disabled = true;
 
           fetch('/api/auth.php?action=login', {

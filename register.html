@@ -298,7 +298,7 @@
       if (!valid) return;
 
       const btn = document.getElementById('btnRegister');
-      btn.textContent = 'Creating account?;
+      btn.textContent = 'Creating account...';
       btn.disabled = true;
 
       try {
@@ -327,7 +327,7 @@
           window.location.href = redirect;
         }
       } catch {
-        alertEl.textContent = 'Network error ?please check your connection and try again.';
+        alertEl.textContent = 'Network error, please check your connection and try again.';
         alertEl.style.display = 'block';
         btn.textContent = 'Create Account';
         btn.disabled = false;

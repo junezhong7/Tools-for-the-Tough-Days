@@ -461,7 +461,7 @@
     }
 
     function fmtDate(dt) {
-      if (!dt) return '?;
+      if (!dt) return '-';
       return new Date(dt).toLocaleDateString('en-AU', { timeZone: APP_TIMEZONE, day: 'numeric', month: 'short', year: 'numeric' });
     }
 
@@ -586,7 +586,7 @@
         <tbody>
           ${payments.map(p => `<tr>
             <td>${fmtDate(p.created_at)}</td>
-            <td>${p.description || '?}</td>
+            <td>${p.description || '-'}</td>
             <td>$${p.amount} AUD</td>
             <td><span class="pay-status ${p.status}">${p.status}</span></td>
           </tr>`).join('')}
@@ -739,14 +739,14 @@
       side.innerHTML = `
         <div class="mood-side-title">Selected Day</div>
         <div class="mood-detail-date">${selectedDateLabel}</div>
-        <div class="mood-detail-score">${score || '?}</div>
+        <div class="mood-detail-score">${score || '-'}</div>
 
         <div class="mood-side-title" style="margin-top:4px;">Last 30 Days</div>
         <div class="mood-summary">
           <div class="mood-kpi"><div class="mood-kpi-label">Check-ins</div><div class="mood-kpi-value">${summary.total_checkins_30 || 0}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Average</div><div class="mood-kpi-value">${summary.avg_score_30 ?? '?}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Lowest</div><div class="mood-kpi-value">${summary.min_score_30 ?? '?}</div></div>
-          <div class="mood-kpi"><div class="mood-kpi-label">Highest</div><div class="mood-kpi-value">${summary.max_score_30 ?? '?}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Average</div><div class="mood-kpi-value">${summary.avg_score_30 ?? '-'}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Lowest</div><div class="mood-kpi-value">${summary.min_score_30 ?? '-'}</div></div>
+          <div class="mood-kpi"><div class="mood-kpi-label">Highest</div><div class="mood-kpi-value">${summary.max_score_30 ?? '-'}</div></div>
         </div>
 
         <div class="mood-side-title">Follow-up Alerts</div>
@@ -902,7 +902,7 @@
     async function cancelSub(subId, btn) {
       if (!confirm('Are you sure? Your subscription will remain active until the end of the billing period.')) return;
       btn.disabled = true;
-      btn.textContent = 'Cancelling?;
+      btn.textContent = 'Cancelling...';
       const res = await fetch('/api/subscriptions.php?action=cancel', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
@@ -914,7 +914,7 @@
 
     async function resumeSub(subId, btn) {
       btn.disabled = true;
-      btn.textContent = 'Resuming?;
+      btn.textContent = 'Resuming...';
       const res = await fetch('/api/subscriptions.php?action=resume', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subscription_id: subId }), credentials: 'same-origin',
@@ -946,7 +946,7 @@
       if (newPw !== confirm) { showToast('New passwords do not match.'); confirmEl.focus(); return; }
 
       btn.disabled = true;
-      btn.textContent = 'Updating?;
+      btn.textContent = 'Updating...';
 
       try {
         const res = await fetch('/api/auth.php?action=change-password', {
@@ -992,7 +992,7 @@
       }
 
       btn.disabled = true;
-      btn.textContent = 'Deleting?;
+      btn.textContent = 'Deleting...';
 
       try {
         const res = await fetch('/api/auth.php?action=delete-account', {
