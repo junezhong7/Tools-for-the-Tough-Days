@@ -77,8 +77,9 @@
     padding: 0 40px; display: flex; align-items: center; justify-content: space-between;
     height: 64px; position: sticky; top: 0; z-index: 100;
   }
-  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); }
-  .nav-logo span { color: var(--teal); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
@@ -498,7 +499,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Tools for the <span>Tough Days</span></div>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO - V2.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="support.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>

@@ -7,6 +7,8 @@
  * POST /api/auth.php?action=logout
  * POST /api/auth.php?action=delete-account
  * POST /api/auth.php?action=change-password
+ * POST /api/auth.php?action=request-password-reset
+ * POST /api/auth.php?action=reset-password
  * GET  /api/auth.php?action=me
  */
 
@@ -15,6 +17,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/mailer.php';
+require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -50,6 +53,12 @@ switch ($action) {
         break;
     case 'change-password':
         handle_change_password($body);
+        break;
+    case 'request-password-reset':
+        handle_request_password_reset($body);
+        break;
+    case 'reset-password':
+        handle_reset_password($body);
         break;
     case 'me':
         handle_me();
@@ -318,6 +327,154 @@ function handle_change_password(array $body): never
 }
 
 // ─────────────────────────────────────────────
+// REQUEST PASSWORD RESET
+// ─────────────────────────────────────────────
+function handle_request_password_reset(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $email = strtolower(trim((string) ($body['email'] ?? '')));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        json_error(422, 'INVALID_EMAIL', 'Please enter a valid email address.');
+    }
+
+    $genericResponse = [
+        'message' => 'If the email exists, a password reset link has been sent.',
+    ];
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT id, email, full_name, status
+             FROM users
+             WHERE email = ?
+             LIMIT 1'
+        );
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+
+        if (!$user || (string) ($user['status'] ?? '') === 'suspended') {
+            usleep(random_int(100_000, 250_000));
+            json_ok($genericResponse);
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $tokenHash = hash('sha256', $token);
+        $userId = (int) $user['id'];
+        $expiresMinutes = password_reset_ttl_minutes();
+        $expiresAt = date('Y-m-d H:i:s', time() + ($expiresMinutes * 60));
+
+        db()->prepare(
+            'UPDATE password_reset_tokens
+             SET used_at = NOW()
+             WHERE user_id = ? AND used_at IS NULL'
+        )->execute([$userId]);
+
+        db()->prepare(
+            'INSERT INTO password_reset_tokens (token_hash, user_id, requested_ip, user_agent, expires_at)
+             VALUES (?, ?, ?, ?, ?)'
+        )->execute([
+            $tokenHash,
+            $userId,
+            client_ip_address(),
+            client_user_agent(),
+            $expiresAt,
+        ]);
+
+        $resetLink = rtrim((string) SITE_URL, '/') . '/forgot-password.html?token=' . urlencode($token);
+
+        try {
+            send_password_reset_email(
+                (string) $user['email'],
+                $user['full_name'] ? (string) $user['full_name'] : null,
+                $resetLink,
+                $expiresMinutes
+            );
+        } catch (Throwable $mailErr) {
+            error_log('password reset email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        audit('user.password_reset_requested', $userId);
+        json_ok($genericResponse);
+    } catch (Throwable $e) {
+        error_log('request password reset error: ' . $e->getMessage());
+        json_ok($genericResponse);
+    }
+}
+
+// ─────────────────────────────────────────────
+// RESET PASSWORD BY TOKEN
+// ─────────────────────────────────────────────
+function handle_reset_password(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $token = trim((string) ($body['token'] ?? ''));
+    $newPassword = (string) ($body['new_password'] ?? '');
+
+    if ($token === '') {
+        json_error(422, 'MISSING_TOKEN', 'Reset token is required.');
+    }
+
+    if (strlen($newPassword) < 8) {
+        json_error(422, 'WEAK_PASSWORD', 'New password must be at least 8 characters.');
+    }
+
+    $tokenHash = hash('sha256', $token);
+
+    try {
+        db()->beginTransaction();
+
+        $stmt = db()->prepare(
+            'SELECT prt.token_hash, prt.user_id, u.status
+             FROM password_reset_tokens prt
+             JOIN users u ON u.id = prt.user_id
+             WHERE prt.token_hash = ?
+               AND prt.used_at IS NULL
+               AND prt.expires_at > NOW()
+             LIMIT 1
+             FOR UPDATE'
+        );
+        $stmt->execute([$tokenHash]);
+        $row = $stmt->fetch();
+
+        if (!$row || (string) ($row['status'] ?? '') === 'suspended') {
+            db()->rollBack();
+            usleep(random_int(120_000, 280_000));
+            json_error(400, 'INVALID_OR_EXPIRED_TOKEN', 'This reset link is invalid or expired.');
+        }
+
+        $userId = (int) $row['user_id'];
+        $newHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+
+        db()->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$newHash, $userId]);
+
+        db()->prepare(
+            'UPDATE password_reset_tokens
+             SET used_at = NOW()
+             WHERE user_id = ? AND used_at IS NULL'
+        )->execute([$userId]);
+
+        db()->prepare('DELETE FROM user_sessions WHERE user_id = ?')->execute([$userId]);
+
+        db()->commit();
+        audit('user.password_reset_completed', $userId);
+
+        json_ok(['message' => 'Password has been reset. You can now sign in.']);
+    } catch (Throwable $e) {
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
+
+        error_log('reset password error: ' . $e->getMessage());
+        json_error(500, 'SERVER_ERROR', 'Could not reset password. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
 // ME  (current user info)
 // ─────────────────────────────────────────────
 function handle_me(): never
@@ -365,6 +522,32 @@ function normalize_bool(mixed $value): bool
     }
 
     return false;
+}
+
+function password_reset_ttl_minutes(): int
+{
+    $ttl = (int) (getenv('PASSWORD_RESET_TTL_MIN') ?: 60);
+    return max(10, min($ttl, 180));
+}
+
+function client_ip_address(): ?string
+{
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ($_SERVER['REMOTE_ADDR'] ?? null);
+    if (!$ip) {
+        return null;
+    }
+
+    return trim(explode(',', $ip)[0]);
+}
+
+function client_user_agent(): ?string
+{
+    $ua = trim((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+    if ($ua === '') {
+        return null;
+    }
+
+    return substr($ua, 0, 512);
 }
 
 function cancel_active_stripe_subscriptions_or_fail(int $userId): void

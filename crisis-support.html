@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -52,8 +52,9 @@
 
     /* NAV */
     nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-    .nav-logo span { color: var(--teal); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
     .nav-links { display: flex; align-items: center; gap: 16px; }
     .nav-links a,
     .nav-links button {
@@ -165,7 +166,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO - V2.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="support.html">→Back to resources</a>
     <a href="login.html" id="navSignIn" class="nav-login">Sign In</a>
@@ -264,7 +265,7 @@
   <div class="talk-inner">
     <h2>Prefer to speak with someone from our team?</h2>
     <p>Our staff at Tools for the Tough Days include Registered Psychologists and Registered Counsellors. If you'd prefer to talk with someone directly, you can book a session through the platform. Sessions are private, confidential, and available at short notice.</p>
-    <a href="booking.html" class="btn-teal">Book a session →</a>
+    <a href="booking.html" class="btn-teal">Book a session </a>
     <p style="font-size: 13px; color: var(--warm-grey); margin-top: 8px;">$130/30 mins, $220/hour</p>
   </div>
 </div>
@@ -279,8 +280,8 @@
 
       <div class="resource-card">
         <span class="resource-emoji"></span>
-        <div class="resource-title">What to Do When You're in Crisis — Your First Steps</div>
-        <p class="resource-desc">When everything feels overwhelming and you don't know where to start — practical, immediate steps to help you get through the next few minutes.</p>
+        <div class="resource-title">What to Do When You're in Crisis ?Your First Steps</div>
+        <p class="resource-desc">When everything feels overwhelming and you don't know where to start ?practical, immediate steps to help you get through the next few minutes.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -290,7 +291,7 @@
       <div class="resource-card">
         <span class="resource-emoji"></span>
         <div class="resource-title">Grounding Yourself When Everything Feels Overwhelming</div>
-        <p class="resource-desc">Simple, immediate grounding steps you can use right now to feel a little steadier — even when everything feels like too much.</p>
+        <p class="resource-desc">Simple, immediate grounding steps you can use right now to feel a little steadier ?even when everything feels like too much.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -298,8 +299,8 @@
       </div>
 
       <div class="resource-card">
-        <div class="resource-title">Getting Through the Next Hour — Simple Steps for Hard Moments</div>
-        <p class="resource-desc">When the only goal is getting through the next hour — a clear, manageable path through a really hard moment.</p>
+        <div class="resource-title">Getting Through the Next Hour ?Simple Steps for Hard Moments</div>
+        <p class="resource-desc">When the only goal is getting through the next hour ?a clear, manageable path through a really hard moment.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -312,7 +313,7 @@
 
 <!-- RETURN -->
 <div class="return-section">
-  <p>Feeling a bit steadier? <a href="support.html">Return to the full resource library →</a></p>
+  <p>Feeling a bit steadier? <a href="support.html">Return to the full resource library </a></p>
 </div>
 
 <!-- FOOTER -->
