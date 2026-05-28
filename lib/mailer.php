@@ -65,7 +65,8 @@ function send_password_reset_email(
         . "This link will expire in {$expiresMinutes} minutes and can only be used once.\n\n"
         . "If you did not request this, you can ignore this email.\n\n"
         . "Warm regards,\n"
-        . "Tools for the Tough Days";
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
 
     $htmlGreeting = $firstName !== ''
         ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
@@ -76,7 +77,7 @@ function send_password_reset_email(
         . '<p><a href="' . $safeUrl . '">Reset your password</a></p>'
         . '<p>This link will expire in ' . (int) $expiresMinutes . ' minutes and can only be used once.</p>'
         . '<p>If you did not request this, you can ignore this email.</p>'
-        . '<p>Warm regards,<br>Tools for the Tough Days</p>';
+        . '<p>Warm regards,<br>Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
 
     return send_transactional_email($toEmail, $subject, $body, $htmlBody);
 }
@@ -115,7 +116,8 @@ function send_subscription_email(
             . $periodLine
             . "Thank you for continuing with us.\n\n"
             . "Warmly,\n"
-            . "Tools for the Tough Days";
+            . "Tools for the Tough Days\n"
+            . "www.toolsforthetoughdays.com.au";
     } else {
         $videoUrl = 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQC5aZu51NRPRIwA-NbnwgPyAVzxFltV33r9xK1zbLZ7CE4?e=zwyljM';
         $subject = 'Welcome to Tools for the Tough Days';
