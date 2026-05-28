@@ -13,7 +13,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/db.php';
 
 const SESSION_COOKIE  = 'tttd_session';
-const SESSION_TTL_SEC = 60 * 60 * 24 * 30; // 30 days
+const SESSION_IDLE_TTL_SEC = 60 * 60 * 6; // 6 hours of inactivity
 
 /**
  * Returns the authenticated user row, or sends a 401 response and exits.
@@ -52,6 +52,8 @@ function current_user(): ?array
             return null;
         }
 
+        refresh_session_activity($token);
+
         return $row;
     } catch (Throwable $e) {
         error_log('current_user() error: ' . $e->getMessage());
@@ -65,7 +67,7 @@ function current_user(): ?array
 function create_session(int $userId): string
 {
     $token     = bin2hex(random_bytes(32)); // 64 hex chars
-    $expiresAt = date('Y-m-d H:i:s', time() + SESSION_TTL_SEC);
+    $expiresAt = date('Y-m-d H:i:s', time() + SESSION_IDLE_TTL_SEC);
 
     $ip        = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ($_SERVER['REMOTE_ADDR'] ?? null);
     if ($ip) {
@@ -77,19 +79,42 @@ function create_session(int $userId): string
         'INSERT INTO user_sessions (id, user_id, ip_address, user_agent, expires_at) VALUES (?, ?, ?, ?, ?)'
     )->execute([$token, $userId, $ip, $ua, $expiresAt]);
 
+    set_session_cookie($token, time() + SESSION_IDLE_TTL_SEC);
+
+    return $token;
+}
+
+/**
+ * Refreshes session activity timestamp and sliding expiry.
+ */
+function refresh_session_activity(string $token): void
+{
+    $expiresAt = date('Y-m-d H:i:s', time() + SESSION_IDLE_TTL_SEC);
+
+    db()->prepare(
+        'UPDATE user_sessions
+         SET last_active = NOW(), expires_at = ?
+         WHERE id = ? AND expires_at > NOW()'
+    )->execute([$expiresAt, $token]);
+
+    set_session_cookie($token, time() + SESSION_IDLE_TTL_SEC);
+}
+
+/**
+ * Sets the authenticated session cookie with secure defaults.
+ */
+function set_session_cookie(string $token, int $expiresAtUnix): void
+{
     $secure   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
                 || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
-    $sameSite = 'Lax';
 
     setcookie(SESSION_COOKIE, $token, [
-        'expires'  => time() + SESSION_TTL_SEC,
+        'expires'  => $expiresAtUnix,
         'path'     => '/',
         'secure'   => $secure,
         'httponly' => true,
-        'samesite' => $sameSite,
+        'samesite' => 'Lax',
     ]);
-
-    return $token;
 }
 
 /**
