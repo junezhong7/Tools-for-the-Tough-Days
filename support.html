@@ -143,17 +143,22 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .topic-modal-overlay.show { display: flex; }
     .topic-modal {
       width: 100%;
       max-width: 520px;
+      max-height: calc(100vh - 40px);
       background: var(--white);
       border-radius: 14px;
       border: 1px solid var(--border);
       box-shadow: 0 14px 40px rgba(42,40,37,0.16);
       padding: 24px;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
     .topic-modal-close {
       position: absolute;
@@ -182,6 +187,8 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
+      overflow-y: auto;
+      padding-right: 2px;
     }
     .topic-option {
       border: 1px solid var(--border);
@@ -405,6 +412,9 @@
       .hero { padding: calc(var(--hero-space-top) - 8px) 20px calc(var(--hero-space-bottom) - 6px); }
       .content-section { padding: var(--section-space-mobile) 20px; }
       .trust-strip, .what-strip { padding: 28px 20px; }
+      .topic-modal-overlay { align-items: flex-start; padding: 12px; }
+      .topic-modal { max-height: calc(100vh - 24px); padding: 20px 16px 16px; }
+      .cat-nav { grid-template-columns: 1fr; }
       .resource-grid { grid-template-columns: 1fr; }
       .what-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
