@@ -36,7 +36,7 @@ function send_registration_welcome_email(string $toEmail, ?string $fullName = nu
         . "Nic Marcon\n"
         . "Registered Psychologist\n"
         . "Tools for the Tough Days\n"
-        . "toolsforthetoughdays.com.au";
+        . "www.toolsforthetoughdays.com.au";
 
     return send_transactional_email($toEmail, $subject, $body);
 }
@@ -131,7 +131,7 @@ function send_subscription_email(
             . "Nic Marcon\n"
             . "Registered Psychologist\n"
             . "Tools for the Tough Days\n"
-            . "toolsforthetoughdays.com.au";
+            . "www.toolsforthetoughdays.com.au";
 
         $htmlGreeting = $firstName !== ''
             ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
@@ -148,7 +148,7 @@ function send_subscription_email(
             . 'Nic Marcon<br>'
             . 'Registered Psychologist<br>'
             . 'Tools for the Tough Days<br>'
-            . 'toolsforthetoughdays.com.au</p>';
+            . 'www.toolsforthetoughdays.com.au</p>';
     }
 
     return send_transactional_email($toEmail, $subject, $body, $htmlBody);
