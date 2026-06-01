@@ -9,7 +9,7 @@
 
   function getRedirectTarget() {
     var params = new URLSearchParams(window.location.search);
-    return params.get('redirect') || '/dashboard.html';
+    return params.get('redirect') || '/support.html';
   }
 
   function getCurrentPathWithQuery() {
