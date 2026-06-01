@@ -610,7 +610,8 @@
               btn.disabled = false;
             } else {
               // Redirect to dashboard (or the page they came from)
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
+              sessionStorage.setItem('showWelcomeAfterLogin', '1');
+              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
               window.location.href = redirect;
             }
           })
