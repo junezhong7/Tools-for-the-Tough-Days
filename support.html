@@ -100,6 +100,14 @@
     cursor: pointer; font-weight: 500; transition: background 0.15s;
   }
   .mood-submit:hover { background: var(--teal-hover); }
+  .mood-submit.is-processing {
+    background: #2d8b8f;
+    box-shadow: 0 0 0 3px rgba(200, 240, 242, 0.22);
+  }
+  .mood-submit:disabled {
+    cursor: wait;
+    opacity: 0.95;
+  }
   .crisis-alert {
     display: none; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis);
     border-radius: 10px; padding: 14px 18px; margin-top: 14px; margin-bottom: 14px;
@@ -515,7 +523,7 @@
           <h4>It sounds like things are really tough right now.</h4>
           <p>Please click the button below to access some important information.</p>
         </div>
-        <button class="mood-submit" id="mood-btn" onclick="submitMood()">Show me what's available </button>
+        <button class="mood-submit" id="mood-btn" onclick="submitMood()">Check in and show me what's available </button>
       </div>
     </div>
   </section>
@@ -1374,7 +1382,7 @@
       btn.textContent = 'Access important information';
     } else {
       alert.classList.remove('show');
-      btn.textContent = 'Show me what\'s available';
+      btn.textContent = 'Check in and show me what\'s available';
     }
   }
 
@@ -1403,13 +1411,37 @@
 
   function submitMood() {
     const val = parseInt(document.getElementById('mood-slider').value);
-    logMoodSubmission(val);
-    if (val <= 2) {
-      window.location.href = 'crisis-support.html';
-    } else {
-      const target = document.getElementById('browse-topics') || document.querySelector('.content-section');
-      if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    const btn = document.getElementById('mood-btn');
+
+    if (btn && btn.disabled) {
+      return;
     }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('is-processing');
+      btn.textContent = 'Saving your check-in...';
+    }
+
+    logMoodSubmission(val);
+
+    setTimeout(function () {
+      if (val <= 2) {
+        window.location.href = 'crisis-support.html';
+        return;
+      }
+
+      const target = document.getElementById('browse-topics') || document.querySelector('.content-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      if (btn) {
+        btn.classList.remove('is-processing');
+        btn.disabled = false;
+        btn.textContent = 'Check in and show me what\'s available';
+      }
+    }, 450);
   }
 
   (function hideFreeResourcesForSubscribedUsers() {
