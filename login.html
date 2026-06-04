@@ -435,7 +435,7 @@
   <aside class="panel-left">
     <div class="brand-area">
       <img
-        src="data/TOUGH DAYS_LOGO - V2.png"
+        src="data/TOUGH DAYS_LOGO.png"
         alt="Tools for the Tough Days"
         style="height:72px; display:block;"
       />
@@ -480,7 +480,7 @@
       <!-- mobile logo -->
       <div class="mobile-logo">
         <img
-          src="data/TOUGH DAYS_LOGO - V2.png"
+          src="data/TOUGH DAYS_LOGO.png"
           alt="Tools for the Tough Days"
         />
       </div>
@@ -610,7 +610,8 @@
               btn.disabled = false;
             } else {
               // Redirect to dashboard (or the page they came from)
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
+              sessionStorage.setItem('showWelcomeAfterLogin', '1');
+              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
               window.location.href = redirect;
             }
           })

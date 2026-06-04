@@ -1,5 +1,5 @@
 /**
- * nav-mobile.js — hamburger menu for mobile viewports (≤ 700 px)
+ * nav-mobile.js — hamburger menu for mobile viewports (≤ 800 px)
  * Include this script in every page that has the standard <nav> structure.
  */
 (function () {
@@ -16,10 +16,11 @@
     '.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}',
 
     /* mobile overrides */
-    '@media(max-width:700px){',
-    '  html,body{overflow-x:hidden;}',
+    '@media(max-width:800px){',
     '  .nav-hamburger{display:flex;}',
     '  nav{position:relative;}',
+    '  .nav-logo-text{display:none!important;}',
+    '  .nav-logo img{height:50px;}',
     /* hide horizontal links */
     '  .nav-links{',
     '    display:none;flex-direction:column;',

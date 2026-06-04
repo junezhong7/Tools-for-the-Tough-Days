@@ -100,6 +100,54 @@
     cursor: pointer; font-weight: 500; transition: background 0.15s;
   }
   .mood-submit:hover { background: var(--teal-hover); }
+  .mood-submit.is-processing {
+    background: #2d8b8f;
+    box-shadow: 0 0 0 3px rgba(200, 240, 242, 0.22);
+  }
+  .mood-submit:disabled {
+    cursor: wait;
+    opacity: 0.95;
+  }
+  .checkin-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.94);
+    width: min(92vw, 620px);
+    background: linear-gradient(145deg, #26777B 0%, #1e5f63 55%, #1a4e52 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 28px 56px rgba(15, 32, 34, 0.36);
+    padding: 26px 30px;
+    z-index: 1100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    text-align: center;
+    font-size: clamp(16px, 2.1vw, 20px);
+    line-height: 1.45;
+  }
+  .checkin-toast.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+  }
+  .checkin-toast.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.94);
+    pointer-events: none;
+  }
+  .checkin-toast a {
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .checkin-toast a:hover {
+    color: #d7f1f3;
+    border-bottom-color: rgba(215, 241, 243, 0.75);
+  }
   .crisis-alert {
     display: none; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis);
     border-radius: 10px; padding: 14px 18px; margin-top: 14px; margin-bottom: 14px;
@@ -143,17 +191,22 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .topic-modal-overlay.show { display: flex; }
     .topic-modal {
       width: 100%;
       max-width: 520px;
+      max-height: calc(100vh - 40px);
       background: var(--white);
       border-radius: 14px;
       border: 1px solid var(--border);
       box-shadow: 0 14px 40px rgba(42,40,37,0.16);
       padding: 24px;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
     .topic-modal-close {
       position: absolute;
@@ -182,6 +235,8 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
+      overflow-y: auto;
+      padding-right: 2px;
     }
     .topic-option {
       border: 1px solid var(--border);
@@ -399,16 +454,68 @@
     .crisis-nav-btn { background: var(--red-crisis); color: #fff; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
     .crisis-nav-btn:hover { background: #a93226; color: #fff; }
 
+    .welcome-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: min(92vw, 620px);
+      background: linear-gradient(145deg, #f8f7f3 0%, #ffffff 100%);
+      color: var(--teal-dark);
+      border: 1px solid rgba(26, 78, 82, 0.18);
+      border-radius: 18px;
+      box-shadow: 0 28px 56px rgba(15, 32, 34, 0.28);
+      padding: 26px 30px;
+      z-index: 1001;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.94);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      text-align: center;
+    }
+    .welcome-popup.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .welcome-popup.fade-out {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.94);
+    }
+    .welcome-popup-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+    }
+    .welcome-popup-copy {
+      font-size: clamp(16px, 2.1vw, 20px);
+      line-height: 1.45;
+      color: var(--warm-grey);
+    }
+
     /* RESPONSIVE */
     @media (max-width: 800px) {
       nav { padding: 0 16px; }
       .hero { padding: calc(var(--hero-space-top) - 8px) 20px calc(var(--hero-space-bottom) - 6px); }
       .content-section { padding: var(--section-space-mobile) 20px; }
       .trust-strip, .what-strip { padding: 28px 20px; }
+      .topic-modal-overlay { align-items: flex-start; padding: 12px; }
+      .topic-modal { max-height: calc(100vh - 24px); padding: 20px 16px 16px; }
+      .cat-nav { grid-template-columns: 1fr; }
       .resource-grid { grid-template-columns: 1fr; }
       .what-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
       footer { padding: 24px 16px; flex-direction: column; text-align: center; }
+      .welcome-popup {
+        width: calc(100vw - 24px);
+        padding: 22px 18px;
+        border-radius: 14px;
+      }
+      .checkin-toast {
+        width: calc(100vw - 24px);
+        padding: 22px 18px;
+        border-radius: 14px;
+      }
     }
   </style>
 </head>
@@ -422,7 +529,7 @@
   </div>
 
   <nav>
-    <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO - V2.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
+    <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
     <div class="nav-links">
       <a href="index.html">For Personal Life</a>
       <a href="business.html">For Workplaces</a>
@@ -433,6 +540,15 @@
       <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
     </div>
   </nav>
+
+  <div class="welcome-popup" id="welcomePopup" role="status" aria-live="polite" style="display:none;">
+    <div class="welcome-popup-title" id="welcomePopupTitle">Welcome back</div>
+    <div class="welcome-popup-copy">Great to see you.</div>
+  </div>
+
+  <div class="checkin-toast" id="checkinToast" role="status" aria-live="polite">
+    Thanks for checking in. Your score is saved and available in the Mood Tracker on your <a href="/dashboard.html">Dashboard</a>.
+  </div>
 
   <section class="hero">
     <div class="hero-texture"></div>
@@ -456,7 +572,7 @@
           <h4>It sounds like things are really tough right now.</h4>
           <p>Please click the button below to access some important information.</p>
         </div>
-        <button class="mood-submit" id="mood-btn" onclick="submitMood()">Show me what's available </button>
+        <button class="mood-submit" id="mood-btn" onclick="submitMood()">Check in and show me what's available </button>
       </div>
     </div>
   </section>
@@ -609,7 +725,7 @@
           </div>
         </div>
         <a href="booking.html" class="cta-link">Or book a free 15-min call with Nic first </a>
-        <p class="growing-note"> The library grows regularly ?new resources added every month</p>
+        <p class="growing-note"> The library grows regularly - new resources added every month</p>
       </div>
 
     </div>
@@ -630,8 +746,8 @@
     <div class="what-inner">
       <h3>What you get with a subscription</h3>
       <div class="what-grid">
-        <div class="what-card"><div class="w-icon"></div><h4>240+ PDF guides</h4><p>Clinically reviewed ?covering 20+ problem areas, growing every month</p></div>
-        <div class="what-card"><div class="w-icon"></div><h4>130+ MP4 guides</h4><p>Watch or listen on the go ?same support when reading isn't convenient</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>240+ PDF guides</h4><p>Clinically reviewed - covering 20+ problem areas, growing every month</p></div>
+        <div class="what-card"><div class="w-icon"></div><h4>130+ MP4 guides</h4><p>Watch or listen on the go - same support when reading isn't convenient</p></div>
         <div class="what-card"><div class="w-icon"></div><h4>Book with Nic</h4><p>Access to Nic's calendar directly through the platform</p></div>
         <div class="what-card"><div class="w-icon"></div><h4>Completely private</h4><p>No employer access, no data sharing - just you and the resources</p></div>
       </div>
@@ -645,7 +761,7 @@
       <h2 style="font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;margin-bottom:12px;line-height:1.2;">New resources added <em style="color:var(--teal);font-style:italic;">every month.</em></h2>
       <p style="font-size:15px;color:var(--warm-grey);line-height:1.7;margin-bottom:28px;">Subscribe to hear when new clinically-reviewed resources are released. One email. No spam. Unsubscribe any time.</p>
       <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" style="display:inline-block;background:var(--teal);color:#fff;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif;">Subscribe Newsletter</a>
-      <p style="font-size:11px;color:var(--warm-grey);margin-top:12px;">Stored securely ?never shared. <a href="privacy-policy.html" style="color:var(--teal);text-decoration:none;">Privacy Policy</a>.</p>
+      <p style="font-size:11px;color:var(--warm-grey);margin-top:12px;">Stored securely - never shared. <a href="privacy-policy.html" style="color:var(--teal);text-decoration:none;">Privacy Policy</a>.</p>
     </div>
   </section>
 
@@ -698,27 +814,27 @@
           <p class="res-body">Grounding is the process of bringing your attention back to the present moment and your physical surroundings. It doesn't fix the problem. But it can bring you back to a place where you can think, breathe, and take a next step.</p>
 
           <div class="res-section-title">Why it helps</div>
-          <p class="res-body">When you're overwhelmed, the part of your brain responsible for rational thinking gets bypassed by the part that manages threat responses. Grounding techniques work by activating your senses ?giving your brain something concrete to focus on. This slows the stress response and allows the thinking part of your brain to come back online.</p>
+          <p class="res-body">When you're overwhelmed, the part of your brain responsible for rational thinking gets bypassed by the part that manages threat responses. Grounding techniques work by activating your senses - giving your brain something concrete to focus on. This slows the stress response and allows the thinking part of your brain to come back online.</p>
           <p class="res-body">You don't need to believe it will work. You just need to do it.</p>
 
           <div class="res-section-title">What to do - the 5-4-3-2-1 method</div>
           <p class="res-body">Wherever you are right now, go slowly through each of these steps. Say the answers out loud if you can.</p>
           <ul class="res-list">
-            <li><strong>5 things you can see.</strong> Look around slowly. Name five things in your environment ?a chair, a crack in the wall, your own hands.</li>
+            <li><strong>5 things you can see.</strong> Look around slowly. Name five things in your environment - a chair, a crack in the wall, your own hands.</li>
             <li><strong>4 things you can physically feel.</strong> The weight of your body on the seat. The texture of your clothing. Your feet on the floor. The temperature of the air.</li>
-            <li><strong>3 things you can hear.</strong> Listen carefully. Distant sounds count ?traffic, a fan, your own breathing.</li>
-            <li><strong>2 things you can smell.</strong> If nothing is obvious, move closer to something ?your sleeve, the air near a window.</li>
+            <li><strong>3 things you can hear.</strong> Listen carefully. Distant sounds count - traffic, a fan, your own breathing.</li>
+            <li><strong>2 things you can smell.</strong> If nothing is obvious, move closer to something - your sleeve, the air near a window.</li>
             <li><strong>1 thing you can taste.</strong> Notice whatever is present in your mouth right now.</li>
           </ul>
 
           <div class="res-section-title">Slow your breathing</div>
-          <p class="res-body">After the 5-4-3-2-1, try this breathing pattern: breathe in for 4 counts, hold for 2, breathe out slowly for 6. The longer exhale is important ?it activates the part of your nervous system responsible for calm. Repeat this four or five times.</p>
+          <p class="res-body">After the 5-4-3-2-1, try this breathing pattern: breathe in for 4 counts, hold for 2, breathe out slowly for 6. The longer exhale is important - it activates the part of your nervous system responsible for calm. Repeat this four or five times.</p>
 
           <div class="res-section-title">Other grounding approaches</div>
           <ul class="res-list">
             <li><strong>Hold something cold or textured.</strong> Ice, a stone, or even just your keys. Physical sensation anchors you in the present.</li>
             <li><strong>Plant your feet firmly on the floor</strong> and press them down. Notice the solidity beneath you.</li>
-            <li><strong>Name your surroundings.</strong> Quietly describe the room you're in ?colour, size, what's in it.</li>
+            <li><strong>Name your surroundings.</strong> Quietly describe the room you're in - colour, size, what's in it.</li>
             <li><strong>Splash cold water on your face or wrists.</strong> This activates the diving reflex and slows heart rate quickly.</li>
           </ul>
 
@@ -749,22 +865,22 @@
 
           <div class="res-section-title">What's happening</div>
           <p class="res-body">Anxiety is your body's alarm system. It is not a character flaw, a sign of weakness, or something you invented. It is a deeply wired biological response designed to protect you - and for most of human history, it did exactly that.</p>
-          <p class="res-body">The problem is that your nervous system cannot easily tell the difference between a genuine physical threat and a stressful thought about the future. So it responds the same way to both ?flooding your body with the same chemicals, triggering the same physical sensations, even when there is no actual danger in the room.</p>
+          <p class="res-body">The problem is that your nervous system cannot easily tell the difference between a genuine physical threat and a stressful thought about the future. So it responds the same way to both - flooding your body with the same chemicals, triggering the same physical sensations, even when there is no actual danger in the room.</p>
 
-          <div class="res-section-title">What anxiety is actually doing ?physically</div>
+          <div class="res-section-title">What anxiety is actually doing - physically</div>
           <p class="res-body">When your brain detects a threat (real or perceived), it triggers a cascade of physical changes through the release of adrenaline and cortisol. Understanding each one can reduce how frightening they feel:</p>
           <ul class="res-list">
-            <li><strong>Racing heart.</strong> Your heart pumps faster to move blood to your muscles, preparing you to run or fight. It is not a heart attack ?it is your body gearing up.</li>
-            <li><strong>Tight chest or difficulty breathing.</strong> Your breathing becomes shallow and fast to take in more oxygen quickly. This is why slow breathing helps ?it signals to your brain that the threat is passing.</li>
+            <li><strong>Racing heart.</strong> Your heart pumps faster to move blood to your muscles, preparing you to run or fight. It is not a heart attack - it is your body gearing up.</li>
+            <li><strong>Tight chest or difficulty breathing.</strong> Your breathing becomes shallow and fast to take in more oxygen quickly. This is why slow breathing helps - it signals to your brain that the threat is passing.</li>
             <li><strong>Shaking or trembling.</strong> Muscles tense and prepare for action. The trembling is excess energy with nowhere to go.</li>
             <li><strong>Sweating.</strong> Your body temperature rises with the increased effort, so cooling begins.</li>
             <li><strong>Nausea or an unsettled stomach.</strong> Digestion is non-essential in an emergency, so blood flow is redirected away from the gut. This is why anxiety often sits in the stomach.</li>
-            <li><strong>Dizziness or feeling detached.</strong> Blood flow changes can cause lightheadedness. The detached feeling ?like watching yourself from outside ?is your brain's protective response to overwhelming input.</li>
+            <li><strong>Dizziness or feeling detached.</strong> Blood flow changes can cause lightheadedness. The detached feeling - like watching yourself from outside - is your brain's protective response to overwhelming input.</li>
             <li><strong>Racing thoughts.</strong> Your brain scans rapidly for threats and solutions. This is useful in a genuine emergency. In everyday anxiety, it creates a loop of worry that is hard to switch off.</li>
           </ul>
 
           <div class="res-section-title">Why it keeps happening</div>
-          <p class="res-body">Anxiety feeds on avoidance. When you avoid something that makes you anxious, your brain learns that the thing was dangerous ?because you escaped it. This keeps the alarm system sensitive and makes anxiety grow over time. Gradual, gentle exposure ?staying with discomfort rather than fleeing it ?is one of the most effective ways to retrain the response.</p>
+          <p class="res-body">Anxiety feeds on avoidance. When you avoid something that makes you anxious, your brain learns that the thing was dangerous - because you escaped it. This keeps the alarm system sensitive and makes anxiety grow over time. Gradual, gentle exposure - staying with discomfort rather than fleeing it - is one of the most effective ways to retrain the response.</p>
           <p class="res-body">Chronic stress, poor sleep, high caffeine intake, and lack of physical activity all lower the threshold at which anxiety fires. Small changes in these areas can make a meaningful difference.</p>
 
           <div class="res-section-title">What actually helps</div>
@@ -772,13 +888,13 @@
             <li><strong>Slow your exhale.</strong> Breathe in for 4 counts, hold for 2, out for 6. The long exhale activates your parasympathetic nervous system - the brake on your stress response.</li>
             <li><strong>Name what's happening.</strong> "This is anxiety. My body is doing what it's supposed to do. I am not in danger." Labelling reduces the brain's alarm response.</li>
             <li><strong>Move your body.</strong> Physical activity burns off the stress hormones that anxiety produces. Even a ten-minute walk can significantly reduce symptoms.</li>
-            <li><strong>Don't avoid.</strong> Reducing avoidance is the single most effective long-term strategy. Start small ?approach one thing that makes you mildly anxious.</li>
+            <li><strong>Don't avoid.</strong> Reducing avoidance is the single most effective long-term strategy. Start small - approach one thing that makes you mildly anxious.</li>
             <li><strong>Limit caffeine.</strong> Caffeine directly stimulates adrenaline release. If anxiety is high, cutting back can have a surprisingly quick effect.</li>
             <li><strong>Protect your sleep.</strong> Anxiety and sleep deprivation reinforce each other. Consistent sleep and wake times help regulate your nervous system.</li>
           </ul>
 
           <div class="res-section-title">When to get more help</div>
-          <p class="res-body">If anxiety is affecting your relationships, your work, or stopping you from doing things you want to do ?it is time to speak with someone. Anxiety responds very well to psychological treatment. You do not have to manage this alone, and you do not have to wait until it becomes a crisis.</p>
+          <p class="res-body">If anxiety is affecting your relationships, your work, or stopping you from doing things you want to do - it is time to speak with someone. Anxiety responds very well to psychological treatment. You do not have to manage this alone, and you do not have to wait until it becomes a crisis.</p>
           <p class="res-body">Speak to your GP or a registered psychologist for an assessment and a treatment plan that suits you.</p>
 
           <div class="res-footer">
@@ -804,9 +920,9 @@
           <div class="audio-title">${r.title}</div>
           <div class="audio-byline">Narrated audio · toolsforthetoughdays.com.au · Nic Marcon, Registered Psychologist</div>
           <a href="${r.audioSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;padding:13px 22px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:16px;">
-             Listen on SharePoint ?
+             Listen on SharePoint
           </a>
-          <p class="audio-note">Opens in SharePoint in a new tab ?free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
+          <p class="audio-note">Opens in SharePoint in a new tab - free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
         </div>
         <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:16px 20px;">
           <p style="font-size:13px;color:var(--teal-dark);margin:0 0 10px;">Want more? Subscribe for $10/month and unlock 130+ MP4 guides covering anxiety, relationships, sleep, financial stress, burnout, and more.</p>
@@ -818,7 +934,7 @@
       const pdfBtn = r.pdfSrc
         ? `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
              <a href="${r.pdfSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);color:var(--charcoal);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">
-                Download PDF version ?
+                Download PDF version
              </a>
            </div>`
         : `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--warm-grey);">
@@ -1315,7 +1431,7 @@
       btn.textContent = 'Access important information';
     } else {
       alert.classList.remove('show');
-      btn.textContent = 'Show me what\'s available';
+      btn.textContent = 'Check in and show me what\'s available';
     }
   }
 
@@ -1342,15 +1458,59 @@
     }
   }
 
+  function showCheckinToast() {
+    const toast = document.getElementById('checkinToast');
+    if (!toast) {
+      return;
+    }
+
+    toast.classList.remove('fade-out');
+    toast.classList.remove('show');
+    requestAnimationFrame(function () {
+      toast.classList.add('show');
+    });
+
+    setTimeout(function () {
+      toast.classList.add('fade-out');
+      toast.classList.remove('show');
+    }, 3800);
+  }
+
   function submitMood() {
     const val = parseInt(document.getElementById('mood-slider').value);
-    logMoodSubmission(val);
-    if (val <= 2) {
-      window.location.href = 'crisis-support.html';
-    } else {
-      const target = document.getElementById('browse-topics') || document.querySelector('.content-section');
-      if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    const btn = document.getElementById('mood-btn');
+
+    if (btn && btn.disabled) {
+      return;
     }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('is-processing');
+      btn.textContent = 'Saving your check-in...';
+    }
+
+    logMoodSubmission(val);
+
+    setTimeout(function () {
+      if (val <= 2) {
+        window.location.href = 'crisis-support.html';
+        return;
+      }
+
+      const target = document.getElementById('browse-topics') || document.querySelector('.content-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      showCheckinToast();
+
+      if (btn) {
+        btn.classList.remove('is-processing');
+        btn.disabled = false;
+        btn.textContent = 'Check in and show me what\'s available';
+      }
+    }, 450);
   }
 
   (function hideFreeResourcesForSubscribedUsers() {
@@ -1398,6 +1558,67 @@
       })
       .catch(function () {
         // Keep free resources visible if auth check fails.
+      });
+  })();
+
+  (function showWelcomeAfterLoginOnSupport() {
+    if (sessionStorage.getItem('showWelcomeAfterLogin') !== '1') {
+      return;
+    }
+
+    const popup = document.getElementById('welcomePopup');
+    const title = document.getElementById('welcomePopupTitle');
+    if (!popup || !title) {
+      sessionStorage.removeItem('showWelcomeAfterLogin');
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        const fullName = data && data.user && data.user.full_name ? String(data.user.full_name).trim() : '';
+        const firstName = fullName ? fullName.split(' ')[0] : '';
+        title.textContent = firstName ? 'Welcome, ' + firstName : 'Welcome back';
+
+        popup.style.display = 'block';
+        requestAnimationFrame(function () {
+          popup.classList.add('show');
+        });
+
+        setTimeout(function () {
+          popup.classList.add('fade-out');
+          popup.classList.remove('show');
+        }, 2200);
+
+        setTimeout(function () {
+          popup.style.display = 'none';
+        }, 2900);
+      })
+      .catch(function () {
+        popup.style.display = 'block';
+        requestAnimationFrame(function () {
+          popup.classList.add('show');
+        });
+        setTimeout(function () {
+          popup.classList.add('fade-out');
+          popup.classList.remove('show');
+        }, 2200);
+        setTimeout(function () {
+          popup.style.display = 'none';
+        }, 2900);
+      })
+      .finally(function () {
+        sessionStorage.removeItem('showWelcomeAfterLogin');
       });
   })();
 </script>
