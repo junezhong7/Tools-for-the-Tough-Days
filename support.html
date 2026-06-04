@@ -108,6 +108,44 @@
     cursor: wait;
     opacity: 0.95;
   }
+  .checkin-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.94);
+    width: min(92vw, 620px);
+    background: linear-gradient(145deg, #26777B 0%, #1e5f63 55%, #1a4e52 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 28px 56px rgba(15, 32, 34, 0.36);
+    padding: 26px 30px;
+    z-index: 1100;
+    opacity: 0;
+    pointer-events: auto;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    text-align: center;
+    font-size: clamp(16px, 2.1vw, 20px);
+    line-height: 1.45;
+  }
+  .checkin-toast.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .checkin-toast.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+  .checkin-toast a {
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .checkin-toast a:hover {
+    color: #d7f1f3;
+    border-bottom-color: rgba(215, 241, 243, 0.75);
+  }
   .crisis-alert {
     display: none; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis);
     border-radius: 10px; padding: 14px 18px; margin-top: 14px; margin-bottom: 14px;
@@ -471,6 +509,11 @@
         padding: 22px 18px;
         border-radius: 14px;
       }
+      .checkin-toast {
+        width: calc(100vw - 24px);
+        padding: 22px 18px;
+        border-radius: 14px;
+      }
     }
   </style>
 </head>
@@ -499,6 +542,10 @@
   <div class="welcome-popup" id="welcomePopup" role="status" aria-live="polite" style="display:none;">
     <div class="welcome-popup-title" id="welcomePopupTitle">Welcome back</div>
     <div class="welcome-popup-copy">Great to see you.</div>
+  </div>
+
+  <div class="checkin-toast" id="checkinToast" role="status" aria-live="polite">
+    Thanks for checking in. Your score is saved and available in the Mood Tracker on your <a href="/dashboard.html">Dashboard</a>.
   </div>
 
   <section class="hero">
@@ -1409,6 +1456,24 @@
     }
   }
 
+  function showCheckinToast() {
+    const toast = document.getElementById('checkinToast');
+    if (!toast) {
+      return;
+    }
+
+    toast.classList.remove('fade-out');
+    toast.classList.remove('show');
+    requestAnimationFrame(function () {
+      toast.classList.add('show');
+    });
+
+    setTimeout(function () {
+      toast.classList.add('fade-out');
+      toast.classList.remove('show');
+    }, 3800);
+  }
+
   function submitMood() {
     const val = parseInt(document.getElementById('mood-slider').value);
     const btn = document.getElementById('mood-btn');
@@ -1435,6 +1500,8 @@
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
+
+      showCheckinToast();
 
       if (btn) {
         btn.classList.remove('is-processing');
