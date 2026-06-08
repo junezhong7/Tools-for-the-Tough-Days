@@ -531,6 +531,7 @@
     .hero-text { animation: fadeUp 0.7s ease both; }
     .pull-quote { animation: fadeUp 0.6s 0.1s ease both; }
   </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
@@ -588,7 +589,8 @@
   </header>
 
   <!-- Wave -->
-  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style="display:block;background:#f7fbfb;">
+  <div class="hero-wave-band" aria-hidden="true"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
     <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
   </svg>
 

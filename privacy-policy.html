@@ -317,6 +317,72 @@
       .page-body { padding: 40px 18px 60px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
+  <style>
+    /* Bridge overrides so this legacy page matches the unified site theme. */
+    .crisis-bar {
+      background: #aada37 !important;
+      color: #1a5558 !important;
+    }
+    .crisis-bar a {
+      color: #1a5558 !important;
+    }
+    nav {
+      height: 68px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .nav-inner {
+      height: 68px;
+    }
+    .nav-logo img {
+      height: 62px !important;
+      max-height: 62px;
+      max-width: 240px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .nav-logo-text,
+    .nav-logo span {
+      display: none !important;
+    }
+    .nav-links a,
+    .nav-links button {
+      font-weight: 700;
+      color: #4a6566;
+    }
+    .nav-links a:hover,
+    .nav-links button:hover {
+      color: #26777b;
+    }
+    .nav-login {
+      border-radius: 999px !important;
+    }
+
+    /* Privacy page hero should match support-page visual language. */
+    .page-header.hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 60%, #3aa0a5 100%) !important;
+      padding: 56px 24px 52px;
+    }
+    .page-header.hero .page-header-orb {
+      position: absolute;
+      right: -90px;
+      top: -110px;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header.hero > *:not(.page-header-orb) {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
 
@@ -349,12 +415,18 @@
   </nav>
 
   <!-- Page header -->
-  <header class="page-header">
+  <header class="page-header hero">
+    <div class="page-header-orb" aria-hidden="true"></div>
     <p class="eyebrow">Legal</p>
     <h1>Privacy Policy</h1>
     <p class="updated">Last updated: April 2025</p>
     <span class="legal-note">?Compliant with the Australian Privacy Act 1988</span>
   </header>
+
+  <div class="hero-wave-band" aria-hidden="true"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+    <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
+  </svg>
 
   <!-- Body -->
   <div class="page-body">
