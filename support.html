@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Resources, Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
   <meta name="description" content="Free clinically-reviewed mental health resources from a Registered Psychologist. No waitlist, no referral. Start reading or listening right now." />
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
@@ -64,7 +65,7 @@
     /* NAV */
     nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,119,123,0.07); }
     .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-left: 100px; }
     .nav-logo img { height: 62px; max-height: 62px; max-width: 240px; width: auto; object-fit: contain; display: block; }
   .nav-logo-text { display: none; }
     .nav-links { display: flex; gap: 28px; align-items: center; }
@@ -81,6 +82,20 @@
     border-radius: 16px; padding: 24px 28px; max-width: 500px; margin: 28px auto 0;
     backdrop-filter: blur(2px);
   }
+  .mood-card-sand {
+    background: #236a6f;
+    border: 1px solid rgba(214, 242, 244, 0.4);
+    box-shadow: 0 8px 22px rgba(18, 67, 71, 0.18);
+    margin: 8px auto 28px;
+    backdrop-filter: blur(3px);
+  }
+  .mood-card-sand .mood-question { font-size: 17px; }
+  .mood-card-sand .mood-number { font-size: 40px; }
+  .mood-card-sand .mood-descriptor { font-size: 15px; }
+  .mood-card-sand .mood-labels { font-size: 13px; }
+  .mood-card-sand .mood-submit { font-size: 17px; }
+  .mood-card-sand .crisis-alert h4 { font-size: 16px; }
+  .mood-card-sand .crisis-alert p { font-size: 15px; }
   .mood-question { color: rgba(255,255,255,0.9); font-size: 15px; margin-bottom: 16px; font-weight: 400; }
   .mood-slider-wrap { position: relative; margin-bottom: 10px; }
   .mood-slider {
@@ -103,6 +118,8 @@
     cursor: pointer; font-weight: 700; transition: background 0.15s;
   }
   .mood-submit:hover { background: var(--teal-hover); }
+  .mood-card-sand .mood-submit { background: #2f878c; }
+  .mood-card-sand .mood-submit:hover { background: #28797d; }
   .mood-submit.is-processing {
     background: #2d8b8f;
     box-shadow: 0 0 0 3px rgba(200, 240, 242, 0.22);
@@ -523,6 +540,7 @@
     /* RESPONSIVE */
     @media (max-width: 800px) {
       .nav-inner { padding: 0 16px; height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px; }
+      .nav-logo { margin-left: 0; }
       .nav-links { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
       .hero { padding: calc(var(--hero-space-top) - 8px) 20px calc(var(--hero-space-bottom) - 6px); }
       .content-section { padding: var(--section-space-mobile) 20px; }
@@ -587,7 +605,17 @@
       <div class="hero-badge" id="hero-free-badge"><span class="hero-dot"></span> Free resources, no subscription needed</div>
       <h1>Real support,<br><em>right now.</em></h1>
       <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral, start reading or listening today.</p>
-      <div class="mood-card">
+    </div>
+  </section>
+  <div class="hero-wave-band" aria-hidden="true"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+    <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
+  </svg>
+
+  <!-- CATEGORY NAVIGATION STRIP -->
+  <div id="browse-topics" style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
+    <div style="max-width: 880px; margin: 0 auto;">
+      <div class="mood-card mood-card-sand">
         <p class="mood-question">Before we start, how are you feeling right now?</p>
         <div class="mood-value-display">
           <div class="mood-number" id="mood-num">5</div>
@@ -603,16 +631,6 @@
         </div>
         <button class="mood-submit" id="mood-btn" onclick="submitMood()">Check in and show me what's available </button>
       </div>
-    </div>
-  </section>
-  <div class="hero-wave-band" aria-hidden="true"></div>
-  <svg class="hero-wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
-    <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
-  </svg>
-
-  <!-- CATEGORY NAVIGATION STRIP -->
-  <div id="browse-topics" style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
-    <div style="max-width: 880px; margin: 0 auto;">
       <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
       <!-- Category buttons -->

@@ -7,6 +7,126 @@
     user: null,
   };
 
+  var IDLE_TIMEOUT_MS = 6 * 60 * 60 * 1000;
+
+  function getIdleLogoutManager() {
+    if (window.TTTDIdleLogout && typeof window.TTTDIdleLogout.ensure === 'function') {
+      return window.TTTDIdleLogout;
+    }
+
+    var LAST_ACTIVITY_KEY = 'tttd:lastActivityAt';
+    var timerId = null;
+    var bound = false;
+    var loggingOut = false;
+
+    function readLastActivity() {
+      var raw = window.localStorage.getItem(LAST_ACTIVITY_KEY);
+      var ts = Number(raw);
+      if (!Number.isFinite(ts) || ts <= 0) {
+        return Date.now();
+      }
+      return ts;
+    }
+
+    function writeLastActivity(ts) {
+      try {
+        window.localStorage.setItem(LAST_ACTIVITY_KEY, String(ts));
+      } catch (_err) {
+        // Ignore storage failures (private mode, quotas, etc.).
+      }
+    }
+
+    function clearTimer() {
+      if (timerId !== null) {
+        window.clearTimeout(timerId);
+        timerId = null;
+      }
+    }
+
+    function getCurrentPathWithQuery() {
+      return window.location.pathname + window.location.search;
+    }
+
+    function logoutForInactivity() {
+      if (loggingOut) {
+        return;
+      }
+      loggingOut = true;
+
+      fetch('/api/auth.php?action=logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        keepalive: true,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).catch(function () {
+        // Best effort logout.
+      }).finally(function () {
+        var mode = (document.body && document.body.dataset && document.body.dataset.auth) || 'public';
+        if (mode === 'required') {
+          var redirect = encodeURIComponent(getCurrentPathWithQuery());
+          window.location.replace('/login.html?redirect=' + redirect);
+          return;
+        }
+
+        window.location.reload();
+      });
+    }
+
+    function scheduleFromLastActivity() {
+      clearTimer();
+
+      var remaining = IDLE_TIMEOUT_MS - (Date.now() - readLastActivity());
+      if (remaining <= 0) {
+        logoutForInactivity();
+        return;
+      }
+
+      timerId = window.setTimeout(logoutForInactivity, remaining);
+    }
+
+    function markActivity() {
+      writeLastActivity(Date.now());
+      scheduleFromLastActivity();
+    }
+
+    function bindListenersOnce() {
+      if (bound) {
+        return;
+      }
+      bound = true;
+
+      ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(function (eventName) {
+        window.addEventListener(eventName, markActivity, { passive: true });
+      });
+
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) {
+          scheduleFromLastActivity();
+        }
+      });
+
+      window.addEventListener('storage', function (event) {
+        if (event.key === LAST_ACTIVITY_KEY) {
+          scheduleFromLastActivity();
+        }
+      });
+    }
+
+    window.TTTDIdleLogout = {
+      ensure: function () {
+        bindListenersOnce();
+        markActivity();
+      },
+      stop: function () {
+        clearTimer();
+      }
+    };
+
+    return window.TTTDIdleLogout;
+  }
+
   function getRedirectTarget() {
     var params = new URLSearchParams(window.location.search);
     return params.get('redirect') || '/support.html';
@@ -59,6 +179,10 @@
 
   async function enforce(mode) {
     var auth = await fetchAuthState();
+
+    if (auth.authenticated) {
+      getIdleLogoutManager().ensure();
+    }
 
     if (mode === 'required' && !auth.authenticated) {
       goToLoginWithRedirect();

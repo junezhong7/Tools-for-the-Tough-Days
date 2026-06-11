@@ -38,13 +38,34 @@ h3,
   background: #aada37;
   color: var(--ui-teal-dark);
   padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  text-align: center;
   font-size: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
   letter-spacing: 0.01em;
+}
+
+.crisis-bar span {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .crisis-bar a {
   color: var(--ui-teal-dark);
+  margin: 0;
+  border-bottom: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
   font-weight: 700;
+  line-height: 1.2;
   text-decoration: none;
 }
 
@@ -98,8 +119,19 @@ nav > ul.nav-links {
 
 .nav-links a,
 .nav-links button {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
   color: var(--ui-muted);
   font-weight: 700;
+  line-height: 1.2;
+}
+
+.nav-login,
+nav .btn-nav {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .nav-links a:hover,
@@ -124,17 +156,42 @@ nav > ul.nav-links {
   position: relative;
   overflow: visible;
   margin-bottom: 78px;
+  --hero-orb-left-size: 330px;
+  --hero-orb-left-x: -120px;
+  --hero-orb-left-y: -150px;
+  --hero-orb-right-size: 420px;
+  --hero-orb-right-x: -90px;
+  --hero-orb-right-y: -110px;
+  --hero-orb-opacity: 0.08;
 }
 
 .hero::before {
   content: '';
   position: absolute;
-  left: -120px;
-  bottom: -150px;
-  width: 330px;
-  height: 330px;
+  left: var(--hero-orb-left-x);
+  bottom: var(--hero-orb-left-y);
+  width: var(--hero-orb-left-size);
+  height: var(--hero-orb-left-size);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, var(--hero-orb-opacity));
+  pointer-events: none;
+}
+
+.hero .hero-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero .hero-texture::before {
+  content: '';
+  position: absolute;
+  right: var(--hero-orb-right-x);
+  top: var(--hero-orb-right-y);
+  width: var(--hero-orb-right-size);
+  height: var(--hero-orb-right-size);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, var(--hero-orb-opacity));
   pointer-events: none;
 }
 
