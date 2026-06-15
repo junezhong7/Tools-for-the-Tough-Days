@@ -1477,7 +1477,7 @@
     document.getElementById('mood-desc').textContent = descriptors[val];
     const alert = document.getElementById('crisis-alert');
     const btn = document.getElementById('mood-btn');
-    if (val <= 2) {
+    if (val <= 3) {
       alert.classList.add('show');
       btn.textContent = 'Access important information';
     } else {
@@ -1544,7 +1544,7 @@
     logMoodSubmission(val);
 
     setTimeout(function () {
-      if (val <= 2) {
+      if (val <= 3) {
         window.location.href = 'crisis-support.html';
         return;
       }
