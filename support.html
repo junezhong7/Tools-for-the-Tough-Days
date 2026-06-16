@@ -79,7 +79,7 @@
   /* MOOD CHECK-IN */
   .mood-card {
     background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24);
-    border-radius: 16px; padding: 24px 28px; max-width: 500px; margin: 28px auto 0;
+    border-radius: 16px; padding: 24px 28px; max-width: 650px; margin: 28px auto 0;
     backdrop-filter: blur(2px);
   }
   .mood-card-sand {
@@ -91,7 +91,7 @@
   }
   .mood-card-sand .mood-question { font-size: 17px; }
   .mood-card-sand .mood-number { font-size: 40px; }
-  .mood-card-sand .mood-descriptor { font-size: 15px; }
+  .mood-card-sand .mood-descriptor { font-size: 20px; }
   .mood-card-sand .mood-labels { font-size: 13px; }
   .mood-card-sand .mood-submit { font-size: 17px; }
   .mood-card-sand .crisis-alert h4 { font-size: 16px; }
@@ -112,6 +112,8 @@
   .mood-value-display { text-align: center; margin-bottom: 14px; }
   .mood-number { font-family: 'Lora', serif; font-size: 38px; color: #fff; line-height: 1; }
   .mood-descriptor { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .mood-subdescriptor { font-size: 18px; color: rgba(255,255,255,0.5); margin-top: 6px; font-style: italic; line-height: 1.5; display: none; text-align: left; }
+  .mood-subdescriptor.show { display: block; }
   .mood-submit {
     width: 100%; background: var(--teal); color: #fff; border: none;
     padding: 13px; border-radius: 999px; font-size: 15px; font-family: 'Nunito', sans-serif;
@@ -620,6 +622,7 @@
         <div class="mood-value-display">
           <div class="mood-number" id="mood-num">5</div>
           <div class="mood-descriptor" id="mood-desc">Getting by</div>
+          <div class="mood-subdescriptor show" id="mood-subdesc">I'm somewhere in the middle today — some moments are okay, others aren't. I'm not falling apart, but I'm not doing great either. I'll take it one thing at a time.</div>
         </div>
         <div class="mood-slider-wrap">
           <input type="range" class="mood-slider" id="mood-slider" min="1" max="10" value="5" oninput="updateMood(this.value)">
@@ -1471,10 +1474,25 @@
     4: "Having a tough time", 5: "Getting by", 6: "Okay, but not great",
     7: "Doing alright", 8: "Pretty good", 9: "Doing well", 10: "Really good"
   };
+  const subdescriptors = {
+    1: "Everything feels completely overwhelming right now. I can't see a way through, and I'm not sure I can cope with much at all. I just need to get through the next minute.",
+    2: "I'm doing it really tough today. Even small things feel like too much, and getting through the day is taking everything I've got. I just need to get through the next few minutes.",
+    3: "Today is genuinely difficult for me. I'm getting through, but it doesn't feel good and the weight of things is hard to ignore. I just need to get through the next five minutes.",
+    4: "I'm managing, but there's not much left in the tank. Things feel heavier than usual and I'm finding it hard to find motivation. Even small steps still count today.",
+    5: "I'm somewhere in the middle today — some moments are okay, others aren't. I'm not falling apart, but I'm not doing great either. I'll take it one thing at a time.",
+    6: "I'm doing alright. Nothing is particularly wrong, but I'm not quite on top of things yet either. I've got enough to work with today.",
+    7: "Today feels solid for me. I've got enough energy to engage with things and the day feels manageable. I want to keep the momentum going.",
+    8: "Things are sitting well for me today. I feel capable and clear-headed. I want to keep building on this.",
+    9: "I'm in a really strong place right now. Things feel positive and I've got plenty of energy and clarity behind me. I'm keen to see where that takes me today.",
+    10: "I'm feeling really good today. I've got plenty of energy and clarity and things are going well for me. I still want to keep building on this."
+  };
   function updateMood(val) {
     val = parseInt(val);
     document.getElementById('mood-num').textContent = val;
     document.getElementById('mood-desc').textContent = descriptors[val];
+    const subdesc = document.getElementById('mood-subdesc');
+    subdesc.textContent = subdescriptors[val];
+    subdesc.classList.add('show');
     const alert = document.getElementById('crisis-alert');
     const btn = document.getElementById('mood-btn');
     if (val <= 3) {
