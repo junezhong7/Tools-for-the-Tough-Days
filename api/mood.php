@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
+require_once __DIR__ . '/../lib/mailer.php';
 
 const MOOD_BRISBANE_OFFSET_HOURS = 10;
 
@@ -92,12 +93,51 @@ function handle_submit(int $userId, array $body): never
 
     $alerts = evaluate_mood_rules($userId);
 
+    maybe_send_milestone_email($userId);
+
     json_ok([
         'ok' => true,
         'score' => $score,
         'submitted_at' => gmdate('c'),
         'alerts' => $alerts,
     ], 201);
+}
+
+function maybe_send_milestone_email(int $userId): void
+{
+    static $milestones = [3, 7, 14, 21, 30];
+
+    $stmt = db()->prepare('SELECT COUNT(*) FROM mood_events WHERE user_id = ?');
+    $stmt->execute([$userId]);
+    $total = (int) ($stmt->fetchColumn() ?: 0);
+
+    if (!in_array($total, $milestones, true)) {
+        return;
+    }
+
+    $stmt = db()->prepare(
+        'SELECT id FROM milestone_sends WHERE user_id = ? AND milestone_count = ?'
+    );
+    $stmt->execute([$userId, $total]);
+    if ($stmt->fetch()) {
+        return;
+    }
+
+    $stmt = db()->prepare('SELECT email, full_name FROM users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $userRow = $stmt->fetch();
+    if (!$userRow) {
+        return;
+    }
+
+    $sent = send_milestone_email((string) $userRow['email'], $userRow['full_name'] ?? null, $total);
+
+    if ($sent) {
+        db()->prepare(
+            'INSERT IGNORE INTO milestone_sends (user_id, milestone_count) VALUES (?, ?)'
+        )->execute([$userId, $total]);
+        audit('mood.milestone_email', $userId, ['count' => $total]);
+    }
 }
 
 function handle_history(int $userId): never

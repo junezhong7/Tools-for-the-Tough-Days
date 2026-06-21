@@ -899,24 +899,28 @@ const moodLabels = {1:'In crisis',2:'Really struggling',3:'Finding it very hard'
 const bSlider = document.getElementById('bSlider');
 const bVal = document.getElementById('bVal');
 const bDesc = document.getElementById('bDesc');
-bSlider.addEventListener('input', function(){
-  const v = parseInt(this.value);
-  bVal.textContent = v;
-  bDesc.textContent = moodLabels[v];
-  const pct = ((v - 1) / 9) * 100;
-  this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
-});
+if (bSlider) {
+  bSlider.addEventListener('input', function(){
+    const v = parseInt(this.value);
+    bVal.textContent = v;
+    bDesc.textContent = moodLabels[v];
+    const pct = ((v - 1) / 9) * 100;
+    this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
+  });
+}
 
 const tSlider = document.getElementById('tSlider');
 const tVal = document.getElementById('tVal');
 const tDesc = document.getElementById('tDesc');
-tSlider.addEventListener('input', function(){
-  const v = parseInt(this.value);
-  tVal.textContent = v;
-  tDesc.textContent = moodLabels[v];
-  const pct = ((v - 1) / 6) * 100;
-  this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
-});
+if (tSlider) {
+  tSlider.addEventListener('input', function(){
+    const v = parseInt(this.value);
+    tVal.textContent = v;
+    tDesc.textContent = moodLabels[v];
+    const pct = ((v - 1) / 6) * 100;
+    this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
+  });
+}
 
 function showSkip(mode) {
   const title = document.getElementById('overlay-title');
@@ -948,6 +952,112 @@ function closeOverlay() {
     if (banner) banner.style.display = 'block';
   }
 })();
+
+// ── Frequency tile toggle ─────────────────────────────────────────────────────
+document.querySelectorAll('.freq-tile').forEach(function(tile) {
+  tile.addEventListener('click', function() {
+    document.querySelectorAll('.freq-tile').forEach(function(t) { t.classList.remove('selected'); });
+    this.classList.add('selected');
+  });
+});
+
+// ── Form element references (by position — no id attributes needed) ───────────
+const timeRows           = document.querySelectorAll('.time-row');
+const reminderTimeSelect = timeRows[0] ? timeRows[0].querySelectorAll('.time-select')[0] : null;
+const timezoneSelect     = timeRows[0] ? timeRows[0].querySelectorAll('.time-select')[1] : null;
+const quietFromSelect    = timeRows[1] ? timeRows[1].querySelectorAll('.time-select')[0] : null;
+const quietUntilSelect   = timeRows[1] ? timeRows[1].querySelectorAll('.time-select')[1] : null;
+
+const freqLabelToKey = {
+  'Every day':        'daily',
+  '4 times per week': '4x_week',
+  '2 times per week': '2x_week'
+};
+const freqKeyToLabel = {
+  'daily':   'Every day',
+  '4x_week': '4 times per week',
+  '2x_week': '2 times per week'
+};
+
+function selectByText(selectEl, text) {
+  if (!selectEl) return;
+  for (let i = 0; i < selectEl.options.length; i++) {
+    if (selectEl.options[i].text === text || selectEl.options[i].value === text) {
+      selectEl.selectedIndex = i;
+      return;
+    }
+  }
+}
+
+// ── Pre-fill form from saved preferences ──────────────────────────────────────
+(function loadPreferences() {
+  fetch('/api/preferences.php?action=get', { credentials: 'include' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.saved) return;
+      selectByText(reminderTimeSelect, data.reminder_time);
+      selectByText(timezoneSelect, data.timezone);
+      selectByText(quietFromSelect, data.quiet_from);
+      selectByText(quietUntilSelect, data.quiet_until);
+      const freqLabel = freqKeyToLabel[data.frequency];
+      if (freqLabel) {
+        document.querySelectorAll('.freq-tile').forEach(function(tile) {
+          const strong = tile.querySelector('strong');
+          if (strong && strong.textContent.trim() === freqLabel) {
+            document.querySelectorAll('.freq-tile').forEach(function(t) { t.classList.remove('selected'); });
+            tile.classList.add('selected');
+          }
+        });
+      }
+    })
+    .catch(function() {});
+})();
+
+// ── Save preferences ──────────────────────────────────────────────────────────
+document.querySelector('.btn-submit').addEventListener('click', function() {
+  const activeTile = document.querySelector('.freq-tile.selected strong');
+  const freqLabel  = activeTile ? activeTile.textContent.trim() : 'Every day';
+
+  const payload = {
+    reminder_time:     reminderTimeSelect ? reminderTimeSelect.value : '7:30 am',
+    timezone:          timezoneSelect     ? timezoneSelect.value     : 'Australia/Brisbane',
+    frequency:         freqLabelToKey[freqLabel] || 'daily',
+    quiet_from:        quietFromSelect    ? quietFromSelect.value    : '8:00 pm',
+    quiet_until:       quietUntilSelect   ? quietUntilSelect.value   : '6:30 am',
+    reminders_enabled: true
+  };
+
+  const btn = this;
+  btn.disabled    = true;
+  btn.textContent = 'Saving…';
+
+  fetch('/api/preferences.php?action=save', {
+    method:      'POST',
+    credentials: 'include',
+    headers:     { 'Content-Type': 'application/json' },
+    body:        JSON.stringify(payload)
+  })
+    .then(function(r) {
+      if (!r.ok) throw new Error('save_failed');
+      return r.json();
+    })
+    .then(function() {
+      window.location.href = '/dashboard.html';
+    })
+    .catch(function() {
+      btn.disabled    = false;
+      btn.textContent = 'Save my preferences';
+      const title = document.getElementById('overlay-title');
+      const msg   = document.getElementById('overlay-msg');
+      const sub   = document.getElementById('overlay-sub');
+      const cta   = document.getElementById('overlay-cta');
+      if (title) title.textContent = 'Something went wrong';
+      if (msg)   msg.textContent   = 'We could not save your preferences. Please check your connection and try again.';
+      if (sub)   sub.textContent   = '';
+      if (cta)   { cta.textContent = 'OK'; cta.onclick = closeOverlay; }
+      document.getElementById('overlay').classList.add('visible');
+    });
+});
 </script>
 </body>
 </html>
