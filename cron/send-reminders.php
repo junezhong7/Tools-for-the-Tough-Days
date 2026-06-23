@@ -38,7 +38,7 @@ if (is_readable($configFile)) {
 $utcNow = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 
 $stmt = db()->prepare(
-    'SELECT up.user_id, up.reminder_time, up.timezone, up.freq_days,
+    'SELECT up.user_id, up.reminder_time, up.timezone, up.frequency,
             up.quiet_from, up.quiet_until,
             u.email, u.full_name
      FROM user_preferences up
@@ -58,18 +58,33 @@ foreach ($prefs as $pref) {
         $userId = (int) $pref['user_id'];
 
         // Convert UTC now to the user's local timezone
-        $tz       = new DateTimeZone((string) $pref['timezone']);
-        $userNow  = $utcNow->setTimezone($tz);
-        $localHHMM  = $userNow->format('H:i');
-        $localDate  = $userNow->format('Y-m-d');
-        $weekday    = (int) $userNow->format('N'); // 1=Mon … 7=Sun
+        $tz        = new DateTimeZone((string) $pref['timezone']);
+        $userNow   = $utcNow->setTimezone($tz);
+        $localHHMM = $userNow->format('H:i');
+        $localDate = $userNow->format('Y-m-d');
 
-        // Check frequency — is today a send day?
-        $freqDays = json_decode((string) $pref['freq_days'], true);
-        if (!is_array($freqDays) || !in_array($weekday, $freqDays, true)) {
-            $skip++;
-            continue;
+        // Map frequency to minimum hours since last check-in required before sending
+        $thresholds = ['daily' => 24, 'every_2_days' => 48, 'every_3_days' => 72];
+        $threshold  = $thresholds[(string) $pref['frequency']] ?? null;
+        if ($threshold === null) {
+            $skip++; continue; // unknown or not_now
         }
+
+        // Check hours since user's last check-in
+        $lastCheckinStmt = db()->prepare(
+            'SELECT MAX(checkin_at) FROM mood_events WHERE user_id = ?'
+        );
+        $lastCheckinStmt->execute([$userId]);
+        $lastCheckin = $lastCheckinStmt->fetchColumn();
+
+        if ($lastCheckin !== null && $lastCheckin !== false && $lastCheckin !== '') {
+            $lastCheckinDt = new DateTimeImmutable((string) $lastCheckin, new DateTimeZone('UTC'));
+            $hoursSince    = ($utcNow->getTimestamp() - $lastCheckinDt->getTimestamp()) / 3600;
+            if ($hoursSince < $threshold) {
+                $skip++; continue;
+            }
+        }
+        // If user has never checked in, always send
 
         // Check quiet hours
         if (is_in_quiet_window($localHHMM, (string) $pref['quiet_from'], (string) $pref['quiet_until'])) {
