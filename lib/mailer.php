@@ -423,3 +423,117 @@ function test_recipients(): array
 
     return array_values(array_unique($valid));
 }
+
+function extract_first_name(?string $fullName): string
+{
+    $name = trim((string) $fullName);
+    if ($name === '') {
+        return '';
+    }
+    $parts = preg_split('/\s+/', $name) ?: [];
+    return $parts[0] ?? $name;
+}
+
+function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
+{
+    $firstName = extract_first_name($fullName);
+    $greeting  = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl   = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
+    $checkinUrl = $siteUrl . '/support.html';
+    $prefsUrl   = $siteUrl . '/my-preference.html';
+
+    $subject = 'Time for your daily check-in';
+
+    $textBody = $greeting . "\n\n"
+        . "This is your gentle reminder to take a moment for your daily mood check-in.\n\n"
+        . "It only takes a few seconds and helps you track how you are really travelling over time.\n\n"
+        . "Check in now: " . $checkinUrl . "\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au\n\n"
+        . "To change your reminder settings: " . $prefsUrl;
+
+    $safeCheckinUrl = htmlspecialchars($checkinUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safePrefsUrl   = htmlspecialchars($prefsUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlGreeting   = $firstName !== ''
+        ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+        : 'Hi there,';
+
+    $htmlBody = '<p>' . $htmlGreeting . '</p>'
+        . '<p>This is your gentle reminder to take a moment for your daily mood check-in.</p>'
+        . '<p>It only takes a few seconds and helps you track how you are really travelling over time.</p>'
+        . '<p><a href="' . $safeCheckinUrl . '">Check in now</a></p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>'
+        . '<p style="font-size:12px;color:#999;">To change your reminder settings, '
+        . '<a href="' . $safePrefsUrl . '">update your preferences</a>.</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody);
+}
+
+function send_milestone_email(string $toEmail, ?string $fullName, int $count): bool
+{
+    $firstName = extract_first_name($fullName);
+    $greeting  = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl   = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
+
+    // Placeholder text — replace with content supplied by user
+    $messages = [
+        3  => [
+            'subject' => 'You have done 3 check-ins',
+            'body'    => "Three check-ins in. You are building something real here.\n\n"
+                       . "Most people never get this far. Checking in on yourself — honestly, regularly — takes more courage than it looks.\n\n"
+                       . "Keep going.",
+        ],
+        7  => [
+            'subject' => 'Seven check-ins — you are showing up',
+            'body'    => "Seven check-ins. That is a week of showing up for yourself.\n\n"
+                       . "That kind of consistency is exactly what builds real self-awareness over time. You are doing it.\n\n"
+                       . "Keep going.",
+        ],
+        14 => [
+            'subject' => 'Two weeks of check-ins',
+            'body'    => "Fourteen check-ins. You have been at this for two weeks.\n\n"
+                       . "Two weeks of honest self-reflection is something genuinely worth marking. You are building a picture of your own wellbeing that most people never have.\n\n"
+                       . "Keep going.",
+        ],
+        21 => [
+            'subject' => 'Three weeks — almost a habit',
+            'body'    => "Twenty-one check-ins. Research puts habit formation right around here.\n\n"
+                       . "What started as a conscious effort is becoming something more automatic. That is exactly the goal.\n\n"
+                       . "Keep going.",
+        ],
+        30 => [
+            'subject' => '30 check-ins — a month of data',
+            'body'    => "Thirty check-ins. A full month of honest data about how you are really travelling.\n\n"
+                       . "Thirty days of self-reflection is something to be genuinely proud of. You now have more insight into your own mental health than most people ever develop.\n\n"
+                       . "That matters.",
+        ],
+    ];
+
+    $template = $messages[$count] ?? [
+        'subject' => "Check-in milestone: {$count}",
+        'body'    => "You have reached {$count} check-ins. Keep going.",
+    ];
+
+    $textBody = $greeting . "\n\n"
+        . $template['body'] . "\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $htmlGreeting = $firstName !== ''
+        ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+        : 'Hi there,';
+
+    $htmlBody = '<p>' . $htmlGreeting . '</p>'
+        . '<p>' . nl2br(htmlspecialchars($template['body'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) . '</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $template['subject'], $textBody, $htmlBody);
+}
