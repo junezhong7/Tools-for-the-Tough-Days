@@ -987,18 +987,16 @@ const quietFromSelect    = timeRows[1] ? timeRows[1].querySelectorAll('.time-sel
 const quietUntilSelect   = timeRows[1] ? timeRows[1].querySelectorAll('.time-select')[1] : null;
 
 const freqLabelToKey = {
-  'Every day':        'daily',
-  '4 times per week': '4x_week',
-  '2 times per week': '2x_week',
-  'Every 3 days':     '3x_week',
-  'Not now':          'none'
+  'Every day':    'daily',
+  'Every 2 days': 'every_2_days',
+  'Every 3 days': 'every_3_days',
+  'Not now':      'not_now'
 };
 const freqKeyToLabel = {
-  'daily':   'Every day',
-  '4x_week': '4 times per week',
-  '2x_week': '2 times per week',
-  '3x_week': 'Every 3 days',
-  'none':    'Not now'
+  'daily':        'Every day',
+  'every_2_days': 'Every 2 days',
+  'every_3_days': 'Every 3 days',
+  'not_now':      'Not now'
 };
 
 function selectByText(selectEl, text) {

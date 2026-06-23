@@ -90,8 +90,8 @@ function handle_save(int $userId, array $body): never
     }
 
     $frequency = trim((string) ($body['frequency'] ?? 'daily'));
-    if (!in_array($frequency, ['daily', '4x_week', '2x_week'], true)) {
-        json_error(422, 'INVALID_FREQUENCY', 'Frequency must be daily, 4x_week, or 2x_week.');
+    if (!in_array($frequency, ['daily', 'every_2_days', 'every_3_days', 'not_now'], true)) {
+        json_error(422, 'INVALID_FREQUENCY', 'Frequency must be daily, every_2_days, every_3_days, or not_now.');
     }
 
     $quietFrom = parse_time_string((string) ($body['quiet_from'] ?? '8:00 pm'));
@@ -104,22 +104,21 @@ function handle_save(int $userId, array $body): never
         json_error(422, 'INVALID_QUIET_UNTIL', 'Invalid quiet-until time format.');
     }
 
-    $remindersEnabled = !empty($body['reminders_enabled']) ? 1 : 0;
-    $freqDays = json_encode(compute_freq_days($frequency), JSON_THROW_ON_ERROR);
+    // "Not now" disables reminders entirely
+    $remindersEnabled = ($frequency === 'not_now') ? 0 : 1;
 
     db()->prepare(
         'INSERT INTO user_preferences
-            (user_id, reminder_time, timezone, frequency, freq_days, quiet_from, quiet_until, reminders_enabled)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            (user_id, reminder_time, timezone, frequency, quiet_from, quiet_until, reminders_enabled)
+         VALUES (?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE
             reminder_time     = VALUES(reminder_time),
             timezone          = VALUES(timezone),
             frequency         = VALUES(frequency),
-            freq_days         = VALUES(freq_days),
             quiet_from        = VALUES(quiet_from),
             quiet_until       = VALUES(quiet_until),
             reminders_enabled = VALUES(reminders_enabled)'
-    )->execute([$userId, $reminderTime, $timezone, $frequency, $freqDays, $quietFrom, $quietUntil, $remindersEnabled]);
+    )->execute([$userId, $reminderTime, $timezone, $frequency, $quietFrom, $quietUntil, $remindersEnabled]);
 
     audit('preferences.save', $userId, [
         'reminder_time'     => $reminderTime,
@@ -131,14 +130,6 @@ function handle_save(int $userId, array $body): never
     json_ok(['ok' => true]);
 }
 
-function compute_freq_days(string $frequency): array
-{
-    return match ($frequency) {
-        '4x_week' => [1, 3, 5, 7],
-        '2x_week' => [2, 5],
-        default   => [1, 2, 3, 4, 5, 6, 7],
-    };
-}
 
 function parse_time_string(string $raw): ?string
 {
