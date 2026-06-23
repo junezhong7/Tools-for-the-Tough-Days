@@ -63,11 +63,14 @@ foreach ($prefs as $pref) {
         $localHHMM = $userNow->format('H:i');
         $localDate = $userNow->format('Y-m-d');
 
+        $logPrefix = "[send-reminders] user_id={$userId} local={$localHHMM}";
+
         // Map frequency to minimum hours since last check-in required before sending
         $thresholds = ['daily' => 24, 'every_2_days' => 48, 'every_3_days' => 72];
         $threshold  = $thresholds[(string) $pref['frequency']] ?? null;
         if ($threshold === null) {
-            $skip++; continue; // unknown or not_now
+            error_log("{$logPrefix} SKIP: frequency={$pref['frequency']} (not_now or unknown)");
+            $skip++; continue;
         }
 
         // Check hours since user's last check-in
@@ -79,21 +82,23 @@ foreach ($prefs as $pref) {
 
         if ($lastCheckin !== null && $lastCheckin !== false && $lastCheckin !== '') {
             $lastCheckinDt = new DateTimeImmutable((string) $lastCheckin, new DateTimeZone('UTC'));
-            $hoursSince    = ($utcNow->getTimestamp() - $lastCheckinDt->getTimestamp()) / 3600;
+            $hoursSince    = round(($utcNow->getTimestamp() - $lastCheckinDt->getTimestamp()) / 3600, 1);
             if ($hoursSince < $threshold) {
+                error_log("{$logPrefix} SKIP: last_checkin={$lastCheckin} hours_since={$hoursSince} threshold={$threshold}h");
                 $skip++; continue;
             }
         }
-        // If user has never checked in, always send
 
         // Check quiet hours
         if (is_in_quiet_window($localHHMM, (string) $pref['quiet_from'], (string) $pref['quiet_until'])) {
+            error_log("{$logPrefix} SKIP: in quiet window ({$pref['quiet_from']}–{$pref['quiet_until']})");
             $skip++;
             continue;
         }
 
         // Check if current time is within the 30-minute reminder window
         if (!time_in_window($localHHMM, (string) $pref['reminder_time'], 30)) {
+            error_log("{$logPrefix} SKIP: outside reminder window (target={$pref['reminder_time']})");
             $skip++;
             continue;
         }
@@ -104,6 +109,7 @@ foreach ($prefs as $pref) {
         );
         $dedupStmt->execute([$userId, $localDate]);
         if ($dedupStmt->fetch()) {
+            error_log("{$logPrefix} SKIP: already sent today ({$localDate})");
             $skip++;
             continue;
         }
