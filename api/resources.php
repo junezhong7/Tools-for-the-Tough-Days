@@ -409,6 +409,7 @@ function user_has_active_subscription(int $userId): bool
          FROM subscriptions
          WHERE user_id = ?
            AND status IN ('active', 'trialing', 'past_due')
+           AND (current_period_end IS NULL OR current_period_end > NOW())
          ORDER BY created_at DESC
          LIMIT 1"
     );
