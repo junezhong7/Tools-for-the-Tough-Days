@@ -434,20 +434,81 @@ function extract_first_name(?string $fullName): string
     return $parts[0] ?? $name;
 }
 
+function load_reminder_messages(): array
+{
+    $path = __DIR__ . '/../data/TTTD - Automated message database.csv';
+    if (!is_readable($path)) {
+        return [];
+    }
+
+    $handle = fopen($path, 'r');
+    if ($handle === false) {
+        return [];
+    }
+
+    $messages = [];
+    fgetcsv($handle); // skip header row
+
+    while (($row = fgetcsv($handle)) !== false) {
+        if (count($row) < 4) {
+            continue;
+        }
+
+        $subject = trim($row[2]);
+        $rawBody = str_replace("\r\n", "\n", $row[3]);
+
+        // Extract CTA label before stripping internal sections
+        $ctaText = 'Check in now';
+        if (preg_match('/\nCTA:\s*(.+)/', $rawBody, $m)) {
+            $candidate = trim(str_replace('→', '', $m[1]));
+            if ($candidate !== '') {
+                $ctaText = $candidate;
+            }
+        }
+
+        // Keep only the main message — strip Why it works / Note for dev team / CTA
+        $parts   = preg_split('/\n(?:Why it works|Note for dev team|CTA):/', $rawBody, 2);
+        $msgBody = trim($parts[0] ?? $rawBody);
+
+        if ($subject === '' || $msgBody === '') {
+            continue;
+        }
+
+        $messages[] = [
+            'subject' => $subject,
+            'body'    => $msgBody,
+            'cta'     => $ctaText,
+        ];
+    }
+
+    fclose($handle);
+    return $messages;
+}
+
 function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
 {
-    $firstName = extract_first_name($fullName);
-    $greeting  = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
-    $siteUrl   = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
+    $firstName  = extract_first_name($fullName);
+    $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl    = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
     $checkinUrl = $siteUrl . '/support.html';
     $prefsUrl   = $siteUrl . '/my-preference.html';
 
-    $subject = 'Time for your daily check-in';
+    $allMessages = load_reminder_messages();
+    if (!empty($allMessages)) {
+        $msg     = $allMessages[array_rand($allMessages)];
+        $subject = $msg['subject'];
+        $ctaText = $msg['cta'];
+        $msgBody = $msg['body'];
+    } else {
+        $subject = 'Time for your daily check-in';
+        $ctaText = 'Check in now';
+        $msgBody = "This is your gentle reminder to take a moment for your daily mood check-in.\n\n"
+                 . "It only takes a few seconds and helps you track how you are really travelling over time.";
+    }
 
     $textBody = $greeting . "\n\n"
-        . "This is your gentle reminder to take a moment for your daily mood check-in.\n\n"
-        . "It only takes a few seconds and helps you track how you are really travelling over time.\n\n"
-        . "Check in now: " . $checkinUrl . "\n\n"
+        . $msgBody . "\n\n"
+        . $ctaText . ': ' . $checkinUrl . "\n\n"
         . "Warm regards,\n"
         . "Nic Marcon\n"
         . "Registered Psychologist\n"
@@ -456,15 +517,16 @@ function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
         . "To change your reminder settings: " . $prefsUrl;
 
     $safeCheckinUrl = htmlspecialchars($checkinUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    $safePrefsUrl   = htmlspecialchars($prefsUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safePrefsUrl   = htmlspecialchars($prefsUrl,   ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     $htmlGreeting   = $firstName !== ''
         ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
         : 'Hi there,';
+    $safeCtaText    = htmlspecialchars($ctaText, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeMsgBody    = nl2br(htmlspecialchars($msgBody, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
 
     $htmlBody = '<p>' . $htmlGreeting . '</p>'
-        . '<p>This is your gentle reminder to take a moment for your daily mood check-in.</p>'
-        . '<p>It only takes a few seconds and helps you track how you are really travelling over time.</p>'
-        . '<p><a href="' . $safeCheckinUrl . '">Check in now</a></p>'
+        . '<p>' . $safeMsgBody . '</p>'
+        . '<p><a href="' . $safeCheckinUrl . '">' . $safeCtaText . '</a></p>'
         . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
         . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>'
         . '<p style="font-size:12px;color:#999;">To change your reminder settings, '
