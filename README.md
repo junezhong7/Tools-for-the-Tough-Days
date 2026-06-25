@@ -39,6 +39,15 @@ Set these in Azure Web App application settings:
 - `AZURE_STORAGE_ACCOUNT_KEY`
 - `RESOURCE_TOKEN_SECRET`
 - `RESOURCE_URL_TTL_SEC`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `MAIL_FROM`
+- `MAIL_REPLY_TO`
+- `PASSWORD_RESET_TTL_MIN` (optional, default 60, min 10, max 180)
+- `SUBSCRIPTION_EMAIL_SCOPE` (`include_renewals` to send renewal emails, anything else for initial subscription only)
+- `TEST_RECIPIENTS` (optional comma/space separated monitor recipients)
 
 Database connection settings must also be configured for [lib/db.php](lib/db.php).
 
@@ -47,6 +56,8 @@ Database connection settings must also be configured for [lib/db.php](lib/db.php
 For a new environment, run [sql/schema.sql](sql/schema.sql).
 
 For an existing environment that already has subscription data, run [sql/2026-04-28-add-checkout-session-unique-index.sql](sql/2026-04-28-add-checkout-session-unique-index.sql) before deploying the updated webhook. It clears duplicate `stripe_checkout_session_id` values on older duplicate rows and then adds the unique index needed to keep one Checkout session mapped to one local subscription record.
+
+To enable forgot-password reset links in existing environments, also run [sql/2026-05-27-add-password-reset-tokens.sql](sql/2026-05-27-add-password-reset-tokens.sql).
 
 ## Stripe Webhook Configuration
 
@@ -98,6 +109,17 @@ az webapp config appsettings set --resource-group <resource-group> --name <webap
 4. Confirm the webhook call succeeds in Stripe Dashboard.
 5. Open the dashboard and verify the subscription card shows the live status and `Renews on` or `Access ends on` date.
 6. Confirm a payment row appears in the payment history after `invoice.payment_succeeded`.
+
+## Transactional Email (SMTP)
+
+The app now sends transactional emails for:
+
+- user registration success
+- password reset links (`/api/auth.php?action=request-password-reset`)
+- subscription activation (`checkout.session.completed`)
+- subscription renewals when `SUBSCRIPTION_EMAIL_SCOPE=include_renewals`
+
+SMTP uses STARTTLS on port 587 and AUTH LOGIN credentials from environment variables.
 
 If Stripe cannot deliver webhooks from the public internet during testing, use Stripe CLI locally and forward events to the app URL once the site is reachable.
 

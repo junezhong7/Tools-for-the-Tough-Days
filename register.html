@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account — Tools for the Tough Days</title>
+  <title>Create Account ?Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -21,6 +22,8 @@
       --muted:      #5a7272;
       --border:     #cde3e3;
       --error:      #c0392b;
+      --panel-space: 40px;
+      --panel-space-mobile: 20px;
     }
 
     html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--text); }
@@ -31,7 +34,7 @@
     .panel-left {
       background: linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 45%, #4aafb0 100%);
       display: flex; flex-direction: column; justify-content: space-between;
-      padding: 56px 52px; overflow: hidden; position: relative;
+      padding: var(--panel-space) 52px; overflow: hidden; position: relative;
     }
     .panel-left::before {
       content: ''; position: absolute; inset: 0;
@@ -126,6 +129,7 @@
     }
 
     .mobile-logo { display: none; margin-bottom: 32px; text-align: center; }
+    .mobile-logo img { height: 60px; width: auto; }
 
     @media (max-width: 860px) {
       body { grid-template-columns: 1fr; }
@@ -136,6 +140,7 @@
     }
     @media (max-width: 480px) { .panel-right { padding: 32px 20px; } }
   </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body data-auth="guest">
 
@@ -143,7 +148,7 @@
   <aside class="panel-left">
     <div class="brand-area">
       <p class="brand-tagline">Real Support.<br><em>Whenever You Need It.</em></p>
-      <p class="brand-sub">Psychologist-authored resources for stress, sleep, anxiety, relationships and more — available to you any time, day or night.</p>
+      <p class="brand-sub">Psychologist-authored resources for stress, sleep, anxiety, relationships and more - available to you any time, day or night.</p>
     </div>
     <div class="trust-badges">
       <div class="badge">
@@ -166,7 +171,7 @@
     <div class="form-wrapper">
 
       <div class="mobile-logo">
-        <strong style="font-family: serif; font-size: 1.2rem; color: var(--teal);">Tools for the Tough Days</strong>
+        <img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" style="height:60px; width:auto;" />
       </div>
 
       <h1 class="form-title">Create your account</h1>
@@ -221,7 +226,7 @@
 
       <button class="btn-register" id="btnRegister" type="button">Create Account</button>
 
-      <p class="signin-row">Already have an account? <a href="/login.html">Sign in →</a></p>
+      <p class="signin-row">Already have an account? <a href="/login.html">Sign in </a></p>
 
     </div>
   </main>
@@ -295,7 +300,7 @@
       if (!valid) return;
 
       const btn = document.getElementById('btnRegister');
-      btn.textContent = 'Creating account…';
+      btn.textContent = 'Creating account...';
       btn.disabled = true;
 
       try {
@@ -324,7 +329,7 @@
           window.location.href = redirect;
         }
       } catch {
-        alertEl.textContent = 'Network error — please check your connection and try again.';
+        alertEl.textContent = 'Network error, please check your connection and try again.';
         alertEl.style.display = 'block';
         btn.textContent = 'Create Account';
         btn.disabled = false;

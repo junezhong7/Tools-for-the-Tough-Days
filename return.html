@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome Back — Tools for the Tough Days</title>
-<meta name="description" content="Welcome back to Tools for the Tough Days. Pick up where you left off or start fresh — clinically reviewed support whenever you need it.">
+<title>Welcome Back ?Tools for the Tough Days</title>
+<link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
+<meta name="description" content="Welcome back to Tools for the Tough Days. Pick up where you left off or start fresh ?clinically reviewed support whenever you need it.">
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
@@ -13,7 +14,7 @@
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window, document, "clarity", "script", "waf821qhxo");
 </script>
-<!-- GA4 placeholder — replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- GA4 placeholder ?replace G-XXXXXXXXXX with your Measurement ID -->
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
 <script>
@@ -54,8 +55,9 @@
 
   /* ── NAV ── */
   nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-  .nav-logo span { color: var(--teal); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
@@ -204,10 +206,6 @@
   footer a:hover { color: #fff; }
   .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 
-  /* ── FLOATING CHAT ── */
-  .free-chat-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: var(--teal); color: #fff; border: none; padding: 14px 22px; border-radius: 99px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; box-shadow: 0 4px 20px rgba(38,119,123,0.4); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; text-decoration: none; }
-  .free-chat-float:hover { transform: translateY(-2px); background: var(--teal-hover); }
-
   /* ── RESPONSIVE ── */
   @media (max-width: 860px) {
     .scen-body { grid-template-columns: 1fr; }
@@ -223,12 +221,13 @@
     .scen-body { padding: 24px 16px; }
   }
 </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
 <!-- Crisis bar -->
 <div class="crisis-bar">
-  <span>If things feel urgent right now —</span>
+  <span>If things feel urgent right now </span>
   <a href="tel:131114">Lifeline 13 11 14</a>
   <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
   <a href="tel:000">Emergency 000</a>
@@ -236,7 +235,7 @@
 
 <!-- Nav -->
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="index.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>
@@ -245,7 +244,6 @@
     <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
     <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
     <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
   </div>
 </nav>
 
@@ -268,14 +266,14 @@
 </div>
 
 
-<!-- ═══════════SCENARIO 1: ANONYMOUS RETURN ═══════════-->
+<!-- ═══════════SCENARIO 1: ANONYMOUS RETURN ══════════?->
 <div class="scenario-view active" id="scen-anon">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--sand);color:var(--warm-grey)">General public · No login required</span>
       <h2>Welcome back</h2>
-      <p>Your privacy is protected — your history is stored only on this device, never on our servers. Take a fresh mood check-in and we'll find what's most helpful for today.</p>
+      <p>Your privacy is protected ?your history is stored only on this device, never on our servers. Take a fresh mood check-in and we'll find what's most helpful for today.</p>
     </div>
   </div>
 
@@ -291,10 +289,10 @@
         </div>
 
         <div class="return-checkin">
-          <h3>Take a moment — how's today, honestly?</h3>
+          <h3>Take a moment ?how's today, honestly?</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="6">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Find what's helpful →</button>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Find what's helpful </button>
         </div>
 
         <div class="continue-section">
@@ -302,7 +300,7 @@
           <div class="continue-card">
             <div class="continue-icon"></div>
             <div>
-              <div class="continue-title">Anxiety and avoidance — breaking the cycle</div>
+              <div class="continue-title">Anxiety and avoidance ?breaking the cycle</div>
               <div class="continue-meta"> Anxiety · ANX-P04</div>
             </div>
             <div class="continue-progress">
@@ -326,7 +324,7 @@
         </div>
 
         <div class="privacy-strip">
-          <p>Your data is stored only in this browser — never on our servers.</p>
+          <p>Your data is stored only in this browser ?never on our servers.</p>
           <button>Clear my history</button>
         </div>
 
@@ -386,34 +384,34 @@
     <div class="scen-sidebar">
       <div class="sidebar-card">
         <h3>Your privacy matters</h3>
-        <p>We never store your personal usage on our servers. Everything you read, listen to, or access is kept only on this device — and you can clear it any time.</p>
+        <p>We never store your personal usage on our servers. Everything you read, listen to, or access is kept only on this device - and you can clear it any time.</p>
         <ul>
           <li>No account required to use the platform</li>
           <li>History stored in browser only</li>
           <li>Clear all data with one tap</li>
           <li>Employer access codes never share individual data</li>
         </ul>
-        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy </a>
       </div>
       <div class="sidebar-card">
         <h3>Want to unlock more?</h3>
-        <p>Subscribe for $10/month and access all 370+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
-        <a href="support.html" class="sidebar-link" id="return-free-resources-link">See all free resources →</a><br>
-        <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe — 10/month →</a>
+        <p>Subscribe for $10/month and access all 370+ clinically reviewed resources ?covering anxiety, sleep, relationships, financial stress and more.</p>
+        <a href="support.html" class="sidebar-link" id="return-free-resources-link">See all free resources </a><br>
+        <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe ?10/month </a>
       </div>
     </div>
   </div>
 </div>
 
 
-<!-- ═══════════SCENARIO 2: EMPLOYEE WITH ACCESS CODE ═══════════-->
+<!-- ═══════════SCENARIO 2: EMPLOYEE WITH ACCESS CODE ══════════?->
 <div class="scenario-view" id="scen-employee">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--teal-light);color:var(--teal)">Team member · Access code recognised</span>
       <h2>Welcome back, team member</h2>
-      <p>Your access is through your employer's subscription. Your individual usage is completely private — your employer sees only anonymous team totals, never your activity.</p>
+      <p>Your access is through your employer's subscription. Your individual usage is completely private ?your employer sees only anonymous team totals, never your activity.</p>
     </div>
   </div>
 
@@ -425,14 +423,14 @@
         <div class="wb wb-employee">
           <div class="wb-eyebrow">Your team subscription</div>
           <div class="wb-heading">Welcome back.</div>
-          <div class="wb-sub">Your access is private — your employer sees only anonymous team data, never your individual activity.</div>
+          <div class="wb-sub">Your access is private ?your employer sees only anonymous team data, never your individual activity.</div>
         </div>
 
         <div class="return-checkin">
           <h3>How are you feeling right now?</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="7">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Show me what's available →</button>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Show me what's available </button>
         </div>
 
         <div class="continue-section">
@@ -475,7 +473,7 @@
         </div>
 
         <div class="privacy-strip">
-          <p>Your employer sees only anonymous team totals — never your individual history.</p>
+          <p>Your employer sees only anonymous team totals ?never your individual history.</p>
           <button>Clear my history</button>
         </div>
 
@@ -542,26 +540,26 @@
           <li>You can clear your history at any time</li>
           <li>Booking a session with Nic is confidential</li>
         </ul>
-        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy </a>
       </div>
       <div class="sidebar-card">
         <h3>Book a session</h3>
-        <p>As a team member, you have access to book a free 15-min call directly with Nic — a Registered Psychologist with 20+ years of experience.</p>
-        <a href="booking.html" class="sidebar-link">Book a free 15-min call →</a>
+        <p>As a team member, you have access to book a free 15-min call directly with Nic ?a Registered Psychologist with 20+ years of experience.</p>
+        <a href="booking.html" class="sidebar-link">Book a free 15-min call </a>
       </div>
     </div>
   </div>
 </div>
 
 
-<!-- ═══════════SCENARIO 3: RETURN AFTER CRISIS ═══════════-->
+<!-- ═══════════SCENARIO 3: RETURN AFTER CRISIS ══════════?->
 <div class="scenario-view" id="scen-crisis">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--red-light);color:var(--red-crisis)">Previous visit: crisis support accessed</span>
       <h2>We're glad you're back</h2>
-      <p>Last time you visited, things were really tough. We never assume how you're feeling today — take a fresh check-in and we'll guide you from there with warmth.</p>
+      <p>Last time you visited, things were really tough. We never assume how you're feeling today ?take a fresh check-in and we'll guide you from there with warmth.</p>
     </div>
   </div>
 
@@ -577,15 +575,15 @@
         </div>
 
         <div class="return-checkin">
-          <h3>Take your time with this — there's no rush.</h3>
+          <h3>Take your time with this - there's no rush.</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="5">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Tell us how you're doing →</button>
+          <button class="checkin-btn" onclick="window.location.href='support.html'">Tell us how you're doing </button>
         </div>
 
         <div class="crisis-return-box">
           <h3>Support is still here if you need it</h3>
-          <p>If things still feel urgent, these are available 24/7. There's no pressure — just wanted you to know they're close.</p>
+          <p>If things still feel urgent, these are available 24/7. There's no pressure - just wanted you to know they're close.</p>
           <div class="crisis-numbers">
             <button class="crisis-num-btn" onclick="window.location.href='tel:131114'"> Lifeline 13 11 14</button>
             <button class="crisis-secondary" onclick="window.location.href='booking.html'"> Talk to Nic today</button>
@@ -594,7 +592,7 @@
         </div>
 
         <div style="padding:18px 28px;border-top:1px solid var(--border)">
-          <p style="font-size:13px;color:var(--warm-grey)">Your check-in result will guide you to the right resources for today — whatever that looks like right now.</p>
+          <p style="font-size:13px;color:var(--warm-grey)">Your check-in result will guide you to the right resources for today ?whatever that looks like right now.</p>
         </div>
 
         <!-- TOPIC BROWSER -->
@@ -657,16 +655,16 @@
     <div class="scen-sidebar">
       <div class="sidebar-card">
         <h3>You don't have to figure this out alone</h3>
-        <p>If things are still difficult, a free 15-minute call with Nic can help you work out what support looks like for you — no pressure, no obligation.</p>
-        <a href="booking.html" class="sidebar-link">Book a free call with Nic →</a>
+        <p>If things are still difficult, a free 15-minute call with Nic can help you work out what support looks like for you - no pressure, no obligation.</p>
+        <a href="booking.html" class="sidebar-link">Book a free call with Nic </a>
       </div>
       <div class="sidebar-card">
         <h3>24/7 crisis support</h3>
         <ul>
-          <li>Lifeline — a href="tel:131114" style="color:var(--teal)">13 11 14</a></li>
-          <li>Beyond Blue — a href="tel:1300224636" style="color:var(--teal)">1300 22 4636</a></li>
-          <li>1800RESPECT — a href="tel:1800737732" style="color:var(--teal)">1800 737 732</a></li>
-          <li>Emergency — a href="tel:000" style="color:var(--teal)">000</a></li>
+          <li>Lifeline ?a href="tel:131114" style="color:var(--teal)">13 11 14</a></li>
+          <li>Beyond Blue ?a href="tel:1300224636" style="color:var(--teal)">1300 22 4636</a></li>
+          <li>1800RESPECT ?a href="tel:1800737732" style="color:var(--teal)">1800 737 732</a></li>
+          <li>Emergency ?a href="tel:000" style="color:var(--teal)">000</a></li>
         </ul>
       </div>
     </div>
@@ -674,14 +672,14 @@
 </div>
 
 
-<!-- ═══════════SCENARIO 4: EMPLOYER PORTAL ═══════════-->
+<!-- ═══════════SCENARIO 4: EMPLOYER PORTAL ══════════?->
 <div class="scenario-view" id="scen-employer">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--blue-bg);color:var(--blue)">Employer · Subscription active</span>
       <h2>Your employer dashboard</h2>
-      <p>Anonymous aggregate data only — you'll never see individual employee names, resources accessed, or personal activity. Your team's privacy is fully protected.</p>
+      <p>Anonymous aggregate data only ?you'll never see individual employee names, resources accessed, or personal activity. Your team's privacy is fully protected.</p>
     </div>
   </div>
 
@@ -714,7 +712,7 @@
             <div class="dash-card">
               <div class="dash-num">9</div>
               <div class="dash-label">Team members accessed resources this month</div>
-              <div class="dash-note">— 3 more than last month</div>
+              <div class="dash-note">?3 more than last month</div>
             </div>
             <div class="dash-card">
               <div class="dash-num">34</div>
@@ -741,7 +739,7 @@
               <div class="ea-title">Manage access codes</div>
               <div class="ea-sub">Generate new codes · share with new starters · revoke if needed</div>
             </div>
-            <div class="ea-arrow">—</div>
+            <div class="ea-arrow"></div>
           </div>
           <div class="employer-action">
             <div class="ea-icon"></div>
@@ -749,7 +747,7 @@
               <div class="ea-title">Book a team session with Nic</div>
               <div class="ea-sub">Group session or manager check-in · 30 or 60 min</div>
             </div>
-            <div class="ea-arrow">—</div>
+            <div class="ea-arrow"></div>
           </div>
           <div class="employer-action">
             <div class="ea-icon"></div>
@@ -757,7 +755,7 @@
               <div class="ea-title">Download usage report</div>
               <div class="ea-sub">Anonymous PDF report · useful for board or WHS reporting</div>
             </div>
-            <div class="ea-arrow">—</div>
+            <div class="ea-arrow"></div>
           </div>
           <div class="employer-action" style="border-color:rgba(200,117,42,0.25)">
             <div class="ea-icon"></div>
@@ -765,7 +763,7 @@
               <div class="ea-title">Billing &amp; subscription</div>
               <div class="ea-sub" style="color:var(--amber)">Next billing date: 15 May 2025 · $250/month</div>
             </div>
-            <div class="ea-arrow">—</div>
+            <div class="ea-arrow"></div>
           </div>
         </div>
       </div>
@@ -774,32 +772,29 @@
     <div class="scen-sidebar">
       <div class="sidebar-card">
         <h3>Your team's privacy</h3>
-        <p>Individual employee activity is never visible to you or any other employer. The data you see is anonymous and aggregated — it shows team trends only.</p>
+        <p>Individual employee activity is never visible to you or any other employer. The data you see is anonymous and aggregated ?it shows team trends only.</p>
         <ul>
           <li>No individual names or activity</li>
           <li>No specific resources accessed shown</li>
           <li>Usage data is anonymous totals only</li>
           <li>Booking details are never shared with employers</li>
         </ul>
-        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy →</a>
+        <a href="privacy-policy.html" class="sidebar-link">Read our Privacy Policy </a>
       </div>
       <div class="sidebar-card">
         <h3>Need help?</h3>
         <p>Questions about your subscription, access codes, or onboarding? Book a call with Nic directly.</p>
-        <a href="booking.html" class="sidebar-link">Book a free call with Nic →</a><br>
-        <a href="business.html" class="sidebar-link">View your plan details →</a>
+        <a href="booking.html" class="sidebar-link">Book a free call with Nic </a><br>
+        <a href="business.html" class="sidebar-link">View your plan details </a>
       </div>
     </div>
   </div>
 </div>
 
 
-<!-- Floating chat -->
-<a href="booking.html" class="free-chat-float"> Free 15-min chat</a>
-
 <!-- Footer -->
 <footer>
-  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div>© 2025 Tools for the Tough Days · Powered by Emotional Balance · ABN 69 142 299 250</div>
   <div class="footer-links">
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>

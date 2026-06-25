@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome - Tools for the Tough Days</title>
+<link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
 <meta name="description" content="Your subscription is confirmed. Here's how to get started with Tools for the Tough Days.">
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
@@ -48,8 +49,9 @@
 
   /* NAV */
   nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-  .nav-logo span { color: var(--teal); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
@@ -59,7 +61,7 @@
   .nav-cta:hover { background: var(--teal-hover); }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 56px 40px 52px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--teal); padding: var(--hero-space-top) 40px 52px; text-align: center; position: relative; overflow: hidden; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
   .hero-content { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
   .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
@@ -68,7 +70,7 @@
   .hero-sub { color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 300; max-width: 480px; margin: 0 auto; line-height: 1.7; }
 
   /* LAYOUT */
-  .main-wrap { max-width: 800px; margin: 0 auto; padding: 56px 40px 80px; }
+  .main-wrap { max-width: 800px; margin: 0 auto; padding: var(--main-space) 40px 80px; }
 
   /* SECTION LABEL */
   .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
@@ -143,6 +145,7 @@
   .hero-content { animation: fadeUp 0.6s ease both; }
   .main-wrap { animation: fadeUp 0.5s 0.1s ease both; }
 </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
@@ -154,7 +157,7 @@
 </div>
 
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="support.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>
@@ -163,7 +166,6 @@
     <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
     <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
     <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-    <a href="booking.html" class="nav-cta">Free 15-min chat</a>
   </div>
 </nav>
 
@@ -198,7 +200,7 @@
             src="YOUR_EMBED_URL" allow="autoplay; fullscreen" allowfullscreen></iframe>
         -->
         <div class="video-placeholder">
-          <div class="play-btn">▶</div>
+          <div class="play-btn"></div>
           <p>Welcome video from Nic - coming soon</p>
         </div>
       </div>
@@ -312,7 +314,7 @@
 </div>
 
 <footer>
-  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div>© 2025 Tools for the Tough Days · Powered by Emotional Balance · ABN 69 142 299 250</div>
   <div class="footer-links">
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>

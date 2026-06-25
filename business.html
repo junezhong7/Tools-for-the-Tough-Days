@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tools for the Tough Days, For Workplaces</title>
+<link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -23,25 +24,29 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --charcoal: #2a2825;
-    --warm-grey: #6b6560;
-    --sand: #f2ede6;
-    --sand-dark: #e8e0d5;
-    --cream: #faf8f4;
+    --charcoal: #1a2e2f;
+    --warm-grey: #4a6566;
+    --sand: #e8f4f4;
+    --sand-dark: #d8eff0;
+    --cream: #f7fbfb;
     --white: #ffffff;
     --teal: #26777B;
     --teal-hover: #1e5f63;
-    --teal-dark: #1a4e52;
+    --teal-dark: #1a5558;
     --teal-light: #e8f4f4;
-    --amber: #c8752a;
-    --amber-hover: #a85f20;
-    --amber-light: #f5ece0;
+    --amber: #2f8f94;
+    --amber-hover: #26777B;
+    --amber-light: #d8eff0;
     --red-crisis: #c0392b;
     --red-crisis-bg: #fdf0ef;
     --green: #3a6b45;
     --green-bg: #edf5ef;
     --border: rgba(42,40,37,0.12);
     --shadow: 0 2px 20px rgba(42,40,37,0.08);
+    --section-space: 24px;
+    --section-space-mobile: 20px;
+    --hero-space-top: 36px;
+    --hero-space-bottom: 30px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
@@ -61,8 +66,9 @@
     padding: 0 40px; display: flex; align-items: center; justify-content: space-between;
     height: 64px; position: sticky; top: 0; z-index: 100;
   }
-  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-  .nav-logo span { color: var(--teal); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
@@ -78,7 +84,7 @@
   .nav-cta:hover { background: var(--teal-hover); }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 56px 40px 48px; position: relative; overflow: hidden; text-align: center; }
+  .hero { background: var(--teal); padding: var(--hero-space-top) 40px var(--hero-space-bottom); position: relative; overflow: hidden; text-align: center; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
   .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
   .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 20px; }
@@ -88,19 +94,68 @@
   .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
   .btn-primary { background: var(--teal); color: #fff; border: none; padding: 13px 26px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; text-decoration: none; display: inline-block; }
   .btn-primary:hover { background: var(--teal-hover); }
+  a[data-tooltip] { position: relative; }
+  a[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%) translateY(6px);
+    background: #fff;
+    color: var(--teal-dark);
+    border: 1px solid rgba(38,119,123,0.28);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(42,40,37,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 20;
+  }
+  a[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-left: 1px solid rgba(38,119,123,0.28);
+    border-top: 1px solid rgba(38,119,123,0.28);
+    transform: translateX(-50%) rotate(225deg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease;
+    z-index: 19;
+  }
+  a[data-tooltip]:hover::after,
+  a[data-tooltip]:hover::before,
+  a[data-tooltip]:focus-visible::after,
+  a[data-tooltip]:focus-visible::before {
+    opacity: 1;
+  }
+  a[data-tooltip]:hover::after,
+  a[data-tooltip]:focus-visible::after {
+    transform: translateX(-50%) translateY(0);
+  }
   .btn-secondary { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.2); padding: 13px 24px; border-radius: 8px; font-size: 15px; font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none; display: inline-block; }
   .btn-secondary:hover { background: rgba(255,255,255,0.18); }
   .sector-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .sector-chip { font-size: 12px; padding: 5px 14px; border-radius: 99px; background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.95); border: 1px solid rgba(255,255,255,0.3); }
 
   /* SECTIONS */
-  .section { padding: 72px 40px; }
+  .section { padding: var(--section-space) 40px; }
   .section-inner { max-width: 880px; margin: 0 auto; }
-  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .section h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; margin-bottom: 16px; line-height: 1.2; }
+  .section h2 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; margin-bottom: 12px; line-height: 1.2; }
   .section h2 em { color: var(--teal); font-style: italic; }
-  .section p { font-size: 15px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 20px; }
+  .section p { font-size: 15px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 16px; }
 
   /* INSIGHT BADGE */
   .insight-badge {
@@ -110,8 +165,8 @@
   .insight-badge p { font-size: 14px; color: var(--teal-dark); line-height: 1.6; margin: 0; }
 
   /* VALUE GRID */
-  .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
-  .val-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .val-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .val-card.featured { background: var(--teal-light); border-color: rgba(38,119,123,0.25); }
   .val-icon { font-size: 28px; margin-bottom: 12px; }
   .val-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
@@ -120,8 +175,8 @@
 
   /* PRICING */
   .pricing-section { background: var(--sand); }
-  .price-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 32px; }
-  .price-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 24px; }
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .price-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px 18px; }
   .price-card.popular { border: 2px solid var(--teal); background: var(--teal-light); }
   .popular-tag { font-size: 10px; background: var(--teal); color: #fff; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; display: inline-block; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
   .price-range { font-size: 13px; color: var(--warm-grey); margin-bottom: 6px; }
@@ -132,15 +187,15 @@
   .price-note { font-size: 12px; color: var(--warm-grey); text-align: center; margin-top: 16px; }
 
   /* STEPS */
-  .steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 32px; }
-  .step-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+  .steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 24px; }
+  .step-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
   .step-item:last-child { border-bottom: none; }
   .step-num-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--teal-light); color: var(--teal); border: 1.5px solid rgba(38,119,123,0.3); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 18px; flex-shrink: 0; }
   .step-text h4 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
   .step-text p { font-size: 14px; color: var(--warm-grey); line-height: 1.6; margin: 0; }
 
   /* PRIVACY BADGE */
-  .privacy-badge { background: var(--green-bg); border: 1px solid rgba(58,107,69,0.2); border-radius: 10px; padding: 16px 20px; display: flex; gap: 12px; align-items: flex-start; margin-top: 32px; }
+  .privacy-badge { background: var(--green-bg); border: 1px solid rgba(58,107,69,0.2); border-radius: 10px; padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start; margin-top: 20px; }
   .privacy-badge p { font-size: 14px; color: var(--green); line-height: 1.6; margin: 0; }
 
   /* REASSURE LIST */
@@ -149,21 +204,9 @@
   .reassure-list li::before { content: ''; color: var(--teal); font-weight: 500; flex-shrink: 0; }
 
   /* FINAL CTA */
-  .final-cta { background: var(--charcoal); padding: 72px 40px; text-align: center; }
-  .final-cta h2 { font-family: 'DM Serif Display', serif; font-size: 36px; font-weight: 400; color: #fff; margin-bottom: 16px; }
-  .final-cta p { color: rgba(255,255,255,0.6); font-size: 16px; margin-bottom: 32px; font-weight: 300; }
-
-  /* FLOATING CTA */
-  .free-chat-float {
-    position: fixed; bottom: 24px; right: 24px; z-index: 200;
-    background: var(--teal); color: #fff; border: none;
-    padding: 14px 22px; border-radius: 99px; font-size: 14px;
-    font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500;
-    box-shadow: 0 4px 20px rgba(38,119,123,0.4);
-    display: flex; align-items: center; gap: 8px;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .free-chat-float:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(38,119,123,0.45); background: var(--teal-hover); }
+  .final-cta { background: var(--charcoal); padding: 48px 40px; text-align: center; }
+  .final-cta h2 { font-family: 'DM Serif Display', serif; font-size: 36px; font-weight: 400; color: #fff; margin-bottom: 12px; }
+  .final-cta p { color: rgba(255,255,255,0.6); font-size: 16px; margin-bottom: 24px; font-weight: 300; }
 
   /* FOOTER */
   footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 40px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
@@ -194,13 +237,13 @@
   .crisis-nav-btn:hover { background: #a93226; color: #fff; }
 
   /* TOPIC MODAL */
-  .topic-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.55); z-index: 650; align-items: center; justify-content: center; padding: 20px; }
+  .topic-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.55); z-index: 650; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .topic-modal-overlay.show { display: flex; }
-  .topic-modal { width: 100%; max-width: 520px; background: var(--white); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 14px 40px rgba(42,40,37,0.16); padding: 24px; position: relative; }
+  .topic-modal { width: 100%; max-width: 520px; max-height: calc(100vh - 40px); background: var(--white); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 14px 40px rgba(42,40,37,0.16); padding: 24px; position: relative; display: flex; flex-direction: column; }
   .topic-modal-close { position: absolute; top: 10px; right: 10px; border: 0; background: transparent; font-size: 22px; color: var(--warm-grey); cursor: pointer; line-height: 1; padding: 2px 6px; }
   .topic-modal-title { font-family: 'DM Serif Display', serif; font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
   .topic-modal-sub { font-size: 13px; color: var(--warm-grey); margin-bottom: 16px; }
-  .topic-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .topic-options { display: grid; grid-template-columns: 1fr; gap: 10px; overflow-y: auto; }
   .topic-option { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--charcoal); background: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .topic-option[data-kind="video"] { background: #c8f0f2; border-color: rgba(38,119,123,0.35); }
   .topic-option[data-kind="video"] .badge { background: rgba(255,255,255,0.7); border-color: rgba(38,119,123,0.35); color: var(--teal-dark); }
@@ -211,16 +254,19 @@
 
   @media (max-width: 700px) {
     nav { padding: 0 16px; }
-    .hero { padding: 60px 20px 40px; }
-    .section { padding: 48px 20px; }
+    .hero { padding: calc(var(--hero-space-top) - 10px) 20px calc(var(--hero-space-bottom) - 8px); }
+    .section { padding: var(--section-space-mobile) 20px; }
     .val-grid { grid-template-columns: 1fr; }
     .price-grid { grid-template-columns: 1fr 1fr; }
     .val-grid[style*="1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
     .final-cta { padding: 48px 20px; }
     footer { padding: 24px 16px; flex-direction: column; gap: 16px; text-align: center; }
     .cat-nav { grid-template-columns: 1fr 1fr; }
+    .topic-modal-overlay { align-items: flex-start; padding: 12px; }
+    .topic-modal { max-height: calc(100vh - 24px); padding: 20px 16px 16px; }
   }
 </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
@@ -234,7 +280,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="support.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>
@@ -243,19 +289,18 @@
     <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
     <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
     <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-    <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min call</button>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero-section">
   <div class="hero-texture"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">For small &amp; medium businesses</div>
     <h1>The EAP built for the businesses <em>most EAPs forget.</em></h1>
-    <p class="hero-sub">Pay as you go. $150, 300 per month. Built for trades, care, hospitality, transport, and every business in between. No contracts. No HR department needed.</p>
-    <div class="hero-ctas">
-      <a href="booking.html" class="btn-primary">Book a 15-min call with Nic →</a>
+    <p class="hero-sub" id="hero-sub-text">Pay as you go. $150, 300 per month. Built for trades, care, hospitality, transport, and every business in between. No contracts. No HR department needed.</p>
+    <div class="hero-ctas" id="hero-ctas-block">
+      <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" class="btn-primary" data-tooltip="Learn more about our service.">Book a 30-min call with Nic </a>
       <a href="#what-your-team-gets" class="btn-secondary">See what your team gets</a>
     </div>
   </div>
@@ -275,7 +320,7 @@
       <div class="subtopic-list" id="subtopic-list"></div>
     </div>
 
-    <!-- Crisis Support — persistent, outside dropdown system -->
+    <!-- Crisis Support persistent, outside dropdown system -->
     <div class="crisis-nav-card">
       <div class="crisis-nav-left">
         <span class="crisis-nav-icon"></span>
@@ -284,7 +329,7 @@
           <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
         </div>
       </div>
-      <a href="crisis-support.html" class="crisis-nav-btn">Access now →</a>
+      <a href="crisis-support.html" class="crisis-nav-btn">Access now </a>
     </div>
   </div>
 </div>
@@ -299,11 +344,11 @@
 </div>
 
 <!-- THE PROBLEM -->
-<section class="section" style="background: var(--cream);">
+<section class="section" id="problem-section" style="background: var(--cream);">
   <div class="section-inner">
     <div class="section-label">The problem</div>
     <h2>"Traditional EAPs are designed for <em>big companies.</em>"</h2>
-    <p>Most EAP providers charge $30–80 per employee per year and require a minimum of 100+ staff. That locks out the vast majority of Australian businesses, and the workers who need support most.</p>
+    <p>Most EAP providers charge $30?0 per employee per year and require a minimum of 100+ staff. That locks out the vast majority of Australian businesses, and the workers who need support most.</p>
     <h2 style="margin-top:32px;">"Supporting your people before they reach <em>breaking point.</em>"</h2>
     <p>Most employees don't ask for help until things have become very serious. In over 21 years of clinical practice as a Registered Psychologist, that pattern is consistent, by the time someone walks through the door for counselling, the problem has been building for a long time.</p>
     <p>The question for every business owner, HR manager, and leader isn't whether your people are struggling. It's whether they have somewhere to turn before it gets to that point.</p>
@@ -316,7 +361,7 @@
 </section>
 
 <!-- WHY IT'S DIFFERENT -->
-<section class="section" style="background: #e8f4f4;">
+<section class="section" id="why-different-section" style="background: #e8f4f4;">
   <div class="section-inner">
     <div class="section-label">Why it's different</div>
     <h2>Built around what small businesses actually need</h2>
@@ -346,7 +391,7 @@
 </section>
 
 <!-- PRICING -->
-<section class="section" style="background: var(--cream);">
+<section class="section" id="pricing-section" style="background: var(--cream);">
   <div class="section-inner" style="max-width:1000px;">
     <div class="section-label">Pricing</div>
     <h2>Transparent pricing, no quote required</h2>
@@ -357,14 +402,14 @@
       <!-- STARTER -->
       <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
         <div style="background:var(--teal);padding:20px 24px;">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Starter · 6–20 staff</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Starter · 6?0 staff</div>
           <div style="font-family:'DM Serif Display',serif;font-size:36px;color:#fff;line-height:1;">$150</div>
           <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:2px;">/month · resources only</div>
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
           <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
-          <a href="checkout.php?product=starter_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
+          <a href="checkout.php?product=starter_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started </a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);flex:1;display:flex;flex-direction:column;">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--teal-dark);margin-bottom:12px;"> Resources + EAP</div>
@@ -399,7 +444,7 @@
               </div>
             </div>
             <div style="font-size:12px;color:var(--teal-dark);margin-bottom:12px;">Billed annually · renews automatically each year.</div>
-            <a href="checkout.php?product=starter_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually →</a>
+            <a href="checkout.php?product=starter_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually </a>
           </div>
         </div>
       </div>
@@ -408,17 +453,17 @@
       <div style="background:var(--white);border:2px solid var(--teal);border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(38,119,123,0.15);">
         <div style="background:var(--teal);padding:20px 24px;position:relative;">
           <div style="position:absolute;top:12px;right:16px;background:#fff;color:var(--teal);font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:0.05em;">Most popular</div>
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Growth · 21–50 staff</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Growth · 21?0 staff</div>
           <div style="font-family:'DM Serif Display',serif;font-size:36px;color:#fff;line-height:1;">$250</div>
           <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:2px;">/month · resources only</div>
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
           <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
-          <a href="checkout.php?product=growth_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
+          <a href="checkout.php?product=growth_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started </a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);">
-          <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--teal-dark);margin-bottom:12px;"> Resources + EAP — Annual</div>
+          <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--teal-dark);margin-bottom:12px;"> Resources + EAP ?Annual</div>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
             <div style="display:flex;justify-content:space-between;align-items:baseline;">
               <span style="font-size:13px;color:var(--warm-grey);">Resource library</span>
@@ -449,24 +494,24 @@
             </div>
           </div>
           <div style="font-size:12px;color:var(--teal-dark);margin-bottom:12px;">Billed annually · renews automatically each year.</div>
-          <a href="checkout.php?product=growth_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually →</a>
+          <a href="checkout.php?product=growth_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually </a>
         </div>
       </div>
 
       <!-- TEAM -->
       <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
         <div style="background:var(--teal);padding:20px 24px;">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Team · 51–80 staff</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.75);margin-bottom:4px;">Team · 51?0 staff</div>
           <div style="font-family:'DM Serif Display',serif;font-size:36px;color:#fff;line-height:1;">$300</div>
           <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:2px;">/month · resources only</div>
         </div>
         <div style="padding:20px 24px;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--warm-grey);margin-bottom:12px;"> Resources only</div>
           <div style="font-size:13px;color:var(--warm-grey);line-height:1.7;">370+ clinically-reviewed resources · regularly updated with new content · crisis support · booking access · quarterly check-in with Nic</div>
-          <a href="checkout.php?product=team_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started →</a>
+          <a href="checkout.php?product=team_only" style="display:block;margin-top:14px;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Get started </a>
         </div>
         <div style="padding:20px 24px;background:var(--teal-light);flex:1;display:flex;flex-direction:column;">
-          <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--teal-dark);margin-bottom:12px;"> Resources + EAP — Annual</div>
+          <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--teal-dark);margin-bottom:12px;"> Resources + EAP ?Annual</div>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
             <div style="display:flex;justify-content:space-between;align-items:baseline;">
               <span style="font-size:13px;color:var(--warm-grey);">Resource library</span>
@@ -498,7 +543,7 @@
               </div>
             </div>
             <div style="font-size:12px;color:var(--teal-dark);margin-bottom:12px;">Billed annually · renews automatically each year.</div>
-            <a href="checkout.php?product=team_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually →</a>
+            <a href="checkout.php?product=team_bundle" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:9px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe annually </a>
           </div>
         </div>
       </div>
@@ -506,13 +551,13 @@
     </div>
 
     <!-- ENTERPRISE -->
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <div id="enterprise-section" style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
       <div>
         <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:6px;">Enterprise · 81+ staff</div>
         <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--charcoal);">Custom pricing</div>
         <div style="font-size:13px;color:var(--warm-grey);margin-top:4px;">Dedicated support · tailored onboarding · custom EAP structure</div>
       </div>
-      <a href="tier-enterprise.html" style="background:var(--teal);color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;">Get in touch →</a>
+      <a href="tier-enterprise.html" style="background:var(--teal);color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;">Get in touch </a>
     </div>
 
   </div>
@@ -525,7 +570,7 @@
     <h2>Add counselling sessions to <em>your EAP bundle.</em></h2>
     <p>Counselling sessions are available exclusively to businesses on an annual EAP bundle, they cannot be purchased as a standalone product. Once your bundle is active, purchase sessions as your team needs them. Each session is a private, confidential one-on-one with a Registered Psychologist or Registered Counsellor. You never see who books or what is discussed.</p>
     <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:14px 18px;display:flex;gap:10px;align-items:flex-start;margin:20px 0 32px;">
-      <span style="font-size:20px;flex-shrink:0;">ℹ</span>
+      <span style="font-size:20px;flex-shrink:0;"></span>
       <p style="font-size:13px;color:var(--teal-dark);margin:0;line-height:1.6;">Session bundles can only be purchased after your annual EAP bundle subscription is active. If you haven't subscribed yet, choose a bundle above first.</p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
@@ -560,7 +605,7 @@
               <span style="color:var(--warm-grey);">Requires an active annual EAP bundle subscription</span>
             </div>
           </div>
-          <a href="checkout.php?product=sessions_3" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Purchase 3 sessions, $600 →</a>
+          <a href="checkout.php?product=sessions_3" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Purchase 3 sessions, $600 </a>
         </div>
       </div>
 
@@ -599,12 +644,12 @@
             <span style="font-size:15px;"></span>
             <span style="font-size:12px;color:var(--amber);font-weight:500;">Same per-session rate, more sessions ready when your team needs them</span>
           </div>
-          <a href="checkout.php?product=sessions_6" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Purchase 6 sessions, $1,200 →</a>
+          <a href="checkout.php?product=sessions_6" style="display:block;text-align:center;background:var(--teal);color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Purchase 6 sessions, $1,200 </a>
         </div>
       </div>
 
     </div>
-    <p style="text-align:center;font-size:13px;color:var(--warm-grey);margin-top:20px;">Not sure how many sessions you'll need? <a href="booking.html" style="color:var(--teal);font-weight:500;">Talk to Nic first →</a></p>
+    <p style="text-align:center;font-size:13px;color:var(--warm-grey);margin-top:20px;">Not sure how many sessions you'll need? <a href="booking.html" style="color:var(--teal);font-weight:500;">Talk to Nic first </a></p>
   </div>
 </section>
 
@@ -618,10 +663,10 @@
         <div class="step-num-circle">1</div>
         <div class="step-text">
           <h4>Choose how you'd like to get started</h4>
-          <p>You have two options, subscribe directly online and get set up straight away, or book a free 15-min call with Nic first if you'd like to talk it through before committing to anything.</p>
+          <p>You have two options, subscribe directly online and get set up straight away, or book a free 30-min call with Nic first if you'd like to talk it through before committing to anything.</p>
           <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
-            <a href="tier-starter.html" style="background:var(--teal);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Subscribe now →</a>
-            <a href="booking.html" style="background:var(--white);color:var(--teal);border:1.5px solid var(--teal);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Book a free 15-min call →</a>
+            <a href="tier-starter.html" style="background:var(--teal);color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;">Subscribe now </a>
+            <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" style="background:var(--white);color:var(--teal);border:1.5px solid var(--teal);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;" data-tooltip="Learn more about our service.">Book a free 30-min call </a>
           </div>
         </div>
       </div>
@@ -665,10 +710,10 @@
 <!-- STAY IN THE LOOP -->
 <section class="section" style="background: var(--sand);">
   <div class="section-inner" style="max-width:580px;text-align:center;">
-    <div class="section-label" style="justify-content:center;">Stay in the loop</div>
+    <div class="section-label" style="justify-content:center;">Subscribe Newsletter</div>
     <h2>Keep your team ahead of <em>what's new.</em></h2>
     <p>Subscribe for updates on new resources, platform additions and mental health insights for Australian businesses. One email. No spam. Unsubscribe any time.</p>
-    <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993090&amp;s=998871&amp;a=117428&amp;k=1,_CMONSxWqGSzC09LzAvuPGh8XJKcPsz7BGgiOdAY7Qw" target="_blank" rel="noopener" style="display:inline-block;background:var(--teal);color:#fff;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif;">Stay in the loop →</a>
+    <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993090&amp;s=998871&amp;a=117428&amp;k=1,_CMONSxWqGSzC09LzAvuPGh8XJKcPsz7BGgiOdAY7Qw" target="_blank" rel="noopener" style="display:inline-block;background:var(--teal);color:#fff;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif;">Subscribe Newsletter </a>
     <p style="font-size:11px;color:var(--warm-grey);margin-top:12px;">Stored securely, never shared. <a href="privacy-policy.html" style="color:var(--teal);text-decoration:none;">Privacy Policy</a>.</p>
   </div>
 </section>
@@ -676,17 +721,14 @@
 <!-- FINAL CTA -->
 <section class="final-cta">
   <h2>Ready to give your team somewhere to turn?</h2>
-    <p>Book a 15-min call with Nic, no obligation, no contract, just a conversation.</p>
-  <a href="booking.html" class="btn-primary">Book a free 15-min call →</a>
-  <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.7);">Still have questions? <a href="faq.html" style="color:rgba(255,255,255,0.9);font-weight:500;">Read the FAQs →</a></p>
+    <p>Book a 30-min call with Nic, no obligation, no contract, just a conversation.</p>
+  <a href="https://outlook.office.com/book/FreeEAPServiceIntroduction@www.emotionalbalance.com.au/s/3wsENV7TREKnsrSqdoCgKA2?ismsaljsauthenabled" class="btn-primary" data-tooltip="Learn more about our service.">Book a free 30-min call </a>
+  <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.7);">Still have questions? <a href="faq.html" style="color:rgba(255,255,255,0.9);font-weight:500;">Read the FAQs </a></p>
 </section>
-
-<!-- FLOATING CTA -->
-<button class="free-chat-float"> Book a free call</button>
 
 <!-- FOOTER -->
 <footer>
-  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div>© 2025 Tools for the Tough Days · Powered by Emotional Balance · ABN 69 142 299 250</div>
   <div style="display:flex;gap:20px;flex-wrap:wrap">
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>
@@ -798,7 +840,7 @@
       catNav.innerHTML = CATEGORIES.map(function (cat) {
         return '<button class="cat-btn" data-cat-id="' + cat.id + '" type="button">'
           + cat.icon + ' ' + cat.label
-          + ' <span class="cat-chevron">▼</span></button>';
+          + ' <span class="cat-chevron"></span></button>';
       }).join('');
 
       catNav.addEventListener('click', function (e) {

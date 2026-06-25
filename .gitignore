@@ -2,3 +2,8 @@ data/**
 !data/
 !data/**/
 !data/**/*.csv
+!data/TOUGH DAYS_LOGO.png
+
+
+# Ignore all files under any sql folder
+**/sql/**

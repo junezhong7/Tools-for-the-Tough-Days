@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You're Not Alone, Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
   <meta name="description" content="If things feel really tough right now, help is available. You don't have to do this alone.">
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
@@ -52,10 +53,28 @@
 
     /* NAV */
     nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-    .nav-logo span { color: var(--teal); }
-    .nav-back { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
-    .nav-back:hover { color: var(--charcoal); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
+    .nav-links { display: flex; align-items: center; gap: 16px; }
+    .nav-links a,
+    .nav-links button {
+      font-size: 13px;
+      color: var(--warm-grey);
+      text-decoration: none;
+      border: 0;
+      background: none;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+    }
+    .nav-links a:hover,
+    .nav-links button:hover { color: var(--charcoal); }
+    .nav-login {
+      color: var(--charcoal);
+      border: 1px solid var(--border) !important;
+      padding: 8px 14px;
+      border-radius: 6px;
+    }
 
     /* HERO */
     .hero { background: var(--teal); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
@@ -135,6 +154,7 @@
       footer { padding: 24px 16px; flex-direction: column; text-align: center; }
     }
   </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
@@ -148,8 +168,14 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
-  <a href="support.html" class="nav-back">→Back to resources</a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
+  <div class="nav-links">
+    <a href="support.html">→Back to resources</a>
+    <a href="login.html" id="navSignIn" class="nav-login">Sign In</a>
+    <a href="register.html" id="navSignUp" class="nav-login">Sign Up</a>
+    <a href="dashboard.html" id="navDashboard" class="nav-login" style="display:none;">Dashboard</a>
+    <button id="navSignOut" class="nav-login" type="button" style="display:none;">Sign Out</button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -241,7 +267,8 @@
   <div class="talk-inner">
     <h2>Prefer to speak with someone from our team?</h2>
     <p>Our staff at Tools for the Tough Days include Registered Psychologists and Registered Counsellors. If you'd prefer to talk with someone directly, you can book a session through the platform. Sessions are private, confidential, and available at short notice.</p>
-    <a href="booking.html" class="btn-teal">Book a session →</a>
+    <a href="booking.html" class="btn-teal">Book a session </a>
+    <p style="font-size: 13px; color: var(--warm-grey); margin-top: 8px;">$130/30 mins, $220/hour</p>
   </div>
 </div>
 
@@ -255,8 +282,8 @@
 
       <div class="resource-card">
         <span class="resource-emoji"></span>
-        <div class="resource-title">What to Do When You're in Crisis — Your First Steps</div>
-        <p class="resource-desc">When everything feels overwhelming and you don't know where to start — practical, immediate steps to help you get through the next few minutes.</p>
+        <div class="resource-title">What to Do When You're in Crisis ?Your First Steps</div>
+        <p class="resource-desc">When everything feels overwhelming and you don't know where to start ?practical, immediate steps to help you get through the next few minutes.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -266,7 +293,7 @@
       <div class="resource-card">
         <span class="resource-emoji"></span>
         <div class="resource-title">Grounding Yourself When Everything Feels Overwhelming</div>
-        <p class="resource-desc">Simple, immediate grounding steps you can use right now to feel a little steadier — even when everything feels like too much.</p>
+        <p class="resource-desc">Simple, immediate grounding steps you can use right now to feel a little steadier ?even when everything feels like too much.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -274,9 +301,8 @@
       </div>
 
       <div class="resource-card">
-        <span class="resource-emoji">⏱</span>
-        <div class="resource-title">Getting Through the Next Hour — Simple Steps for Hard Moments</div>
-        <p class="resource-desc">When the only goal is getting through the next hour — a clear, manageable path through a really hard moment.</p>
+        <div class="resource-title">Getting Through the Next Hour ?Simple Steps for Hard Moments</div>
+        <p class="resource-desc">When the only goal is getting through the next hour ?a clear, manageable path through a really hard moment.</p>
         <div class="resource-btns">
           <a href="support.html" class="resource-btn primary"> Read</a>
           <a href="support.html" class="resource-btn"> Listen</a>
@@ -289,12 +315,12 @@
 
 <!-- RETURN -->
 <div class="return-section">
-  <p>Feeling a bit steadier? <a href="support.html">Return to the full resource library →</a></p>
+  <p>Feeling a bit steadier? <a href="support.html">Return to the full resource library </a></p>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div>© 2025 Tools for the Tough Days · Powered by Emotional Balance · ABN 69 142 299 250</div>
   <div style="display:flex;gap:20px;flex-wrap:wrap;">
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>
@@ -316,6 +342,7 @@
   box-shadow: -4px 0 10px rgba(0,0,0,0.2); display: block; cursor: pointer;
 ">Share feedback</a>
 
+<script src="auth-nav.js"></script>
 <script src="scripts/nav-mobile.js"></script>
 </body>
 </html>

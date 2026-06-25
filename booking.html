@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book a Free 15-Min Call, Tools for the Tough Days</title>
+<link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -28,6 +29,9 @@
     --teal: #26777B; --teal-hover: #1e5f63; --teal-dark: #1a4e52; --teal-light: #e8f4f4;
     --red-crisis: #c0392b; --green: #3a6b45; --green-bg: #edf5ef;
     --border: rgba(42,40,37,0.12);
+    --section-space: 24px;
+    --hero-space-top: 32px;
+    --hero-space-bottom: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
@@ -36,8 +40,9 @@
   .crisis-bar a { color: #fff; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
 
   nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--charcoal); text-decoration: none; }
-  .nav-logo span { color: var(--teal); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 62px; width: auto; display: block; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--teal); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; }
   .nav-links a:hover { color: var(--charcoal); }
@@ -46,7 +51,7 @@
   .nav-cta { background: var(--teal); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; }
 
   /* HERO */
-  .hero { background: var(--teal); padding: 64px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero { background: var(--teal); padding: var(--hero-space-top) 40px var(--hero-space-bottom); text-align: center; position: relative; overflow: hidden; }
   .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%); }
   .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
   .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 16px; }
@@ -58,7 +63,7 @@
   .booking-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 0; max-width: 1100px; margin: 0 auto; }
 
   /* LEFT PANEL */
-  .booking-info { background: var(--cream); padding: 48px 40px; border-right: 1px solid var(--border); }
+  .booking-info { background: var(--cream); padding: var(--section-space) 40px; border-right: 1px solid var(--border); }
   .booking-info h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
   .booking-info p { font-size: 14px; color: var(--warm-grey); line-height: 1.7; margin-bottom: 24px; }
 
@@ -73,12 +78,12 @@
   .reassure-box p { font-size: 13px; color: var(--teal-dark); line-height: 1.6; margin: 0; }
   .reassure-box strong { display: block; margin-bottom: 8px; font-size: 13px; }
 
-  /* RIGHT PANEL — BOOKING EMBED */
+  /* RIGHT PANEL ?BOOKING EMBED */
   .booking-embed { background: var(--white); padding: 0; min-height: 700px; }
   .booking-embed iframe { width: 100%; height: 100%; min-height: 700px; border: none; display: block; }
 
   /* BELOW BOOKING */
-  .below-booking { background: #e8f4f4; padding: 56px 40px; }
+  .below-booking { background: #e8f4f4; padding: var(--section-space) 40px; }
   .below-inner { max-width: 840px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
   .below-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; }
   .below-icon { font-size: 28px; margin-bottom: 10px; }
@@ -99,6 +104,7 @@
     footer { padding: 24px 16px; flex-direction: column; text-align: center; }
   }
 </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body>
 
@@ -110,7 +116,7 @@
 </div>
 
 <nav>
-  <a href="index.html" class="nav-logo">Tools for the <span>Tough Days</span></a>
+  <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
     <a href="support.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>
@@ -119,7 +125,6 @@
     <a href="register.html" class="nav-login" id="navSignUp">Sign Up</a>
     <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
     <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
-    <button class="nav-cta" onclick="window.location.href='booking.html'">Free 15-min call</button>
   </div>
 </nav>
 
@@ -127,9 +132,8 @@
 <section class="hero">
   <div class="hero-texture"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">No obligation · No sales pitch</div>
-    <h1>Book a <em>free 15-min call</em> with Nic</h1>
-    <p class="hero-sub">You'll speak directly with Nic, a Registered Psychologist with 20+ years of experience. Pick a time that works for you below.</p>
+    <h1>Book an <em>appointment</em> with us</h1>
+    <p class="hero-sub">You'll speak directly with a registered Psychologist or Counsellor. Pick a time that works for you below.</p>
   </div>
 </section>
 
@@ -139,18 +143,17 @@
   <!-- LEFT: INFO -->
   <div class="booking-info">
     <h2>What to expect</h2>
-    <p>This is a relaxed, no-pressure conversation. There's no script and no sales team, just Nic, ready to listen and help you work out if this is the right fit.</p>
+    <p>This is a relaxed, no-pressure conversation. There's no script and no sales team, just a registered Psychologist or Counsellor, ready to listen and help you work out if this is the right fit.</p>
 
     <ul class="detail-list">
-      <li><span class="icon">⏱</span><div class="text">15 minutes<small>Short, focused and easy to fit into your day</small></div></li>
       <li><span class="icon"></span><div class="text">Phone or video, your choice<small>Pick whatever feels most comfortable</small></div></li>
-      <li><span class="icon"></span><div class="text">You'll speak directly with Nic<small>Not a receptionist or intake worker</small></div></li>
-      <li><span class="icon"></span><div class="text">No commitment required<small>If it's not the right fit, Nic will tell you that too</small></div></li>
-      <li><span class="icon"></span><div class="text">Completely confidential<small>Everything you share stays between you and Nic</small></div></li>
+      <li><span class="icon"></span><div class="text">You'll speak directly with a psychologist or counsellor<small>Not a receptionist or intake worker</small></div></li>
+      <li><span class="icon"></span><div class="text">No commitment required<small>If it's not the right fit, we will tell you that too</small></div></li>
+      <li><span class="icon"></span><div class="text">Completely confidential<small>Everything you share stays between you and your psychologist/counsellor</small></div></li>
     </ul>
 
     <div class="reassure-box">
-      <p><strong>Not sure what to say?</strong>That's okay, most people aren't. You don't need to have it all figured out before you call. Just show up, and Nic will take it from there.</p>
+      <p><strong>Not sure what to say?</strong>That's okay, most people aren't. You don't need to have it all figured out before you call. Just show up, and we will take it from there.</p>
     </div>
   </div>
 
@@ -159,9 +162,9 @@
     <div style="text-align:center; padding: 40px;">
       <div style="font-size:48px; margin-bottom:20px;"></div>
       <h2 style="font-family:'DM Serif Display',serif; font-size:26px; font-weight:400; color:var(--teal-dark); margin-bottom:12px;">Pick a time that works for you</h2>
-      <p style="font-size:15px; color:var(--warm-grey); margin-bottom:32px; max-width:340px; line-height:1.7;">Click below to open Nic's calendar and choose a time. It only takes a minute.</p>
-      <a href="https://outlook.office.com/bookwithme/user/1c697f5e80824965b1d006ee409888a1@emotionalbalance.com.au/meetingtype/wOiUaQacU0iTv5cnuM5gGA2?anonymous&ismsaljsauthenabled" target="_blank" style="display:inline-block; background:var(--teal); color:#fff; padding:16px 36px; border-radius:8px; font-size:16px; font-weight:500; text-decoration:none; font-family:'DM Sans',sans-serif;">Book my free 15-min call →</a>
-      <p style="font-size:12px; color:var(--warm-grey); margin-top:16px;">Opens Microsoft Bookings in a new tab</p>
+      <p style="font-size:15px; color:var(--warm-grey); margin-bottom:32px; max-width:340px; line-height:1.7;">Click below to book an appointment with a psychologist or counsellor. It only takes a minute.</p>
+      <a href="https://outlook.office.com/book/EBCounseling@www.emotionalbalance.com.au/?ismsaljsauthenabled" target="_blank" style="display:inline-block; background:var(--teal); color:#fff; padding:16px 36px; border-radius:8px; font-size:16px; font-weight:500; text-decoration:none; font-family:'DM Sans',sans-serif;">Book an appointment </a>
+      <p style="font-size:12px; color:var(--warm-grey); margin-top:16px;">Powered by Emotional Balance</p>
     </div>
   </div>
 
@@ -172,7 +175,7 @@
   <div class="below-inner">
     <div class="below-card">
       <div class="below-icon"></div>
-      <h4>160 resources ready now</h4>
+      <h4>370+ resources ready now</h4>
       <p>Can't wait? Browse the full library of PDF and audio resources, available any time, no booking needed.</p>
     </div>
     <div class="below-card">
@@ -189,7 +192,7 @@
 </section>
 
 <footer>
-  <div>© 2025 Tools for the Tough Days · ABN 69 142 299 250</div>
+  <div>© 2025 Tools for the Tough Days · Powered by Emotional Balance · ABN 69 142 299 250</div>
   <div style="display:flex;gap:20px;flex-wrap:wrap">
     <a href="faq.html">FAQs</a>
     <a href="privacy-policy.html">Privacy</a>

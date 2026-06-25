@@ -1,0 +1,313 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --ui-charcoal: #1a2e2f;
+  --ui-muted: #4a6566;
+  --ui-teal: #26777b;
+  --ui-teal-dark: #1a5558;
+  --ui-teal-hover: #1f6468;
+  --ui-teal-light: #e8f4f4;
+  --ui-cream: #f7fbfb;
+  --ui-border: #d0e6e7;
+  --ui-shadow: 0 4px 24px rgba(38, 119, 123, 0.1);
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  color: var(--ui-charcoal);
+  background: var(--ui-cream);
+  line-height: 1.7;
+}
+
+h1,
+h2,
+h3,
+.hero h1,
+.section-intro h2,
+.card-title,
+.subscribe-cta h2,
+.modal-box h2,
+.viewer-header h3,
+.res-title,
+.audio-title,
+.what-strip h3 {
+  font-family: 'Lora', serif;
+}
+
+.crisis-bar {
+  background: #aada37;
+  color: var(--ui-teal-dark);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.crisis-bar span {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.crisis-bar a {
+  color: var(--ui-teal-dark);
+  margin: 0;
+  border-bottom: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.crisis-bar a:hover {
+  text-decoration: underline;
+}
+
+nav {
+  background: #fff;
+  border-bottom: 1px solid var(--ui-border);
+  box-shadow: 0 2px 12px rgba(38, 119, 123, 0.07);
+  height: 68px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Fallback layout for pages that place .nav-logo/.nav-links directly under nav */
+nav > .nav-logo {
+  display: flex;
+  align-items: center;
+  min-height: 68px;
+  margin-left: max(24px, calc((100vw - 1100px) / 2 + 24px));
+}
+
+nav > .nav-links,
+nav > ul.nav-links {
+  margin-right: max(24px, calc((100vw - 1100px) / 2 + 24px));
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo img {
+  height: 62px;
+  max-height: 62px;
+  width: auto;
+  object-fit: contain;
+}
+
+.nav-logo-text,
+.nav-logo span {
+  display: none;
+}
+
+.nav-links a,
+.nav-links button {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: var(--ui-muted);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nav-login,
+nav .btn-nav {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nav-links a:hover,
+.nav-links button:hover,
+.nav-links a.active {
+  color: var(--ui-teal);
+}
+
+.nav-login,
+.btn-open,
+.btn-unlock,
+.modal-submit,
+.price-box a,
+.mood-submit {
+  border-radius: 999px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--ui-teal-dark) 0%, var(--ui-teal) 60%, #3aa0a5 100%);
+  position: relative;
+  overflow: visible;
+  margin-bottom: 78px;
+  --hero-orb-left-size: 330px;
+  --hero-orb-left-x: -120px;
+  --hero-orb-left-y: -150px;
+  --hero-orb-right-size: 420px;
+  --hero-orb-right-x: -90px;
+  --hero-orb-right-y: -110px;
+  --hero-orb-opacity: 0.08;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  left: var(--hero-orb-left-x);
+  bottom: var(--hero-orb-left-y);
+  width: var(--hero-orb-left-size);
+  height: var(--hero-orb-left-size);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, var(--hero-orb-opacity));
+  pointer-events: none;
+}
+
+.hero .hero-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero .hero-texture::before {
+  content: '';
+  position: absolute;
+  right: var(--hero-orb-right-x);
+  top: var(--hero-orb-right-y);
+  width: var(--hero-orb-right-size);
+  height: var(--hero-orb-right-size);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, var(--hero-orb-opacity));
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -78px;
+  height: 78px;
+  background:
+    linear-gradient(var(--ui-teal-dark), var(--ui-teal-dark)) top / 100% 24px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C360,60 1080,0 1440,40 L1440,0 Z' fill='%231a5558'/%3E%3C/svg%3E") bottom / 100% 54px no-repeat;
+  background-color: var(--ui-cream);
+  pointer-events: none;
+}
+
+/* Pages with explicit wave markup keep their original divider. */
+.hero:has(+ .hero-wave-band)::after,
+.hero:has(+ .hero-wave)::after,
+.hero:has(+ svg[viewBox="0 0 1440 60"])::after {
+  display: none;
+}
+
+.hero:has(+ .hero-wave-band),
+.hero:has(+ .hero-wave),
+.hero:has(+ svg[viewBox="0 0 1440 60"]) {
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.hero-wave-band {
+  height: 24px;
+  background: var(--ui-teal-dark);
+}
+
+.hero-wave {
+  display: block;
+  width: 100%;
+  height: 54px;
+  background: var(--ui-cream);
+}
+
+.hero-content,
+.hero-inner,
+.hero-text {
+  position: relative;
+  z-index: 1;
+}
+
+.resource-card,
+.exp-card,
+.personal-section,
+.what-card,
+.topic-modal,
+.modal-box,
+.viewer-box {
+  border-color: var(--ui-border);
+  box-shadow: var(--ui-shadow);
+}
+
+.card-title,
+.section-intro h2,
+.what-strip h3,
+.modal-box h2,
+.res-title,
+.audio-title {
+  color: var(--ui-teal-dark);
+  font-weight: 600;
+}
+
+.subscribe-cta {
+  background: linear-gradient(135deg, var(--ui-teal) 0%, var(--ui-teal-dark) 100%);
+  box-shadow: 0 10px 34px rgba(38, 119, 123, 0.2);
+}
+
+footer {
+  background: var(--ui-teal-dark);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+footer a:hover {
+  color: #fff;
+}
+
+@media (max-width: 800px) {
+  nav {
+    height: auto;
+    min-height: 64px;
+  }
+
+  .nav-inner {
+    padding: 0 16px;
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nav-links {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  nav > .nav-logo {
+    margin-left: 16px;
+    min-height: 64px;
+  }
+
+  nav > .nav-links,
+  nav > ul.nav-links {
+    margin-right: 16px;
+  }
+}

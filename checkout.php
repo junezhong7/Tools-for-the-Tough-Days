@@ -158,7 +158,7 @@ try {
     if (INTRO_COUPON_ID !== '') {
       $session_params['discounts'] = [['coupon' => INTRO_COUPON_ID]];
     }
-    $session_params['success_url'] = SITE_URL . '/welcome-individual.html?session_id={CHECKOUT_SESSION_ID}';
+    $session_params['success_url'] = SITE_URL . '/my-preference.html?new_subscriber=1&session_id={CHECKOUT_SESSION_ID}';
   }
 
   // ── INDIVIDUAL YEARLY ───────────────────────
@@ -169,7 +169,7 @@ try {
       'price'    => $prices['individual_yearly'],
       'quantity' => 1,
     ]];
-    $session_params['success_url'] = SITE_URL . '/welcome-individual.html?session_id={CHECKOUT_SESSION_ID}';
+    $session_params['success_url'] = SITE_URL . '/my-preference.html?new_subscriber=1&session_id={CHECKOUT_SESSION_ID}';
   }
 
   // ── BUSINESS — RESOURCES ONLY ───────────────

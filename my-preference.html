@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools for the Tough Days — Onboarding Questionnaire</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Nunito:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #26777B;
+    --teal-light: #E8F4F5;
+    --teal-mid: #C2E0E2;
+    --charcoal: #2D3B44;
+    --lime: #AADA37;
+    --grey-bg: #F7F8F8;
+    --grey-border: #E2E8EA;
+    --grey-text: #6B7E87;
+    --red: #B91C1C;
+    --red-light: #FEF2F2;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 3px rgba(38,119,123,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(38,119,123,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #EEF3F4;
+    color: var(--charcoal);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── CRISIS BAR ── */
+  .crisis-bar {
+    background: #aada37;
+    color: #1a5558;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+  .crisis-bar span { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; }
+  .crisis-bar a { color: #1a5558; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; }
+  .crisis-bar a:hover { text-decoration: underline; }
+
+  /* ── NAV ── */
+  nav { background: var(--white); border-bottom: 1px solid #d0e6e7; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,119,123,0.07); }
+  .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-left: 100px; }
+  .nav-logo img { height: 68px; max-height: 68px; max-width: 240px; width: auto; object-fit: contain; display: block; }
+  .nav-logo-text { display: none; }
+
+  /* ── MAIN LAYOUT ── */
+  .page-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── SECTION TITLE ── */
+  .page-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .page-title h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--teal);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .page-title p {
+    font-size: 14px;
+    color: var(--grey-text);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  /* ── INTRO BOX ── */
+  .intro-box {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    padding: 18px 22px;
+    margin: 24px 24px 0;
+    border-radius: 10px;
+  }
+  .intro-box p {
+    font-size: 13px;
+    line-height: 1.75;
+    color: #3D6164;
+  }
+  .intro-box p + p { margin-top: 8px; }
+
+  /* ── BODY ── */
+  .card-body { padding: 24px; display: flex; flex-direction: column; gap: 28px; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--grey-border);
+    margin: 4px -24px;
+  }
+
+  /* ── GROUP ── */
+  .group { display: flex; flex-direction: column; gap: 10px; }
+  .section-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-tag::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+  .q-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+    line-height: 1.4;
+  }
+  .q-label .count {
+    font-weight: 400;
+    color: var(--grey-text);
+    font-size: 12px;
+    margin-left: 6px;
+  }
+  .q-sub {
+    font-size: 12px;
+    color: var(--grey-text);
+    line-height: 1.55;
+    margin-top: -4px;
+  }
+
+  /* ── SLIDER ── */
+  .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .slider-row { display: flex; align-items: center; gap: 14px; }
+  .slider-track {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--teal) 45%, var(--grey-border) 45%);
+    outline: none;
+    cursor: pointer;
+  }
+  .slider-track::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 3px solid var(--white);
+    box-shadow: 0 1px 4px rgba(38,119,123,0.35);
+    cursor: pointer;
+  }
+  .slider-bubble {
+    min-width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--white);
+    font-size: 15px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(38,119,123,0.3);
+  }
+  .slider-desc {
+    font-size: 13px; font-weight: 600; color: var(--teal);
+    min-height: 18px;
+  }
+  .slider-ends {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--grey-text);
+    margin-top: 2px;
+  }
+
+  /* ── PILL GRID ── */
+  .pill-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pill-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .pill-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+  .pill-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ── OPTION CARD ── */
+  .opt-card {
+    border: 1.5px solid var(--grey-border);
+    border-radius: 12px;
+    padding: 13px 14px;
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+    background: var(--white);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .opt-card.selected {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .opt-card .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+    color: var(--teal);
+  }
+  .opt-card.selected .icon { background: rgba(38,119,123,0.15); }
+  .opt-card-text strong {
+    font-size: 13px; font-weight: 600; color: var(--charcoal); display: block; margin-bottom: 2px;
+  }
+  .opt-card-text span { font-size: 11px; color: var(--grey-text); line-height: 1.45; }
+
+  /* ── FREQUENCY TILES ── */
+  .freq-tile {
+    border: 1.5px solid var(--grey-border);
+    border-radius: 12px;
+    padding: 16px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: var(--white);
+    cursor: pointer;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .freq-tile.selected { border-color: var(--teal); background: var(--teal-light); }
+  .freq-tile .tile-icon { font-size: 22px; color: var(--teal); }
+  .freq-tile strong { font-size: 13px; font-weight: 600; color: var(--charcoal); }
+  .freq-tile span { font-size: 11px; color: var(--grey-text); }
+
+  /* ── PILL BUTTON ── */
+  .pill-btn {
+    border: 1.5px solid var(--grey-border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--white);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill-btn.selected { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .pill-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── TIME ROW ── */
+  .time-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .time-row span { font-size: 13px; color: var(--grey-text); }
+  .time-select {
+    border: 1.5px solid var(--grey-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7E87' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+
+  /* ── PROF SUPPORT PILLS ── */
+  .prof-pill {
+    border: 1.5px solid var(--grey-border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    color: var(--charcoal);
+    background: var(--white);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    box-shadow: var(--shadow-sm);
+  }
+  .prof-pill.selected { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+
+  /* ── FOOTER ── */
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-top: 1px solid var(--grey-border);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn-later {
+    background: none; border: none;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    color: var(--grey-text); cursor: pointer;
+    text-decoration: underline; padding: 8px 0;
+  }
+  .footer-right { display: flex; gap: 8px; align-items: center; }
+  .btn-skip {
+    background: var(--white);
+    border: 1.5px solid var(--grey-border);
+    border-radius: 9px;
+    padding: 9px 18px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    color: var(--grey-text); cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-submit {
+    background: var(--teal);
+    border: none;
+    border-radius: 9px;
+    padding: 10px 24px;
+    font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    color: var(--white); cursor: pointer;
+    box-shadow: 0 2px 8px rgba(38,119,123,0.3);
+  }
+
+  /* ── SKIP OVERLAY ── */
+  .overlay-bg {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .overlay-bg.visible { opacity: 1; pointer-events: all; }
+  .skip-modal {
+    background: var(--white);
+    border-radius: 16px;
+    max-width: 460px; width: 100%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+    overflow: hidden;
+    transform: translateY(8px);
+    transition: transform 0.2s;
+  }
+  .overlay-bg.visible .skip-modal { transform: translateY(0); }
+  .skip-modal-top {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--grey-border);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .skip-icon-wrap {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .skip-icon-wrap svg { width: 20px; height: 20px; color: var(--teal); }
+  .skip-modal-top h3 { font-size: 15px; font-weight: 600; color: var(--charcoal); margin-bottom: 5px; }
+  .skip-modal-top p { font-size: 13px; color: var(--grey-text); line-height: 1.65; }
+  .skip-modal-body { padding: 16px 24px; }
+  .skip-modal-body p { font-size: 13px; color: var(--grey-text); line-height: 1.7; }
+  .skip-modal-actions {
+    padding: 16px 24px;
+    border-top: 1px solid var(--grey-border);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .btn-goback {
+    background: var(--teal); border: none; border-radius: 9px;
+    padding: 11px 18px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    color: var(--white); cursor: pointer; text-align: center;
+    box-shadow: 0 2px 8px rgba(38,119,123,0.3);
+  }
+  .btn-continue-anyway {
+    background: none; border: 1.5px solid var(--grey-border); border-radius: 9px;
+    padding: 10px 18px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    color: var(--grey-text); cursor: pointer; text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ── DESIGN CALLOUTS ── */
+  .design-note {
+    background: #FFFBEB;
+    border: 1px dashed #D97706;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #92400E;
+    margin-top: 6px;
+    display: flex; align-items: flex-start; gap: 6px;
+    line-height: 1.5;
+  }
+  .design-note::before { content: '↳'; font-weight: 700; flex-shrink: 0; }
+
+  /* ── INLINE ANNOTATIONS ── */
+  .annotation {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px; font-weight: 500; color: #1D4ED8;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ── ICONS (inline SVG) ── */
+  .ic { display: inline-flex; align-items: center; color: var(--teal); }
+  .ic svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+
+<!-- CRISIS BAR -->
+<div class="crisis-bar">
+  <span>If things feel urgent right now :</span>
+  <a href="tel:131114">Lifeline 13 11 14</a>
+  <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+  <a href="tel:000">Emergency 000</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/index.html">
+      <img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" />
+      <span class="nav-logo-text">Tools for the Tough Days</span>
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrap">
+
+  <!-- NEW SUBSCRIBER WELCOME BANNER -->
+  <div id="newSubscriberBanner" style="display:none;background:#e8f4f4;border:1px solid rgba(38,119,123,0.25);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:none;">
+    <div style="font-family:'DM Serif Display',serif;font-size:18px;color:#1a4e52;margin-bottom:4px;">Subscription confirmed — welcome!</div>
+    <div style="font-size:14px;color:#26777B;line-height:1.6;">Take a moment to set your preferences so we can point you to the most relevant resources. It only takes a minute.</div>
+  </div>
+
+  <div class="page-title">
+    <h1>Let us get to know you a little</h1>
+    <p>Post sign-up, pre-dashboard — shown on first login after registration</p>
+  </div>
+
+  <div class="card">
+
+    <!-- INTRO -->
+    <div class="intro-box">
+      <p>Welcome, and thank you for joining. Looking after your mental wellbeing isn't something you do once and forget about. It's something you continue to build and look after on a regular basis, and that's exactly what this platform is designed to help you do.</p>
+      <p>These questions are here to help you build the habit of looking after your mental wellbeing — and to make sure the experience actually fits your life. Your answers shape your daily check-ins, the resources we point you toward, and how we reach out if things get tough. There are no right or wrong answers. Everything you share stays private and is only ever used to support you.</p>
+      <p>You can update any of this at any time from your settings, or skip it for now and come back when you're ready. If I can assist in any way please do not hesitate to reach out.</p>
+    </div>
+
+    <div class="card-body">
+
+      <!-- ── SECTION 6: GOALS ── -->
+      <div class="group" style="display:none">
+        <div class="section-tag">Your goals</div>
+        <label class="q-label">What are you hoping to get out of this? <span class="count">Choose up to 3</span></label>
+        <p class="q-sub">This helps us point you toward the most relevant tools and resources from the start.</p>
+        <div class="pill-grid-2">
+          <div class="opt-card selected">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/><path d="m16 16 4.5 4.5"/><path d="m7.5 20.5 4-4"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Manage stress better</strong><span>Day to day pressures</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15h8"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Lift my mood</strong><span>Feel more like myself</span></div>
+          </div>
+          <div class="opt-card selected">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Build better habits</strong><span>Small, consistent daily steps</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Strengthen my resilience</strong><span>Cope better when things get hard</span></div>
+          </div>
+          <div class="opt-card selected">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Sleep better</strong><span>Rest and recovery</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Ease anxiety</strong><span>Worry, tension, overthinking</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Stay connected</strong><span>Relationships, belonging</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Understand myself better</strong><span>Patterns, triggers, awareness</span></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" style="display:none">
+
+      <!-- ── SECTION 3: TIMING ── -->
+      <div class="group">
+        <div class="section-tag">Check-in timing</div>
+        <label class="q-label">What time would you like your daily check-in reminder?</label>
+        <p class="q-sub">Pick the time that works best for you on most days. You can change this at any time.</p>
+        <div class="time-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7E87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <select class="time-select">
+            <option>12:00 am</option>
+            <option>12:30 am</option>
+            <option>1:00 am</option>
+            <option>1:30 am</option>
+            <option>2:00 am</option>
+            <option>2:30 am</option>
+            <option>3:00 am</option>
+            <option>3:30 am</option>
+            <option>4:00 am</option>
+            <option>4:30 am</option>
+            <option>5:00 am</option>
+            <option>5:30 am</option>
+            <option>6:00 am</option>
+            <option>6:30 am</option>
+            <option>7:00 am</option>
+            <option selected>7:30 am</option>
+            <option>8:00 am</option>
+            <option>8:30 am</option>
+            <option>9:00 am</option>
+            <option>9:30 am</option>
+            <option>10:00 am</option>
+            <option>10:30 am</option>
+            <option>11:00 am</option>
+            <option>11:30 am</option>
+            <option>12:00 pm</option>
+            <option>12:30 pm</option>
+            <option>1:00 pm</option>
+            <option>1:30 pm</option>
+            <option>2:00 pm</option>
+            <option>2:30 pm</option>
+            <option>3:00 pm</option>
+            <option>3:30 pm</option>
+            <option>4:00 pm</option>
+            <option>4:30 pm</option>
+            <option>5:00 pm</option>
+            <option>5:30 pm</option>
+            <option>6:00 pm</option>
+            <option>6:30 pm</option>
+            <option>7:00 pm</option>
+            <option>7:30 pm</option>
+            <option>8:00 pm</option>
+            <option>8:30 pm</option>
+            <option>9:00 pm</option>
+            <option>9:30 pm</option>
+            <option>10:00 pm</option>
+            <option>10:30 pm</option>
+            <option>11:00 pm</option>
+            <option>11:30 pm</option>
+          </select>
+          <select class="time-select">
+            <option value="Australia/Perth">Perth — AWST (UTC+8)</option>
+            <option value="Australia/Eucla">Eucla — ACWST (UTC+8:45)</option>
+            <option value="Australia/Darwin">Darwin — ACST (UTC+9:30)</option>
+            <option value="Australia/Adelaide">Adelaide — ACST/ACDT (UTC+9:30/10:30)</option>
+            <option value="Australia/Brisbane" selected>Brisbane — AEST (UTC+10)</option>
+            <option value="Australia/Lindeman">Lindeman — AEST (UTC+10)</option>
+            <option value="Australia/Sydney">Sydney — AEST/AEDT (UTC+10/11)</option>
+            <option value="Australia/ACT">Canberra — AEST/AEDT (UTC+10/11)</option>
+            <option value="Australia/Melbourne">Melbourne — AEST/AEDT (UTC+10/11)</option>
+            <option value="Australia/Hobart">Hobart — AEST/AEDT (UTC+10/11)</option>
+            <option value="Australia/Currie">Currie — AEST/AEDT (UTC+10/11)</option>
+            <option value="Australia/Lord_Howe">Lord Howe Island — LHST/LHDT (UTC+10:30/11)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="group">
+        <label class="q-label">How often would you like us to check in?</label>
+        <p class="q-sub">You can always change this later.</p>
+        <div class="pill-grid-4">
+          <div class="freq-tile selected">
+            <div class="tile-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+            </div>
+            <strong>Every day</strong>
+            <span>Build the habit quickly</span>
+          </div>
+          <div class="freq-tile">
+            <div class="tile-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <strong>Every 2 days</strong>
+            <span>A steady pace</span>
+          </div>
+          <div class="freq-tile">
+            <div class="tile-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <strong>Every 3 days</strong>
+            <span>Light touch</span>
+          </div>
+          <div class="freq-tile">
+            <div class="tile-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a2 2 0 0 1-3.46 0"/><path d="M18.63 13A17.89 17.89 0 0 1 18 8"/><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 0 0-9.33-5"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            </div>
+            <strong>Not now</strong>
+            <span>I'll check in myself</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label class="q-label">What do you usually do around that time that you could link this to?</label>
+        <p class="q-sub">Attaching a new habit to something you already do makes it far more likely to stick.</p>
+        <div class="pill-grid-3">
+          <button class="pill-btn selected">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            Getting ready for the day
+          </button>
+          <button class="pill-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
+            Having a break
+          </button>
+          <button class="pill-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="22"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+            Eating a meal
+          </button>
+          <button class="pill-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Getting home
+          </button>
+          <button class="pill-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M4 18v2"/><path d="M20 18v2"/></svg>
+            Relaxing after dinner
+          </button>
+          <button class="pill-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            Winding down before sleep
+          </button>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- ── SECTION 4: QUIET HOURS ── -->
+      <div class="group">
+        <div class="section-tag">Your quiet hours</div>
+        <label class="q-label">When should we go quiet? We will never contact you outside these hours.</label>
+        <p class="q-sub">Protecting your sleep is one of the most important things you can do for your wellbeing. This is on by default.</p>
+        <div class="time-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7E87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span>Do not disturb from</span>
+          <select class="time-select">
+            <option>12:00 am</option>
+            <option>12:30 am</option>
+            <option>1:00 am</option>
+            <option>1:30 am</option>
+            <option>2:00 am</option>
+            <option>2:30 am</option>
+            <option>3:00 am</option>
+            <option>3:30 am</option>
+            <option>4:00 am</option>
+            <option>4:30 am</option>
+            <option>5:00 am</option>
+            <option>5:30 am</option>
+            <option>6:00 am</option>
+            <option>6:30 am</option>
+            <option>7:00 am</option>
+            <option>7:30 am</option>
+            <option>8:00 am</option>
+            <option>8:30 am</option>
+            <option>9:00 am</option>
+            <option>9:30 am</option>
+            <option>10:00 am</option>
+            <option>10:30 am</option>
+            <option>11:00 am</option>
+            <option>11:30 am</option>
+            <option>12:00 pm</option>
+            <option>12:30 pm</option>
+            <option>1:00 pm</option>
+            <option>1:30 pm</option>
+            <option>2:00 pm</option>
+            <option>2:30 pm</option>
+            <option>3:00 pm</option>
+            <option>3:30 pm</option>
+            <option>4:00 pm</option>
+            <option>4:30 pm</option>
+            <option>5:00 pm</option>
+            <option>5:30 pm</option>
+            <option>6:00 pm</option>
+            <option>6:30 pm</option>
+            <option>7:00 pm</option>
+            <option>7:30 pm</option>
+            <option selected>8:00 pm</option>
+            <option>8:30 pm</option>
+            <option>9:00 pm</option>
+            <option>9:30 pm</option>
+            <option>10:00 pm</option>
+            <option>10:30 pm</option>
+            <option>11:00 pm</option>
+            <option>11:30 pm</option>
+          </select>
+          <span>until</span>
+          <select class="time-select">
+            <option>12:00 am</option>
+            <option>12:30 am</option>
+            <option>1:00 am</option>
+            <option>1:30 am</option>
+            <option>2:00 am</option>
+            <option>2:30 am</option>
+            <option>3:00 am</option>
+            <option>3:30 am</option>
+            <option>4:00 am</option>
+            <option>4:30 am</option>
+            <option>5:00 am</option>
+            <option>5:30 am</option>
+            <option>6:00 am</option>
+            <option selected>6:30 am</option>
+            <option>7:00 am</option>
+            <option>7:30 am</option>
+            <option>8:00 am</option>
+            <option>8:30 am</option>
+            <option>9:00 am</option>
+            <option>9:30 am</option>
+            <option>10:00 am</option>
+            <option>10:30 am</option>
+            <option>11:00 am</option>
+            <option>11:30 am</option>
+            <option>12:00 pm</option>
+            <option>12:30 pm</option>
+            <option>1:00 pm</option>
+            <option>1:30 pm</option>
+            <option>2:00 pm</option>
+            <option>2:30 pm</option>
+            <option>3:00 pm</option>
+            <option>3:30 pm</option>
+            <option>4:00 pm</option>
+            <option>4:30 pm</option>
+            <option>5:00 pm</option>
+            <option>5:30 pm</option>
+            <option>6:00 pm</option>
+            <option>6:30 pm</option>
+            <option>7:00 pm</option>
+            <option>7:30 pm</option>
+            <option>8:00 pm</option>
+            <option>8:30 pm</option>
+            <option>9:00 pm</option>
+            <option>9:30 pm</option>
+            <option>10:00 pm</option>
+            <option>10:30 pm</option>
+            <option>11:00 pm</option>
+            <option>11:30 pm</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider" style="display:none">
+
+      <!-- ── SECTION 5: STRATEGIES ── -->
+      <div class="group" style="display:none">
+        <div class="section-tag">What already works for you</div>
+        <label class="q-label">When things get tough, what do you usually reach for? <span class="count">Choose up to 3</span></label>
+        <p class="q-sub">We use these to personalise your support. When your mood drops, we will remind you of what you already know works.</p>
+        <div class="pill-grid-2">
+          <div class="opt-card selected">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 4 6-4"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Walking or getting outside</strong><span>A walk, fresh air, nature</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Exercise</strong><span>Gym, run, sport, weights</span></div>
+          </div>
+          <div class="opt-card selected">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Music</strong><span>Listening, dancing, playing</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Talking to someone</strong><span>Friend, family, someone you trust</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Reading or watching something</strong><span>A book, show, film</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Quiet time alone</strong><span>Breathing, stillness, rest</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M17.5 14c.97.58 2.5 1.84 2.5 3.5v1h-16v-1c0-1.66 1.53-2.92 2.5-3.5"/><path d="M7.5 12.5c.83.5 1.5 1.66 2 3"/><path d="M16.5 12.5c-.83.5-1.5 1.66-2 3"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Something creative</strong><span>Art, music, cooking, writing</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </div>
+            <div class="opt-card-text"><strong>Sticking to a routine</strong><span>Structure, predictability</span></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" style="display:none">
+
+      <!-- ── SECTION 8: PROFESSIONAL SUPPORT ── -->
+      <div class="group" style="display:none">
+        <div class="section-tag">Professional support</div>
+        <label class="q-label">When you are having a really tough time, do you currently have professional support to turn to?</label>
+        <p class="q-sub">This helps us understand how best to support you and what to suggest if things get difficult. This platform works alongside professional care, not instead of it.</p>
+        <div class="pill-wrap">
+          <button class="prof-pill selected">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+            Yes, I see a psychologist
+          </button>
+          <button class="prof-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Yes, I see my GP
+          </button>
+          <button class="prof-pill">Yes, I see a counsellor</button>
+          <button class="prof-pill">Not currently, but open to it</button>
+          <button class="prof-pill">No, I am managing on my own</button>
+        </div>
+      </div>
+
+    </div><!-- end card-body -->
+
+    <!-- FOOTER -->
+    <div class="card-footer">
+      <button class="btn-later" onclick="showSkip('later')">Not now, I will do this later</button>
+      <div class="footer-right">
+        <button class="btn-skip" onclick="showSkip('skip')">Skip these questions</button>
+        <button class="btn-submit">Save my preferences</button>
+      </div>
+    </div>
+
+  </div><!-- end card -->
+
+
+</div><!-- end page-wrap -->
+
+<!-- SKIP OVERLAY (live) -->
+<div class="overlay-bg" id="overlay">
+  <div class="skip-modal">
+    <div class="skip-modal-top">
+      <div class="skip-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#26777B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div>
+        <h3 id="overlay-title">Just so you know</h3>
+        <p id="overlay-msg">Your answers help us personalise everything — your check-in timing, the resources we suggest, and the way we reach out if things get tough. Without them, your experience will be based on general defaults rather than what actually works for you.</p>
+      </div>
+    </div>
+    <div class="skip-modal-body">
+      <p id="overlay-sub">You can always come back and complete this from your settings whenever you are ready. It only takes a few minutes and makes a real difference to how well the platform works for you.</p>
+    </div>
+    <div class="skip-modal-actions">
+      <button class="btn-goback" onclick="closeOverlay()">Go back and complete it</button>
+      <button class="btn-continue-anyway" id="overlay-cta" onclick="closeOverlay()">Continue with defaults</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const moodLabels = {1:'In crisis',2:'Really struggling',3:'Finding it very hard',4:'Having a tough time',5:'Getting by',6:'Okay, not great',7:'Fairly good',8:'Going well',9:'Really well',10:"Couldn't be better"};
+
+const bSlider = document.getElementById('bSlider');
+const bVal = document.getElementById('bVal');
+const bDesc = document.getElementById('bDesc');
+if (bSlider) {
+  bSlider.addEventListener('input', function(){
+    const v = parseInt(this.value);
+    bVal.textContent = v;
+    bDesc.textContent = moodLabels[v];
+    const pct = ((v - 1) / 9) * 100;
+    this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
+  });
+}
+
+const tSlider = document.getElementById('tSlider');
+const tVal = document.getElementById('tVal');
+const tDesc = document.getElementById('tDesc');
+if (tSlider) {
+  tSlider.addEventListener('input', function(){
+    const v = parseInt(this.value);
+    tVal.textContent = v;
+    tDesc.textContent = moodLabels[v];
+    const pct = ((v - 1) / 6) * 100;
+    this.style.background = 'linear-gradient(to right, #26777B ' + pct + '%, #E2E8EA ' + pct + '%)';
+  });
+}
+
+function showSkip(mode) {
+  const title = document.getElementById('overlay-title');
+  const msg = document.getElementById('overlay-msg');
+  const sub = document.getElementById('overlay-sub');
+  const cta = document.getElementById('overlay-cta');
+  if (mode === 'skip') {
+    title.textContent = 'Just so you know';
+    msg.textContent = 'Your answers help us personalise everything — your check-in timing, the resources we suggest, and the way we reach out if things get tough. Without them, your experience will be based on general defaults rather than what actually works for you.';
+    sub.textContent = 'You can always come back and complete this from your settings whenever you are ready. It only takes a few minutes and makes a real difference to how well the platform works for you.';
+    cta.textContent = 'Continue with defaults';
+  } else {
+    title.textContent = 'No problem at all';
+    msg.textContent = 'We will remind you to complete this next time you log in. Your answers make a real difference — they help us personalise your check-ins, your resources, and the way we reach out if things get tough.';
+    sub.textContent = 'You can also find this questionnaire at any time in your settings. We will prompt you again on your next visit, but after that it is completely up to you.';
+    cta.textContent = 'Take me to the platform';
+  }
+  document.getElementById('overlay').classList.add('visible');
+}
+function closeOverlay() {
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+// Show welcome banner for new subscribers arriving from checkout
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('new_subscriber') === '1') {
+    const banner = document.getElementById('newSubscriberBanner');
+    if (banner) banner.style.display = 'block';
+  }
+})();
+
+// ── Frequency tile toggle ─────────────────────────────────────────────────────
+document.querySelectorAll('.freq-tile').forEach(function(tile) {
+  tile.addEventListener('click', function() {
+    document.querySelectorAll('.freq-tile').forEach(function(t) { t.classList.remove('selected'); });
+    this.classList.add('selected');
+  });
+});
+
+// ── Pill button toggle (single-select per grid) ───────────────────────────────
+document.querySelectorAll('.pill-grid-3').forEach(function(grid) {
+  grid.querySelectorAll('.pill-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      grid.querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
+      this.classList.add('selected');
+    });
+  });
+});
+
+// ── Form element references (by position — no id attributes needed) ───────────
+const timeRows           = document.querySelectorAll('.time-row');
+const reminderTimeSelect = timeRows[0] ? timeRows[0].querySelectorAll('.time-select')[0] : null;
+const timezoneSelect     = timeRows[0] ? timeRows[0].querySelectorAll('.time-select')[1] : null;
+const quietFromSelect    = timeRows[1] ? timeRows[1].querySelectorAll('.time-select')[0] : null;
+const quietUntilSelect   = timeRows[1] ? timeRows[1].querySelectorAll('.time-select')[1] : null;
+
+const freqLabelToKey = {
+  'Every day':    'daily',
+  'Every 2 days': 'every_2_days',
+  'Every 3 days': 'every_3_days',
+  'Not now':      'not_now'
+};
+const freqKeyToLabel = {
+  'daily':        'Every day',
+  'every_2_days': 'Every 2 days',
+  'every_3_days': 'Every 3 days',
+  'not_now':      'Not now'
+};
+
+function selectByText(selectEl, text) {
+  if (!selectEl) return;
+  for (let i = 0; i < selectEl.options.length; i++) {
+    if (selectEl.options[i].text === text || selectEl.options[i].value === text) {
+      selectEl.selectedIndex = i;
+      return;
+    }
+  }
+}
+
+// ── Pre-fill form from saved preferences ──────────────────────────────────────
+(function loadPreferences() {
+  fetch('/api/preferences.php?action=get', { credentials: 'include' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.saved) return;
+      selectByText(reminderTimeSelect, data.reminder_time);
+      selectByText(timezoneSelect, data.timezone);
+      selectByText(quietFromSelect, data.quiet_from);
+      selectByText(quietUntilSelect, data.quiet_until);
+      const freqLabel = freqKeyToLabel[data.frequency];
+      if (freqLabel) {
+        document.querySelectorAll('.freq-tile').forEach(function(tile) {
+          const strong = tile.querySelector('strong');
+          if (strong && strong.textContent.trim() === freqLabel) {
+            document.querySelectorAll('.freq-tile').forEach(function(t) { t.classList.remove('selected'); });
+            tile.classList.add('selected');
+          }
+        });
+      }
+    })
+    .catch(function() {});
+})();
+
+// ── Save preferences ──────────────────────────────────────────────────────────
+document.querySelector('.btn-submit').addEventListener('click', function() {
+  const activeTile = document.querySelector('.freq-tile.selected strong');
+  const freqLabel  = activeTile ? activeTile.textContent.trim() : 'Every day';
+
+  const freqKey = freqLabelToKey[freqLabel] || 'daily';
+  const payload = {
+    reminder_time:     reminderTimeSelect ? reminderTimeSelect.value : '7:30 am',
+    timezone:          timezoneSelect     ? timezoneSelect.value     : 'Australia/Brisbane',
+    frequency:         freqKey,
+    quiet_from:        quietFromSelect    ? quietFromSelect.value    : '8:00 pm',
+    quiet_until:       quietUntilSelect   ? quietUntilSelect.value   : '6:30 am',
+    reminders_enabled: freqKey !== 'not_now'
+  };
+
+  const btn = this;
+  btn.disabled    = true;
+  btn.textContent = 'Saving…';
+
+  fetch('/api/preferences.php?action=save', {
+    method:      'POST',
+    credentials: 'include',
+    headers:     { 'Content-Type': 'application/json' },
+    body:        JSON.stringify(payload)
+  })
+    .then(function(r) {
+      if (!r.ok) throw new Error('save_failed');
+      return r.json();
+    })
+    .then(function() {
+      window.location.href = '/dashboard.html';
+    })
+    .catch(function() {
+      btn.disabled    = false;
+      btn.textContent = 'Save my preferences';
+      const title = document.getElementById('overlay-title');
+      const msg   = document.getElementById('overlay-msg');
+      const sub   = document.getElementById('overlay-sub');
+      const cta   = document.getElementById('overlay-cta');
+      if (title) title.textContent = 'Something went wrong';
+      if (msg)   msg.textContent   = 'We could not save your preferences. Please check your connection and try again.';
+      if (sub)   sub.textContent   = '';
+      if (cta)   { cta.textContent = 'OK'; cta.onclick = closeOverlay; }
+      document.getElementById('overlay').classList.add('visible');
+    });
+});
+</script>
+</body>
+</html>
