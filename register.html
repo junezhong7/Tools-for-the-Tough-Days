@@ -122,6 +122,78 @@
     .signin-row a { color: var(--teal); text-decoration: none; font-weight: 600; }
     .signin-row a:hover { color: var(--teal-dark); text-decoration: underline; }
 
+    /* ── CONSENT MODAL ── */
+    .consent-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(26, 46, 46, 0.6);
+      backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .consent-dialog {
+      background: var(--warm-white); border-radius: 16px;
+      width: 100%; max-width: 874px; max-height: 90vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 24px 60px rgba(26,46,46,0.25);
+      animation: fadeUp 0.3s ease both;
+    }
+    .consent-body {
+      overflow-y: auto; padding: 32px 32px 0;
+      flex: 1;
+    }
+    .consent-section { margin-bottom: 28px; }
+    .consent-section-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+    }
+    .consent-section p {
+      font-size: 0.9rem; color: var(--text); line-height: 1.7; margin-bottom: 10px;
+    }
+    .consent-scope-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--error); margin-bottom: 14px;
+      border-top: 1.5px solid #fde8e6; padding-top: 24px;
+    }
+    .consent-scope-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .consent-scope-list li {
+      font-size: 0.875rem; color: var(--text); line-height: 1.65;
+      padding-left: 18px; position: relative;
+    }
+    .consent-scope-list li::before {
+      content: '•'; position: absolute; left: 0;
+      color: var(--teal); font-size: 1rem; line-height: 1.65;
+    }
+    .consent-scope-list li strong { font-weight: 600; }
+    .consent-footer {
+      padding: 24px 32px 28px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .btn-consent-agree {
+      width: 100%; padding: 14px 18px;
+      background: var(--teal); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+      border: none; border-radius: 10px; cursor: pointer;
+      line-height: 1.45; letter-spacing: 0.01em;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(38,119,123,0.25);
+      text-align: center;
+    }
+    .btn-consent-agree:hover { background: var(--teal-dark); box-shadow: 0 4px 18px rgba(38,119,123,0.35); }
+    .btn-consent-decline {
+      width: 100%; padding: 12px 18px;
+      background: var(--error); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+      border: 1.5px solid var(--error); border-radius: 10px; cursor: pointer;
+      line-height: 1.45; letter-spacing: 0.01em;
+      transition: background 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    .btn-consent-decline:hover { background: #a93226; border-color: #a93226; box-shadow: 0 4px 14px rgba(192,57,43,0.3); }
+
     /* global error */
     .alert-error {
       display: none; background: #fdf0ef; border: 1px solid #e8b4af; border-left: 3px solid var(--error);
@@ -143,6 +215,42 @@
   <link rel="stylesheet" href="assets/theme-unified.css" />
 </head>
 <body data-auth="guest">
+
+  <!-- ══ CONSENT MODAL ══ -->
+  <div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+    <div class="consent-dialog">
+      <div class="consent-body">
+
+        <div class="consent-section">
+          <p class="consent-section-label">About this platform</p>
+          <p>Tools for the Tough Days is a digital wellbeing and habit-building platform. It provides structured self-awareness tools, psychoeducational resources, and habit-anchoring support grounded in clinical methodology.</p>
+          <p>The platform is operated by <strong>Nic Marcon, Registered Psychologist (AHPRA Registration No. PSY0000962669)</strong>. All resources are clinically authored and reviewed by Nic Marcon before publication.</p>
+        </div>
+
+        <div class="consent-section">
+          <p class="consent-scope-label" id="consentTitle">Clinical Scope &mdash; Please Read Carefully</p>
+          <ul class="consent-scope-list">
+            <li>This platform is intended for adults aged 18 and over. By registering, you confirm you are 18 years of age or older.</li>
+            <li>This platform does not provide psychological treatment, diagnosis, or constitute a therapeutic relationship. It is not a substitute for professional clinical care.</li>
+            <li>In-house counselling services are offered separately and are subject to their own service agreement. Accessing the platform does not constitute entry into a counselling or therapeutic relationship.</li>
+            <li>The resources on this platform are designed to support self-awareness and wellbeing habits. They are not personalised clinical advice.</li>
+            <li>This platform is not a crisis service. If you are in immediate danger or require urgent mental health support, please contact <strong>Lifeline on 13 11 14</strong>, the <strong>Suicide Call Back Service on 1300 659 467</strong>, or <strong>emergency services on 000</strong>.</li>
+            <li>If you have concerns about your mental health, we encourage you to speak with a qualified health professional.</li>
+            <li>Participation is entirely voluntary. You may deactivate your account at any time.</li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="consent-footer">
+        <button class="btn-consent-agree" id="btnConsentAgree" type="button">
+          I have read and understood the clinical scope above, and confirm I am 18 years of age or older
+        </button>
+        <button class="btn-consent-decline" id="btnConsentDecline" type="button">
+          I do not agree to these terms, or I am under 18 years of age — close this page
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ LEFT PANEL ══ -->
   <aside class="panel-left">
@@ -224,7 +332,7 @@
         </label>
       </div>
 
-      <button class="btn-register" id="btnRegister" type="button">Create Account</button>
+      <button class="btn-register" id="btnRegister" type="button" disabled>Create Account</button>
 
       <p class="signin-row">Already have an account? <a href="/login.html">Sign in </a></p>
 
@@ -232,6 +340,25 @@
   </main>
 
   <script src="/auth-guard.js"></script>
+  <script>
+    // ── Consent modal
+    let consentGiven = false;
+    const overlay = document.getElementById('consentOverlay');
+
+    document.getElementById('btnConsentAgree').addEventListener('click', () => {
+      consentGiven = true;
+      overlay.style.display = 'none';
+      document.getElementById('btnRegister').disabled = false;
+    });
+
+    document.getElementById('btnConsentDecline').addEventListener('click', () => {
+      window.close();
+      // Fallback for browsers that block window.close() on directly-navigated pages
+      setTimeout(() => {
+        window.location.href = 'about:blank';
+      }, 300);
+    });
+  </script>
   <script>
     // ── Toggle password visibility
     const pwInput  = document.getElementById('password');
