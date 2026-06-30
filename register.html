@@ -103,8 +103,10 @@
     .terms-row label { font-size: 0.84rem; color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: 400; cursor: pointer; margin: 0; }
     .terms-row a { color: var(--teal); text-decoration: none; font-weight: 500; }
     .terms-row a:hover { text-decoration: underline; }
+    .terms-row.has-error label { color: var(--error); }
+    .terms-row.has-error input[type="checkbox"] { outline: 2px solid var(--error); outline-offset: 1px; border-radius: 2px; }
 
-    .business-row { margin-bottom: 18px; }
+    .business-row { margin-bottom: 24px; }
     .business-name-wrap { display: none; }
     .business-name-wrap.show { display: block; }
 
@@ -332,7 +334,7 @@
         </label>
       </div>
 
-      <div class="terms-row" id="field-newsletter" style="margin-bottom: 24px;">
+      <div class="terms-row" id="field-newsletter">
         <input type="checkbox" id="subscribe_newsletter" name="subscribe_newsletter" />
         <label for="subscribe_newsletter">Subscribe to our newsletter for wellbeing tips and updates</label>
       </div>
@@ -371,6 +373,11 @@
     const eyeIcon  = document.getElementById('eye-icon');
     const eyeOpen  = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
     const eyeClosed = `<line x1="17.94" y1="17.94" x2="22" y2="22"/><line x1="1" y1="1" x2="5.06" y2="5.06"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M6.53 6.53A18.5 18.5 0 0 0 1 12s4 8 11 8a9.12 9.12 0 0 0 5.76-2.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+    document.getElementById('terms').addEventListener('change', () => {
+      document.getElementById('field-terms').classList.remove('has-error');
+      document.getElementById('alertError').style.display = 'none';
+    });
+
     toggleBtn.addEventListener('click', () => {
       const isPassword = pwInput.type === 'password';
       pwInput.type = isPassword ? 'text' : 'password';
@@ -413,10 +420,14 @@
       }
 
       const termsEl = document.getElementById('terms');
+      const termsField = document.getElementById('field-terms');
       if (!termsEl.checked) {
+        termsField.classList.add('has-error');
         alertEl.textContent = 'Please agree to the Terms of Service and Privacy Policy.';
         alertEl.style.display = 'block';
         valid = false;
+      } else {
+        termsField.classList.remove('has-error');
       }
 
       const isBusinessUser = document.getElementById('is_business_user').checked;
