@@ -17,6 +17,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/mailer.php';
+require_once __DIR__ . '/../lib/newsletter.php';
 require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -133,6 +134,10 @@ function handle_register(array $body): never
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
             error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        if ($newsletterOptIn) {
+            submit_to_vision6($email, $fullName);
         }
 
         json_ok([
