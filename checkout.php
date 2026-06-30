@@ -152,12 +152,6 @@ try {
       'price'    => $prices['individual_monthly'],
       'quantity' => 1,
     ]];
-    $session_params['subscription_data'] = [
-      'description' => 'First 3 months at $10/month, then $15/month',
-    ];
-    if (INTRO_COUPON_ID !== '') {
-      $session_params['discounts'] = [['coupon' => INTRO_COUPON_ID]];
-    }
     $session_params['success_url'] = SITE_URL . '/my-preference.html?new_subscriber=1&session_id={CHECKOUT_SESSION_ID}';
   }
 
