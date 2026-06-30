@@ -422,6 +422,34 @@
   /* ── ICONS (inline SVG) ── */
   .ic { display: inline-flex; align-items: center; color: var(--teal); }
   .ic svg { width: 16px; height: 16px; }
+
+  /* ── TOGGLE SWITCH ── */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; cursor: pointer;
+    background: var(--grey-bg); border: 1.5px solid var(--grey-border);
+    border-radius: 12px; padding: 14px 16px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .toggle-row:has(input:checked) { border-color: var(--teal); background: var(--teal-light); }
+  .toggle-text { font-size: 14px; color: var(--charcoal); font-weight: 500; line-height: 1.4; }
+  .toggle-sub { font-size: 12px; color: var(--grey-text); font-weight: 400; margin-top: 2px; }
+  .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--grey-border); border-radius: 24px;
+    transition: background 0.2s; cursor: pointer;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute;
+    width: 18px; height: 18px; left: 3px; top: 3px;
+    background: var(--white); border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  }
+  .toggle-switch input:checked + .toggle-slider { background: var(--teal); }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 </style>
 </head>
 <body>
@@ -863,6 +891,25 @@
         </div>
       </div>
 
+      <hr class="divider">
+
+      <!-- ── NEWSLETTER ── -->
+      <div class="group">
+        <div class="section-tag">Newsletter</div>
+        <label class="q-label">Wellbeing tips and updates</label>
+        <p class="q-sub">Occasional emails from our registered psychologist — practical tools, new resources, and helpful reminders. Unsubscribe any time.</p>
+        <label class="toggle-row" for="newsletterToggle">
+          <div>
+            <div class="toggle-text">Subscribe to our newsletter</div>
+            <div class="toggle-sub">You can change this at any time</div>
+          </div>
+          <div class="toggle-switch">
+            <input type="checkbox" id="newsletterToggle" />
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+      </div>
+
     </div><!-- end card-body -->
 
     <!-- FOOTER -->
@@ -1029,6 +1076,9 @@ function selectByText(selectEl, text) {
           }
         });
       }
+      if (typeof data.newsletter_opt_in !== 'undefined') {
+        document.getElementById('newsletterToggle').checked = !!data.newsletter_opt_in;
+      }
     })
     .catch(function() {});
 })();
@@ -1045,7 +1095,8 @@ document.querySelector('.btn-submit').addEventListener('click', function() {
     frequency:         freqKey,
     quiet_from:        quietFromSelect    ? quietFromSelect.value    : '8:00 pm',
     quiet_until:       quietUntilSelect   ? quietUntilSelect.value   : '6:30 am',
-    reminders_enabled: freqKey !== 'not_now'
+    reminders_enabled:  freqKey !== 'not_now',
+    newsletter_opt_in:  document.getElementById('newsletterToggle').checked
   };
 
   const btn = this;

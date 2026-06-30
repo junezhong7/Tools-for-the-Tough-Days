@@ -17,6 +17,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/mailer.php';
+require_once __DIR__ . '/../lib/newsletter.php';
 require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -81,6 +82,7 @@ function handle_register(array $body): never
     $fullName = trim($body['full_name'] ?? '');
     $isBusinessUser = normalize_bool($body['is_business_user'] ?? false);
     $businessName = trim((string) ($body['business_name'] ?? ''));
+    $newsletterOptIn = normalize_bool($body['subscribe_newsletter'] ?? false);
 
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -111,8 +113,8 @@ function handle_register(array $body): never
         $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
         $stmt = db()->prepare(
-            'INSERT INTO users (email, password_hash, full_name, is_business_user, business_name, status)
-             VALUES (?, ?, ?, ?, ?, ?)'
+            'INSERT INTO users (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in)
+             VALUES (?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $email,
@@ -121,6 +123,7 @@ function handle_register(array $body): never
             $isBusinessUser ? 1 : 0,
             $businessName !== '' ? $businessName : null,
             'active',
+            $newsletterOptIn ? 1 : 0,
         ]);
         $userId = (int) db()->lastInsertId();
 
@@ -131,6 +134,10 @@ function handle_register(array $body): never
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
             error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        if ($newsletterOptIn) {
+            submit_to_vision6($email, $fullName);
         }
 
         json_ok([
