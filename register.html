@@ -255,7 +255,7 @@
           I have read and understood the clinical scope above, and confirm I am 18 years of age or older
         </button>
         <button class="btn-consent-decline" id="btnConsentDecline" type="button">
-          I do not agree to these terms, or I am under 18 years of age — close this page
+          I do not agree to these terms, or I am under 18 years of age — back to homepage
         </button>
       </div>
     </div>
@@ -380,11 +380,7 @@
     });
 
     document.getElementById('btnConsentDecline').addEventListener('click', () => {
-      window.close();
-      // Fallback for browsers that block window.close() on directly-navigated pages
-      setTimeout(() => {
-        window.location.href = 'about:blank';
-      }, 300);
+      window.location.href = 'index.html';
     });
   </script>
   <script>
