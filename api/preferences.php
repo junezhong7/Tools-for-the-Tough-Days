@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
+require_once __DIR__ . '/../lib/newsletter.php';
 
 $user   = require_auth();
 $userId = (int) ($user['id'] ?? 0);
@@ -54,6 +55,11 @@ function handle_get(int $userId): never
     $stmt->execute([$userId]);
     $row = $stmt->fetch();
 
+    $userStmt = db()->prepare('SELECT newsletter_opt_in FROM users WHERE id = ?');
+    $userStmt->execute([$userId]);
+    $userRow = $userStmt->fetch();
+    $newsletterOptIn = $userRow ? (bool) $userRow['newsletter_opt_in'] : false;
+
     if (!$row) {
         json_ok([
             'reminder_time'     => '7:30 am',
@@ -62,6 +68,7 @@ function handle_get(int $userId): never
             'quiet_from'        => '8:00 pm',
             'quiet_until'       => '6:30 am',
             'reminders_enabled' => true,
+            'newsletter_opt_in' => $newsletterOptIn,
             'saved'             => false,
         ]);
     }
@@ -73,6 +80,7 @@ function handle_get(int $userId): never
         'quiet_from'        => format_time_display((string) $row['quiet_from']),
         'quiet_until'       => format_time_display((string) $row['quiet_until']),
         'reminders_enabled' => (bool) $row['reminders_enabled'],
+        'newsletter_opt_in' => $newsletterOptIn,
         'saved'             => true,
     ]);
 }
@@ -119,6 +127,23 @@ function handle_save(int $userId, array $body): never
             quiet_until       = VALUES(quiet_until),
             reminders_enabled = VALUES(reminders_enabled)'
     )->execute([$userId, $reminderTime, $timezone, $frequency, $quietFrom, $quietUntil, $remindersEnabled]);
+
+    if (array_key_exists('newsletter_opt_in', $body)) {
+        $newsletterOptIn = $body['newsletter_opt_in'] ? 1 : 0;
+
+        // Fetch current value to detect opt-in transitions (avoid duplicate submissions)
+        $cur = db()->prepare('SELECT newsletter_opt_in, email, full_name FROM users WHERE id = ?');
+        $cur->execute([$userId]);
+        $userRow = $cur->fetch();
+
+        db()->prepare('UPDATE users SET newsletter_opt_in = ? WHERE id = ?')
+            ->execute([$newsletterOptIn, $userId]);
+
+        // Submit to Vision6 only when user switches from opted-out → opted-in
+        if ($newsletterOptIn && $userRow && !(bool) $userRow['newsletter_opt_in']) {
+            submit_to_vision6((string) $userRow['email'], (string) ($userRow['full_name'] ?? ''));
+        }
+    }
 
     audit('preferences.save', $userId, [
         'reminder_time'     => $reminderTime,
