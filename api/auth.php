@@ -130,6 +130,13 @@ function handle_register(array $body): never
         $token = create_session($userId);
         audit('user.register', $userId, ['email' => $email]);
 
+        $trialPlanType = $isBusinessUser ? 'business' : 'individual';
+        $trialStmt = db()->prepare(
+            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
+             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
+        );
+        $trialStmt->execute([$userId, 'free_trial', $trialPlanType, 'trialing']);
+
         try {
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
