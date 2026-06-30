@@ -73,7 +73,14 @@
     .form-subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 32px; font-weight: 300; line-height: 1.5; }
 
     /* trial banner */
-
+    .trial-banner {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--teal-mist); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 11px 14px; margin-bottom: 24px;
+    }
+    .trial-banner svg { flex-shrink: 0; stroke: var(--teal); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .trial-banner-text { font-size: 0.88rem; color: var(--teal-dark); line-height: 1.45; }
+    .trial-banner-text strong { font-weight: 600; }
 
     /* fields */
     .field { margin-bottom: 18px; }
@@ -248,7 +255,7 @@
           I have read and understood the clinical scope above, and confirm I am 18 years of age or older
         </button>
         <button class="btn-consent-decline" id="btnConsentDecline" type="button">
-          I do not agree to these terms, or I am under 18 years of age — close this page
+          I do not agree to these terms, or I am under 18 years of age — back to homepage
         </button>
       </div>
     </div>
@@ -257,6 +264,13 @@
   <!-- ══ LEFT PANEL ══ -->
   <aside class="panel-left">
     <div class="brand-area">
+      <a href="index.html">
+        <img
+          src="data/TOUGH DAYS_LOGO.png"
+          alt="Tools for the Tough Days"
+          style="height:72px; display:block;"
+        />
+      </a>
       <p class="brand-tagline">Real Support.<br><em>Whenever You Need It.</em></p>
       <p class="brand-sub">Psychologist-authored resources for stress, sleep, anxiety, relationships and more - available to you any time, day or night.</p>
     </div>
@@ -281,11 +295,18 @@
     <div class="form-wrapper">
 
       <div class="mobile-logo">
-        <img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" style="height:60px; width:auto;" />
+        <a href="index.html">
+          <img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" style="height:60px; width:auto;" />
+        </a>
       </div>
 
       <h1 class="form-title">Create your account</h1>
       <p class="form-subtitle">Sign up to access our support resources.</p>
+
+      <div class="trial-banner">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p class="trial-banner-text"><strong>14-day free trial included</strong> — full access, no credit card required.</p>
+      </div>
 
       <div class="alert-error" id="alertError"></div>
 
@@ -359,11 +380,7 @@
     });
 
     document.getElementById('btnConsentDecline').addEventListener('click', () => {
-      window.close();
-      // Fallback for browsers that block window.close() on directly-navigated pages
-      setTimeout(() => {
-        window.location.href = 'about:blank';
-      }, 300);
+      window.location.href = 'index.html';
     });
   </script>
   <script>
