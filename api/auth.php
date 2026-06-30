@@ -81,6 +81,7 @@ function handle_register(array $body): never
     $fullName = trim($body['full_name'] ?? '');
     $isBusinessUser = normalize_bool($body['is_business_user'] ?? false);
     $businessName = trim((string) ($body['business_name'] ?? ''));
+    $newsletterOptIn = normalize_bool($body['subscribe_newsletter'] ?? false);
 
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -111,8 +112,8 @@ function handle_register(array $body): never
         $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
         $stmt = db()->prepare(
-            'INSERT INTO users (email, password_hash, full_name, is_business_user, business_name, status)
-             VALUES (?, ?, ?, ?, ?, ?)'
+            'INSERT INTO users (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in)
+             VALUES (?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $email,
@@ -121,6 +122,7 @@ function handle_register(array $body): never
             $isBusinessUser ? 1 : 0,
             $businessName !== '' ? $businessName : null,
             'active',
+            $newsletterOptIn ? 1 : 0,
         ]);
         $userId = (int) db()->lastInsertId();
 

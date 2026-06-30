@@ -332,6 +332,11 @@
         </label>
       </div>
 
+      <div class="terms-row" id="field-newsletter" style="margin-bottom: 24px;">
+        <input type="checkbox" id="subscribe_newsletter" name="subscribe_newsletter" checked />
+        <label for="subscribe_newsletter">Subscribe to our newsletter for wellbeing tips and updates</label>
+      </div>
+
       <button class="btn-register" id="btnRegister" type="button" disabled>Create Account</button>
 
       <p class="signin-row">Already have an account? <a href="/login.html">Sign in </a></p>
@@ -440,6 +445,7 @@
             full_name: nameVal,
             is_business_user: isBusinessUser,
             business_name: businessNameEl.value.trim(),
+            subscribe_newsletter: document.getElementById('subscribe_newsletter').checked,
           }),
           credentials: 'same-origin',
         });
