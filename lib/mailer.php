@@ -14,6 +14,95 @@ function mailer_is_configured(): bool
         && smtp_from() !== '';
 }
 
+function send_trial_day10_email(string $toEmail, ?string $fullName = null): bool
+{
+    $firstName  = extract_first_name($fullName);
+    $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl    = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $platformUrl    = $siteUrl . '/support.html';
+    $membershipUrl  = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $platformUrl);
+
+    $subject = 'Your trial ends soon — a quick note';
+
+    $textBody = $greeting . "\n\n"
+        . "Your free trial ends in four days, so we wanted to check in.\n\n"
+        . "If you've been using the daily tool, you'll know what it offers: a short reset, a quick mood check, and a few small actions to carry into tomorrow.\n\n"
+        . "If you haven't had a chance yet, there's still time. Log on today — it takes about three minutes.\n\n"
+        . $platformUrl . "\n\n"
+        . "Becoming a Foundation Member\n\n"
+        . "When your trial ends, we'll invite you to continue as a Foundation Member — with a founding rate, early access to what we build next, and the chance to help shape The Tough Days Project from the beginning.\n\n"
+        . "If the tool has helped, even a little, we'd love you to stay connected.\n\n"
+        . "See Foundation Membership details: " . $membershipUrl . "\n\n"
+        . "Either way, thank you for being part of the start of this.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $htmlGreeting      = $firstName !== ''
+        ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+        : 'Hi there,';
+    $safePlatformUrl   = htmlspecialchars($platformUrl,   ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeMembershipUrl = htmlspecialchars($membershipUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+    $htmlBody = '<p>' . $htmlGreeting . '</p>'
+        . '<p>Your free trial ends in four days, so we wanted to check in.</p>'
+        . '<p>If you\'ve been using the daily tool, you\'ll know what it offers: a short reset, a quick mood check, and a few small actions to carry into tomorrow.</p>'
+        . '<p>If you haven\'t had a chance yet, there\'s still time. <a href="' . $safePlatformUrl . '">Log on today</a> — it takes about three minutes.</p>'
+        . '<h3 style="font-size:16px;font-family:inherit;margin:24px 0 8px;">Becoming a Foundation Member</h3>'
+        . '<p>When your trial ends, we\'ll invite you to continue as a Foundation Member — with a founding rate, early access to what we build next, and the chance to help shape The Tough Days Project from the beginning.</p>'
+        . '<p>If the tool has helped, even a little, we\'d love you to stay connected.</p>'
+        . '<p><a href="' . $safeMembershipUrl . '">See Foundation Membership details &rarr;</a></p>'
+        . '<p>Either way, thank you for being part of the start of this.</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody);
+}
+
+function send_trial_day14_email(string $toEmail, ?string $fullName = null): bool
+{
+    $firstName     = extract_first_name($fullName);
+    $greeting      = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl       = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $membershipUrl = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $siteUrl . '/support.html');
+
+    $subject = 'Your trial has ended — here\'s how to continue';
+
+    $textBody = $greeting . "\n\n"
+        . "Your 14-day trial has come to an end.\n\n"
+        . "If you've used the daily tool over the past two weeks, you'll have a sense of what it offers day to day: a short reset, a quick mood check, and small actions you can carry forward. If it's helped, even in a small way, the next step is simple.\n\n"
+        . "Becoming a Foundation Member\n\n"
+        . "You can continue now as a Foundation Member, locking in the founding rate before it closes. Foundation Members get early access to what we build next, and a genuine say in shaping The Tough Days Project from the beginning.\n\n"
+        . "Continue as a Foundation Member: " . $membershipUrl . "\n\n"
+        . "If now isn't the right time, that's okay too. You can come back to this whenever you're ready.\n\n"
+        . "Because you're worth showing up for.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $htmlGreeting      = $firstName !== ''
+        ? 'Hi ' . htmlspecialchars($firstName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ','
+        : 'Hi there,';
+    $safeMembershipUrl = htmlspecialchars($membershipUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+    $htmlBody = '<p>' . $htmlGreeting . '</p>'
+        . '<p>Your 14-day trial has come to an end.</p>'
+        . '<p>If you\'ve used the daily tool over the past two weeks, you\'ll have a sense of what it offers day to day: a short reset, a quick mood check, and small actions you can carry forward. If it\'s helped, even in a small way, the next step is simple.</p>'
+        . '<h3 style="font-size:16px;font-family:inherit;margin:24px 0 8px;">Becoming a Foundation Member</h3>'
+        . '<p>You can continue now as a Foundation Member, locking in the founding rate before it closes. Foundation Members get early access to what we build next, and a genuine say in shaping The Tough Days Project from the beginning.</p>'
+        . '<p><a href="' . $safeMembershipUrl . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Continue as a Foundation Member</a></p>'
+        . '<p>If now isn\'t the right time, that\'s okay too. You can come back to this whenever you\'re ready.</p>'
+        . '<p><em>Because you\'re worth showing up for.</em></p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody);
+}
+
 function send_registration_welcome_email(string $toEmail, ?string $fullName = null): bool
 {
     $name = trim((string) $fullName);
