@@ -192,42 +192,6 @@
 </head>
 <body data-auth="guest">
 
-  <!-- ══ CONSENT MODAL ══ -->
-  <div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
-    <div class="consent-dialog">
-      <div class="consent-body">
-
-        <div class="consent-section">
-          <p class="consent-section-label">About this platform</p>
-          <p>Tools for the Tough Days is a digital wellbeing and habit-building platform. It provides structured self-awareness tools, psychoeducational resources, and habit-anchoring support grounded in clinical methodology.</p>
-          <p>The platform is operated by <strong>Nic Marcon, Registered Psychologist (AHPRA Registration No. PSY0000962669)</strong>. All resources are clinically authored and reviewed by Nic Marcon before publication.</p>
-        </div>
-
-        <div class="consent-section">
-          <p class="consent-scope-label" id="consentTitle">Clinical Scope &mdash; Please Read Carefully</p>
-          <ul class="consent-scope-list">
-            <li>This platform is intended for adults aged 18 and over. By registering, you confirm you are 18 years of age or older.</li>
-            <li>This platform does not provide psychological treatment, diagnosis, or constitute a therapeutic relationship. It is not a substitute for professional clinical care.</li>
-            <li>In-house counselling services are offered separately and are subject to their own service agreement. Accessing the platform does not constitute entry into a counselling or therapeutic relationship.</li>
-            <li>The resources on this platform are designed to support self-awareness and wellbeing habits. They are not personalised clinical advice.</li>
-            <li>This platform is not a crisis service. If you are in immediate danger or require urgent mental health support, please contact <strong>Lifeline on 13 11 14</strong>, the <strong>Suicide Call Back Service on 1300 659 467</strong>, or <strong>emergency services on 000</strong>.</li>
-            <li>If you have concerns about your mental health, we encourage you to speak with a qualified health professional.</li>
-            <li>Participation is entirely voluntary. You may deactivate your account at any time.</li>
-          </ul>
-        </div>
-
-      </div>
-      <div class="consent-footer">
-        <button class="btn-consent-agree" id="btnConsentAgree" type="button">
-          I have read and understood the clinical scope above, and confirm I am 18 years of age or older
-        </button>
-        <button class="btn-consent-decline" id="btnConsentDecline" type="button">
-          I do not agree to these terms, or I am under 18 years of age — back to homepage
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- ══ LEFT PANEL ══ -->
   <aside class="panel-left">
     <div class="brand-area">
@@ -343,6 +307,11 @@
         </label>
       </div>
 
+      <div class="terms-row" id="field-age">
+        <input type="checkbox" id="age_confirm" name="age_confirm" />
+        <label for="age_confirm">I confirm I am 18 years of age or older</label>
+      </div>
+
       <div class="terms-row" id="field-newsletter">
         <input type="checkbox" id="subscribe_newsletter" name="subscribe_newsletter" />
         <label for="subscribe_newsletter">Subscribe to our newsletter for wellbeing tips and updates</label>
@@ -357,21 +326,6 @@
 
   <script src="/auth-guard.js"></script>
   <script>
-    // ── Consent modal
-    let consentGiven = false;
-    const overlay = document.getElementById('consentOverlay');
-
-    document.getElementById('btnConsentAgree').addEventListener('click', () => {
-      consentGiven = true;
-      overlay.style.display = 'none';
-      document.getElementById('btnRegister').disabled = false;
-    });
-
-    document.getElementById('btnConsentDecline').addEventListener('click', () => {
-      window.location.href = 'index.html';
-    });
-  </script>
-  <script>
     // ── Toggle password visibility
     const pwInput  = document.getElementById('password');
     const toggleBtn = document.getElementById('togglePw');
@@ -380,6 +334,11 @@
     const eyeClosed = `<line x1="17.94" y1="17.94" x2="22" y2="22"/><line x1="1" y1="1" x2="5.06" y2="5.06"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M6.53 6.53A18.5 18.5 0 0 0 1 12s4 8 11 8a9.12 9.12 0 0 0 5.76-2.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
     document.getElementById('terms').addEventListener('change', () => {
       document.getElementById('field-terms').classList.remove('has-error');
+      document.getElementById('alertError').style.display = 'none';
+    });
+
+    document.getElementById('age_confirm').addEventListener('change', () => {
+      document.getElementById('field-age').classList.remove('has-error');
       document.getElementById('alertError').style.display = 'none';
     });
 
@@ -433,6 +392,19 @@
         valid = false;
       } else {
         termsField.classList.remove('has-error');
+      }
+
+      const ageEl = document.getElementById('age_confirm');
+      const ageField = document.getElementById('field-age');
+      if (!ageEl.checked) {
+        ageField.classList.add('has-error');
+        if (!alertEl.style.display || alertEl.style.display === 'none') {
+          alertEl.textContent = 'Please confirm you are 18 years of age or older.';
+          alertEl.style.display = 'block';
+        }
+        valid = false;
+      } else {
+        ageField.classList.remove('has-error');
       }
 
       const isBusinessUser = document.getElementById('is_business_user').checked;
