@@ -57,8 +57,11 @@ function db(): PDO
 
 /**
  * Write one row to audit_logs.
+ *
+ * $adminUserId is set when the action was performed by an ops/staff admin
+ * (via the admin tool) rather than by the member themselves.
  */
-function audit(string $action, ?int $userId = null, array $details = []): void
+function audit(string $action, ?int $userId = null, array $details = [], ?int $adminUserId = null): void
 {
     try {
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ($_SERVER['REMOTE_ADDR'] ?? null);
@@ -68,9 +71,10 @@ function audit(string $action, ?int $userId = null, array $details = []): void
         }
 
         db()->prepare(
-            'INSERT INTO audit_logs (user_id, action, details, ip_address) VALUES (?, ?, ?, ?)'
+            'INSERT INTO audit_logs (user_id, admin_user_id, action, details, ip_address) VALUES (?, ?, ?, ?, ?)'
         )->execute([
             $userId,
+            $adminUserId,
             $action,
             $details ? json_encode($details, JSON_UNESCAPED_UNICODE) : null,
             $ip,
