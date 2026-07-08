@@ -59,6 +59,27 @@ For an existing environment that already has subscription data, run [sql/2026-04
 
 To enable forgot-password reset links in existing environments, also run [sql/2026-05-27-add-password-reset-tokens.sql](sql/2026-05-27-add-password-reset-tokens.sql).
 
+To enable the internal admin tool (see below), also run [sql/2026-07-07-add-admin-tool.sql](sql/2026-07-07-add-admin-tool.sql).
+
+## Internal Admin Tool
+
+The ops team manages members (search, view subscription status, cancel or extend a subscription, export a CSV) at `/admin/index.html`, instead of hand-running SQL against production.
+
+Admin accounts are completely separate from member accounts (`admin_users` / `admin_sessions` tables, `tttd_admin_session` cookie) — there is no self-serve admin registration. Create the first admin account from a shell with access to the app's environment variables:
+
+```bash
+php scripts/create-admin.php ops@example.com "Ops Team"
+```
+
+The script prompts for a password (min 8 characters) and stores a bcrypt hash — never pass a password as a command-line argument.
+
+Notes on the admin tool's subscription actions ([api/admin/subscriptions.php](api/admin/subscriptions.php)):
+
+- **Cancel** — if the subscription has a `stripe_subscription_id`, it's cancelled in Stripe too (`cancel_at_period_end`), not just locally. Comp/manual grants with no Stripe subscription are cancelled immediately.
+- **Extend** — grants or extends a comp subscription (`product_key = 'comp_grant'`) for 7/30/90 days or "permanent" (`current_period_end = '2099-12-31 23:59:59'`). Refuses to act on a member who currently has an active Stripe-backed subscription — extending real billing periods isn't supported; manage those in Stripe or cancel first.
+
+Every cancel/extend/export action is recorded in `audit_logs` with the acting admin's id.
+
 ## Stripe Webhook Configuration
 
 Create a Stripe webhook endpoint pointing to:
