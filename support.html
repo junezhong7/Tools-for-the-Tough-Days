@@ -629,7 +629,7 @@
   <!-- CATEGORY NAVIGATION STRIP -->
   <div id="browse-topics" style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
-      <div class="mood-card mood-card-sand">
+      <div class="mood-card mood-card-sand" id="mood-tracker-card" style="display: none;">
         <p class="mood-question">Before we start, how are you feeling right now?</p>
         <div class="mood-value-display">
           <div class="mood-number" id="mood-num">5</div>
@@ -1603,6 +1603,36 @@
       }
     }, 450);
   }
+
+  (function showMoodTrackerForLoggedInUsers() {
+    const moodCard = document.getElementById('mood-tracker-card');
+    if (!moodCard) {
+      return;
+    }
+
+    fetch('/api/auth.php?action=me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json().catch(function () { return null; });
+      })
+      .then(function (data) {
+        if (data && data.user) {
+          moodCard.style.display = '';
+        }
+      })
+      .catch(function () {
+        // Keep mood tracker hidden if auth check fails.
+      });
+  })();
 
   (function hideFreeResourcesForSubscribedUsers() {
     const freeBlock = document.getElementById('free-resources-block');
