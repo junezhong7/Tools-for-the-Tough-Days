@@ -122,7 +122,14 @@
     .gated-wrap { position: relative; margin-top: 4px; }
     .fade { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; background: linear-gradient(to bottom, rgba(255,255,255,0), var(--white)); }
 
-    .video-placeholder { background: rgba(38,119,123,0.06); border: 1.5px dashed rgba(38,119,123,0.25); border-radius: 8px; padding: 28px 20px; text-align: center; font-size: 13px; color: var(--teal-dark); margin-bottom: 20px; }
+    .video-caption { font-size: 15px; color: var(--warm-grey); margin-bottom: 16px; line-height: 1.6; }
+    .video-caption .lock { font-weight: 700; color: var(--teal-dark); }
+    .video-preview { border-radius: 12px; overflow: hidden; position: relative; background: #000; margin-bottom: 12px; }
+    .video-preview video { width: 100%; display: block; }
+    .video-badge { position: absolute; top: 14px; left: 14px; background: rgba(26,46,47,0.75); color: #fff; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; letter-spacing: 0.02em; z-index: 2; }
+    .video-lock-overlay { position: absolute; inset: 0; background: rgba(26,46,47,0.92); color: #fff; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; z-index: 3; }
+    .video-lock-overlay h4 { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #fff; }
+    .video-lock-overlay p { font-size: 15px; color: #cfe8e6; margin-bottom: 20px; max-width: 380px; }
 
     .unlock-box { background: var(--teal-dark); color: #fff; text-align: center; padding: 32px 30px 36px; border-radius: 0 0 16px 16px; margin: 24px -40px 0; }
     .unlock-box h3 { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #fff; }
@@ -300,8 +307,20 @@
           Burnout isn't just being tired. It's what happens when stress has nowhere to go for too long - and it builds gradually, often before you notice it.
         </div>
 
-        <div class="video-placeholder">
-          Video preview coming soon. In the meantime, the full guide is available to subscribers in the resource library.
+        <p class="video-caption">This is a free preview. <span class="lock">The full video unlocks with a free account.</span></p>
+
+        <div class="video-preview">
+          <span class="video-badge" id="videoBadge">Preview - first 25 seconds</span>
+          <video id="burnoutVideo" controls playsinline preload="metadata">
+            <source src="https://toolsforthetoughdays.blob.core.windows.net/resources/Free%20Resources/BRN-A01What%20Is%20Burnout.mp4" type="video/mp4">
+            Your browser doesn't support embedded video.
+          </video>
+          <div class="video-lock-overlay" id="videoLockOverlay">
+            <h4>Unlock the full video</h4>
+            <p>Create a free account to keep watching.</p>
+            <a href="register.html" class="unlock-btn">Create your free account</a>
+            <p class="trial-disclosure" style="color:#cfe8e6;">Free for 14 days, then $15/month. Cancel anytime.</p>
+          </div>
         </div>
 
         <div class="unlock-box" style="margin-top:0;">
@@ -371,5 +390,23 @@
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
 <script src="scripts/nav-mobile.js"></script>
+<script>
+  // Client-side preview lock only - a signed-in/subscribed visitor should get the full
+  // video served without this limit and without the overlay markup, enforced server-side.
+  (function () {
+    var PREVIEW_LIMIT = 25; // seconds
+    var video = document.getElementById('burnoutVideo');
+    var overlay = document.getElementById('videoLockOverlay');
+    if (!video || !overlay) return;
+    var locked = false;
+    video.addEventListener('timeupdate', function () {
+      if (!locked && video.currentTime >= PREVIEW_LIMIT) {
+        locked = true;
+        video.pause();
+        overlay.style.display = 'flex';
+      }
+    });
+  })();
+</script>
 </body>
 </html>
