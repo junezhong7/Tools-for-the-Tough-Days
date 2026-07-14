@@ -209,9 +209,15 @@
     .hero-wave { display: block; width: 100%; height: 54px; background: var(--cream); }
     .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
     .hero-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+    .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 700; margin-bottom: 16px; }
     .hero h1 { font-family: 'Lora', serif; font-size: clamp(28px, 4vw, 44px); color: #fff; line-height: 1.18; margin-bottom: 12px; font-weight: 600; }
     .hero h1 em { color: #c8f0f2; font-style: italic; }
     .hero-sub { color: rgba(255,255,255,0.9); font-size: 17px; font-weight: 500; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+    .btn-solid { background: #aada37; color: var(--teal-dark); border: none; padding: 14px 28px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; border-radius: 8px; text-decoration: none; display: inline-block; }
+    .btn-solid:hover { background: #9bc72f; }
+    .btn-ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.35); padding: 14px 26px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; border-radius: 8px; text-decoration: none; display: inline-block; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.2); }
 
     #resource-topic-buttons a {
       cursor: pointer;
@@ -551,6 +557,30 @@
       color: var(--warm-grey);
     }
 
+    /* LANDING PAGE PREVIEW (hidden - pending review, see #landing-preview-block) */
+    .landing-timeline { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-top: 32px; position: relative; }
+    .landing-timeline::before { content: ''; position: absolute; top: 22px; left: 60px; right: 60px; border-top: 2px dotted var(--border); z-index: 0; }
+    .landing-tl-step { text-align: center; flex: 1; position: relative; z-index: 1; padding: 0 6px; }
+    .landing-tl-num { width: 44px; height: 44px; border-radius: 50%; background: var(--white); border: 2px solid var(--teal); color: var(--teal-dark); font-family: 'Lora', serif; font-weight: 600; font-size: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+    .landing-tl-step h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--charcoal); }
+    .landing-tl-step p { font-size: 12px; color: var(--warm-grey); margin: 0; }
+
+    .landing-reviewed { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; margin-top: 28px; }
+    .landing-reviewed img { width: 100%; border-radius: 16px; display: block; }
+
+    .landing-trust-box { background: var(--teal-light); border: 1px solid rgba(38,119,123,0.2); border-radius: 16px; padding: 36px 32px; margin-top: 24px; }
+    .landing-assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px; }
+    .landing-assoc-item { font-size: 14px; color: var(--charcoal); line-height: 1.6; padding-left: 16px; border-left: 3px solid var(--teal); }
+
+    .landing-faq-teaser { text-align: center; }
+
+    @media (max-width: 800px) {
+      .landing-timeline { flex-direction: column; gap: 20px; }
+      .landing-timeline::before { display: none; }
+      .landing-reviewed { grid-template-columns: 1fr; }
+      .landing-assoc-grid { grid-template-columns: 1fr; }
+    }
+
     /* RESPONSIVE */
     @media (max-width: 800px) {
       .nav-inner { padding: 0 16px; height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px; }
@@ -616,9 +646,13 @@
   <section class="hero">
     <div class="hero-texture"></div>
     <div class="hero-content">
-      <div class="hero-badge" id="hero-free-badge"><span class="hero-dot"></span> Free resources, no subscription needed</div>
-      <h1>Real support,<br><em>right now.</em></h1>
-      <p class="hero-sub">Clinically reviewed resources written by a Registered Psychologist. No waitlist, no referral, start reading or listening today.</p>
+      <div class="hero-eyebrow" id="hero-free-badge">For individuals</div>
+      <h1>Tough days happen.<br><em>Here's what helps.</em></h1>
+      <p class="hero-sub">Track your mood, build habits that stick, and access tools grounded in clinical practice, at your own pace.</p>
+      <div class="hero-btns">
+        <a href="free-resources.html" class="btn-solid">Learn more</a>
+        <a href="#how-it-works" class="btn-ghost">See how it works</a>
+      </div>
     </div>
   </section>
   <div class="hero-wave-band" aria-hidden="true"></div>
@@ -646,27 +680,31 @@
         </div>
         <button class="mood-submit" id="mood-btn" onclick="submitMood()">Check in and show me what's available </button>
       </div>
-      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
-      <!-- Category buttons -->
-      <div class="cat-nav" id="cat-nav"></div>
+      <!-- Resource library (topic browsing) + Crisis Support card - signed-in members only, same gate as Mood Tracker above -->
+      <div id="resource-library-block" style="display: none;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
-      <!-- Sub-topic panel (shown when a category is selected) -->
-      <div class="subtopic-panel" id="subtopic-panel">
-        <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
-        <div class="subtopic-list" id="subtopic-list"></div>
-      </div>
+        <!-- Category buttons -->
+        <div class="cat-nav" id="cat-nav"></div>
 
-      <!-- Crisis Support persistent, outside dropdown system -->
-      <div class="crisis-nav-card">
-        <div class="crisis-nav-left">
-          <span class="crisis-nav-icon"></span>
-          <div>
-            <div class="crisis-nav-title">Crisis Support</div>
-            <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
-          </div>
+        <!-- Sub-topic panel (shown when a category is selected) -->
+        <div class="subtopic-panel" id="subtopic-panel">
+          <div class="subtopic-panel-label" id="subtopic-panel-label"></div>
+          <div class="subtopic-list" id="subtopic-list"></div>
         </div>
-        <a href="crisis-support.html" class="crisis-nav-btn">Access now </a>
+
+        <!-- Crisis Support persistent, outside dropdown system -->
+        <div class="crisis-nav-card">
+          <div class="crisis-nav-left">
+            <span class="crisis-nav-icon"></span>
+            <div>
+              <div class="crisis-nav-title">Crisis Support</div>
+              <div class="crisis-nav-sub">If you're in distress right now, access immediate grounding and crisis resources</div>
+            </div>
+          </div>
+          <a href="crisis-support.html" class="crisis-nav-btn">Access now </a>
+        </div>
       </div>
     </div>
   </div>
@@ -680,97 +718,123 @@
     </div>
   </div>
 
+  <!--
+    LANDING PAGE PREVIEW - built from page-update/support.html (Individual design reference).
+  -->
+  <div id="landing-preview-block">
+
+    <section class="content-section" id="how-it-works" style="scroll-margin-top: 90px;">
+      <div class="content-inner">
+        <div class="section-label">How it works</div>
+        <div class="section-intro">
+          <h2>Tough days happen. <em style="color:var(--teal);font-style:italic;">Here's what helps.</em></h2>
+          <p>Track your mood, build habits that stick, and access tools grounded in clinical practice, at your own pace.</p>
+        </div>
+        <div class="landing-timeline">
+          <div class="landing-tl-step">
+            <div class="landing-tl-num">1</div>
+            <h4>Check in with how you're feeling</h4>
+            <p>A quick mood check-in guides you to the right support.</p>
+          </div>
+          <div class="landing-tl-step">
+            <div class="landing-tl-num">2</div>
+            <h4>Choose what you need</h4>
+            <p>Pick from specific areas in plain, honest language.</p>
+          </div>
+          <div class="landing-tl-step">
+            <div class="landing-tl-num">3</div>
+            <h4>Read or listen, whatever works for you</h4>
+            <p>Access resources immediately, no waiting, no referrals.</p>
+          </div>
+          <div class="landing-tl-step">
+            <div class="landing-tl-num">4</div>
+            <h4>Fresh content, regularly</h4>
+            <p>New resources uploaded regularly so there's always something new to help.</p>
+          </div>
+          <div class="landing-tl-step">
+            <div class="landing-tl-num">5</div>
+            <h4>Stay in the loop</h4>
+            <p>Receive regular notifications about us.</p>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:32px;">
+          <a href="free-resources.html" class="btn-solid">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="content-inner">
+        <div class="landing-reviewed">
+          <div>
+            <div class="section-label">Clinically reviewed</div>
+            <h2 style="font-family:'Lora',serif;font-size:31px;font-weight:600;color:var(--teal-dark);margin-bottom:12px;">Everything here is reviewed by a real person</h2>
+            <p style="font-size:15px;color:var(--warm-grey);line-height:1.7;margin-bottom:16px;">Every resource on this platform is clinically authored and reviewed by Nic Marcon, a Registered Psychologist with 20+ years of experience working with people in some of the toughest moments of their lives.</p>
+            <p style="font-size:15px;color:var(--warm-grey);line-height:1.7;margin-bottom:20px;">Nic has spent over 20 years supporting people through some of their hardest moments and every resource here reflects that experience.</p>
+            <a href="about-nic.html" class="btn-open">Meet Nic </a>
+          </div>
+          <div>
+            <img src="data/Nic Marcon photo.webp" alt="Nic Marcon">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="content-inner">
+        <div class="landing-trust-box">
+          <div class="section-intro" style="margin-bottom:0;">
+            <h2 style="font-size:26px;">Why members keep coming back</h2>
+            <p>Built around habit and pattern, not quick fixes.</p>
+          </div>
+          <div class="landing-assoc-grid">
+            <div class="landing-assoc-item">Members often notice patterns in their mood earlier once check-ins become a habit.</div>
+            <div class="landing-assoc-item">A consistent, low-friction routine tends to be easier to sustain than occasional bursts of effort.</div>
+            <div class="landing-assoc-item">Tools are matched to your check-in, so what you see tends to feel relevant to that day.</div>
+            <div class="landing-assoc-item">Quiet hours and check-in timing are set by you, so the platform fits around your life.</div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:24px;">
+          <a href="free-resources.html" class="btn-solid">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="trust-inner">
+        <div class="trust-item">Clinically authored content</div>
+        <div class="trust-item">AHPRA registered psychologist</div>
+        <div class="trust-item">Not AI-generated advice</div>
+      </div>
+    </div>
+
+    <section class="content-section landing-faq-teaser">
+      <div class="content-inner">
+        <div class="section-label" style="justify-content:center;">Got questions?</div>
+        <h2 style="font-family:'Lora',serif;font-size:31px;font-weight:600;color:var(--teal-dark);margin-bottom:12px;">We've answered the most common ones.</h2>
+        <p style="font-size:15px;color:var(--warm-grey);max-width:520px;margin:0 auto 20px;">From Medicare and privacy to how this compares to seeing a psychologist, it's all in the FAQ.</p>
+        <a href="faq.html" class="btn-open">Read the FAQs </a>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="content-inner">
+        <div class="subscribe-cta">
+          <h2>Ready to start?</h2>
+          <p>Set up your check-in preferences in a few minutes and start building the habit.</p>
+          <a href="register.html" class="cta-link" style="background:#fff;color:var(--teal-dark);padding:11px 28px;border-radius:999px;font-weight:700;text-decoration:none;">Create your free account </a>
+          <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:14px;">Free for 14 days, then $15/month. Cancel anytime.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
   <section class="content-section">
     <div class="content-inner">
 
-      <div id="free-resources-block">
-      <div class="section-label">Free resources</div>
-
-      <div class="section-intro">
-        <h2>Four free resources to start with</h2>
-        <p>Two are available right now - no signup, no gate. Two more unlock with your email, covering the topics Australians are searching for most. Every resource is clinically authored and reviewed by Nic Marcon personally.</p>
-        <div class="growing-badge">
-          <span class="growing-dot"></span>
-          New resources added regularly - the library keeps growing
-        </div>
-      </div>
-
-      <!-- FREE INSTANTLY -->
-      <div class="grid-label instant"> Open now, no email needed</div>
-      <div class="resource-grid">
-
-        <div class="resource-card instant">
-          <span class="card-tag t-instant">Free - no signup</span>
-          <span class="c-icon"></span>
-          <div class="card-cat">Crisis Support</div>
-          <h3 class="card-title">Grounding Yourself When Everything Feels Overwhelming</h3>
-          <p class="card-desc">When everything feels too much and you don't know where to start - simple, immediate grounding steps you can use right now to feel a little steadier.</p>
-          <div class="card-footer">
-            <div class="format-row">
-              <span class="format-pill pdf"> PDF</span>
-              <span class="format-pill audio"> Audio</span>
-            </div>
-            <a href="#" class="btn-open" onclick="openViewer('crisis'); return false;">Read or listen </a>
-          </div>
-        </div>
-
-        <div class="resource-card instant">
-          <span class="card-tag t-instant">Free - no signup</span>
-          <span class="c-icon"></span>
-          <div class="card-cat">Anxiety</div>
-          <h3 class="card-title">Understanding What Anxiety Is Actually Doing to Your Body</h3>
-          <p class="card-desc">Anxiety affects 2.4 million Australians. This explains what's happening in your body - the racing heart, tight chest, racing thoughts - and what actually helps.</p>
-          <div class="card-footer">
-            <div class="format-row">
-              <span class="format-pill pdf"> PDF</span>
-              <span class="format-pill audio"> Audio</span>
-            </div>
-            <a href="#" class="btn-open" onclick="openViewer('anxiety'); return false;">Read or listen </a>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- FREE WITH EMAIL -->
-      <div class="grid-label email"> Free with your email</div>
-      <div class="resource-grid">
-
-        <div class="resource-card email-gate" onclick="openModal('financial')">
-          <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon"></span>
-          <div class="card-cat">Financial Stress</div>
-          <h3 class="card-title">When Financial Stress Starts Affecting Your Mental Health</h3>
-          <p class="card-desc">Money stress is the #1 driver of mental health decline in Australia right now. Understand why financial pressure hits so hard - and what to do when it's affecting how you feel and function.</p>
-          <div class="card-footer">
-            <div class="format-row">
-              <span class="format-pill pdf"> PDF</span>
-              <span class="format-pill audio"> Audio</span>
-            </div>
-            <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free </a>
-          </div>
-        </div>
-
-        <div class="resource-card email-gate">
-          <span class="card-tag t-email">Email to unlock</span>
-          <span class="c-icon"></span>
-          <div class="card-cat">Burnout & Stress</div>
-          <h3 class="card-title">The Basics That Actually Make a Difference to Your Wellbeing</h3>
-          <p class="card-desc">Burnout doesn't fix itself. This resource cuts through the noise and gives you the fundamentals - the things that clinical research and 20+ years of practice show actually work.</p>
-          <div class="card-footer">
-            <div class="format-row">
-              <span class="format-pill pdf"> PDF</span>
-              <span class="format-pill audio"> Audio</span>
-            </div>
-            <a href="https://app4.vision6.com.au/em/forms/subscribe.php?db=993085&amp;s=998863&amp;a=117428&amp;k=1,mky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE" target="_blank" rel="noopener" class="btn-unlock" style="text-decoration:none;display:inline-block;">Get free </a>
-          </div>
-        </div>
-
-      </div>
-
-      </div>
-
-      <!-- Subscribe CTA -->
-      <div class="subscribe-cta" id="subscribe-cta-block">
+      <!-- Subscribe CTA (hidden for now - pending review) -->
+      <div class="subscribe-cta" id="subscribe-cta-block" style="display:none;">
         <h2>Unlock the full library</h2>
         <p>370+ clinically-reviewed PDF guides and audio resources - available any time, on any device. New topics added regularly.</p>
         <div class="pricing-grid">
@@ -796,8 +860,8 @@
     </div>
   </section>
 
-  <!-- Trust strip -->
-  <div class="trust-strip" id="trust-strip-block">
+  <!-- Trust strip (hidden for now - pending review) -->
+  <div class="trust-strip" id="trust-strip-block" style="display:none;">
     <div class="trust-inner">
       <div class="trust-item"> Written by a Registered Psychologist</div>
       <div class="trust-item"> Clinically authored and reviewed</div>
@@ -806,8 +870,8 @@
     </div>
   </div>
 
-  <!-- What you get -->
-  <div class="what-strip" id="what-strip-block">
+  <!-- What you get (hidden for now - pending review) -->
+  <div class="what-strip" id="what-strip-block" style="display:none;">
     <div class="what-inner">
       <h3>What you get with a subscription</h3>
       <div class="what-grid">
@@ -819,8 +883,8 @@
     </div>
   </div>
 
-  <!-- STAY IN THE LOOP -->
-  <section style="background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
+  <!-- STAY IN THE LOOP (hidden for now - pending review) -->
+  <section id="newsletter-block" style="display:none;background:var(--sand);border-top:1px solid var(--border);padding:56px 40px;">
     <div style="max-width:580px;margin:0 auto;text-align:center;">
       <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--warm-grey);margin-bottom:16px;">Subscribe Newsletter</div>
       <h2 style="font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;margin-bottom:12px;line-height:1.2;">New resources added <em style="color:var(--teal);font-style:italic;">every month.</em></h2>
@@ -853,243 +917,14 @@
     </div>
   </footer>
 
-  <!-- RESOURCE VIEWER MODAL -->
-  <div class="viewer-overlay" id="viewer-modal">
-    <div class="viewer-box">
-      <div class="viewer-header">
-        <h3 id="viewer-title"></h3>
-        <button class="viewer-close" onclick="closeViewer()"> Close</button>
-      </div>
-      <div class="viewer-tabs">
-        <button class="viewer-tab active" id="tab-read"   onclick="switchTab('read')"> Read</button>
-        <button class="viewer-tab"        id="tab-listen" onclick="switchTab('listen')"> Listen</button>
-      </div>
-      <div class="viewer-upsell">
-        <p>You're reading a free resource. Subscribe to unlock all 370+.</p>
-        <a href="checkout.php?product=individual_monthly">Subscribe from $15/month </a>
-      </div>
-      <div class="viewer-read"   id="viewer-read"></div>
-      <div class="viewer-listen" id="viewer-listen"></div>
-    </div>
-  </div>
-
-
-  <script>
-    // ── RESOURCE CONTENT ─────────────────────────────────
-    const resourceData = {
-      crisis: {
-        title: 'Grounding Yourself When Everything Feels Overwhelming',
-        audioSrc: 'https://emotionalbalance.sharepoint.com/:v:/r/sites/ResourceCenter/Shared%20Documents/Resource%20Centre%20B2C/Audio/CRISIS-P-02-Grounding%20Yourself%20When%20Everything%20Feels%20Overwhelming.mp4?csf=1&web=1',
-        pdfSrc: '', // Add SharePoint PDF link here once confirmed
-        read: `
-          <div class="res-title">Grounding Yourself When Everything Feels Overwhelming</div>
-          <div class="res-byline">Clinically authored and reviewed by Nic Marcon - Registered Psychologist · toolsforthetoughdays.com.au</div>
-
-          <div class="res-section-title">What's happening</div>
-          <p class="res-body">When everything feels like too much at once, your nervous system goes into overdrive. Your thoughts race, your body tightens, and the world can feel loud, blurry, or unreal. This is your brain's threat response - it's trying to protect you. But it can make even simple things feel impossible.</p>
-          <p class="res-body">Grounding is the process of bringing your attention back to the present moment and your physical surroundings. It doesn't fix the problem. But it can bring you back to a place where you can think, breathe, and take a next step.</p>
-
-          <div class="res-section-title">Why it helps</div>
-          <p class="res-body">When you're overwhelmed, the part of your brain responsible for rational thinking gets bypassed by the part that manages threat responses. Grounding techniques work by activating your senses - giving your brain something concrete to focus on. This slows the stress response and allows the thinking part of your brain to come back online.</p>
-          <p class="res-body">You don't need to believe it will work. You just need to do it.</p>
-
-          <div class="res-section-title">What to do - the 5-4-3-2-1 method</div>
-          <p class="res-body">Wherever you are right now, go slowly through each of these steps. Say the answers out loud if you can.</p>
-          <ul class="res-list">
-            <li><strong>5 things you can see.</strong> Look around slowly. Name five things in your environment - a chair, a crack in the wall, your own hands.</li>
-            <li><strong>4 things you can physically feel.</strong> The weight of your body on the seat. The texture of your clothing. Your feet on the floor. The temperature of the air.</li>
-            <li><strong>3 things you can hear.</strong> Listen carefully. Distant sounds count - traffic, a fan, your own breathing.</li>
-            <li><strong>2 things you can smell.</strong> If nothing is obvious, move closer to something - your sleeve, the air near a window.</li>
-            <li><strong>1 thing you can taste.</strong> Notice whatever is present in your mouth right now.</li>
-          </ul>
-
-          <div class="res-section-title">Slow your breathing</div>
-          <p class="res-body">After the 5-4-3-2-1, try this breathing pattern: breathe in for 4 counts, hold for 2, breathe out slowly for 6. The longer exhale is important - it activates the part of your nervous system responsible for calm. Repeat this four or five times.</p>
-
-          <div class="res-section-title">Other grounding approaches</div>
-          <ul class="res-list">
-            <li><strong>Hold something cold or textured.</strong> Ice, a stone, or even just your keys. Physical sensation anchors you in the present.</li>
-            <li><strong>Plant your feet firmly on the floor</strong> and press them down. Notice the solidity beneath you.</li>
-            <li><strong>Name your surroundings.</strong> Quietly describe the room you're in - colour, size, what's in it.</li>
-            <li><strong>Splash cold water on your face or wrists.</strong> This activates the diving reflex and slows heart rate quickly.</li>
-          </ul>
-
-          <div class="res-section-title">When to get more help</div>
-          <p class="res-body">If you are having thoughts of harming yourself or ending your life, please reach out now. You do not have to get through this alone.</p>
-          <ul class="res-list">
-            <li><strong>Lifeline:</strong> 13 11 14 - available 24 hours, 7 days</li>
-            <li><strong>Beyond Blue:</strong> 1300 22 4636</li>
-            <li><strong>Emergency Services:</strong> 000</li>
-          </ul>
-          <p class="res-body">If overwhelming moments are happening regularly, speaking with a psychologist or GP can help you understand what's underneath them and build longer-term strategies.</p>
-
-          <div class="res-footer">
-            <strong>Tools for the Tough Days</strong> · toolsforthetoughdays.com.au<br>
-            Clinically authored and reviewed by Nic Marcon, Registered Psychologist.<br>
-            For personal use only. Not to be reproduced or distributed.<br><br>
-            <strong>If things feel urgent:</strong> Lifeline 13 11 14 · Beyond Blue 1300 22 4636 · Emergency 000
-          </div>
-        `
-      },
-      anxiety: {
-        title: 'Understanding What Anxiety Is Actually Doing to Your Body',
-        audioSrc: 'https://emotionalbalance.sharepoint.com/:v:/r/sites/ResourceCenter/Shared%20Documents/Resource%20Centre%20B2C/Audio/ANX-P01-Understanding%20What%20Anxiety%20Is%20Actually%20Doing%20to%20Your%20Body.mp4?csf=1&web=1',
-        pdfSrc: '', // Add SharePoint PDF link here once confirmed
-        read: `
-          <div class="res-title">Understanding What Anxiety Is Actually Doing to Your Body</div>
-          <div class="res-byline">Clinically authored and reviewed by Nic Marcon - Registered Psychologist · toolsforthetoughdays.com.au</div>
-
-          <div class="res-section-title">What's happening</div>
-          <p class="res-body">Anxiety is your body's alarm system. It is not a character flaw, a sign of weakness, or something you invented. It is a deeply wired biological response designed to protect you - and for most of human history, it did exactly that.</p>
-          <p class="res-body">The problem is that your nervous system cannot easily tell the difference between a genuine physical threat and a stressful thought about the future. So it responds the same way to both - flooding your body with the same chemicals, triggering the same physical sensations, even when there is no actual danger in the room.</p>
-
-          <div class="res-section-title">What anxiety is actually doing - physically</div>
-          <p class="res-body">When your brain detects a threat (real or perceived), it triggers a cascade of physical changes through the release of adrenaline and cortisol. Understanding each one can reduce how frightening they feel:</p>
-          <ul class="res-list">
-            <li><strong>Racing heart.</strong> Your heart pumps faster to move blood to your muscles, preparing you to run or fight. It is not a heart attack - it is your body gearing up.</li>
-            <li><strong>Tight chest or difficulty breathing.</strong> Your breathing becomes shallow and fast to take in more oxygen quickly. This is why slow breathing helps - it signals to your brain that the threat is passing.</li>
-            <li><strong>Shaking or trembling.</strong> Muscles tense and prepare for action. The trembling is excess energy with nowhere to go.</li>
-            <li><strong>Sweating.</strong> Your body temperature rises with the increased effort, so cooling begins.</li>
-            <li><strong>Nausea or an unsettled stomach.</strong> Digestion is non-essential in an emergency, so blood flow is redirected away from the gut. This is why anxiety often sits in the stomach.</li>
-            <li><strong>Dizziness or feeling detached.</strong> Blood flow changes can cause lightheadedness. The detached feeling - like watching yourself from outside - is your brain's protective response to overwhelming input.</li>
-            <li><strong>Racing thoughts.</strong> Your brain scans rapidly for threats and solutions. This is useful in a genuine emergency. In everyday anxiety, it creates a loop of worry that is hard to switch off.</li>
-          </ul>
-
-          <div class="res-section-title">Why it keeps happening</div>
-          <p class="res-body">Anxiety feeds on avoidance. When you avoid something that makes you anxious, your brain learns that the thing was dangerous - because you escaped it. This keeps the alarm system sensitive and makes anxiety grow over time. Gradual, gentle exposure - staying with discomfort rather than fleeing it - is one of the most effective ways to retrain the response.</p>
-          <p class="res-body">Chronic stress, poor sleep, high caffeine intake, and lack of physical activity all lower the threshold at which anxiety fires. Small changes in these areas can make a meaningful difference.</p>
-
-          <div class="res-section-title">What actually helps</div>
-          <ul class="res-list">
-            <li><strong>Slow your exhale.</strong> Breathe in for 4 counts, hold for 2, out for 6. The long exhale activates your parasympathetic nervous system - the brake on your stress response.</li>
-            <li><strong>Name what's happening.</strong> "This is anxiety. My body is doing what it's supposed to do. I am not in danger." Labelling reduces the brain's alarm response.</li>
-            <li><strong>Move your body.</strong> Physical activity burns off the stress hormones that anxiety produces. Even a ten-minute walk can significantly reduce symptoms.</li>
-            <li><strong>Don't avoid.</strong> Reducing avoidance is the single most effective long-term strategy. Start small - approach one thing that makes you mildly anxious.</li>
-            <li><strong>Limit caffeine.</strong> Caffeine directly stimulates adrenaline release. If anxiety is high, cutting back can have a surprisingly quick effect.</li>
-            <li><strong>Protect your sleep.</strong> Anxiety and sleep deprivation reinforce each other. Consistent sleep and wake times help regulate your nervous system.</li>
-          </ul>
-
-          <div class="res-section-title">When to get more help</div>
-          <p class="res-body">If anxiety is affecting your relationships, your work, or stopping you from doing things you want to do - it is time to speak with someone. Anxiety responds very well to psychological treatment. You do not have to manage this alone, and you do not have to wait until it becomes a crisis.</p>
-          <p class="res-body">Speak to your GP or a registered psychologist for an assessment and a treatment plan that suits you.</p>
-
-          <div class="res-footer">
-            <strong>Tools for the Tough Days</strong> · toolsforthetoughdays.com.au<br>
-            Clinically authored and reviewed by Nic Marcon, Registered Psychologist.<br>
-            For personal use only. Not to be reproduced or distributed.<br><br>
-            <strong>If things feel urgent:</strong> Lifeline 13 11 14 · Beyond Blue 1300 22 4636 · Emergency 000
-          </div>
-        `
-      }
-    };
-
-    let activeTab = 'read';
-
-    function openViewer(key) {
-      const r = resourceData[key];
-      document.getElementById('viewer-title').textContent = r.title;
-      document.getElementById('viewer-read').innerHTML = r.read;
-
-      // Build audio panel
-      document.getElementById('viewer-listen').innerHTML = `
-        <div class="audio-player-wrap">
-          <div class="audio-title">${r.title}</div>
-          <div class="audio-byline">Narrated audio · toolsforthetoughdays.com.au · Nic Marcon, Registered Psychologist</div>
-          <a href="${r.audioSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;padding:13px 22px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:16px;">
-             Listen on SharePoint
-          </a>
-          <p class="audio-note">Opens in SharePoint in a new tab - free to listen, no account required. The audio covers the same content as the written guide, read in a calm Australian voice.</p>
-        </div>
-        <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:16px 20px;">
-          <p style="font-size:13px;color:var(--teal-dark);margin:0 0 10px;">Want more? Subscribe for $15/month and unlock 130+ MP4 guides covering anxiety, relationships, sleep, financial stress, burnout, and more.</p>
-          <a href="checkout.php?product=individual_monthly" style="display:inline-block;background:var(--teal);color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;">Subscribe from $15/month </a>
-        </div>
-      `;
-
-      // Add PDF button at bottom of read panel if link exists
-      const pdfBtn = r.pdfSrc
-        ? `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
-             <a href="${r.pdfSrc}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--sand);border:1px solid var(--border);color:var(--charcoal);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;">
-                Download PDF version
-             </a>
-           </div>`
-        : `<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--warm-grey);">
-              PDF download coming soon.
-           </div>`;
-      document.getElementById('viewer-read').innerHTML += pdfBtn;
-
-      // Reset to read tab
-      switchTab('read');
-      document.getElementById('viewer-modal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeViewer() {
-      // Pause any playing audio
-      const players = document.querySelectorAll('#viewer-listen audio');
-      players.forEach(p => { p.pause(); p.currentTime = 0; });
-      document.getElementById('viewer-modal').classList.remove('show');
-      document.body.style.overflow = '';
-    }
-
-    function switchTab(tab) {
-      activeTab = tab;
-      document.getElementById('viewer-read').style.display   = tab === 'read'   ? 'block' : 'none';
-      document.getElementById('viewer-listen').style.display = tab === 'listen' ? 'block' : 'none';
-      document.getElementById('tab-read').classList.toggle('active',   tab === 'read');
-      document.getElementById('tab-listen').classList.toggle('active', tab === 'listen');
-    }
-
-    document.getElementById('viewer-modal').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeViewer();
-    });
-
-    // ── CONFIG ────────────────────────────────────────────
-    const VISION6_API_KEY = 'YOUR_VISION6_API_KEY';
-    const VISION6_LIST_ID = 'YOUR_VISION6_LIST_ID';
-    // ─────────────────────────────────────────────────────
-
-    const resources = {
-      financial: {
-        tag: 'Financial Stress',
-        title: 'When Financial Stress Starts Affecting Your Mental Health',
-        checklist: [
-          'Why financial pressure affects mental health so directly',
-          'What to do when money stress disrupts your sleep and mood',
-          'Practical first steps when it feels out of control'
-        ]
-      },
-      burnout: {
-        tag: 'Burnout & Stress',
-        title: 'The Basics That Actually Make a Difference to Your Wellbeing',
-        checklist: [
-          'The fundamentals that clinical research shows actually work',
-          'Why willpower alone doesn\'t fix burnout',
-          'Simple, evidence-based starting points for recovery'
-        ]
-      }
-    };
-
-    let current = null;
-
-    function openModal(type) {
-      current = type;
-      const r = resources[type];
-      document.getElementById('modal-tag').textContent = r.tag;
-      document.getElementById('modal-title').textContent = r.title;
-      document.getElementById('modal-checklist').innerHTML = r.checklist.map(i => `<li>${i}</li>`).join('');
-      document.getElementById('modal-form-wrap').style.display = 'block';
-      document.getElementById('modal-success').style.display = 'none';
-      document.getElementById('modal-error').classList.remove('show');
-      document.getElementById('input-name').value = '';
-      document.getElementById('input-email').value = '';
-      document.getElementById('email-modal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => document.getElementById('input-name').focus(), 100);
-    }
-
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeViewer(); } });
-  </script>
+  <!--
+    RESOURCE VIEWER MODAL, resourceData (Grounding / Anxiety full text), and the email-gate
+    modal JS (openModal/resources/VISION6 config) were removed with the Free Resources
+    section. They only served the four free-resource cards, and openModal() was already
+    dead code (no #email-modal element existed in this page). The clinical article text
+    lived only in this file's resourceData object - copy it out before deleting this
+    comment if it needs to live on elsewhere.
+  -->
 
   <!-- FLOATING FEEDBACK TAB -->
   <a href="feedback.html" style="
@@ -1606,7 +1441,8 @@
 
   (function showMoodTrackerForLoggedInUsers() {
     const moodCard = document.getElementById('mood-tracker-card');
-    if (!moodCard) {
+    const libraryBlock = document.getElementById('resource-library-block');
+    if (!moodCard && !libraryBlock) {
       return;
     }
 
@@ -1626,11 +1462,16 @@
       })
       .then(function (data) {
         if (data && data.user) {
-          moodCard.style.display = '';
+          if (moodCard) {
+            moodCard.style.display = '';
+          }
+          if (libraryBlock) {
+            libraryBlock.style.display = '';
+          }
         }
       })
       .catch(function () {
-        // Keep mood tracker hidden if auth check fails.
+        // Keep mood tracker and resource library hidden if auth check fails.
       });
   })();
 
