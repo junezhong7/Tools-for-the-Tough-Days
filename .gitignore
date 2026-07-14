@@ -7,3 +7,6 @@ data/**
 
 # Ignore all files under any sql folder
 **/sql/**
+
+# Ignore page-update folder
+page-update/

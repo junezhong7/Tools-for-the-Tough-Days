@@ -498,7 +498,7 @@
     <div class="card-body">
 
       <!-- ── SECTION 6: GOALS ── -->
-      <div class="group" style="display:none">
+      <div class="group">
         <div class="section-tag">Your goals</div>
         <label class="q-label">What are you hoping to get out of this? <span class="count">Choose up to 3</span></label>
         <p class="q-sub">This helps us point you toward the most relevant tools and resources from the start.</p>
@@ -554,7 +554,7 @@
         </div>
       </div>
 
-      <hr class="divider" style="display:none">
+      <hr class="divider">
 
       <!-- ── SECTION 3: TIMING ── -->
       <div class="group">
@@ -810,10 +810,10 @@
         </div>
       </div>
 
-      <hr class="divider" style="display:none">
+      <hr class="divider">
 
       <!-- ── SECTION 5: STRATEGIES ── -->
-      <div class="group" style="display:none">
+      <div class="group">
         <div class="section-tag">What already works for you</div>
         <label class="q-label">When things get tough, what do you usually reach for? <span class="count">Choose up to 3</span></label>
         <p class="q-sub">We use these to personalise your support. When your mood drops, we will remind you of what you already know works.</p>
@@ -869,10 +869,10 @@
         </div>
       </div>
 
-      <hr class="divider" style="display:none">
+      <hr class="divider">
 
       <!-- ── SECTION 8: PROFESSIONAL SUPPORT ── -->
-      <div class="group" style="display:none">
+      <div class="group">
         <div class="section-tag">Professional support</div>
         <label class="q-label">When you are having a really tough time, do you currently have professional support to turn to?</label>
         <p class="q-sub">This helps us understand how best to support you and what to suggest if things get difficult. This platform works alongside professional care, not instead of it.</p>
@@ -1021,6 +1021,34 @@ document.querySelectorAll('.pill-grid-3').forEach(function(grid) {
   grid.querySelectorAll('.pill-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       grid.querySelectorAll('.pill-btn').forEach(function(b) { b.classList.remove('selected'); });
+      this.classList.add('selected');
+    });
+  });
+});
+
+// ── Option card toggle (multi-select, up to 3, per grid) ──────────────────────
+document.querySelectorAll('.pill-grid-2').forEach(function(grid) {
+  const cards = grid.querySelectorAll('.opt-card');
+  if (!cards.length) return;
+  cards.forEach(function(card) {
+    card.addEventListener('click', function() {
+      const selectedCount = grid.querySelectorAll('.opt-card.selected').length;
+      if (this.classList.contains('selected')) {
+        this.classList.remove('selected');
+      } else if (selectedCount < 3) {
+        this.classList.add('selected');
+      }
+    });
+  });
+});
+
+// ── Professional support pill toggle (single-select) ───────────────────────────
+document.querySelectorAll('.pill-wrap').forEach(function(wrap) {
+  const pills = wrap.querySelectorAll('.prof-pill');
+  if (!pills.length) return;
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      pills.forEach(function(p) { p.classList.remove('selected'); });
       this.classList.add('selected');
     });
   });
