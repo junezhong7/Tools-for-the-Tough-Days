@@ -115,7 +115,8 @@
       <div class="field-row">
         <div class="field">
           <label for="businessNameInput">Business name</label>
-          <input type="text" id="businessNameInput" placeholder="Acme Pty Ltd" />
+          <input type="text" id="businessNameInput" list="businessNameOptions" placeholder="Start typing..." autocomplete="off" />
+          <datalist id="businessNameOptions"></datalist>
         </div>
         <div class="field">
           <label for="startInput">Period start</label>
@@ -158,6 +159,33 @@
           '<div class="metric-tile"><div class="value">' + m.pct_active_users_with_checkin + '%</div><div class="label">Active users who checked in</div></div>' +
         '</div>';
     }
+
+    var businessNameDebounce = null;
+
+    async function loadBusinessNameOptions(q) {
+      var params = new URLSearchParams({ action: 'business_names', q: q });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      if (!res.ok) return;
+      var data = await res.json();
+
+      var datalist = document.getElementById('businessNameOptions');
+      datalist.innerHTML = '';
+      data.business_names.forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.value = name;
+        datalist.appendChild(opt);
+      });
+    }
+
+    document.getElementById('businessNameInput').addEventListener('input', function (e) {
+      clearTimeout(businessNameDebounce);
+      var value = e.target.value.trim();
+      businessNameDebounce = setTimeout(function () { loadBusinessNameOptions(value); }, 250);
+    });
+
+    document.getElementById('businessNameInput').addEventListener('focus', function (e) {
+      if (!e.target.value.trim()) loadBusinessNameOptions('');
+    });
 
     async function runReport() {
       var businessName = document.getElementById('businessNameInput').value.trim();
