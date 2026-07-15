@@ -34,6 +34,9 @@ switch ($action) {
     case 'business_names':
         handle_business_names();
         break;
+    case 'channel_summary':
+        handle_channel_summary($admin);
+        break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
 }
@@ -132,6 +135,62 @@ function handle_mood_usage(array $admin): never
             'checkin_user_count'            => $checkinUserCount,
             'pct_active_users_with_checkin' => round($checkinUserCount / $activeUserCount * 100, 1),
         ],
+    ]);
+}
+
+// ─────────────────────────────────────────────
+// CHANNEL / UTM SUMMARY
+// (signups + CTA clicks by source — aggregate marketing-funnel data,
+// not per-individual behaviour, so MIN_COHORT_SIZE does not apply here)
+// ─────────────────────────────────────────────
+function handle_channel_summary(array $admin): never
+{
+    $start = trim($_GET['start'] ?? '');
+    $end   = trim($_GET['end'] ?? '');
+
+    if (!is_valid_date($start) || !is_valid_date($end)) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start and end must be dates in YYYY-MM-DD format.');
+    }
+    if ($start > $end) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start must not be after end.');
+    }
+
+    $periodStart = $start . ' 00:00:00';
+    $periodEnd   = $end . ' 23:59:59';
+
+    $signupStmt = db()->prepare(
+        "SELECT
+            COALESCE(utm_source, '(none)')   AS utm_source,
+            COALESCE(utm_campaign, '(none)') AS utm_campaign,
+            COUNT(*) AS signup_count
+         FROM users
+         WHERE created_at BETWEEN ? AND ?
+         GROUP BY utm_source, utm_campaign
+         ORDER BY signup_count DESC"
+    );
+    $signupStmt->execute([$periodStart, $periodEnd]);
+    $signups = $signupStmt->fetchAll();
+
+    $clickStmt = db()->prepare(
+        "SELECT
+            action,
+            COALESCE(JSON_UNQUOTE(JSON_EXTRACT(details, '$.utm_source')), '(none)') AS utm_source,
+            COUNT(*) AS click_count
+         FROM audit_logs
+         WHERE action IN ('cta.trial_click', 'cta.booking_click')
+           AND created_at BETWEEN ? AND ?
+         GROUP BY action, utm_source
+         ORDER BY click_count DESC"
+    );
+    $clickStmt->execute([$periodStart, $periodEnd]);
+    $clicks = $clickStmt->fetchAll();
+
+    audit('admin.report.channel_summary', null, ['start' => $start, 'end' => $end], (int) $admin['id']);
+
+    json_ok([
+        'period'                => ['start' => $start, 'end' => $end],
+        'signups_by_channel'    => $signups,
+        'cta_clicks_by_channel' => $clicks,
     ]);
 }
 
