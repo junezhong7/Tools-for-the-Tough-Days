@@ -31,8 +31,33 @@ switch ($action) {
     case 'mood_usage':
         handle_mood_usage($admin);
         break;
+    case 'business_names':
+        handle_business_names();
+        break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
+}
+
+// ─────────────────────────────────────────────
+// BUSINESS NAME LOOKUP (autocomplete helper — business_name is free text,
+// so exact-match search is otherwise painful to get right)
+// ─────────────────────────────────────────────
+function handle_business_names(): never
+{
+    $q = trim($_GET['q'] ?? '');
+    $escapedQ = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
+
+    $stmt = db()->prepare(
+        "SELECT DISTINCT business_name
+         FROM users
+         WHERE is_business_user = 1
+           AND business_name LIKE ? ESCAPE '\\\\'
+         ORDER BY business_name
+         LIMIT 20"
+    );
+    $stmt->execute(['%' . $escapedQ . '%']);
+
+    json_ok(['business_names' => array_column($stmt->fetchAll(), 'business_name')]);
 }
 
 // ─────────────────────────────────────────────
