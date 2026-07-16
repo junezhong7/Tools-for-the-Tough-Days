@@ -18,6 +18,7 @@ require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/mailer.php';
 require_once __DIR__ . '/../lib/newsletter.php';
+require_once __DIR__ . '/../lib/utm.php';
 require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -111,10 +112,13 @@ function handle_register(array $body): never
         }
 
         $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+        $utm  = read_utm_cookie(); // never throws; [] if absent/malformed
 
         $stmt = db()->prepare(
-            'INSERT INTO users (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in)
-             VALUES (?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO users
+                (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in,
+                 utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, fbclid, landing_page, signup_referrer)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $email,
@@ -124,11 +128,20 @@ function handle_register(array $body): never
             $businessName !== '' ? $businessName : null,
             'active',
             $newsletterOptIn ? 1 : 0,
+            $utm['utm_source']   ?? null,
+            $utm['utm_medium']   ?? null,
+            $utm['utm_campaign'] ?? null,
+            $utm['utm_term']     ?? null,
+            $utm['utm_content']  ?? null,
+            $utm['gclid']        ?? null,
+            $utm['fbclid']       ?? null,
+            $utm['landing_page'] ?? null,
+            $utm['referrer']     ?? null,
         ]);
         $userId = (int) db()->lastInsertId();
 
         $token = create_session($userId);
-        audit('user.register', $userId, ['email' => $email]);
+        audit('user.register', $userId, array_merge(['email' => $email], $utm));
 
         $trialPlanType = $isBusinessUser ? 'business' : 'individual';
         $trialStmt = db()->prepare(

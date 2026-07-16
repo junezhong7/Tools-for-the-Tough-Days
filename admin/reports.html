@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workplace Trial Reports — Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
+  <link rel="stylesheet" href="/assets/theme-unified.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { background: var(--ui-cream); color: var(--ui-charcoal); }
+
+    header.topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--ui-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header.topbar h1 { font-size: 1.1rem; color: var(--ui-teal-dark); }
+    header.topbar nav a { margin-right: 16px; font-size: 0.85rem; color: var(--ui-muted); text-decoration: none; }
+    header.topbar nav a.active { color: var(--ui-teal-dark); font-weight: 700; }
+
+    #adminWhoami { font-size: 0.85rem; color: var(--ui-muted); margin-right: 16px; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--ui-border);
+      background: #fff;
+      color: var(--ui-charcoal);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:hover { border-color: var(--ui-teal); }
+    .btn.primary { background: var(--ui-teal); color: #fff; border-color: var(--ui-teal); }
+    .btn.primary:hover { background: var(--ui-teal-dark); }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+
+    main { max-width: 720px; margin: 0 auto; padding: 24px 28px 60px; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--ui-shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 { font-size: 1rem; color: var(--ui-teal-dark); margin-bottom: 16px; }
+
+    .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+    .field label { font-size: 0.78rem; color: var(--ui-muted); font-weight: 600; }
+    .field input {
+      padding: 9px 12px;
+      border: 1.5px solid var(--ui-border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      background: #fff;
+    }
+
+    .field-msg { font-size: 0.82rem; margin-top: 10px; }
+    .field-msg.error { color: #c0392b; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .metric-tile {
+      background: var(--ui-teal-light);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .metric-tile .value { font-size: 1.5rem; font-weight: 700; color: var(--ui-teal-dark); }
+    .metric-tile .label { font-size: 0.78rem; color: var(--ui-muted); margin-top: 2px; }
+
+    .insufficient {
+      padding: 20px;
+      text-align: center;
+      color: var(--ui-muted);
+      background: #f6f4ef;
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+
+    .empty-state { padding: 20px; text-align: center; color: var(--ui-muted); font-size: 0.85rem; }
+
+    .report-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 20px; }
+    .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
+    .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
+    .report-table-title { font-size: 0.85rem; font-weight: 700; color: var(--ui-teal-dark); margin-bottom: 8px; }
+  </style>
+</head>
+<body data-auth="required">
+  <header class="topbar">
+    <h1>Workplace Trial Reports</h1>
+    <div>
+      <span id="adminWhoami"></span>
+      <button class="btn" id="logoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <nav style="margin-bottom: 16px;">
+      <a href="/admin/index.html">&larr; Back to member admin</a>
+    </nav>
+
+    <div class="card">
+      <h2>Mood slider usage</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="businessNameInput">Business name</label>
+          <input type="text" id="businessNameInput" list="businessNameOptions" placeholder="Start typing..." autocomplete="off" />
+          <datalist id="businessNameOptions"></datalist>
+        </div>
+        <div class="field">
+          <label for="startInput">Period start</label>
+          <input type="date" id="startInput" />
+        </div>
+        <div class="field">
+          <label for="endInput">Period end</label>
+          <input type="date" id="endInput" />
+        </div>
+      </div>
+      <button class="btn primary" id="runReportBtn">Run report</button>
+      <p class="field-msg error" id="reportError"></p>
+
+      <div id="reportResult" style="margin-top: 20px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>Channel &amp; campaign performance</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="channelStartInput">Period start</label>
+          <input type="date" id="channelStartInput" />
+        </div>
+        <div class="field">
+          <label for="channelEndInput">Period end</label>
+          <input type="date" id="channelEndInput" />
+        </div>
+      </div>
+      <button class="btn primary" id="runChannelReportBtn">Run report</button>
+      <p class="field-msg error" id="channelReportError"></p>
+
+      <div id="channelReportResult" style="margin-top: 20px;"></div>
+    </div>
+  </main>
+
+  <script src="/admin/admin-guard.js"></script>
+  <script>
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    function renderResult(data) {
+      var container = document.getElementById('reportResult');
+
+      if (data.insufficient_data) {
+        container.innerHTML = '<div class="insufficient">' + escapeHtml(data.message) + '</div>';
+        return;
+      }
+
+      var m = data.metrics;
+      container.innerHTML =
+        '<div class="metric-grid">' +
+          '<div class="metric-tile"><div class="value">' + m.active_user_count + '</div><div class="label">Active users</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.total_checkins + '</div><div class="label">Total check-ins</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.checkin_user_count + '</div><div class="label">Users who checked in</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.pct_active_users_with_checkin + '%</div><div class="label">Active users who checked in</div></div>' +
+        '</div>';
+    }
+
+    var businessNameDebounce = null;
+
+    async function loadBusinessNameOptions(q) {
+      var params = new URLSearchParams({ action: 'business_names', q: q });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      if (!res.ok) return;
+      var data = await res.json();
+
+      var datalist = document.getElementById('businessNameOptions');
+      datalist.innerHTML = '';
+      data.business_names.forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.value = name;
+        datalist.appendChild(opt);
+      });
+    }
+
+    document.getElementById('businessNameInput').addEventListener('input', function (e) {
+      clearTimeout(businessNameDebounce);
+      var value = e.target.value.trim();
+      businessNameDebounce = setTimeout(function () { loadBusinessNameOptions(value); }, 250);
+    });
+
+    document.getElementById('businessNameInput').addEventListener('focus', function (e) {
+      if (!e.target.value.trim()) loadBusinessNameOptions('');
+    });
+
+    async function runReport() {
+      var businessName = document.getElementById('businessNameInput').value.trim();
+      var start = document.getElementById('startInput').value;
+      var end = document.getElementById('endInput').value;
+      var errorEl = document.getElementById('reportError');
+      var resultEl = document.getElementById('reportResult');
+
+      errorEl.textContent = '';
+      resultEl.innerHTML = '';
+
+      if (!businessName || !start || !end) {
+        errorEl.textContent = 'Business name, period start, and period end are all required.';
+        return;
+      }
+
+      var params = new URLSearchParams({
+        action: 'mood_usage',
+        business_name: businessName,
+        start: start,
+        end: end,
+      });
+
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      var data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.message || 'Could not load this report.';
+        return;
+      }
+
+      renderResult(data);
+    }
+
+    document.getElementById('runReportBtn').addEventListener('click', runReport);
+
+    function renderChannelTable(title, list, cols, labels) {
+      var rows = list.length
+        ? list.map(function (r) {
+            return '<tr>' + cols.map(function (c) { return '<td>' + escapeHtml(r[c]) + '</td>'; }).join('') + '</tr>';
+          }).join('')
+        : '<tr><td colspan="' + cols.length + '" class="empty-state">No data for this period</td></tr>';
+
+      return (
+        '<div class="report-table-title">' + escapeHtml(title) + '</div>' +
+        '<table class="report-table">' +
+          '<tr>' + labels.map(function (l) { return '<th>' + escapeHtml(l) + '</th>'; }).join('') + '</tr>' +
+          rows +
+        '</table>'
+      );
+    }
+
+    async function runChannelReport() {
+      var start = document.getElementById('channelStartInput').value;
+      var end = document.getElementById('channelEndInput').value;
+      var errorEl = document.getElementById('channelReportError');
+      var resultEl = document.getElementById('channelReportResult');
+
+      errorEl.textContent = '';
+      resultEl.innerHTML = '';
+
+      if (!start || !end) {
+        errorEl.textContent = 'Period start and end are both required.';
+        return;
+      }
+
+      var params = new URLSearchParams({ action: 'channel_summary', start: start, end: end });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      var data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.message || 'Could not load this report.';
+        return;
+      }
+
+      resultEl.innerHTML =
+        renderChannelTable('Signups by source / campaign', data.signups_by_channel, ['utm_source', 'utm_campaign', 'signup_count'], ['Source', 'Campaign', 'Signups']) +
+        renderChannelTable('CTA clicks by source', data.cta_clicks_by_channel, ['action', 'utm_source', 'click_count'], ['CTA', 'Source', 'Clicks']);
+    }
+
+    document.getElementById('runChannelReportBtn').addEventListener('click', runChannelReport);
+
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      fetch('/api/admin/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' })
+        .finally(function () { window.location.href = '/admin/login.html'; });
+    });
+
+    (async function init() {
+      var auth = await window.AdminAuthGuard.getState();
+      if (auth.authenticated && auth.admin) {
+        document.getElementById('adminWhoami').textContent = auth.admin.full_name || auth.admin.email;
+      }
+    })();
+  </script>
+</body>
+</html>
