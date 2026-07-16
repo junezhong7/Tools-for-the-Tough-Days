@@ -94,6 +94,11 @@
     }
 
     .empty-state { padding: 20px; text-align: center; color: var(--ui-muted); font-size: 0.85rem; }
+
+    .report-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 20px; }
+    .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
+    .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
+    .report-table-title { font-size: 0.85rem; font-weight: 700; color: var(--ui-teal-dark); margin-bottom: 8px; }
   </style>
 </head>
 <body data-auth="required">
@@ -131,6 +136,24 @@
       <p class="field-msg error" id="reportError"></p>
 
       <div id="reportResult" style="margin-top: 20px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>Channel &amp; campaign performance</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="channelStartInput">Period start</label>
+          <input type="date" id="channelStartInput" />
+        </div>
+        <div class="field">
+          <label for="channelEndInput">Period end</label>
+          <input type="date" id="channelEndInput" />
+        </div>
+      </div>
+      <button class="btn primary" id="runChannelReportBtn">Run report</button>
+      <p class="field-msg error" id="channelReportError"></p>
+
+      <div id="channelReportResult" style="margin-top: 20px;"></div>
     </div>
   </main>
 
@@ -221,6 +244,52 @@
     }
 
     document.getElementById('runReportBtn').addEventListener('click', runReport);
+
+    function renderChannelTable(title, list, cols, labels) {
+      var rows = list.length
+        ? list.map(function (r) {
+            return '<tr>' + cols.map(function (c) { return '<td>' + escapeHtml(r[c]) + '</td>'; }).join('') + '</tr>';
+          }).join('')
+        : '<tr><td colspan="' + cols.length + '" class="empty-state">No data for this period</td></tr>';
+
+      return (
+        '<div class="report-table-title">' + escapeHtml(title) + '</div>' +
+        '<table class="report-table">' +
+          '<tr>' + labels.map(function (l) { return '<th>' + escapeHtml(l) + '</th>'; }).join('') + '</tr>' +
+          rows +
+        '</table>'
+      );
+    }
+
+    async function runChannelReport() {
+      var start = document.getElementById('channelStartInput').value;
+      var end = document.getElementById('channelEndInput').value;
+      var errorEl = document.getElementById('channelReportError');
+      var resultEl = document.getElementById('channelReportResult');
+
+      errorEl.textContent = '';
+      resultEl.innerHTML = '';
+
+      if (!start || !end) {
+        errorEl.textContent = 'Period start and end are both required.';
+        return;
+      }
+
+      var params = new URLSearchParams({ action: 'channel_summary', start: start, end: end });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      var data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.message || 'Could not load this report.';
+        return;
+      }
+
+      resultEl.innerHTML =
+        renderChannelTable('Signups by source / campaign', data.signups_by_channel, ['utm_source', 'utm_campaign', 'signup_count'], ['Source', 'Campaign', 'Signups']) +
+        renderChannelTable('CTA clicks by source', data.cta_clicks_by_channel, ['action', 'utm_source', 'click_count'], ['CTA', 'Source', 'Clicks']);
+    }
+
+    document.getElementById('runChannelReportBtn').addEventListener('click', runChannelReport);
 
     document.getElementById('logoutBtn').addEventListener('click', function () {
       fetch('/api/admin/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' })
