@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -167,6 +168,10 @@
     .btn-register:active { transform: scale(0.99); }
     .btn-register:disabled { opacity: 0.65; cursor: not-allowed; }
 
+    .divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .divider span { font-size: 0.78rem; color: #a0b8b8; white-space: nowrap; }
+
     .signin-row { text-align: center; font-size: 0.88rem; color: var(--muted); }
     .signin-row a { color: var(--teal); text-decoration: none; font-weight: 600; }
     .signin-row a:hover { color: var(--teal-dark); text-decoration: underline; }
@@ -263,6 +268,19 @@
 
       <div class="alert-error" id="alertError"></div>
 
+      <!-- GOOGLE SIGN-IN -->
+      <div id="g_id_onload"
+           data-client_id="976408684368-454sqsaa1sde7i85fjfhnkv5rqh9kfam.apps.googleusercontent.com"
+           data-callback="handleGoogleCredential"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" style="margin-bottom: 20px; display: flex; justify-content: center;"
+           data-type="standard" data-shape="rectangular" data-theme="outline"
+           data-size="large" data-width="360" data-logo_alignment="left">
+      </div>
+
+      <div class="divider"><span>or sign up with email</span></div>
+
       <div class="field" id="field-name">
         <label for="full_name">Full name</label>
         <input type="text" id="full_name" name="full_name" placeholder="Nic Psychologist" autocomplete="name" />
@@ -327,6 +345,33 @@
 
   <script src="/auth-guard.js"></script>
   <script>
+    // Google Sign-In callback
+    function handleGoogleCredential(response) {
+      const alertEl = document.getElementById('alertError');
+      alertEl.style.display = 'none';
+
+      fetch('/api/auth.php?action=google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
+        credentials: 'same-origin',
+      })
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) {
+            alertEl.textContent = data.message || 'Google sign-in failed. Please try again.';
+            alertEl.style.display = 'block';
+          } else {
+            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
+            window.location.href = redirect;
+          }
+        })
+        .catch(() => {
+          alertEl.textContent = 'Network error, please check your connection and try again.';
+          alertEl.style.display = 'block';
+        });
+    }
+
     // ── Toggle password visibility
     const pwInput  = document.getElementById('password');
     const toggleBtn = document.getElementById('togglePw');
