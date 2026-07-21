@@ -19,6 +19,7 @@ require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/mailer.php';
 require_once __DIR__ . '/../lib/newsletter.php';
 require_once __DIR__ . '/../lib/utm.php';
+require_once __DIR__ . '/../lib/google_oauth.php';
 require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -46,6 +47,9 @@ switch ($action) {
         break;
     case 'login':
         handle_login($body);
+        break;
+    case 'google':
+        handle_google_auth($body);
         break;
     case 'logout':
         handle_logout();
@@ -227,6 +231,147 @@ function handle_login(array $body): never
     } catch (Throwable $e) {
         error_log('login error: ' . $e->getMessage());
         json_error(500, 'SERVER_ERROR', 'Login failed. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
+// GOOGLE SIGN-IN  (login existing users, register new ones)
+// ─────────────────────────────────────────────
+function handle_google_auth(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $credential = trim((string) ($body['credential'] ?? ''));
+    if ($credential === '') {
+        json_error(422, 'MISSING_CREDENTIAL', 'Missing Google credential.');
+    }
+
+    $claims = verify_google_id_token($credential);
+    if ($claims === null) {
+        json_error(401, 'INVALID_GOOGLE_TOKEN', 'Could not verify Google sign-in. Please try again.');
+    }
+
+    if (!$claims['email_verified']) {
+        json_error(403, 'GOOGLE_EMAIL_UNVERIFIED', 'Your Google email address is not verified.');
+    }
+
+    $googleId = $claims['sub'];
+    $email    = $claims['email'];
+    $fullName = $claims['name'];
+
+    try {
+        // Already linked to this Google account?
+        $stmt = db()->prepare('SELECT * FROM users WHERE google_id = ? LIMIT 1');
+        $stmt->execute([$googleId]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            if ($user['status'] === 'suspended') {
+                json_error(403, 'ACCOUNT_SUSPENDED', 'Your account has been suspended. Please contact support.');
+            }
+
+            $token = create_session((int) $user['id']);
+            audit('user.google_login', (int) $user['id'], ['email' => $email]);
+
+            json_ok([
+                'user' => [
+                    'id'        => (int) $user['id'],
+                    'email'     => $user['email'],
+                    'full_name' => $user['full_name'],
+                    'is_business_user' => (bool) $user['is_business_user'],
+                    'business_name'    => $user['business_name'],
+                ],
+                'session_token' => $token,
+            ]);
+        }
+
+        // No account linked to this Google ID yet — does an account with this
+        // (verified) email already exist? If so, link it rather than creating
+        // a duplicate.
+        $stmt = db()->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
+        $stmt->execute([$email]);
+        $existing = $stmt->fetch();
+
+        if ($existing) {
+            if ($existing['status'] === 'suspended') {
+                json_error(403, 'ACCOUNT_SUSPENDED', 'Your account has been suspended. Please contact support.');
+            }
+
+            db()->prepare('UPDATE users SET google_id = ? WHERE id = ?')
+                ->execute([$googleId, $existing['id']]);
+
+            $token = create_session((int) $existing['id']);
+            audit('user.google_link', (int) $existing['id'], ['email' => $email]);
+
+            json_ok([
+                'user' => [
+                    'id'        => (int) $existing['id'],
+                    'email'     => $existing['email'],
+                    'full_name' => $existing['full_name'],
+                    'is_business_user' => (bool) $existing['is_business_user'],
+                    'business_name'    => $existing['business_name'],
+                ],
+                'session_token' => $token,
+            ]);
+        }
+
+        // Brand new user
+        $utm = read_utm_cookie(); // never throws; [] if absent/malformed
+
+        $stmt = db()->prepare(
+            'INSERT INTO users
+                (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in, google_id,
+                 utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, fbclid, landing_page, signup_referrer)
+             VALUES (?, NULL, ?, 0, NULL, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $email,
+            $fullName ?: null,
+            'active',
+            $googleId,
+            $utm['utm_source']   ?? null,
+            $utm['utm_medium']   ?? null,
+            $utm['utm_campaign'] ?? null,
+            $utm['utm_term']     ?? null,
+            $utm['utm_content']  ?? null,
+            $utm['gclid']        ?? null,
+            $utm['fbclid']       ?? null,
+            $utm['landing_page'] ?? null,
+            $utm['referrer']     ?? null,
+        ]);
+        $userId = (int) db()->lastInsertId();
+
+        $token = create_session($userId);
+        audit('user.google_register', $userId, array_merge(['email' => $email], $utm));
+
+        $trialStmt = db()->prepare(
+            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
+             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
+        );
+        $trialStmt->execute([$userId, 'free_trial', 'individual', 'trialing']);
+
+        try {
+            send_registration_welcome_email($email, $fullName ?: null);
+        } catch (Throwable $mailErr) {
+            error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        json_ok([
+            'user' => [
+                'id'        => $userId,
+                'email'     => $email,
+                'full_name' => $fullName ?: null,
+                'is_business_user' => false,
+                'business_name'    => null,
+            ],
+            'session_token' => $token,
+        ], 201);
+
+    } catch (Throwable $e) {
+        error_log('google auth error: ' . $e->getMessage());
+        json_error(500, 'SERVER_ERROR', 'Google sign-in failed. Please try again.');
     }
 }
 
