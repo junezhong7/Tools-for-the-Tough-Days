@@ -17,6 +17,10 @@ if (!defined('INTRO_COUPON_ID')) {
     }
 }
 
+if (!defined('GOOGLE_CLIENT_ID')) {
+    define('GOOGLE_CLIENT_ID', getenv('GOOGLE_CLIENT_ID') ?: '');
+}
+
 if (!defined('SITE_URL')) {
     $siteUrlFromEnv = getenv('SITE_URL') ?: '';
     if ($siteUrlFromEnv !== '') {
