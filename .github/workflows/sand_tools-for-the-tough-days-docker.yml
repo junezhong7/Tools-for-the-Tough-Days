@@ -9,6 +9,7 @@ on:
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
+    environment: sand
     permissions:
       id-token: write
       contents: read
