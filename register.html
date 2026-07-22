@@ -350,10 +350,35 @@
       const alertEl = document.getElementById('alertError');
       alertEl.style.display = 'none';
 
+      const termsEl = document.getElementById('terms');
+      const ageEl = document.getElementById('age_confirm');
+      let valid = true;
+
+      if (!termsEl.checked) {
+        document.getElementById('field-terms').classList.add('has-error');
+        alertEl.textContent = 'Please agree to the Terms of Service and Privacy Policy.';
+        alertEl.style.display = 'block';
+        valid = false;
+      }
+
+      if (!ageEl.checked) {
+        document.getElementById('field-age').classList.add('has-error');
+        if (!alertEl.style.display || alertEl.style.display === 'none') {
+          alertEl.textContent = 'Please confirm you are 18 years of age or older.';
+          alertEl.style.display = 'block';
+        }
+        valid = false;
+      }
+
+      if (!valid) return;
+
       fetch('/api/auth.php?action=google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: response.credential }),
+        body: JSON.stringify({
+          credential: response.credential,
+          subscribe_newsletter: document.getElementById('subscribe_newsletter').checked,
+        }),
         credentials: 'same-origin',
       })
         .then(async res => {

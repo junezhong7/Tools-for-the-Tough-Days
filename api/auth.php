@@ -318,18 +318,20 @@ function handle_google_auth(array $body): never
         }
 
         // Brand new user
+        $newsletterOptIn = normalize_bool($body['subscribe_newsletter'] ?? false);
         $utm = read_utm_cookie(); // never throws; [] if absent/malformed
 
         $stmt = db()->prepare(
             'INSERT INTO users
                 (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in, google_id,
                  utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, fbclid, landing_page, signup_referrer)
-             VALUES (?, NULL, ?, 0, NULL, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+             VALUES (?, NULL, ?, 0, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $email,
             $fullName ?: null,
             'active',
+            $newsletterOptIn ? 1 : 0,
             $googleId,
             $utm['utm_source']   ?? null,
             $utm['utm_medium']   ?? null,
@@ -356,6 +358,10 @@ function handle_google_auth(array $body): never
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
             error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        if ($newsletterOptIn) {
+            submit_to_vision6($email, $fullName ?: '');
         }
 
         json_ok([
