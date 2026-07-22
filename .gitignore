@@ -10,3 +10,6 @@ data/**
 
 # Ignore page-update folder
 page-update/
+
+# Ignore ToGitIgnore folder
+ToGitIgnore/

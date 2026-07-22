@@ -122,8 +122,9 @@ jobs:
               AZURE_STORAGE_CONTAINER="${{ vars.AZURE_STORAGE_CONTAINER }}" \
               AZURE_STORAGE_PREFIX="${{ vars.AZURE_STORAGE_PREFIX }}" \
               AZURE_STORAGE_ACCOUNT_KEY="${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}" \
-              AzureWebJobsStorage="${{ secrets.AZURE_WEB_JOBS_STORAGE }}" \
+              AzureWebJobsStorage="${{ secrets.AZUREWEBJOBSSTORAGE }}" \
               STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
+              GOOGLE_CLIENT_ID="${{ vars.GOOGLE_CLIENT_ID }}" \
               STRIPE_WEBHOOK_SECRET="${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
               SUBSCRIPTION_EMAIL="${{ vars.SUBSCRIPTION_EMAIL }}" \
               WEBSITES_ENABLE_APP_SERVICE_STORAGE="${{ vars.WEBSITES_ENABLE_APP_SERVICE_STORAGE }}" \
