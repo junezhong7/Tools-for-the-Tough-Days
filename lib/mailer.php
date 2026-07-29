@@ -251,8 +251,13 @@ function should_send_renewal_emails(): bool
     return $scope === 'include_renewals';
 }
 
-function send_transactional_email(string $toEmail, string $subject, string $body, ?string $htmlBody = null): bool
-{
+function send_transactional_email(
+    string $toEmail,
+    string $subject,
+    string $body,
+    ?string $htmlBody = null,
+    array $attachments = []
+): bool {
     if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
         return false;
     }
@@ -269,11 +274,55 @@ function send_transactional_email(string $toEmail, string $subject, string $body
         }
     }
 
-    smtp_send_mail($recipients, $subject, $body, $htmlBody);
+    smtp_send_mail($recipients, $subject, $body, $htmlBody, $attachments);
     return true;
 }
 
-function smtp_send_mail(array $recipients, string $subject, string $textBody, ?string $htmlBody = null): void
+/**
+ * Sends the "8 Tools for Your Tough Days" free guide as a PDF attachment.
+ */
+function send_free_guide_email(string $toEmail): bool
+{
+    $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $pdfPath = __DIR__ . '/../data/8-Tools-for-Your-Tough-Days-Guide.pdf';
+
+    if (!is_readable($pdfPath)) {
+        error_log('send_free_guide_email: PDF attachment missing at ' . $pdfPath);
+        return false;
+    }
+
+    $subject = 'Your free guide: 8 Tools for Your Tough Days';
+
+    $textBody = "Hi there,\n\n"
+        . "Thanks for requesting the free guide. It's attached to this email as a PDF.\n\n"
+        . "Inside you'll find 8 small, practical things that actually help on a tough day, "
+        . "whatever job you do.\n\n"
+        . "If you'd like ongoing support between tough days, you can explore the platform here:\n"
+        . $siteUrl . "\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $safeSiteUrl = htmlspecialchars($siteUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = '<p>Hi there,</p>'
+        . '<p>Thanks for requesting the free guide. It\'s attached to this email as a PDF.</p>'
+        . '<p>Inside you\'ll find 8 small, practical things that actually help on a tough day, whatever job you do.</p>'
+        . '<p>If you\'d like ongoing support between tough days, you can <a href="' . $safeSiteUrl . '">explore the platform here</a>.</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, [
+        [
+            'path'     => $pdfPath,
+            'filename' => '8-Tools-for-Your-Tough-Days.pdf',
+            'mime'     => 'application/pdf',
+        ],
+    ]);
+}
+
+function smtp_send_mail(array $recipients, string $subject, string $textBody, ?string $htmlBody = null, array $attachments = []): void
 {
     $host = smtp_host();
     $port = smtp_port();
@@ -333,7 +382,7 @@ function smtp_send_mail(array $recipients, string $subject, string $textBody, ?s
         }
 
         smtp_command($socket, 'DATA', [354]);
-        smtp_write($socket, build_rfc822_message($from, $cleanRecipients, $replyTo, $subject, $textBody, $htmlBody));
+        smtp_write($socket, build_rfc822_message($from, $cleanRecipients, $replyTo, $subject, $textBody, $htmlBody, $attachments));
         smtp_write($socket, "\r\n.\r\n");
         smtp_expect_code($socket, [250]);
 
@@ -389,7 +438,8 @@ function build_rfc822_message(
     string $replyTo,
     string $subject,
     string $textBody,
-    ?string $htmlBody = null
+    ?string $htmlBody = null,
+    array $attachments = []
 ): string {
     $safeSubject = preg_replace('/[\r\n]+/', ' ', $subject) ?? 'Message';
     $safeTextBody = preg_replace('/\r\n|\r|\n/', "\r\n", $textBody) ?? '';
@@ -410,28 +460,71 @@ function build_rfc822_message(
     }
 
     if ($safeHtmlBody !== '') {
-        $boundary = '=_Part_' . bin2hex(random_bytes(12));
-        $headers[] = 'Content-Type: multipart/alternative; boundary="' . $boundary . '"';
-
-        $payload = '--' . $boundary . "\r\n"
+        $altBoundary = '=_Part_' . bin2hex(random_bytes(12));
+        $bodyPayload = '--' . $altBoundary . "\r\n"
             . 'Content-Type: text/plain; charset=UTF-8' . "\r\n"
             . 'Content-Transfer-Encoding: 8bit' . "\r\n\r\n"
             . $safeTextBody . "\r\n\r\n"
-            . '--' . $boundary . "\r\n"
+            . '--' . $altBoundary . "\r\n"
             . 'Content-Type: text/html; charset=UTF-8' . "\r\n"
             . 'Content-Transfer-Encoding: 8bit' . "\r\n\r\n"
             . $safeHtmlBody . "\r\n\r\n"
-            . '--' . $boundary . "--";
+            . '--' . $altBoundary . "--";
+        $bodyContentType = 'multipart/alternative; boundary="' . $altBoundary . '"';
     } else {
-        $headers[] = 'Content-Type: text/plain; charset=UTF-8';
-        $headers[] = 'Content-Transfer-Encoding: 8bit';
-        $payload = $safeTextBody;
+        $bodyPayload = $safeTextBody;
+        $bodyContentType = 'text/plain; charset=UTF-8';
+    }
+
+    if (empty($attachments)) {
+        $headers[] = 'Content-Type: ' . $bodyContentType;
+        if ($safeHtmlBody === '') {
+            $headers[] = 'Content-Transfer-Encoding: 8bit';
+        }
+        $payload = $bodyPayload;
+    } else {
+        $mixedBoundary = '=_Part_' . bin2hex(random_bytes(12));
+        $headers[] = 'Content-Type: multipart/mixed; boundary="' . $mixedBoundary . '"';
+
+        $payload = '--' . $mixedBoundary . "\r\n"
+            . 'Content-Type: ' . $bodyContentType . "\r\n"
+            . ($safeHtmlBody === '' ? 'Content-Transfer-Encoding: 8bit' . "\r\n" : '')
+            . "\r\n"
+            . $bodyPayload . "\r\n\r\n";
+
+        foreach ($attachments as $attachment) {
+            $payload .= build_mime_attachment_part($mixedBoundary, $attachment);
+        }
+
+        $payload .= '--' . $mixedBoundary . "--";
     }
 
     // SMTP DATA escaping: lines beginning with a dot must be doubled.
     $payload = preg_replace('/(^|\r\n)\./', '$1..', $payload) ?? $payload;
 
     return implode("\r\n", $headers) . "\r\n\r\n" . $payload;
+}
+
+/**
+ * Builds one base64-encoded MIME attachment part.
+ * $attachment: ['path' => string, 'filename' => string, 'mime' => string]
+ */
+function build_mime_attachment_part(string $boundary, array $attachment): string
+{
+    $contents = file_get_contents($attachment['path']);
+    if ($contents === false) {
+        throw new RuntimeException('Could not read attachment: ' . $attachment['path']);
+    }
+
+    $safeFilename = preg_replace('/[\r\n"]+/', '', $attachment['filename']) ?? 'attachment';
+    $mime = $attachment['mime'] ?: 'application/octet-stream';
+    $encoded = chunk_split(base64_encode($contents), 76, "\r\n");
+
+    return '--' . $boundary . "\r\n"
+        . 'Content-Type: ' . $mime . '; name="' . $safeFilename . '"' . "\r\n"
+        . 'Content-Transfer-Encoding: base64' . "\r\n"
+        . 'Content-Disposition: attachment; filename="' . $safeFilename . '"' . "\r\n\r\n"
+        . $encoded . "\r\n";
 }
 
 function subscription_label_from_product_key(string $productKey, string $planType): string

@@ -20,6 +20,7 @@ require_once __DIR__ . '/../lib/mailer.php';
 require_once __DIR__ . '/../lib/newsletter.php';
 require_once __DIR__ . '/../lib/utm.php';
 require_once __DIR__ . '/../lib/google_oauth.php';
+require_once __DIR__ . '/../lib/facebook_oauth.php';
 require_once __DIR__ . '/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -50,6 +51,9 @@ switch ($action) {
         break;
     case 'google':
         handle_google_auth($body);
+        break;
+    case 'facebook':
+        handle_facebook_auth($body);
         break;
     case 'logout':
         handle_logout();
@@ -378,6 +382,153 @@ function handle_google_auth(array $body): never
     } catch (Throwable $e) {
         error_log('google auth error: ' . $e->getMessage());
         json_error(500, 'SERVER_ERROR', 'Google sign-in failed. Please try again.');
+    }
+}
+
+// ─────────────────────────────────────────────
+// FACEBOOK LOGIN  (login existing users, register new ones)
+// ─────────────────────────────────────────────
+function handle_facebook_auth(array $body): never
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        json_error(405, 'METHOD_NOT_ALLOWED', 'POST required.');
+    }
+
+    $accessToken = trim((string) ($body['access_token'] ?? ''));
+    if ($accessToken === '') {
+        json_error(422, 'MISSING_ACCESS_TOKEN', 'Missing Facebook access token.');
+    }
+
+    $profile = verify_facebook_access_token($accessToken);
+    if ($profile === null) {
+        json_error(401, 'INVALID_FACEBOOK_TOKEN', 'Could not verify Facebook sign-in. Please try again.');
+    }
+
+    if ($profile['email'] === null) {
+        json_error(422, 'FACEBOOK_EMAIL_REQUIRED', 'Please allow access to your email address to sign in with Facebook.');
+    }
+
+    $facebookId = $profile['id'];
+    $email      = $profile['email'];
+    $fullName   = $profile['name'];
+
+    try {
+        // Already linked to this Facebook account?
+        $stmt = db()->prepare('SELECT * FROM users WHERE facebook_id = ? LIMIT 1');
+        $stmt->execute([$facebookId]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            if ($user['status'] === 'suspended') {
+                json_error(403, 'ACCOUNT_SUSPENDED', 'Your account has been suspended. Please contact support.');
+            }
+
+            $token = create_session((int) $user['id']);
+            audit('user.facebook_login', (int) $user['id'], ['email' => $email]);
+
+            json_ok([
+                'user' => [
+                    'id'        => (int) $user['id'],
+                    'email'     => $user['email'],
+                    'full_name' => $user['full_name'],
+                    'is_business_user' => (bool) $user['is_business_user'],
+                    'business_name'    => $user['business_name'],
+                ],
+                'session_token' => $token,
+            ]);
+        }
+
+        // No account linked to this Facebook ID yet — does an account with
+        // this (Facebook-verified) email already exist? If so, link it
+        // rather than creating a duplicate.
+        $stmt = db()->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
+        $stmt->execute([$email]);
+        $existing = $stmt->fetch();
+
+        if ($existing) {
+            if ($existing['status'] === 'suspended') {
+                json_error(403, 'ACCOUNT_SUSPENDED', 'Your account has been suspended. Please contact support.');
+            }
+
+            db()->prepare('UPDATE users SET facebook_id = ? WHERE id = ?')
+                ->execute([$facebookId, $existing['id']]);
+
+            $token = create_session((int) $existing['id']);
+            audit('user.facebook_link', (int) $existing['id'], ['email' => $email]);
+
+            json_ok([
+                'user' => [
+                    'id'        => (int) $existing['id'],
+                    'email'     => $existing['email'],
+                    'full_name' => $existing['full_name'],
+                    'is_business_user' => (bool) $existing['is_business_user'],
+                    'business_name'    => $existing['business_name'],
+                ],
+                'session_token' => $token,
+            ]);
+        }
+
+        // Brand new user
+        $newsletterOptIn = normalize_bool($body['subscribe_newsletter'] ?? false);
+        $utm = read_utm_cookie(); // never throws; [] if absent/malformed
+
+        $stmt = db()->prepare(
+            'INSERT INTO users
+                (email, password_hash, full_name, is_business_user, business_name, status, newsletter_opt_in, facebook_id,
+                 utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, fbclid, landing_page, signup_referrer)
+             VALUES (?, NULL, ?, 0, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $email,
+            $fullName ?: null,
+            'active',
+            $newsletterOptIn ? 1 : 0,
+            $facebookId,
+            $utm['utm_source']   ?? null,
+            $utm['utm_medium']   ?? null,
+            $utm['utm_campaign'] ?? null,
+            $utm['utm_term']     ?? null,
+            $utm['utm_content']  ?? null,
+            $utm['gclid']        ?? null,
+            $utm['fbclid']       ?? null,
+            $utm['landing_page'] ?? null,
+            $utm['referrer']     ?? null,
+        ]);
+        $userId = (int) db()->lastInsertId();
+
+        $token = create_session($userId);
+        audit('user.facebook_register', $userId, array_merge(['email' => $email], $utm));
+
+        $trialStmt = db()->prepare(
+            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
+             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
+        );
+        $trialStmt->execute([$userId, 'free_trial', 'individual', 'trialing']);
+
+        try {
+            send_registration_welcome_email($email, $fullName ?: null);
+        } catch (Throwable $mailErr) {
+            error_log('registration email failed for user ' . $userId . ': ' . $mailErr->getMessage());
+        }
+
+        if ($newsletterOptIn) {
+            submit_to_vision6($email, $fullName ?: '');
+        }
+
+        json_ok([
+            'user' => [
+                'id'        => $userId,
+                'email'     => $email,
+                'full_name' => $fullName ?: null,
+                'is_business_user' => false,
+                'business_name'    => null,
+            ],
+            'session_token' => $token,
+        ], 201);
+
+    } catch (Throwable $e) {
+        error_log('facebook auth error: ' . $e->getMessage());
+        json_error(500, 'SERVER_ERROR', 'Facebook sign-in failed. Please try again.');
     }
 }
 
