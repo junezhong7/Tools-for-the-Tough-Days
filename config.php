@@ -21,6 +21,14 @@ if (!defined('GOOGLE_CLIENT_ID')) {
     define('GOOGLE_CLIENT_ID', getenv('GOOGLE_CLIENT_ID') ?: '');
 }
 
+if (!defined('FACEBOOK_APP_ID')) {
+    define('FACEBOOK_APP_ID', getenv('FACEBOOK_APP_ID') ?: '');
+}
+
+if (!defined('FACEBOOK_APP_SECRET')) {
+    define('FACEBOOK_APP_SECRET', getenv('FACEBOOK_APP_SECRET') ?: '');
+}
+
 if (!defined('SITE_URL')) {
     $siteUrlFromEnv = getenv('SITE_URL') ?: '';
     if ($siteUrlFromEnv !== '') {

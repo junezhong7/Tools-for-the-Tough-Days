@@ -125,6 +125,8 @@ jobs:
               AzureWebJobsStorage="${{ secrets.AZUREWEBJOBSSTORAGE }}" \
               STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
               GOOGLE_CLIENT_ID="${{ vars.GOOGLE_CLIENT_ID }}" \
+              FACEBOOK_APP_ID="${{ vars.FACEBOOK_APP_ID }}" \
+              FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}" \
               STRIPE_WEBHOOK_SECRET="${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
               SUBSCRIPTION_EMAIL="${{ vars.SUBSCRIPTION_EMAIL }}" \
               TEST_RECIPIENTS="${{ vars.TEST_RECIPIENTS }}" \
