@@ -672,7 +672,7 @@ function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
-    $checkinUrl = $siteUrl . '/support.html';
+    $checkinUrl = $siteUrl . '/support.html?utm_source=email&utm_medium=checkin';
     $prefsUrl   = $siteUrl . '/my-preference.html';
 
     $allMessages = load_reminder_messages();
