@@ -438,6 +438,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
             alertEl.textContent = data.message || 'Google sign-in failed. Please try again.';
             alertEl.style.display = 'block';
           } else {
+            if (res.status === 201 && typeof fbq === 'function') {
+              fbq('track', 'CompleteRegistration');
+            }
             const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
             window.location.href = redirect;
           }
@@ -503,6 +506,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
               alertEl.textContent = data.message || 'Facebook sign-in failed. Please try again.';
               alertEl.style.display = 'block';
             } else {
+              if (res.status === 201 && typeof fbq === 'function') {
+                fbq('track', 'CompleteRegistration');
+              }
               const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
               window.location.href = redirect;
             }
