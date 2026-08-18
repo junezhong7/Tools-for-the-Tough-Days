@@ -667,8 +667,23 @@ function load_reminder_messages(): array
     return $messages;
 }
 
-function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
+function load_personalized_messages(): array
 {
+    $path = __DIR__ . '/../data/coping-strategy-messages.php';
+    if (!is_readable($path)) {
+        return ['strategies' => [], 'professional_support' => []];
+    }
+
+    $data = require $path;
+    return is_array($data) ? $data : ['strategies' => [], 'professional_support' => []];
+}
+
+function send_checkin_reminder_email(
+    string $toEmail,
+    ?string $fullName,
+    array $copingStrategies = [],
+    ?string $professionalSupport = null
+): bool {
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
@@ -676,6 +691,18 @@ function send_checkin_reminder_email(string $toEmail, ?string $fullName): bool
     $prefsUrl   = $siteUrl . '/my-preference.html';
 
     $allMessages = load_reminder_messages();
+
+    $personalized = load_personalized_messages();
+    $defaultSubject = 'Time for your daily check-in';
+    foreach ($copingStrategies as $strategy) {
+        foreach ($personalized['strategies'][$strategy] ?? [] as $line) {
+            $allMessages[] = ['subject' => $defaultSubject, 'body' => $line, 'cta' => 'Check in now'];
+        }
+    }
+    foreach ($personalized['professional_support'][$professionalSupport ?? ''] ?? [] as $line) {
+        $allMessages[] = ['subject' => $defaultSubject, 'body' => $line, 'cta' => 'Check in now'];
+    }
+
     if (!empty($allMessages)) {
         $msg     = $allMessages[array_rand($allMessages)];
         $subject = $msg['subject'];
