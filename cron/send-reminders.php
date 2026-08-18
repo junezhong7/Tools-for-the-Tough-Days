@@ -122,18 +122,30 @@ foreach ($prefs as $pref) {
         }
         $professionalSupport = $pref['professional_support'] !== null ? (string) $pref['professional_support'] : null;
 
+        // Don't repeat this user's last 3 sent messages
+        $historyStmt = db()->prepare(
+            'SELECT message_hash FROM reminder_sends
+             WHERE user_id = ? AND message_hash IS NOT NULL
+             ORDER BY send_date DESC LIMIT 3'
+        );
+        $historyStmt->execute([$userId]);
+        $recentHashes = array_column($historyStmt->fetchAll(), 'message_hash');
+
+        $sentMessageHash = null;
         $emailSent = send_checkin_reminder_email(
             (string) $pref['email'],
             $pref['full_name'] ?? null,
             $copingStrategies,
-            $professionalSupport
+            $professionalSupport,
+            $recentHashes,
+            $sentMessageHash
         );
 
         if ($emailSent) {
             // INSERT IGNORE handles the rare case of concurrent cron runs
             db()->prepare(
-                'INSERT IGNORE INTO reminder_sends (user_id, send_date) VALUES (?, ?)'
-            )->execute([$userId, $localDate]);
+                'INSERT IGNORE INTO reminder_sends (user_id, send_date, message_hash) VALUES (?, ?, ?)'
+            )->execute([$userId, $localDate, $sentMessageHash]);
             $sent++;
         } else {
             $error++;
