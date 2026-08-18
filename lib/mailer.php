@@ -678,11 +678,18 @@ function load_personalized_messages(): array
     return is_array($data) ? $data : ['strategies' => [], 'professional_support' => []];
 }
 
+function reminder_message_hash(string $subject, string $body): string
+{
+    return md5($subject . '|' . $body);
+}
+
 function send_checkin_reminder_email(
     string $toEmail,
     ?string $fullName,
     array $copingStrategies = [],
-    ?string $professionalSupport = null
+    ?string $professionalSupport = null,
+    array $excludeMessageHashes = [],
+    ?string &$sentMessageHash = null
 ): bool {
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
@@ -703,16 +710,29 @@ function send_checkin_reminder_email(
         $allMessages[] = ['subject' => $defaultSubject, 'body' => $line, 'cta' => 'Check in now'];
     }
 
+    // Avoid repeating the user's most recent messages — but never let exclusion empty the pool.
+    if (!empty($excludeMessageHashes) && !empty($allMessages)) {
+        $unrepeated = array_values(array_filter(
+            $allMessages,
+            fn(array $m): bool => !in_array(reminder_message_hash($m['subject'], $m['body']), $excludeMessageHashes, true)
+        ));
+        if (!empty($unrepeated)) {
+            $allMessages = $unrepeated;
+        }
+    }
+
     if (!empty($allMessages)) {
-        $msg     = $allMessages[array_rand($allMessages)];
-        $subject = $msg['subject'];
-        $ctaText = $msg['cta'];
-        $msgBody = $msg['body'];
+        $msg             = $allMessages[array_rand($allMessages)];
+        $subject         = $msg['subject'];
+        $ctaText         = $msg['cta'];
+        $msgBody         = $msg['body'];
+        $sentMessageHash = reminder_message_hash($subject, $msgBody);
     } else {
         $subject = 'Time for your daily check-in';
         $ctaText = 'Check in now';
         $msgBody = "This is your gentle reminder to take a moment for your daily mood check-in.\n\n"
                  . "It only takes a few seconds and helps you track how you are really travelling over time.";
+        $sentMessageHash = reminder_message_hash($subject, $msgBody);
     }
 
     $textBody = $greeting . "\n\n"
