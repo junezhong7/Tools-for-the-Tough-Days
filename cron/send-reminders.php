@@ -40,6 +40,7 @@ $utcNow = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 $stmt = db()->prepare(
     'SELECT up.user_id, up.reminder_time, up.timezone, up.frequency,
             up.quiet_from, up.quiet_until,
+            up.coping_strategies, up.professional_support,
             u.email, u.full_name
      FROM user_preferences up
      JOIN users u ON u.id = up.user_id
@@ -115,7 +116,18 @@ foreach ($prefs as $pref) {
         }
 
         // Send the email
-        $emailSent = send_checkin_reminder_email((string) $pref['email'], $pref['full_name'] ?? null);
+        $copingStrategies = json_decode((string) ($pref['coping_strategies'] ?? ''), true);
+        if (!is_array($copingStrategies)) {
+            $copingStrategies = [];
+        }
+        $professionalSupport = $pref['professional_support'] !== null ? (string) $pref['professional_support'] : null;
+
+        $emailSent = send_checkin_reminder_email(
+            (string) $pref['email'],
+            $pref['full_name'] ?? null,
+            $copingStrategies,
+            $professionalSupport
+        );
 
         if ($emailSent) {
             // INSERT IGNORE handles the rare case of concurrent cron runs

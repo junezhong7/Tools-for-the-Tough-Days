@@ -49,7 +49,8 @@ switch ($action) {
 function handle_get(int $userId): never
 {
     $stmt = db()->prepare(
-        'SELECT reminder_time, timezone, frequency, quiet_from, quiet_until, reminders_enabled
+        'SELECT reminder_time, timezone, frequency, quiet_from, quiet_until, reminders_enabled,
+                coping_strategies, professional_support
          FROM user_preferences WHERE user_id = ?'
     );
     $stmt->execute([$userId]);
@@ -62,26 +63,35 @@ function handle_get(int $userId): never
 
     if (!$row) {
         json_ok([
-            'reminder_time'     => '7:30 am',
-            'timezone'          => 'Australia/Brisbane',
-            'frequency'         => 'daily',
-            'quiet_from'        => '8:00 pm',
-            'quiet_until'       => '6:30 am',
-            'reminders_enabled' => true,
-            'newsletter_opt_in' => $newsletterOptIn,
-            'saved'             => false,
+            'reminder_time'        => '7:30 am',
+            'timezone'             => 'Australia/Brisbane',
+            'frequency'            => 'daily',
+            'quiet_from'           => '8:00 pm',
+            'quiet_until'          => '6:30 am',
+            'reminders_enabled'    => true,
+            'newsletter_opt_in'    => $newsletterOptIn,
+            'coping_strategies'    => [],
+            'professional_support' => null,
+            'saved'                => false,
         ]);
     }
 
+    $copingStrategies = json_decode((string) ($row['coping_strategies'] ?? ''), true);
+    if (!is_array($copingStrategies)) {
+        $copingStrategies = [];
+    }
+
     json_ok([
-        'reminder_time'     => format_time_display((string) $row['reminder_time']),
-        'timezone'          => (string) $row['timezone'],
-        'frequency'         => (string) $row['frequency'],
-        'quiet_from'        => format_time_display((string) $row['quiet_from']),
-        'quiet_until'       => format_time_display((string) $row['quiet_until']),
-        'reminders_enabled' => (bool) $row['reminders_enabled'],
-        'newsletter_opt_in' => $newsletterOptIn,
-        'saved'             => true,
+        'reminder_time'        => format_time_display((string) $row['reminder_time']),
+        'timezone'             => (string) $row['timezone'],
+        'frequency'            => (string) $row['frequency'],
+        'quiet_from'           => format_time_display((string) $row['quiet_from']),
+        'quiet_until'          => format_time_display((string) $row['quiet_until']),
+        'reminders_enabled'    => (bool) $row['reminders_enabled'],
+        'newsletter_opt_in'    => $newsletterOptIn,
+        'coping_strategies'    => $copingStrategies,
+        'professional_support' => $row['professional_support'] !== null ? (string) $row['professional_support'] : null,
+        'saved'                => true,
     ]);
 }
 
@@ -115,18 +125,28 @@ function handle_save(int $userId, array $body): never
     // "Not now" disables reminders entirely
     $remindersEnabled = ($frequency === 'not_now') ? 0 : 1;
 
+    $copingStrategies = sanitize_coping_strategies($body['coping_strategies'] ?? []);
+    $professionalSupport = sanitize_professional_support($body['professional_support'] ?? null);
+    $copingStrategiesJson = json_encode($copingStrategies, JSON_UNESCAPED_UNICODE);
+
     db()->prepare(
         'INSERT INTO user_preferences
-            (user_id, reminder_time, timezone, frequency, quiet_from, quiet_until, reminders_enabled)
-         VALUES (?, ?, ?, ?, ?, ?, ?)
+            (user_id, reminder_time, timezone, frequency, quiet_from, quiet_until, reminders_enabled,
+             coping_strategies, professional_support)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE
-            reminder_time     = VALUES(reminder_time),
-            timezone          = VALUES(timezone),
-            frequency         = VALUES(frequency),
-            quiet_from        = VALUES(quiet_from),
-            quiet_until       = VALUES(quiet_until),
-            reminders_enabled = VALUES(reminders_enabled)'
-    )->execute([$userId, $reminderTime, $timezone, $frequency, $quietFrom, $quietUntil, $remindersEnabled]);
+            reminder_time        = VALUES(reminder_time),
+            timezone             = VALUES(timezone),
+            frequency            = VALUES(frequency),
+            quiet_from           = VALUES(quiet_from),
+            quiet_until          = VALUES(quiet_until),
+            reminders_enabled    = VALUES(reminders_enabled),
+            coping_strategies    = VALUES(coping_strategies),
+            professional_support = VALUES(professional_support)'
+    )->execute([
+        $userId, $reminderTime, $timezone, $frequency, $quietFrom, $quietUntil, $remindersEnabled,
+        $copingStrategiesJson, $professionalSupport,
+    ]);
 
     if (array_key_exists('newsletter_opt_in', $body)) {
         $newsletterOptIn = $body['newsletter_opt_in'] ? 1 : 0;
@@ -146,15 +166,58 @@ function handle_save(int $userId, array $body): never
     }
 
     audit('preferences.save', $userId, [
-        'reminder_time'     => $reminderTime,
-        'timezone'          => $timezone,
-        'frequency'         => $frequency,
-        'reminders_enabled' => (bool) $remindersEnabled,
+        'reminder_time'        => $reminderTime,
+        'timezone'             => $timezone,
+        'frequency'            => $frequency,
+        'reminders_enabled'    => (bool) $remindersEnabled,
+        'coping_strategies'    => $copingStrategies,
+        'professional_support' => $professionalSupport,
     ]);
 
     json_ok(['ok' => true]);
 }
 
+/**
+ * Filters to the valid "What already works for you" labels from my-preference.html,
+ * capped at 3 (the UI's own selection limit).
+ */
+function sanitize_coping_strategies(mixed $raw): array
+{
+    $valid = [
+        'Walking or getting outside',
+        'Exercise',
+        'Music',
+        'Talking to someone',
+        'Reading or watching something',
+        'Quiet time alone',
+        'Something creative',
+        'Sticking to a routine',
+    ];
+
+    if (!is_array($raw)) {
+        return [];
+    }
+
+    $filtered = array_values(array_intersect(array_map('strval', $raw), $valid));
+    return array_slice(array_unique($filtered), 0, 3);
+}
+
+/**
+ * Validates against the "Professional support" pill labels from my-preference.html.
+ */
+function sanitize_professional_support(mixed $raw): ?string
+{
+    $valid = [
+        'Yes, I see a psychologist',
+        'Yes, I see my GP',
+        'Yes, I see a counsellor',
+        'Not currently, but open to it',
+        'No, I am managing on my own',
+    ];
+
+    $value = trim((string) $raw);
+    return in_array($value, $valid, true) ? $value : null;
+}
 
 function parse_time_string(string $raw): ?string
 {
