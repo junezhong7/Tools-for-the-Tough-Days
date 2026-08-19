@@ -322,6 +322,40 @@ function send_free_guide_email(string $toEmail): bool
     ]);
 }
 
+/**
+ * Notifies the team when a member suggests a resource that's missing from the library.
+ */
+function send_resource_suggestion_email(string $fromEmail, ?string $fromName, string $message, string $catalog): bool
+{
+    $recipients = ['nic.marcon@emotionalbalance.com.au', 'june.zhong@emotionalbalance.com.au'];
+    $name = trim((string) $fromName);
+    $catalogLabel = $catalog === 'workplace' ? 'Workplace library (business.html)' : 'Personal library (support.html)';
+    $fromLine = $name !== '' ? "{$name} <{$fromEmail}>" : $fromEmail;
+
+    $subject = 'Resource suggestion from a member';
+
+    $textBody = "A member couldn't find what they were looking for on the {$catalogLabel}.\n\n"
+        . "From: {$fromLine}\n\n"
+        . "Message:\n{$message}";
+
+    $safeFromLine = htmlspecialchars($fromLine, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeCatalog = htmlspecialchars($catalogLabel, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeMessage = nl2br(htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+
+    $htmlBody = "<p>A member couldn't find what they were looking for on the {$safeCatalog}.</p>"
+        . "<p><strong>From:</strong> {$safeFromLine}</p>"
+        . "<p><strong>Message:</strong><br>{$safeMessage}</p>";
+
+    $sentAny = false;
+    foreach ($recipients as $recipient) {
+        if (send_transactional_email($recipient, $subject, $textBody, $htmlBody)) {
+            $sentAny = true;
+        }
+    }
+
+    return $sentAny;
+}
+
 function smtp_send_mail(array $recipients, string $subject, string $textBody, ?string $htmlBody = null, array $attachments = []): void
 {
     $host = smtp_host();

@@ -460,6 +460,24 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .modal-success a { display: inline-block; background: var(--teal); color: #fff; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; }
     .modal-success a:hover { background: var(--teal-hover); }
 
+    /* SUGGEST A RESOURCE WIDGET */
+    .suggest-resource-btn { position: fixed; right: 20px; bottom: 20px; z-index: 999998; background: var(--teal); color: #fff; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; padding: 13px 18px; border-radius: 999px; border: none; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
+    .suggest-resource-btn:hover { background: var(--teal-hover); }
+    .suggest-resource-overlay { display: none; position: fixed; inset: 0; background: rgba(20,30,30,0.55); z-index: 999999; align-items: center; justify-content: center; padding: 20px; }
+    .suggest-resource-overlay.show { display: flex; }
+    .suggest-resource-box { background: var(--white); border-radius: 16px; padding: 32px; max-width: 440px; width: 100%; position: relative; }
+    .suggest-resource-close { position: absolute; top: 14px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--warm-grey); line-height: 1; padding: 4px; }
+    .suggest-resource-box h3 { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; margin-bottom: 8px; color: var(--teal-dark); }
+    .suggest-resource-box .sr-desc { font-size: 14px; color: var(--warm-grey); line-height: 1.6; margin-bottom: 16px; }
+    .suggest-resource-box textarea { width: 100%; box-sizing: border-box; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--charcoal); background: var(--cream); resize: vertical; min-height: 100px; outline: none; margin-bottom: 12px; }
+    .suggest-resource-box textarea:focus { border-color: var(--teal); }
+    .suggest-resource-submit { width: 100%; background: var(--teal); color: #fff; border: none; padding: 12px; border-radius: 999px; font-size: 14px; font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer; }
+    .suggest-resource-submit:hover { background: var(--teal-hover); }
+    .suggest-resource-submit:disabled { opacity: 0.6; cursor: default; }
+    .suggest-resource-msg { font-size: 13px; margin-bottom: 10px; display: none; }
+    .suggest-resource-msg.error { color: var(--red-crisis); display: block; }
+    .suggest-resource-msg.success { color: var(--teal-hover); display: block; }
+
     /* RESOURCE VIEWER */
     .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(42,40,37,0.85); z-index: 600; align-items: center; justify-content: center; padding: 20px; }
     .viewer-overlay.show { display: flex; }
@@ -968,6 +986,89 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     cursor: pointer;
   ">Share feedback</a>
 
+  <!-- SUGGEST A RESOURCE WIDGET -->
+  <button type="button" class="suggest-resource-btn" id="suggestResourceBtn" style="display:none;">Can't find what you're looking for?</button>
+  <div class="suggest-resource-overlay" id="suggestResourceOverlay" aria-hidden="true">
+    <div class="suggest-resource-box" role="dialog" aria-modal="true" aria-labelledby="suggestResourceTitle">
+      <button type="button" class="suggest-resource-close" id="suggestResourceClose" aria-label="Close">×</button>
+      <h3 id="suggestResourceTitle">Suggest a resource</h3>
+      <p class="sr-desc">Tell us what you were hoping to find and we'll look at adding it.</p>
+      <div class="suggest-resource-msg" id="suggestResourceMsg"></div>
+      <form id="suggestResourceForm">
+        <textarea id="suggestResourceMessage" placeholder="e.g. A guide on coping with a difficult diagnosis..." maxlength="2000" required></textarea>
+        <button type="submit" class="suggest-resource-submit" id="suggestResourceSubmit">Send suggestion</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('suggestResourceBtn');
+      var overlay = document.getElementById('suggestResourceOverlay');
+      var closeBtn = document.getElementById('suggestResourceClose');
+      var form = document.getElementById('suggestResourceForm');
+      var textarea = document.getElementById('suggestResourceMessage');
+      var submitBtn = document.getElementById('suggestResourceSubmit');
+      var msgEl = document.getElementById('suggestResourceMsg');
+      if (!btn || !overlay || !closeBtn || !form || !textarea || !submitBtn || !msgEl) { return; }
+
+      function showMsg(text, type) {
+        msgEl.textContent = text;
+        msgEl.className = 'suggest-resource-msg ' + type;
+      }
+
+      function openOverlay() {
+        overlay.classList.add('show');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove('show');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openOverlay);
+      closeBtn.addEventListener('click', closeOverlay);
+      overlay.addEventListener('click', function (event) { if (event.target === overlay) { closeOverlay(); } });
+      document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && overlay.classList.contains('show')) { closeOverlay(); } });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var message = textarea.value.trim();
+        if (!message) { return; }
+
+        submitBtn.disabled = true;
+        showMsg('Sending...', 'success');
+
+        fetch('/api/suggest-resource.php', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message, catalog: 'personal' })
+        })
+          .then(function (response) {
+            return response.json().catch(function () { return {}; }).then(function (data) {
+              if (!response.ok) { throw new Error(data.message || 'Something went wrong. Please try again.'); }
+              return data;
+            });
+          })
+          .then(function () {
+            showMsg('Thanks! We\'ve sent your suggestion through.', 'success');
+            textarea.value = '';
+            setTimeout(closeOverlay, 1800);
+          })
+          .catch(function (error) {
+            showMsg(error.message || 'Something went wrong. Please try again.', 'error');
+          })
+          .finally(function () {
+            submitBtn.disabled = false;
+          });
+      });
+    })();
+  </script>
+
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
 
@@ -1462,7 +1563,8 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   (function showMoodTrackerForLoggedInUsers() {
     const moodCard = document.getElementById('mood-tracker-card');
     const libraryBlock = document.getElementById('resource-library-block');
-    if (!moodCard && !libraryBlock) {
+    const suggestBtn = document.getElementById('suggestResourceBtn');
+    if (!moodCard && !libraryBlock && !suggestBtn) {
       return;
     }
 
@@ -1487,6 +1589,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
           }
           if (libraryBlock) {
             libraryBlock.style.display = '';
+          }
+          if (suggestBtn) {
+            suggestBtn.style.display = '';
           }
         }
       })
