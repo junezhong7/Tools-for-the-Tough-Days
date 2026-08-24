@@ -677,6 +677,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const sections = document.querySelectorAll('.faq-section');
   const navLinks = document.querySelectorAll('.faq-nav a');
 
+  // Explicitly drive the scroll instead of relying on native fragment
+  // navigation — on the live site the hash updates but the page doesn't
+  // move, so we scroll manually here as well.
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, '', link.getAttribute('href'));
+    });
+  });
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
