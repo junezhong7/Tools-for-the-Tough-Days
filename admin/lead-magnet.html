@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T39SV49J');</script>
+<!-- End Google Tag Manager -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('set', 'autoConfig', false, '1022504650555050');
+fbq('init', '1022504650555050');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1"
+src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Guide Signups — Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
+  <link rel="stylesheet" href="/assets/theme-unified.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { background: var(--ui-cream); color: var(--ui-charcoal); }
+
+    header.topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--ui-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header.topbar h1 { font-size: 1.1rem; color: var(--ui-teal-dark); }
+
+    #adminWhoami { font-size: 0.85rem; color: var(--ui-muted); margin-right: 16px; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--ui-border);
+      background: #fff;
+      color: var(--ui-charcoal);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover { border-color: var(--ui-teal); }
+    .btn.danger { color: #c0392b; border-color: #e8b9b0; }
+    .btn.danger:hover { background: #fdf1ef; }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 28px 60px; }
+
+    nav.backlink { margin-bottom: 16px; font-size: 0.85rem; }
+    nav.backlink a { color: var(--ui-muted); text-decoration: none; }
+    nav.backlink a:hover { color: var(--ui-teal-dark); }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar input[type="text"], .toolbar select {
+      padding: 9px 12px;
+      border: 1.5px solid var(--ui-border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      background: #fff;
+    }
+
+    #searchInput { flex: 1; min-width: 220px; }
+
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: var(--ui-shadow); }
+    th, td { padding: 10px 14px; text-align: left; font-size: 0.86rem; border-bottom: 1px solid var(--ui-border); }
+    th { background: var(--ui-teal-light); color: var(--ui-teal-dark); font-weight: 700; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafdfd; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .badge.yes { background: #e3f6e8; color: #1e7a41; }
+    .badge.no { background: #eee; color: #888; }
+
+    .pagination { display: flex; align-items: center; gap: 12px; margin-top: 16px; font-size: 0.85rem; color: var(--ui-muted); }
+
+    .empty-state { padding: 40px; text-align: center; color: var(--ui-muted); }
+
+    .muted { color: var(--ui-muted); }
+  </style>
+</head>
+<body data-auth="required">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T39SV49J"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <header class="topbar">
+    <h1>Free Guide Signups</h1>
+    <div>
+      <span id="adminWhoami"></span>
+      <button class="btn" id="logoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <nav class="backlink">
+      <a href="/admin/index.html">&larr; Back to member admin</a>
+    </nav>
+
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by email..." />
+      <select id="newsletterFilter">
+        <option value="all">All signups</option>
+        <option value="yes">Newsletter opt-in</option>
+        <option value="no">No newsletter opt-in</option>
+      </select>
+      <a class="btn" id="exportBtn" href="#">Export CSV</a>
+    </div>
+
+    <div id="tableWrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Newsletter</th>
+            <th>Guide emailed</th>
+            <th>Source</th>
+            <th>Signed up</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="signupsBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">No signups match this filter.</div>
+    </div>
+
+    <div class="pagination">
+      <button class="btn" id="prevPageBtn">&larr; Prev</button>
+      <span id="pageInfo"></span>
+      <button class="btn" id="nextPageBtn">Next &rarr;</button>
+    </div>
+  </main>
+
+  <script src="/admin/admin-guard.js"></script>
+  <script>
+    var state = { q: '', newsletter: 'all', page: 1, pageSize: 25, totalPages: 1 };
+    var searchDebounce = null;
+
+    function yesNoBadge(value) {
+      return value ? '<span class="badge yes">Yes</span>' : '<span class="badge no">No</span>';
+    }
+
+    function formatDate(value) {
+      if (!value) return '—';
+      return new Date(value.replace(' ', 'T')).toLocaleString();
+    }
+
+    function buildQuery(extra) {
+      var params = new URLSearchParams(Object.assign({
+        q: state.q,
+        newsletter: state.newsletter,
+        page: state.page,
+        page_size: state.pageSize,
+      }, extra || {}));
+      return params.toString();
+    }
+
+    async function loadSignups() {
+      var res = await fetch('/api/admin/lead-magnet.php?' + buildQuery(), { credentials: 'same-origin' });
+      if (!res.ok) return;
+      var data = await res.json();
+      renderSignups(data);
+    }
+
+    function sourceLabel(s) {
+      var parts = [s.utm_source, s.utm_medium].filter(Boolean);
+      return parts.length ? parts.join(' / ') : '<span class="muted">—</span>';
+    }
+
+    function renderSignups(data) {
+      var body = document.getElementById('signupsBody');
+      var emptyState = document.getElementById('emptyState');
+      body.innerHTML = '';
+
+      emptyState.style.display = data.signups.length ? 'none' : 'block';
+
+      data.signups.forEach(function (s) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + escapeHtml(s.email) + '</td>' +
+          '<td>' + yesNoBadge(s.newsletter_opt_in) + '</td>' +
+          '<td>' + yesNoBadge(s.email_sent) + '</td>' +
+          '<td>' + sourceLabel(s) + '</td>' +
+          '<td>' + formatDate(s.created_at) + '</td>' +
+          '<td><button class="btn danger" data-delete-id="' + s.id + '">Delete</button></td>';
+        body.appendChild(tr);
+      });
+
+      document.getElementById('pageInfo').textContent =
+        'Page ' + data.page + ' of ' + Math.max(1, data.total_pages) + ' (' + data.total + ' signups)';
+      state.totalPages = Math.max(1, data.total_pages);
+      document.getElementById('prevPageBtn').disabled = state.page <= 1;
+      document.getElementById('nextPageBtn').disabled = state.page >= state.totalPages;
+
+      document.getElementById('exportBtn').href = '/api/admin/lead-magnet.php?action=export&' + buildQuery();
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    async function deleteSignup(id) {
+      if (!confirm('Delete this signup? This cannot be undone.')) return;
+      var res = await fetch('/api/admin/lead-magnet.php?action=delete', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id }),
+      });
+      var data = await res.json();
+      if (!res.ok) {
+        alert(data.message || 'Could not delete signup.');
+        return;
+      }
+      await loadSignups();
+    }
+
+    // ── Event wiring ──
+    document.getElementById('searchInput').addEventListener('input', function (e) {
+      clearTimeout(searchDebounce);
+      var value = e.target.value;
+      searchDebounce = setTimeout(function () {
+        state.q = value.trim();
+        state.page = 1;
+        loadSignups();
+      }, 300);
+    });
+
+    document.getElementById('newsletterFilter').addEventListener('change', function (e) {
+      state.newsletter = e.target.value;
+      state.page = 1;
+      loadSignups();
+    });
+
+    document.getElementById('prevPageBtn').addEventListener('click', function () {
+      if (state.page > 1) { state.page -= 1; loadSignups(); }
+    });
+
+    document.getElementById('nextPageBtn').addEventListener('click', function () {
+      if (state.page < state.totalPages) { state.page += 1; loadSignups(); }
+    });
+
+    document.getElementById('signupsBody').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-delete-id]');
+      if (btn) deleteSignup(Number(btn.dataset.deleteId));
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      fetch('/api/admin/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' })
+        .finally(function () { window.location.href = '/admin/login.html'; });
+    });
+
+    // ── Init ──
+    (async function init() {
+      var auth = await window.AdminAuthGuard.getState();
+      if (auth.authenticated && auth.admin) {
+        document.getElementById('adminWhoami').textContent = auth.admin.full_name || auth.admin.email;
+      }
+      loadSignups();
+    })();
+  </script>
+</body>
+</html>
