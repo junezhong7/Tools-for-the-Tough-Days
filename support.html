@@ -541,6 +541,28 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 
     /* CATEGORY NAVIGATION */
+    .resource-search-box {
+      max-width: 700px; margin: 0 auto 28px; background: var(--white);
+      border: 1.5px solid var(--border); border-radius: 18px; padding: 26px 30px 28px;
+      box-shadow: 0 10px 28px rgba(26, 85, 88, 0.13); text-align: center;
+    }
+    .resource-search-label { display: block; font-size: 18px; color: var(--teal-dark); text-align: center; margin-bottom: 16px; font-weight: 800; }
+    .resource-search-form { display: flex; gap: 10px; }
+    .resource-search-form input[type="text"] {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 999px; padding: 15px 22px;
+      font-size: 16px; font-family: 'Nunito', sans-serif; color: var(--charcoal); background: var(--cream);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .resource-search-form input[type="text"]:focus { outline: none; border-color: var(--teal); background: var(--white); }
+    .resource-search-form input[type="text"]::placeholder { color: var(--warm-grey); }
+    .resource-search-form button {
+      background: var(--teal); color: #fff; border: none; padding: 15px 28px; border-radius: 999px;
+      font-size: 15px; font-family: 'Nunito', sans-serif; font-weight: 800; cursor: pointer;
+      white-space: nowrap; transition: background 0.15s, transform 0.12s;
+    }
+    .resource-search-form button:hover { background: var(--teal-hover); transform: translateY(-1px); }
+    .search-results-panel { display: none; background: var(--cream); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-top: 16px; text-align: left; }
+    .search-results-panel.show { display: block; }
     .cat-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto; }
     .cat-btn { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 22px; font-size: 15px; color: var(--charcoal); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: border-color 0.15s, background 0.15s, color 0.15s; width: 100%; text-align: center; }
     .cat-btn:hover { border-color: rgba(38,119,123,0.45); }
@@ -637,6 +659,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       .topic-modal-overlay { align-items: flex-start; padding: 12px; }
       .topic-modal { max-height: calc(100vh - 24px); padding: 20px 16px 16px; }
       .cat-nav { grid-template-columns: 1fr; }
+      .resource-search-form { flex-direction: column; }
       .resource-grid { grid-template-columns: 1fr; }
       .what-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
@@ -732,6 +755,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- Resource library (topic browsing) + Crisis Support card - signed-in members only, same gate as Mood Tracker above -->
       <div id="resource-library-block" style="display: none;">
+        <!-- Keyword search -->
+        <div class="resource-search-box">
+          <label for="resourceSearchInput" class="resource-search-label">Not sure where to start? Tell us what's going on</label>
+          <form id="resourceSearchForm" class="resource-search-form" autocomplete="off">
+            <input type="text" id="resourceSearchInput" placeholder="e.g. I can't stop worrying about work" maxlength="200">
+            <button type="submit" id="resourceSearchSubmit">Find resources</button>
+          </form>
+          <div class="search-results-panel" id="search-results-panel">
+            <div class="subtopic-panel-label" id="search-results-label"></div>
+            <div class="subtopic-list" id="search-results-list"></div>
+          </div>
+        </div>
+
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
         <!-- Category buttons -->
@@ -1111,68 +1147,180 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {
         id: 'mental-health', icon: '', label: 'My Mental Health',
         subtopics: [
-          { icon: '', label: 'Low mood & depression',       key: 'low-mood-depression' },
-          { icon: '', label: 'Anxiety & worry',              key: 'anxiety-worry' },
-          { icon: '', label: 'Feeling flat or angry',        key: 'feeling-flat-angry' },
-          { icon: '', label: 'Self-esteem',                  key: 'self-esteem' },
-          { icon: '', label: 'Stress about the future',      key: 'stress-about-future' },
-          { icon: '', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories' },
+          { icon: '', label: 'Low mood & depression',       key: 'low-mood-depression',
+            keywords: ['depression','depressed','low mood','sad','sadness','hopeless','empty','numb','no motivation','unmotivated','down','crying','tearful'] },
+          { icon: '', label: 'Anxiety & worry',              key: 'anxiety-worry',
+            keywords: ['anxiety','anxious','worry','worried','worrying','panic','panicking','nervous','on edge','racing thoughts','overthinking',"can't relax",'restless'] },
+          { icon: '', label: 'Feeling flat or angry',        key: 'feeling-flat-angry',
+            keywords: ['angry','anger','irritable','irritated','frustrated','flat','apathy','apathetic','snapping','short temper','resentful'] },
+          { icon: '', label: 'Self-esteem',                  key: 'self-esteem',
+            keywords: ['self esteem','self-esteem','confidence','insecure','not good enough','self worth','self-worth','self doubt','imposter'] },
+          { icon: '', label: 'Stress about the future',      key: 'stress-about-future',
+            keywords: ['future','uncertain','uncertainty','what if','fear of the future','dread','scared of what\'s next'] },
+          { icon: '', label: 'Trauma & difficult memories',  key: 'trauma-difficult-memories',
+            keywords: ['trauma','ptsd','flashback','flashbacks','difficult memories','triggered','triggering','past abuse'] },
         ]
       },
       {
         id: 'life-challenges', icon: '', label: 'Life Challenges',
         subtopics: [
-          { icon: '', label: 'Grief & loss',                key: 'grief-loss' },
-          { icon: '', label: 'Big life changes',             key: 'big-life-changes' },
-          { icon: '', label: 'Financial stress',             key: 'financial-stress' },
-          { icon: '', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse' },
-          { icon: '', label: 'Gambling & substance use',     key: 'gambling-substance' },
-          { icon: '', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true },
+          { icon: '', label: 'Grief & loss',                key: 'grief-loss',
+            keywords: ['grief','grieving','loss','bereavement','someone died','death','mourning','miscarriage'] },
+          { icon: '', label: 'Big life changes',             key: 'big-life-changes',
+            keywords: ['big change','moving house','divorce','separation','life transition','new chapter','starting over'] },
+          { icon: '', label: 'Financial stress',             key: 'financial-stress',
+            keywords: ['money','financial','finance','debt','bills','can\'t afford','broke','budget','cost of living'] },
+          { icon: '', label: 'Domestic violence & abuse',    key: 'domestic-violence-abuse',
+            keywords: ['domestic violence','abuse','abusive','unsafe at home','partner hurts me','coercive control'] },
+          { icon: '', label: 'Gambling & substance use',     key: 'gambling-substance',
+            keywords: ['gambling','betting','alcohol','drinking','drugs','substance use','addiction','can\'t stop drinking'] },
+          { icon: '', label: 'Loneliness & social isolation',key: 'loneliness-social-isolation', comingSoon: true,
+            keywords: ['lonely','loneliness','isolated','isolation','no friends','disconnected','alone'] },
         ]
       },
       {
         id: 'relationships', icon: '', label: 'Relationships',
         subtopics: [
-          { icon: '', label: 'Relationships',               key: 'relationships' },
-          { icon: '', label: 'Supporting someone else',      key: 'supporting-someone-else' },
-          { icon: '', label: 'Identity & belonging',         key: 'identity-belonging' },
-          { icon: '', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true },
+          { icon: '', label: 'Relationships',               key: 'relationships',
+            keywords: ['relationship','partner','marriage','spouse','boyfriend','girlfriend','breakup','arguing with my partner'] },
+          { icon: '', label: 'Supporting someone else',      key: 'supporting-someone-else',
+            keywords: ['supporting someone','helping a friend','worried about someone','caring for','carer','loved one struggling'] },
+          { icon: '', label: 'Identity & belonging',         key: 'identity-belonging',
+            keywords: ['identity','belonging','who am i','fitting in','culture','lgbtq','sense of self'] },
+          { icon: '', label: 'Conflict & communication',     key: 'conflict-communication', comingSoon: true,
+            keywords: ['conflict','communication','arguing','fighting','can\'t communicate','misunderstood'] },
         ]
       },
       {
         id: 'family-parenting', icon: '', label: 'Family & Parenting',
         subtopics: [
-          { icon: '', label: 'Parenting young children',     key: 'parenting-young-children' },
-          { icon: '', label: 'Parenting teenagers',          key: 'parenting-teenagers' },
-          { icon: '', label: 'Pregnancy',                    key: 'pregnancy' },
-          { icon: '', label: 'Postnatal struggles',          key: 'postnatal-struggles' },
-          { icon: '', label: 'Expecting fathers',          key: 'expecting-fathers' },
-          { icon: '', label: 'Single parenting',             key: 'single-parenting', comingSoon: true },
+          { icon: '', label: 'Parenting young children',     key: 'parenting-young-children',
+            keywords: ['parenting','toddler','kids','children','young children','tantrums','baby','exhausted parent'] },
+          { icon: '', label: 'Parenting teenagers',          key: 'parenting-teenagers',
+            keywords: ['teenager','teen','teenagers','adolescent','my son','my daughter','rebellious'] },
+          { icon: '', label: 'Pregnancy',                    key: 'pregnancy',
+            keywords: ['pregnant','pregnancy','expecting a baby','morning sickness','third trimester'] },
+          { icon: '', label: 'Postnatal struggles',          key: 'postnatal-struggles',
+            keywords: ['postnatal','postpartum','new mum','new mom','after birth','baby blues'] },
+          { icon: '', label: 'Expecting fathers',          key: 'expecting-fathers',
+            keywords: ['expecting father','new dad','becoming a dad','partner is pregnant'] },
+          { icon: '', label: 'Single parenting',             key: 'single-parenting', comingSoon: true,
+            keywords: ['single parent','single mum','single mom','single dad','parenting alone'] },
         ]
       },
       {
         id: 'work-career', icon: '', label: 'Work & Career',
         subtopics: [
-          { icon: '', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure' },
-          { icon: '', label: 'Burnout',                          key: 'burnout' },
-          { icon: '', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships' },
-          { icon: '', label: 'Work-life balance',               key: 'work-life-balance' },
-          { icon: '', label: 'Job loss & unemployment',          key: 'job-loss-unemployment' },
-          { icon: '', label: 'Career uncertainty & change',      key: 'career-uncertainty-change' },
+          { icon: '', label: 'Workplace stress & pressure',      key: 'workplace-stress-pressure',
+            keywords: ['work','job','workplace','stress','stressed','pressure','deadline','deadlines','overworked','workload'] },
+          { icon: '', label: 'Burnout',                          key: 'burnout',
+            keywords: ['burnout','burnt out','exhausted','no energy for work','running on empty','can\'t cope with work'] },
+          { icon: '', label: 'Difficult workplace relationships', key: 'difficult-workplace-relationships',
+            keywords: ['difficult boss','coworker','colleague','bullying at work','workplace conflict','my manager'] },
+          { icon: '', label: 'Work-life balance',               key: 'work-life-balance',
+            keywords: ['work life balance','work-life balance','no time for myself','always working','overtime'] },
+          { icon: '', label: 'Job loss & unemployment',          key: 'job-loss-unemployment',
+            keywords: ['job loss','lost my job','unemployed','unemployment','made redundant','redundancy','fired','laid off'] },
+          { icon: '', label: 'Career uncertainty & change',      key: 'career-uncertainty-change',
+            keywords: ['career change','career uncertainty','changing careers','what next in my career','career direction'] },
         ]
       },
       {
         id: 'health-wellbeing', icon: '', label: 'Health & Wellbeing',
         subtopics: [
-          { icon: '', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing' },
-          { icon: '', label: 'Getting older',               key: 'getting-older' },
-          { icon: '', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true },
-          { icon: '', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true },
+          { icon: '', label: 'Daily habits & wellbeing',    key: 'daily-habits-wellbeing',
+            keywords: ['habits','wellbeing','routine','healthy habits','self care','self-care','daily habits'] },
+          { icon: '', label: 'Getting older',               key: 'getting-older',
+            keywords: ['getting older','aging','ageing','growing old','older age','later life'] },
+          { icon: '', label: 'Sleep & rest',                key: 'sleep-rest',               comingSoon: true,
+            keywords: ['sleep','insomnia','can\'t sleep','tired','rest','sleeping badly','exhausted'] },
+          { icon: '', label: 'Body image & self-care',      key: 'body-image-self-care',     comingSoon: true,
+            keywords: ['body image','appearance','weight','self care','self-care','how i look'] },
         ]
       },
     ];
 
     let activeCatId = null;
+
+    const SEARCH_STOPWORDS = ['the','and','for','with','that','this','have','from','about','what','when','where','how','can','cant','not','are','was','were','has','had','into','out','just','feel','feeling','feels','really','very','always','still','been','being','get','getting','got','know','like','make','made','need','want','going'];
+
+    function tokenizeSearchText(str) {
+      return String(str || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9\s']/g, ' ')
+        .split(/\s+/)
+        .filter(function (w) { return w.length >= 3 && SEARCH_STOPWORDS.indexOf(w) === -1; });
+    }
+
+    function scoreSubtopic(sub, queryTokens, queryLower) {
+      var score = 0;
+      (sub.keywords || []).forEach(function (kw) {
+        var kwLower = kw.toLowerCase();
+        if (kwLower.indexOf(' ') > -1) {
+          if (queryLower.indexOf(kwLower) > -1) { score += 3; }
+          return;
+        }
+        if (queryTokens.indexOf(kwLower) > -1) { score += 2; }
+      });
+      tokenizeSearchText(sub.label).forEach(function (w) {
+        if (queryTokens.indexOf(w) > -1) { score += 1; }
+      });
+      return score;
+    }
+
+    function runResourceSearch(query) {
+      var queryLower = query.toLowerCase();
+      var queryTokens = tokenizeSearchText(query);
+      var resultsPanel = document.getElementById('search-results-panel');
+      var resultsLabel = document.getElementById('search-results-label');
+      var resultsList = document.getElementById('search-results-list');
+      if (!resultsPanel || !resultsLabel || !resultsList) { return; }
+
+      if (queryTokens.length === 0) {
+        resultsLabel.textContent = "Try a few words about what's going on";
+        resultsList.innerHTML = '';
+        resultsPanel.classList.add('show');
+        return;
+      }
+
+      var matches = [];
+      CATEGORIES.forEach(function (cat) {
+        cat.subtopics.forEach(function (sub) {
+          var score = scoreSubtopic(sub, queryTokens, queryLower);
+          if (score > 0) { matches.push({ sub: sub, score: score }); }
+        });
+      });
+      matches.sort(function (a, b) { return b.score - a.score; });
+      matches = matches.slice(0, 6);
+
+      if (matches.length === 0) {
+        resultsLabel.textContent = 'No close match yet — try browsing a topic below, or use "Can\'t find what you\'re looking for?"';
+        resultsList.innerHTML = '';
+      } else {
+        resultsLabel.textContent = 'Topics that might help';
+        resultsList.innerHTML = matches.map(function (m) {
+          var sub = m.sub;
+          if (sub.comingSoon) {
+            return '<span class="subtopic-pill coming-soon">' + sub.icon + ' ' + escapeHtml(sub.label) + ' <span class="cs-badge">Soon</span></span>';
+          }
+          return '<a href="#" class="subtopic-pill" data-open-topic="' + sub.key + '">' + sub.icon + ' ' + escapeHtml(sub.label) + '</a>';
+        }).join('');
+      }
+      resultsPanel.classList.add('show');
+    }
+
+    function initResourceSearch() {
+      var searchForm = document.getElementById('resourceSearchForm');
+      var searchInput = document.getElementById('resourceSearchInput');
+      if (!searchForm || !searchInput) { return; }
+
+      searchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var query = searchInput.value.trim();
+        if (!query) { return; }
+        runResourceSearch(query);
+      });
+    }
 
     function renderTopicButtons(config) {
       // topicConfig is already set before this is called; nothing to render here ?
@@ -1232,6 +1380,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     initCategoryNav();
+    initResourceSearch();
 
     async function issueViewerUrl(resourceKey, kind) {
       const query = new URLSearchParams({
