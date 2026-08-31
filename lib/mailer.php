@@ -291,27 +291,34 @@ function send_free_guide_email(string $toEmail): bool
         return false;
     }
 
+    $name = ucfirst(explode('@', $toEmail)[0]);
+    $registerUrl = 'https://www.toolsforthetoughdays.com.au/register.html';
+
     $subject = 'Your free guide: 8 Tools for Your Tough Days';
 
-    $textBody = "Hi there,\n\n"
-        . "Thanks for requesting the free guide. It's attached to this email as a PDF.\n\n"
-        . "Inside you'll find 8 small, practical things that actually help on a tough day, "
-        . "whatever job you do.\n\n"
-        . "If you'd like ongoing support between tough days, you can explore the platform here:\n"
-        . $siteUrl . "\n\n"
-        . "Warm regards,\n"
-        . "Nic Marcon\n"
-        . "Registered Psychologist\n"
-        . "Tools for the Tough Days\n"
-        . "www.toolsforthetoughdays.com.au";
+    $textBody = "Hi {$name},\n\n"
+        . "Thanks for downloading the free guide. I hope you got some valuable tips, and even one small thing you could try this week.\n\n"
+        . "If you want to keep going, Tools for the Tough Days gives you a simple way to check in on how you're really tracking. "
+        . "A daily mood slider feeds straight into your dashboard, giving you a clear visual picture of how you're going, "
+        . "alongside 370+ resources you can read or listen to at your own pace. You're also fully in control of when and how often "
+        . "you hear from us, since we believe regular notifications can help you stay on track and focused.\n\n"
+        . "You can try it free for fourteen days (no card required) and see if it fits into your week.\n"
+        . $registerUrl . "\n\n"
+        . "One small step at a time.\n\n"
+        . "Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days";
 
-    $safeSiteUrl = htmlspecialchars($siteUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    $htmlBody = '<p>Hi there,</p>'
-        . '<p>Thanks for requesting the free guide. It\'s attached to this email as a PDF.</p>'
-        . '<p>Inside you\'ll find 8 small, practical things that actually help on a tough day, whatever job you do.</p>'
-        . '<p>If you\'d like ongoing support between tough days, you can <a href="' . $safeSiteUrl . '">explore the platform here</a>.</p>'
-        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
-        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+    $safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeRegisterUrl = htmlspecialchars($registerUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = "<p>Hi {$safeName},</p>"
+        . '<p>Thanks for downloading the free guide. I hope you got some valuable tips, and even one small thing you could try this week.</p>'
+        . '<p>If you want to keep going, Tools for the Tough Days gives you a simple way to check in on how you\'re really tracking. '
+        . 'A daily mood slider feeds straight into your dashboard, giving you a clear visual picture of how you\'re going, '
+        . 'alongside 370+ resources you can read or listen to at your own pace. You\'re also fully in control of when and how often '
+        . 'you hear from us, since we believe regular notifications can help you stay on track and focused.</p>'
+        . '<p>You can try it free for fourteen days (no card required) and see if it fits into your week.<br>'
+        . '<a href="' . $safeRegisterUrl . '">' . $safeRegisterUrl . '</a></p>'
+        . '<p>One small step at a time.</p>'
+        . '<p>Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days</p>';
 
     return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, [
         [
