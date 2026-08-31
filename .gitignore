@@ -3,6 +3,7 @@ data/**
 !data/**/
 !data/**/*.csv
 !data/**/*.php
+!data/**/*.pdf
 !data/TOUGH DAYS_LOGO.png
 
 
