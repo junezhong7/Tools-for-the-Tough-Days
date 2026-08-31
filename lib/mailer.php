@@ -105,29 +105,67 @@ function send_trial_day14_email(string $toEmail, ?string $fullName = null): bool
 
 function send_registration_welcome_email(string $toEmail, ?string $fullName = null): bool
 {
-    $name = trim((string) $fullName);
-    $firstName = $name;
-    if ($name !== '') {
-        $parts = preg_split('/\s+/', $name) ?: [];
-        $firstName = $parts[0] ?? $name;
-    }
+    $firstName = extract_first_name($fullName);
+    $greeting  = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
 
-    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $guidePath = __DIR__ . '/../data/Welcome Guide.pdf';
+
+    $videos = [
+        'Financial Stress'                => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQBDG-Vb9tJCQqMWuw78PFnZAfZWh59MiJloYc0BhyRBEbY?e=e8MXwG',
+        'Raising Children'                => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQCCg-K4M2MDRbH1dtpoIwZRAUf5eePU4GX8VvscXM5_-08?e=TPXN6n',
+        'Relationships'                   => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQBPROfZXFQAQK4hIspcb6YWAdlWEcwGEdgRDkx6PADHyvs?e=OPeCNa',
+        'Sleep, Diet & Movement'          => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQAiKA8KfPUWS7BCGMTGaSYxAT1B1Fgf7wKmviMY26Zueqs?e=4e8Fbq',
+        'We all struggle with Addictions' => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQAHlL0sWK6oToowX5T1igziAUIgmY8--wb8yoF2etr4wQY?e=NunbVY',
+        'What is Anxiety'                 => 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQAjqC5nkyefQYZxLDkcfogYAcZpu3B-9xNfhW7tda3pAjA?e=Hjg88x',
+    ];
 
     $subject = 'Great to have you with us';
-    $body = $greeting . "\n\n"
-        . "Thank you for joining. Welcome to the Tools for the Tough Days community.\n\n"
-        . "I am Nic Marcon, a Registered Psychologist with over 20 years of clinical experience. I created this platform because I believe that good mental health support should not be hard to access.\n\n"
-        . "As part of our community, you will be among the first to hear about new resources, tips and insights from my clinical practice, upcoming events, and special offers including our founding member rate. We also have a few exciting things in the pipeline so stay tuned for those announcements.\n\n"
-        . "We are always looking to grow and add new topics, so if there is something you would like to see covered that you cannot find, please let us know. Your feedback genuinely helps shape what we work on next.\n\n"
-        . "Looking forward to being part of your journey.\n\n"
-        . "Warm regards,\n"
+
+    $textBody = $greeting . "\n\n"
+        . "Thank you for joining Tools for the Tough Days. Taking that first step is often the hardest part, so well done for making it happen.\n\n"
+        . "We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of your first 14 days.\n\n"
+        . "We have also included six short videos below. Our Founder and Principal Psychologist, Nic Marcon, recorded these himself if you would rather watch and listen than read.\n\n";
+    foreach ($videos as $title => $url) {
+        $textBody .= "{$title}: {$url}\n";
+    }
+    $textBody .= "\n"
+        . "Have a look through whichever format suits you best, and we hope you find them helpful.\n\n"
+        . "Warmly,\n"
         . "Nic Marcon\n"
         . "Registered Psychologist\n"
         . "Tools for the Tough Days\n"
         . "www.toolsforthetoughdays.com.au";
 
-    return send_transactional_email($toEmail, $subject, $body);
+    $safeGreeting = htmlspecialchars($greeting, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $videoListHtml = '<ul style="padding-left:20px;margin:0 0 16px;">';
+    foreach ($videos as $title => $url) {
+        $safeTitle = htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $safeUrl   = htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $videoListHtml .= '<li><a href="' . $safeUrl . '">' . $safeTitle . '</a></li>';
+    }
+    $videoListHtml .= '</ul>';
+
+    $htmlBody = '<p>' . $safeGreeting . '</p>'
+        . '<p>Thank you for joining Tools for the Tough Days. Taking that first step is often the hardest part, so well done for making it happen.</p>'
+        . '<p>We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of your first 14 days.</p>'
+        . '<p>We have also included six short videos below. Our Founder and Principal Psychologist, Nic Marcon, recorded these himself if you would rather watch and listen than read.</p>'
+        . $videoListHtml
+        . '<p>Have a look through whichever format suits you best, and we hope you find them helpful.</p>'
+        . '<p>Warmly,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    $attachments = [];
+    if (is_readable($guidePath)) {
+        $attachments[] = [
+            'path'     => $guidePath,
+            'filename' => 'Welcome Guide.pdf',
+            'mime'     => 'application/pdf',
+        ];
+    } else {
+        error_log('send_registration_welcome_email: Welcome Guide PDF missing at ' . $guidePath);
+    }
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, $attachments);
 }
 
 function send_password_reset_email(
