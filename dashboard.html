@@ -797,7 +797,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const hasScore = Number.isFinite(score) && score > 0;
         const bgColor = hasScore ? getMoodColor(score) : '#ffffff';
         const selectedCls = moodState.selectedDate === dateKey ? ' is-selected' : '';
-        const scoreHtml = hasScore ? `<div class="mood-score">${score}</div>` : '<div class="mood-score">·</div>';
+        const scoreHtml = hasScore ? `<div class="mood-score">${score}</div>` : '<div class="mood-score">&middot;</div>';
 
         cells.push(`
           <button class="mood-day${hasScore ? ' has-score' : ''}${selectedCls}" data-date="${dateKey}" style="background:${bgColor}" type="button">
