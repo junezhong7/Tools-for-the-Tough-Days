@@ -130,8 +130,22 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     footer.mini-footer a { color: var(--warm-grey); }
 
     @media (max-width: 720px) {
+      .hero { padding: 24px 20px 36px; }
+      .hero-logo { height: 40px; margin-bottom: 12px; }
+      .hero-eyebrow { margin-bottom: 8px; }
+      .hero h1 { margin-bottom: 8px; }
+      .hero-sub { font-size: 15px; }
+      .main-wrap { margin-top: -20px; }
+
       .card { grid-template-columns: 1fr; }
-      .card-preview { border-right: none; border-bottom: 1px solid var(--border); }
+      .card-form { order: -1; padding: 24px 20px 20px; }
+      .card-preview { order: 1; border-right: none; border-top: 1px solid var(--border); padding: 20px; }
+
+      .card-form h3 { margin-bottom: 4px; }
+      .card-form p.lead { margin-bottom: 14px; }
+      input[type="email"] { margin-bottom: 12px; }
+      .opt-row { margin-bottom: 14px; }
+      .trust-line { margin-top: 12px; }
     }
   </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
