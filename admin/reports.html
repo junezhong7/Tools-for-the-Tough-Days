@@ -125,6 +125,18 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
     .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
     .report-table-title { font-size: 0.85rem; font-weight: 700; color: var(--ui-teal-dark); margin-bottom: 8px; }
+
+    .quick-range { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .quick-range .btn {
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ui-teal-dark);
+      background: var(--ui-teal-light);
+      border-color: transparent;
+    }
+    .quick-range .btn:hover { border-color: var(--ui-teal); }
+    .quick-range .btn.active { background: var(--ui-teal); color: #fff; }
   </style>
 </head>
 <body data-auth="required">
@@ -162,6 +174,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input type="date" id="endInput" />
         </div>
       </div>
+      <div class="quick-range" data-start="startInput" data-end="endInput">
+        <button type="button" class="btn" data-days="7">Last 7 days</button>
+        <button type="button" class="btn" data-days="15">Last 15 days</button>
+        <button type="button" class="btn" data-days="30">Last 30 days</button>
+        <button type="button" class="btn" data-days="all">All time</button>
+      </div>
       <button class="btn primary" id="runReportBtn">Run report</button>
       <p class="field-msg error" id="reportError"></p>
 
@@ -180,6 +198,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input type="date" id="channelEndInput" />
         </div>
       </div>
+      <div class="quick-range" data-start="channelStartInput" data-end="channelEndInput">
+        <button type="button" class="btn" data-days="7">Last 7 days</button>
+        <button type="button" class="btn" data-days="15">Last 15 days</button>
+        <button type="button" class="btn" data-days="30">Last 30 days</button>
+        <button type="button" class="btn" data-days="all">All time</button>
+      </div>
       <button class="btn primary" id="runChannelReportBtn">Run report</button>
       <p class="field-msg error" id="channelReportError"></p>
 
@@ -194,6 +218,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       div.textContent = str == null ? '' : String(str);
       return div.innerHTML;
     }
+
+    // Earliest date used for the "All time" quick-range option.
+    var ALL_TIME_START = '2000-01-01';
+
+    function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function toISODate(date) {
+      return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate());
+    }
+
+    // Wires up every ".quick-range" button group on the page: clicking a button
+    // fills in that group's start/end date inputs (data-start / data-end ids).
+    document.querySelectorAll('.quick-range').forEach(function (group) {
+      var startInput = document.getElementById(group.dataset.start);
+      var endInput = document.getElementById(group.dataset.end);
+
+      group.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-days]');
+        if (!btn) return;
+
+        var today = new Date();
+        endInput.value = toISODate(today);
+
+        if (btn.dataset.days === 'all') {
+          startInput.value = ALL_TIME_START;
+        } else {
+          var start = new Date();
+          start.setDate(start.getDate() - (Number(btn.dataset.days) - 1));
+          startInput.value = toISODate(start);
+        }
+
+        group.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+      });
+    });
 
     function renderResult(data) {
       var container = document.getElementById('reportResult');
