@@ -110,6 +110,15 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 
     .empty-state { padding: 20px; text-align: center; color: var(--ui-muted); font-size: 0.85rem; }
 
+    .insufficient {
+      padding: 20px;
+      text-align: center;
+      color: var(--ui-muted);
+      background: #f6f4ef;
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+
     .report-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 20px; }
     .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
     .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
@@ -173,6 +182,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <nav style="margin-bottom: 16px;">
       <a href="/admin/index.html">&larr; Back to member admin</a>
     </nav>
+
+    <div class="card">
+      <h2>Aggregate usage statistics</h2>
+      <p class="report-subtitle">Averages across members &mdash; Mood slider check-ins and resource access. Leave business name blank for a sitewide average, or set it to scope to one business.</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="aggBusinessNameInput">Business name (optional)</label>
+          <input type="text" id="aggBusinessNameInput" list="aggBusinessNameOptions" placeholder="All members" autocomplete="off" />
+          <datalist id="aggBusinessNameOptions"></datalist>
+        </div>
+        <div class="field">
+          <label for="aggStartInput">Period start</label>
+          <input type="date" id="aggStartInput" />
+        </div>
+        <div class="field">
+          <label for="aggEndInput">Period end</label>
+          <input type="date" id="aggEndInput" />
+        </div>
+      </div>
+      <div class="quick-range" data-start="aggStartInput" data-end="aggEndInput">
+        <button type="button" class="btn" data-days="7">Last 7 days</button>
+        <button type="button" class="btn" data-days="15">Last 15 days</button>
+        <button type="button" class="btn" data-days="30">Last 30 days</button>
+        <button type="button" class="btn" data-days="all">All time</button>
+      </div>
+      <button class="btn primary" id="runAggregateReportBtn">Run report</button>
+      <p class="field-msg error" id="aggregateReportError"></p>
+
+      <div id="aggregateReportResult" style="margin-top: 20px;"></div>
+    </div>
 
     <div class="card">
       <h2>Personal usage report</h2>
@@ -252,6 +291,88 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!value) return '\u2014';
       return new Date(value.replace(' ', 'T') + 'Z').toLocaleString();
     }
+
+    // -- Aggregate usage statistics --
+    var aggBusinessNameDebounce = null;
+
+    async function loadAggBusinessNameOptions(q) {
+      var params = new URLSearchParams({ action: 'business_names', q: q });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      if (!res.ok) return;
+      var data = await res.json();
+
+      var datalist = document.getElementById('aggBusinessNameOptions');
+      datalist.innerHTML = '';
+      data.business_names.forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.value = name;
+        datalist.appendChild(opt);
+      });
+    }
+
+    document.getElementById('aggBusinessNameInput').addEventListener('input', function (e) {
+      clearTimeout(aggBusinessNameDebounce);
+      var value = e.target.value.trim();
+      aggBusinessNameDebounce = setTimeout(function () { loadAggBusinessNameOptions(value); }, 250);
+    });
+
+    document.getElementById('aggBusinessNameInput').addEventListener('focus', function (e) {
+      if (!e.target.value.trim()) loadAggBusinessNameOptions('');
+    });
+
+    function renderAggregateReport(data) {
+      var container = document.getElementById('aggregateReportResult');
+
+      if (data.insufficient_data) {
+        container.innerHTML = '<div class="insufficient">' + escapeHtml(data.message) + '</div>';
+        return;
+      }
+
+      var m = data.metrics;
+      container.innerHTML =
+        '<div class="metric-grid">' +
+          '<div class="metric-tile"><div class="value">' + m.active_user_count + '</div><div class="label">Active users</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.total_checkins + '</div><div class="label">Mood check-ins</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.avg_checkins_per_active_user + '</div><div class="label">Avg check-ins per active user</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (m.avg_mood_score != null ? m.avg_mood_score : '\u2014') + '</div><div class="label">Average mood score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.pct_active_users_with_checkin + '%</div><div class="label">Active users who checked in</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.total_resource_opens + '</div><div class="label">Resources opened</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.avg_resource_opens_per_active_user + '</div><div class="label">Avg resources opened per active user</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.unique_resources_opened + '</div><div class="label">Unique resources opened</div></div>' +
+          '<div class="metric-tile"><div class="value">' + m.pct_active_users_with_resource_open + '%</div><div class="label">Active users who opened a resource</div></div>' +
+        '</div>';
+    }
+
+    async function runAggregateReport() {
+      var businessName = document.getElementById('aggBusinessNameInput').value.trim();
+      var start = document.getElementById('aggStartInput').value;
+      var end = document.getElementById('aggEndInput').value;
+      var errorEl = document.getElementById('aggregateReportError');
+      var resultEl = document.getElementById('aggregateReportResult');
+
+      errorEl.textContent = '';
+      resultEl.innerHTML = '';
+
+      if (!start || !end) {
+        errorEl.textContent = 'Period start and end are both required.';
+        return;
+      }
+
+      var params = new URLSearchParams({ action: 'aggregate_usage', start: start, end: end });
+      if (businessName) params.set('business_name', businessName);
+
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      var data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.message || 'Could not load this report.';
+        return;
+      }
+
+      renderAggregateReport(data);
+    }
+
+    document.getElementById('runAggregateReportBtn').addEventListener('click', runAggregateReport);
 
     // -- Personal usage report --
     var personalUserDebounce = null;
