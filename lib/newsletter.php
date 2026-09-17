@@ -81,16 +81,18 @@ function submit_to_vision6(string $email, string $fullName = ''): void
  * Vision6 list still happens via the unsubscribe link Vision6 inserts into
  * every campaign email it sends.
  */
-function unsubscribe_from_newsletter(string $email): void
+function unsubscribe_from_newsletter(string $email): bool
 {
     $email = strtolower(trim($email));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return;
+        return false;
     }
 
-    db()->prepare('UPDATE users SET newsletter_opt_in = 0 WHERE email = ?')
-        ->execute([$email]);
+    $usersStmt = db()->prepare('UPDATE users SET newsletter_opt_in = 0 WHERE email = ? AND newsletter_opt_in = 1');
+    $usersStmt->execute([$email]);
 
-    db()->prepare('UPDATE lead_magnet_signups SET newsletter_opt_in = 0 WHERE email = ?')
-        ->execute([$email]);
+    $leadStmt = db()->prepare('UPDATE lead_magnet_signups SET newsletter_opt_in = 0 WHERE email = ? AND newsletter_opt_in = 1');
+    $leadStmt->execute([$email]);
+
+    return $usersStmt->rowCount() > 0 || $leadStmt->rowCount() > 0;
 }

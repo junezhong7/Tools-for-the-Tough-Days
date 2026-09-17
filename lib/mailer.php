@@ -371,6 +371,133 @@ function send_free_guide_email(string $toEmail): bool
 }
 
 /**
+ * Sends the first lead-magnet follow-up email (a walkthrough of the mood
+ * slider) five days after someone downloads the free guide. Only meant to be
+ * sent to addresses that opted into the newsletter at signup — see
+ * cron/send-leadmagnet-followup.php, which filters on
+ * lead_magnet_signups.newsletter_opt_in before calling this.
+ */
+function send_lead_magnet_followup1_email(string $toEmail): bool
+{
+    $siteUrl     = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $registerUrl = $siteUrl . '/register.html';
+    $unsubUrl    = $siteUrl . '/unsubscribe.html?email=' . rawurlencode($toEmail);
+    $videoUrl    = 'https://emotionalbalance.sharepoint.com/:v:/s/ResourceCenter/IQDaHJ8dezQFRJxjfP7nFwctAbcIpmYd6boud7yysHxwe0w?e=h3MHZm';
+    $img2Url     = $siteUrl . '/assets/email/mood-slider-score-2.png';
+    $img5Url     = $siteUrl . '/assets/email/mood-slider-score-5.png';
+    $img8Url     = $siteUrl . '/assets/email/mood-slider-score-8.png';
+
+    $subject = 'Feature Spotlight: Getting to know your mood slider';
+
+    $textBody = "Hi there,\n\n"
+        . "Every check-in starts with one question: how are you feeling right now? "
+        . "That's the mood slider, a few seconds that shapes what you see next, and builds the picture on your dashboard over time.\n\n"
+        . "Watch the 90-second walkthrough: {$videoUrl}\n\n"
+        . "When things are really tough (score 2): you're taken straight to important information. No browsing required.\n\n"
+        . "When you're getting by (score 5): you're invited to check in and see what's available, at your own pace.\n\n"
+        . "When things are on track (score 8): worth logging anyway. It helps you notice what's working.\n\n"
+        . "It doesn't need to be perfect. Even a rough guess, checked in regularly, tells you more than most people ever track.\n\n"
+        . "Haven't tried it yet? Free for 14 days, no card required.\n"
+        . $registerUrl . "\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au\n\n"
+        . "Unsubscribe from our newsletter: " . $unsubUrl;
+
+    $safeUnsubUrl    = htmlspecialchars($unsubUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeRegisterUrl = htmlspecialchars($registerUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeVideoUrl    = htmlspecialchars($videoUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeImg2Url     = htmlspecialchars($img2Url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeImg5Url     = htmlspecialchars($img5Url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeImg8Url     = htmlspecialchars($img8Url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+    $htmlBody = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4;"><tr><td align="center" style="padding:24px 12px;">'
+        . '<table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="width:680px; max-width:680px; background-color:#ffffff;">'
+        . '<tr><td align="center" style="background-color:#1a4e52; padding:32px 24px 28px;">'
+        . '<div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; letter-spacing:2px; color:#a8d7c6; text-transform:uppercase; margin-bottom:6px;">Feature Spotlight</div>'
+        . '<div style="font-family:Georgia, \'Times New Roman\', serif; font-size:28px; line-height:1.25; color:#ffffff;">'
+        . '<span style="font-weight:normal;">Tools for the</span><br><span style="font-weight:bold; color:#ffffff;">Tough Days</span></div>'
+        . '<div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#cfe3e0; margin-top:10px; font-style:italic;">Here for the tough days, and the good ones too.</div>'
+        . '</td></tr>'
+        . '<tr><td style="padding:28px 32px 0;">'
+        . '<h1 style="margin:0 0 6px; font-family:Georgia, \'Times New Roman\', serif; font-size:24px; color:#1a4e52;">Getting to know your mood slider</h1>'
+        . '<p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#26777B; font-weight:bold;">The thirty seconds that starts every check-in</p>'
+        . '</td></tr>'
+        . '<tr><td style="padding:20px 32px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.65; color:#333333;">'
+        . '<p style="margin:0 0 12px;">Hi there,</p>'
+        . '<p style="margin:0 0 12px;">Every check-in starts with one question: <em>how are you feeling right now?</em> '
+        . 'That\'s the mood slider, a few seconds that shapes what you see next, and builds the picture on your dashboard over time.</p>'
+        . '</td></tr>'
+        . '<tr><td align="center" style="padding:8px 32px 4px;">'
+        . '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="#26777B" style="border-radius:6px;">'
+        . '<a href="' . $safeVideoUrl . '" target="_blank" style="display:inline-block; padding:14px 28px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#ffffff; text-decoration:none; border-radius:6px;">&#9654;&nbsp; Watch the 90-second walkthrough</a>'
+        . '</td></tr></table>'
+        . '</td></tr>'
+        . '<tr><td align="center" style="padding:18px 32px 0; border-top:1px solid #e2e2e2;">'
+        . '<p style="margin:16px 0 8px; font-family:Arial, Helvetica, sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#26777B; font-weight:bold; text-align:left;">When things are really tough</p>'
+        . '<img src="' . $safeImg2Url . '" alt="Mood slider set to 2, Really struggling" width="400" style="width:400px; max-width:100%; height:auto; display:block; margin:0 auto; border:1px solid #e2e2e2; border-radius:8px;">'
+        . '<p style="margin:10px 0 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.5; color:#555555; text-align:left;">You\'re taken straight to important information. No browsing required.</p>'
+        . '</td></tr>'
+        . '<tr><td align="center" style="padding:18px 32px 0;">'
+        . '<p style="margin:0 0 8px; font-family:Arial, Helvetica, sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#26777B; font-weight:bold; text-align:left;">When you\'re getting by</p>'
+        . '<img src="' . $safeImg5Url . '" alt="Mood slider set to 5, Getting by" width="400" style="width:400px; max-width:100%; height:auto; display:block; margin:0 auto; border:1px solid #e2e2e2; border-radius:8px;">'
+        . '<p style="margin:10px 0 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.5; color:#555555; text-align:left;">You\'re invited to check in and see what\'s available, at your own pace.</p>'
+        . '</td></tr>'
+        . '<tr><td align="center" style="padding:18px 32px 0;">'
+        . '<p style="margin:0 0 8px; font-family:Arial, Helvetica, sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#26777B; font-weight:bold; text-align:left;">When things are on track</p>'
+        . '<img src="' . $safeImg8Url . '" alt="Mood slider set to 8, Pretty good" width="400" style="width:400px; max-width:100%; height:auto; display:block; margin:0 auto; border:1px solid #e2e2e2; border-radius:8px;">'
+        . '<p style="margin:10px 0 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.5; color:#555555; text-align:left;">Worth logging anyway. It helps you notice what\'s working.</p>'
+        . '</td></tr>'
+        . '<tr><td style="padding:20px 32px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#333333;">'
+        . '<p style="margin:0 0 12px;">It doesn\'t need to be perfect. Even a rough guess, checked in regularly, tells you more than most people ever track.</p>'
+        . '<p style="margin:0;">Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>Tools for the Tough Days</p>'
+        . '</td></tr>'
+        . '<tr><td style="padding:20px 32px 28px;">'
+        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fff6e0; border-radius:8px;"><tr>'
+        . '<td style="padding:18px 24px; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.5; color:#5a4a1f;">'
+        . '<p style="margin:0 0 10px;"><strong>Haven\'t tried it yet?</strong> Free for 14 days, no card required.</p>'
+        . '<a href="' . $safeRegisterUrl . '" style="color:#26777B; font-weight:bold; text-decoration:none;">www.toolsforthetoughdays.com.au &rarr;</a>'
+        . '</td></tr></table>'
+        . '</td></tr>'
+        . '<tr><td style="padding:20px 32px 32px; border-top:1px solid #e2e2e2; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#999999;">'
+        . '<p style="margin:0;">Tools for the Tough Days &middot; <a href="https://www.toolsforthetoughdays.com.au" style="color:#999999;">www.toolsforthetoughdays.com.au</a></p>'
+        . '<p style="margin:6px 0 0;"><a href="' . $safeUnsubUrl . '" style="color:#999999;">Unsubscribe from our newsletter</a>.</p>'
+        . '</td></tr>'
+        . '</table></td></tr></table>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody);
+}
+
+/**
+ * Confirms to a subscriber that they've been unsubscribed from the newsletter.
+ */
+function send_newsletter_unsubscribe_email(string $toEmail): bool
+{
+    $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $resubscribeUrl = $siteUrl . '/support.html';
+
+    $subject = "You've been unsubscribed";
+
+    $textBody = "Hi there,\n\n"
+        . "This confirms you've been unsubscribed from the Tools for the Tough Days newsletter. You won't receive any more newsletter emails from us.\n\n"
+        . "If this was a mistake, you can resubscribe any time here:\n"
+        . $resubscribeUrl . "\n\n"
+        . "Warm regards,\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $safeResubscribeUrl = htmlspecialchars($resubscribeUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = '<p>Hi there,</p>'
+        . '<p>This confirms you\'ve been unsubscribed from the Tools for the Tough Days newsletter. You won\'t receive any more newsletter emails from us.</p>'
+        . '<p>If this was a mistake, you can <a href="' . $safeResubscribeUrl . '">resubscribe any time</a>.</p>'
+        . '<p>Warm regards,<br>Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody);
+}
+
+/**
  * Notifies the team when a member suggests a resource that's missing from the library.
  */
 function send_resource_suggestion_email(string $fromEmail, ?string $fromName, string $message, string $catalog): bool

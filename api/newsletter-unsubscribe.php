@@ -16,6 +16,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
 require_once __DIR__ . '/../lib/newsletter.php';
+require_once __DIR__ . '/../lib/mailer.php';
+if (file_exists(__DIR__ . '/../config.php')) {
+    require_once __DIR__ . '/../config.php';
+}
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -35,8 +39,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     json_error(422, 'INVALID_EMAIL', 'Please enter a valid email address.');
 }
 
-unsubscribe_from_newsletter($email);
+$wasSubscribed = unsubscribe_from_newsletter($email);
 
-audit('newsletter.unsubscribe', null, ['email' => $email]);
+if ($wasSubscribed) {
+    send_newsletter_unsubscribe_email($email); // best-effort; failure shouldn't block the unsubscribe
+}
+
+audit('newsletter.unsubscribe', null, ['email' => $email, 'was_subscribed' => $wasSubscribed]);
 
 json_ok(['success' => true]);
