@@ -50,6 +50,9 @@ switch ($action) {
     case 'personal_usage':
         handle_personal_usage($admin);
         break;
+    case 'aggregate_usage':
+        handle_aggregate_usage($admin);
+        break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
 }
@@ -363,6 +366,123 @@ function handle_personal_usage(array $admin): never
                 'unique_resources' => (int) ($resourceSummary['unique_resources'] ?? 0),
             ],
             'records' => $resourceRecords,
+        ],
+    ]);
+}
+
+// ─────────────────────────────────────────────
+// AGGREGATE USAGE STATISTICS
+// (Mood slider + resource-access averages across many members — same aggregate-only
+// shape as the Workplace mood usage report, but not limited to one business cohort.
+// business_name is optional here: leave blank for a sitewide aggregate, or set it to
+// scope to one business, same cohort/"active user" definition as handle_mood_usage.)
+// ─────────────────────────────────────────────
+function handle_aggregate_usage(array $admin): never
+{
+    $businessName = trim($_GET['business_name'] ?? '');
+    $start        = trim($_GET['start'] ?? '');
+    $end          = trim($_GET['end'] ?? '');
+
+    if (!is_valid_date($start) || !is_valid_date($end)) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start and end must be dates in YYYY-MM-DD format.');
+    }
+    if ($start > $end) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start must not be after end.');
+    }
+
+    $periodStart = $start . ' 00:00:00';
+    $periodEnd   = $end . ' 23:59:59';
+
+    $cohortFilter = $businessName !== '' ? 'AND u.business_name = ?' : '';
+
+    $moodStmt = db()->prepare(
+        "WITH cohort AS (
+            SELECT DISTINCT u.id
+            FROM users u
+            JOIN user_sessions s ON s.user_id = u.id
+            WHERE s.last_active BETWEEN ? AND ? {$cohortFilter}
+         )
+         SELECT
+            (SELECT COUNT(*) FROM cohort)  AS active_user_count,
+            COUNT(DISTINCT m.user_id)      AS checkin_user_count,
+            COUNT(m.id)                    AS total_checkins,
+            ROUND(AVG(m.mood_score), 2)    AS avg_mood_score
+         FROM cohort c
+         LEFT JOIN mood_events m
+           ON m.user_id = c.id AND m.checkin_at BETWEEN ? AND ?"
+    );
+    $moodParams = [$periodStart, $periodEnd];
+    if ($businessName !== '') {
+        $moodParams[] = $businessName;
+    }
+    $moodParams[] = $periodStart;
+    $moodParams[] = $periodEnd;
+    $moodStmt->execute($moodParams);
+    $moodRow = $moodStmt->fetch();
+
+    $activeUserCount = (int) $moodRow['active_user_count'];
+
+    audit('admin.report.aggregate_usage', null, [
+        'business_name' => $businessName !== '' ? $businessName : null,
+        'start'         => $start,
+        'end'           => $end,
+    ], (int) $admin['id']);
+
+    if ($activeUserCount < MIN_COHORT_SIZE) {
+        json_ok([
+            'business_name'     => $businessName !== '' ? $businessName : null,
+            'period'            => ['start' => $start, 'end' => $end],
+            'insufficient_data' => true,
+            'message'           => 'Insufficient data for this period',
+        ]);
+    }
+
+    $resourceStmt = db()->prepare(
+        "WITH cohort AS (
+            SELECT DISTINCT u.id
+            FROM users u
+            JOIN user_sessions s ON s.user_id = u.id
+            WHERE s.last_active BETWEEN ? AND ? {$cohortFilter}
+         )
+         SELECT
+            COUNT(DISTINCT a.user_id) AS resource_user_count,
+            COUNT(a.id)               AS total_resource_opens,
+            COUNT(DISTINCT JSON_UNQUOTE(JSON_EXTRACT(a.details, '$.resource_key'))) AS unique_resources_opened
+         FROM cohort c
+         LEFT JOIN audit_logs a
+           ON a.user_id = c.id AND a.action = 'resource.issue.ok' AND a.created_at BETWEEN ? AND ?"
+    );
+    $resourceParams = [$periodStart, $periodEnd];
+    if ($businessName !== '') {
+        $resourceParams[] = $businessName;
+    }
+    $resourceParams[] = $periodStart;
+    $resourceParams[] = $periodEnd;
+    $resourceStmt->execute($resourceParams);
+    $resourceRow = $resourceStmt->fetch();
+
+    $checkinUserCount     = (int) $moodRow['checkin_user_count'];
+    $totalCheckins        = (int) $moodRow['total_checkins'];
+    $resourceUserCount    = (int) $resourceRow['resource_user_count'];
+    $totalResourceOpens   = (int) $resourceRow['total_resource_opens'];
+    $uniqueResourcesOpened = (int) $resourceRow['unique_resources_opened'];
+
+    json_ok([
+        'business_name'     => $businessName !== '' ? $businessName : null,
+        'period'            => ['start' => $start, 'end' => $end],
+        'insufficient_data' => false,
+        'metrics'           => [
+            'active_user_count'                   => $activeUserCount,
+            'total_checkins'                       => $totalCheckins,
+            'checkin_user_count'                   => $checkinUserCount,
+            'avg_mood_score'                        => isset($moodRow['avg_mood_score']) ? (float) $moodRow['avg_mood_score'] : null,
+            'avg_checkins_per_active_user'          => round($totalCheckins / $activeUserCount, 2),
+            'pct_active_users_with_checkin'         => round($checkinUserCount / $activeUserCount * 100, 1),
+            'total_resource_opens'                  => $totalResourceOpens,
+            'resource_user_count'                   => $resourceUserCount,
+            'unique_resources_opened'                => $uniqueResourcesOpened,
+            'avg_resource_opens_per_active_user'    => round($totalResourceOpens / $activeUserCount, 2),
+            'pct_active_users_with_resource_open'   => round($resourceUserCount / $activeUserCount * 100, 1),
         ],
     ]);
 }
