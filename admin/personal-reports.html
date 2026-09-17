@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T39SV49J');</script>
+<!-- End Google Tag Manager -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('set', 'autoConfig', false, '1022504650555050');
+fbq('init', '1022504650555050');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1"
+src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Reports — Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
+  <link rel="stylesheet" href="/assets/theme-unified.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { background: var(--ui-cream); color: var(--ui-charcoal); }
+
+    header.topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--ui-border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header.topbar h1 { font-size: 1.1rem; color: var(--ui-teal-dark); }
+
+    #adminWhoami { font-size: 0.85rem; color: var(--ui-muted); margin-right: 16px; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--ui-border);
+      background: #fff;
+      color: var(--ui-charcoal);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:hover { border-color: var(--ui-teal); }
+    .btn.primary { background: var(--ui-teal); color: #fff; border-color: var(--ui-teal); }
+    .btn.primary:hover { background: var(--ui-teal-dark); }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+
+    main { max-width: 720px; margin: 0 auto; padding: 24px 28px 60px; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--ui-shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 { font-size: 1rem; color: var(--ui-teal-dark); margin-bottom: 16px; }
+
+    .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+    .field label { font-size: 0.78rem; color: var(--ui-muted); font-weight: 600; }
+    .field input {
+      padding: 9px 12px;
+      border: 1.5px solid var(--ui-border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      background: #fff;
+    }
+
+    .field-msg { font-size: 0.82rem; margin-top: 10px; }
+    .field-msg.error { color: #c0392b; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .metric-tile {
+      background: var(--ui-teal-light);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .metric-tile .value { font-size: 1.5rem; font-weight: 700; color: var(--ui-teal-dark); }
+    .metric-tile .label { font-size: 0.78rem; color: var(--ui-muted); margin-top: 2px; }
+
+    .empty-state { padding: 20px; text-align: center; color: var(--ui-muted); font-size: 0.85rem; }
+
+    .report-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 20px; }
+    .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
+    .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
+    .report-table-title { font-size: 0.85rem; font-weight: 700; color: var(--ui-teal-dark); margin-bottom: 8px; }
+
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-results {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: #fff;
+      border: 1.5px solid var(--ui-border);
+      border-radius: 8px;
+      box-shadow: var(--ui-shadow);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .autocomplete-results.open { display: block; }
+    .autocomplete-results .option {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .autocomplete-results .option:hover { background: var(--ui-teal-light); }
+    .autocomplete-results .option .opt-name { font-weight: 600; color: var(--ui-charcoal); }
+    .autocomplete-results .option .opt-email { color: var(--ui-muted); font-size: 0.78rem; }
+    .autocomplete-results .empty { padding: 8px 12px; color: var(--ui-muted); font-size: 0.82rem; }
+
+    .report-subtitle { font-size: 0.85rem; color: var(--ui-muted); margin-bottom: 14px; }
+  </style>
+</head>
+<body data-auth="required">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T39SV49J"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <header class="topbar">
+    <h1>Personal Reports</h1>
+    <div>
+      <span id="adminWhoami"></span>
+      <button class="btn" id="logoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <nav style="margin-bottom: 16px;">
+      <a href="/admin/index.html">&larr; Back to member admin</a>
+    </nav>
+
+    <div class="card">
+      <h2>Personal usage report</h2>
+      <p class="report-subtitle">Look up a single member's Mood slider history and resource access — for support and duty-of-care follow-up.</p>
+      <div class="field-row">
+        <div class="field autocomplete-wrap">
+          <label for="personalUserInput">Member (email or name)</label>
+          <input type="text" id="personalUserInput" placeholder="Start typing..." autocomplete="off" />
+          <div class="autocomplete-results" id="personalUserResults"></div>
+        </div>
+        <div class="field">
+          <label for="personalStartInput">Period start</label>
+          <input type="date" id="personalStartInput" />
+        </div>
+        <div class="field">
+          <label for="personalEndInput">Period end</label>
+          <input type="date" id="personalEndInput" />
+        </div>
+      </div>
+      <button class="btn primary" id="runPersonalReportBtn">Run report</button>
+      <p class="field-msg error" id="personalReportError"></p>
+
+      <div id="personalReportResult" style="margin-top: 20px;"></div>
+    </div>
+  </main>
+
+  <script src="/admin/admin-guard.js"></script>
+  <script>
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    function formatDateTime(value) {
+      if (!value) return '—';
+      return new Date(value.replace(' ', 'T') + 'Z').toLocaleString();
+    }
+
+    // ── Personal usage report ──
+    var personalUserDebounce = null;
+    var selectedPersonalUser = null;
+
+    async function searchPersonalUsers(q) {
+      var resultsEl = document.getElementById('personalUserResults');
+      if (!q) {
+        resultsEl.classList.remove('open');
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      var params = new URLSearchParams({ action: 'user_search', q: q });
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      if (!res.ok) return;
+      var data = await res.json();
+
+      resultsEl.innerHTML = '';
+      if (!data.users.length) {
+        resultsEl.innerHTML = '<div class="empty">No members match.</div>';
+        resultsEl.classList.add('open');
+        return;
+      }
+
+      data.users.forEach(function (u) {
+        var opt = document.createElement('div');
+        opt.className = 'option';
+        opt.innerHTML =
+          '<div class="opt-name">' + escapeHtml(u.full_name || u.email) + '</div>' +
+          '<div class="opt-email">' + escapeHtml(u.email) + (u.business_name ? ' · ' + escapeHtml(u.business_name) : '') + '</div>';
+        opt.addEventListener('click', function () {
+          selectedPersonalUser = u;
+          document.getElementById('personalUserInput').value = u.full_name ? (u.full_name + ' <' + u.email + '>') : u.email;
+          resultsEl.classList.remove('open');
+          resultsEl.innerHTML = '';
+        });
+        resultsEl.appendChild(opt);
+      });
+      resultsEl.classList.add('open');
+    }
+
+    document.getElementById('personalUserInput').addEventListener('input', function (e) {
+      selectedPersonalUser = null;
+      clearTimeout(personalUserDebounce);
+      var value = e.target.value.trim();
+      personalUserDebounce = setTimeout(function () { searchPersonalUsers(value); }, 250);
+    });
+
+    document.addEventListener('click', function (e) {
+      var wrap = document.getElementById('personalUserInput').closest('.autocomplete-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('personalUserResults').classList.remove('open');
+      }
+    });
+
+    function renderPersonalReport(data) {
+      var container = document.getElementById('personalReportResult');
+      var moodSummary = data.mood.summary;
+      var resourceSummary = data.resource_access.summary;
+
+      var moodRows = data.mood.records.length
+        ? data.mood.records.map(function (r) {
+            return '<tr><td>' + formatDateTime(r.checkin_at) + '</td><td>' + r.score + '</td><td>' + escapeHtml(r.source_page || '—') + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="3" class="empty-state">No Mood slider check-ins for this period</td></tr>';
+
+      var resourceRows = data.resource_access.records.length
+        ? data.resource_access.records.map(function (r) {
+            return '<tr><td>' + formatDateTime(r.accessed_at) + '</td><td>' + escapeHtml(r.resource_key || '—') + '</td><td>' + escapeHtml(r.kind || '—') + '</td><td>' + escapeHtml(r.catalog || '—') + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="4" class="empty-state">No resource access for this period</td></tr>';
+
+      container.innerHTML =
+        '<p class="report-subtitle"><strong>' + escapeHtml(data.user.full_name || data.user.email) + '</strong> · ' + escapeHtml(data.user.email) +
+          (data.user.business_name ? ' · ' + escapeHtml(data.user.business_name) : '') + '</p>' +
+        '<div class="metric-grid">' +
+          '<div class="metric-tile"><div class="value">' + moodSummary.total_checkins + '</div><div class="label">Mood check-ins</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.avg_score != null ? moodSummary.avg_score : '—') + '</div><div class="label">Average mood score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.min_score != null ? moodSummary.min_score : '—') + ' / ' + (moodSummary.max_score != null ? moodSummary.max_score : '—') + '</div><div class="label">Min / Max score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + resourceSummary.total_opens + '</div><div class="label">Resources opened</div></div>' +
+          '<div class="metric-tile"><div class="value">' + resourceSummary.unique_resources + '</div><div class="label">Unique resources</div></div>' +
+        '</div>' +
+        '<div style="margin-top:20px;">' +
+          '<div class="report-table-title">Mood slider records</div>' +
+          '<table class="report-table"><tr><th>Time</th><th>Score</th><th>Page</th></tr>' + moodRows + '</table>' +
+        '</div>' +
+        '<div>' +
+          '<div class="report-table-title">Resource access</div>' +
+          '<table class="report-table"><tr><th>Time</th><th>Resource</th><th>Kind</th><th>Catalog</th></tr>' + resourceRows + '</table>' +
+        '</div>';
+    }
+
+    async function runPersonalReport() {
+      var start = document.getElementById('personalStartInput').value;
+      var end = document.getElementById('personalEndInput').value;
+      var errorEl = document.getElementById('personalReportError');
+      var resultEl = document.getElementById('personalReportResult');
+
+      errorEl.textContent = '';
+      resultEl.innerHTML = '';
+
+      if (!selectedPersonalUser) {
+        errorEl.textContent = 'Pick a member from the search results first.';
+        return;
+      }
+      if (!start || !end) {
+        errorEl.textContent = 'Period start and end are both required.';
+        return;
+      }
+
+      var params = new URLSearchParams({
+        action: 'personal_usage',
+        user_id: selectedPersonalUser.id,
+        start: start,
+        end: end,
+      });
+
+      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
+      var data = await res.json();
+
+      if (!res.ok) {
+        errorEl.textContent = data.message || 'Could not load this report.';
+        return;
+      }
+
+      renderPersonalReport(data);
+    }
+
+    document.getElementById('runPersonalReportBtn').addEventListener('click', runPersonalReport);
+
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      fetch('/api/admin/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' })
+        .finally(function () { window.location.href = '/admin/login.html'; });
+    });
+
+    (async function init() {
+      var auth = await window.AdminAuthGuard.getState();
+      if (auth.authenticated && auth.admin) {
+        document.getElementById('adminWhoami').textContent = auth.admin.full_name || auth.admin.email;
+      }
+    })();
+  </script>
+</body>
+</html>
