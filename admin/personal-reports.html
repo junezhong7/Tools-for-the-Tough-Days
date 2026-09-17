@@ -29,7 +29,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 <!-- End Meta Pixel Code -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Reports — Tools for the Tough Days</title>
+  <title>Personal Reports &mdash; Tools for the Tough Days</title>
   <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
   <link rel="stylesheet" href="/assets/theme-unified.css" />
   <style>
@@ -164,7 +164,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="card">
       <h2>Personal usage report</h2>
-      <p class="report-subtitle">Look up a single member's Mood slider history and resource access — for support and duty-of-care follow-up.</p>
+      <p class="report-subtitle">Look up a single member's Mood slider history and resource access &mdash; for support and duty-of-care follow-up.</p>
       <div class="field-row">
         <div class="field autocomplete-wrap">
           <label for="personalUserInput">Member (email or name)</label>
@@ -196,11 +196,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     function formatDateTime(value) {
-      if (!value) return '—';
+      if (!value) return '\u2014';
       return new Date(value.replace(' ', 'T') + 'Z').toLocaleString();
     }
 
-    // ── Personal usage report ──
+    // -- Personal usage report --
     var personalUserDebounce = null;
     var selectedPersonalUser = null;
 
@@ -229,7 +229,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         opt.className = 'option';
         opt.innerHTML =
           '<div class="opt-name">' + escapeHtml(u.full_name || u.email) + '</div>' +
-          '<div class="opt-email">' + escapeHtml(u.email) + (u.business_name ? ' · ' + escapeHtml(u.business_name) : '') + '</div>';
+          '<div class="opt-email">' + escapeHtml(u.email) + (u.business_name ? ' \u00B7 ' + escapeHtml(u.business_name) : '') + '</div>';
         opt.addEventListener('click', function () {
           selectedPersonalUser = u;
           document.getElementById('personalUserInput').value = u.full_name ? (u.full_name + ' <' + u.email + '>') : u.email;
@@ -262,23 +262,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       var moodRows = data.mood.records.length
         ? data.mood.records.map(function (r) {
-            return '<tr><td>' + formatDateTime(r.checkin_at) + '</td><td>' + r.score + '</td><td>' + escapeHtml(r.source_page || '—') + '</td></tr>';
+            return '<tr><td>' + formatDateTime(r.checkin_at) + '</td><td>' + r.score + '</td><td>' + escapeHtml(r.source_page || '\u2014') + '</td></tr>';
           }).join('')
         : '<tr><td colspan="3" class="empty-state">No Mood slider check-ins for this period</td></tr>';
 
       var resourceRows = data.resource_access.records.length
         ? data.resource_access.records.map(function (r) {
-            return '<tr><td>' + formatDateTime(r.accessed_at) + '</td><td>' + escapeHtml(r.resource_key || '—') + '</td><td>' + escapeHtml(r.kind || '—') + '</td><td>' + escapeHtml(r.catalog || '—') + '</td></tr>';
+            return '<tr><td>' + formatDateTime(r.accessed_at) + '</td><td>' + escapeHtml(r.resource_key || '\u2014') + '</td><td>' + escapeHtml(r.kind || '\u2014') + '</td><td>' + escapeHtml(r.catalog || '\u2014') + '</td></tr>';
           }).join('')
         : '<tr><td colspan="4" class="empty-state">No resource access for this period</td></tr>';
 
       container.innerHTML =
-        '<p class="report-subtitle"><strong>' + escapeHtml(data.user.full_name || data.user.email) + '</strong> · ' + escapeHtml(data.user.email) +
-          (data.user.business_name ? ' · ' + escapeHtml(data.user.business_name) : '') + '</p>' +
+        '<p class="report-subtitle"><strong>' + escapeHtml(data.user.full_name || data.user.email) + '</strong> \u00B7 ' + escapeHtml(data.user.email) +
+          (data.user.business_name ? ' \u00B7 ' + escapeHtml(data.user.business_name) : '') + '</p>' +
         '<div class="metric-grid">' +
           '<div class="metric-tile"><div class="value">' + moodSummary.total_checkins + '</div><div class="label">Mood check-ins</div></div>' +
-          '<div class="metric-tile"><div class="value">' + (moodSummary.avg_score != null ? moodSummary.avg_score : '—') + '</div><div class="label">Average mood score</div></div>' +
-          '<div class="metric-tile"><div class="value">' + (moodSummary.min_score != null ? moodSummary.min_score : '—') + ' / ' + (moodSummary.max_score != null ? moodSummary.max_score : '—') + '</div><div class="label">Min / Max score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.avg_score != null ? moodSummary.avg_score : '\u2014') + '</div><div class="label">Average mood score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.min_score != null ? moodSummary.min_score : '\u2014') + ' / ' + (moodSummary.max_score != null ? moodSummary.max_score : '\u2014') + '</div><div class="label">Min / Max score</div></div>' +
           '<div class="metric-tile"><div class="value">' + resourceSummary.total_opens + '</div><div class="label">Resources opened</div></div>' +
           '<div class="metric-tile"><div class="value">' + resourceSummary.unique_resources + '</div><div class="label">Unique resources</div></div>' +
         '</div>' +
