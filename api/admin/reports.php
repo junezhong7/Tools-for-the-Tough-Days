@@ -12,6 +12,13 @@
  * session active during the period (lib/admin_auth.php has no broader activity signal
  * to draw on yet). Per the data spec's privacy rules, any cohort smaller than
  * MIN_COHORT_SIZE returns no numbers at all, individual or aggregate.
+ *
+ * GET /api/admin/reports.php?action=personal_usage&user_id=123&start=2026-07-01&end=2026-07-15
+ *
+ * Personal reports: single-member mood check-in and resource-access history, for
+ * support/duty-of-care purposes. This is individual-level data, at the same trust
+ * level as the per-member subscription/payment view in the member admin panel —
+ * MIN_COHORT_SIZE does not apply here.
  */
 
 declare(strict_types=1);
@@ -36,6 +43,12 @@ switch ($action) {
         break;
     case 'channel_summary':
         handle_channel_summary($admin);
+        break;
+    case 'user_search':
+        handle_user_search();
+        break;
+    case 'personal_usage':
+        handle_personal_usage($admin);
         break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
@@ -191,6 +204,166 @@ function handle_channel_summary(array $admin): never
         'period'                => ['start' => $start, 'end' => $end],
         'signups_by_channel'    => $signups,
         'cta_clicks_by_channel' => $clicks,
+    ]);
+}
+
+// ─────────────────────────────────────────────
+// PERSONAL REPORTS — single-member mood & resource-access usage
+// (individual detail, same trust level as the member admin panel's per-member
+// subscription/payment view — not subject to MIN_COHORT_SIZE, which exists
+// specifically to keep the workplace-trial cohort reports aggregate-only)
+// ─────────────────────────────────────────────
+function handle_user_search(): never
+{
+    $q = trim($_GET['q'] ?? '');
+    if ($q === '') {
+        json_ok(['users' => []]);
+    }
+
+    $escapedQ = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $q);
+    $like = '%' . $escapedQ . '%';
+
+    $stmt = db()->prepare(
+        "SELECT id, email, full_name, is_business_user, business_name
+         FROM users
+         WHERE email LIKE ? ESCAPE '\\\\' OR full_name LIKE ? ESCAPE '\\\\'
+         ORDER BY email
+         LIMIT 20"
+    );
+    $stmt->execute([$like, $like]);
+
+    $users = array_map(static function (array $row): array {
+        return [
+            'id'               => (int) $row['id'],
+            'email'            => $row['email'],
+            'full_name'        => $row['full_name'],
+            'is_business_user' => (bool) $row['is_business_user'],
+            'business_name'    => $row['business_name'],
+        ];
+    }, $stmt->fetchAll());
+
+    json_ok(['users' => $users]);
+}
+
+function handle_personal_usage(array $admin): never
+{
+    $userId = (int) ($_GET['user_id'] ?? 0);
+    $start  = trim($_GET['start'] ?? '');
+    $end    = trim($_GET['end'] ?? '');
+
+    if ($userId <= 0) {
+        json_error(422, 'MISSING_USER', 'user_id is required.');
+    }
+    if (!is_valid_date($start) || !is_valid_date($end)) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start and end must be dates in YYYY-MM-DD format.');
+    }
+    if ($start > $end) {
+        json_error(422, 'INVALID_DATE_RANGE', 'start must not be after end.');
+    }
+
+    $userStmt = db()->prepare('SELECT id, email, full_name, business_name FROM users WHERE id = ?');
+    $userStmt->execute([$userId]);
+    $user = $userStmt->fetch();
+    if (!$user) {
+        json_error(404, 'NOT_FOUND', 'Member not found.');
+    }
+
+    $periodStart = $start . ' 00:00:00';
+    $periodEnd   = $end . ' 23:59:59';
+
+    $moodStmt = db()->prepare(
+        'SELECT mood_score, source_page, checkin_at
+         FROM mood_events
+         WHERE user_id = ? AND checkin_at BETWEEN ? AND ?
+         ORDER BY checkin_at DESC
+         LIMIT 500'
+    );
+    $moodStmt->execute([$userId, $periodStart, $periodEnd]);
+    $moodRecords = array_map(static function (array $row): array {
+        return [
+            'score'       => (int) $row['mood_score'],
+            'source_page' => $row['source_page'],
+            'checkin_at'  => $row['checkin_at'],
+        ];
+    }, $moodStmt->fetchAll());
+
+    $moodSummaryStmt = db()->prepare(
+        'SELECT COUNT(*) AS total_checkins,
+                ROUND(AVG(mood_score), 2) AS avg_score,
+                MIN(mood_score) AS min_score,
+                MAX(mood_score) AS max_score
+         FROM mood_events
+         WHERE user_id = ? AND checkin_at BETWEEN ? AND ?'
+    );
+    $moodSummaryStmt->execute([$userId, $periodStart, $periodEnd]);
+    $moodSummary = $moodSummaryStmt->fetch() ?: [];
+
+    // "resource.issue.ok" fires every time the member opens a PDF/video, so it's the
+    // cleanest single signal for "accessed this resource" (list/topics browsing is not access).
+    $resourceStmt = db()->prepare(
+        "SELECT
+            JSON_UNQUOTE(JSON_EXTRACT(details, '$.resource_key')) AS resource_key,
+            JSON_UNQUOTE(JSON_EXTRACT(details, '$.kind'))         AS kind,
+            JSON_UNQUOTE(JSON_EXTRACT(details, '$.catalog'))      AS catalog,
+            created_at
+         FROM audit_logs
+         WHERE user_id = ?
+           AND action = 'resource.issue.ok'
+           AND created_at BETWEEN ? AND ?
+         ORDER BY created_at DESC
+         LIMIT 500"
+    );
+    $resourceStmt->execute([$userId, $periodStart, $periodEnd]);
+    $resourceRecords = array_map(static function (array $row): array {
+        return [
+            'resource_key' => $row['resource_key'],
+            'kind'         => $row['kind'],
+            'catalog'      => $row['catalog'],
+            'accessed_at'  => $row['created_at'],
+        ];
+    }, $resourceStmt->fetchAll());
+
+    $resourceSummaryStmt = db()->prepare(
+        "SELECT
+            COUNT(*) AS total_opens,
+            COUNT(DISTINCT JSON_UNQUOTE(JSON_EXTRACT(details, '$.resource_key'))) AS unique_resources
+         FROM audit_logs
+         WHERE user_id = ?
+           AND action = 'resource.issue.ok'
+           AND created_at BETWEEN ? AND ?"
+    );
+    $resourceSummaryStmt->execute([$userId, $periodStart, $periodEnd]);
+    $resourceSummary = $resourceSummaryStmt->fetch() ?: [];
+
+    audit('admin.report.personal_usage', $userId, [
+        'start' => $start,
+        'end'   => $end,
+    ], (int) $admin['id']);
+
+    json_ok([
+        'user' => [
+            'id'            => (int) $user['id'],
+            'email'         => $user['email'],
+            'full_name'     => $user['full_name'],
+            'business_name' => $user['business_name'],
+        ],
+        'period' => ['start' => $start, 'end' => $end],
+        'mood' => [
+            'summary' => [
+                'total_checkins' => (int) ($moodSummary['total_checkins'] ?? 0),
+                'avg_score'      => isset($moodSummary['avg_score']) ? (float) $moodSummary['avg_score'] : null,
+                'min_score'      => isset($moodSummary['min_score']) ? (int) $moodSummary['min_score'] : null,
+                'max_score'      => isset($moodSummary['max_score']) ? (int) $moodSummary['max_score'] : null,
+            ],
+            'records' => $moodRecords,
+        ],
+        'resource_access' => [
+            'summary' => [
+                'total_opens'      => (int) ($resourceSummary['total_opens'] ?? 0),
+                'unique_resources' => (int) ($resourceSummary['unique_resources'] ?? 0),
+            ],
+            'records' => $resourceRecords,
+        ],
     ]);
 }
 
