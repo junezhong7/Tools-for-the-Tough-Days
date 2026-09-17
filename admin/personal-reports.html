@@ -29,7 +29,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 <!-- End Meta Pixel Code -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Workplace Trial Reports — Tools for the Tough Days</title>
+  <title>Personal Reports &mdash; Tools for the Tough Days</title>
   <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
   <link rel="stylesheet" href="/assets/theme-unified.css" />
   <style>
@@ -47,8 +47,6 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     }
 
     header.topbar h1 { font-size: 1.1rem; color: var(--ui-teal-dark); }
-    header.topbar nav a { margin-right: 16px; font-size: 0.85rem; color: var(--ui-muted); text-decoration: none; }
-    header.topbar nav a.active { color: var(--ui-teal-dark); font-weight: 700; }
 
     #adminWhoami { font-size: 0.85rem; color: var(--ui-muted); margin-right: 16px; }
 
@@ -110,21 +108,40 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .metric-tile .value { font-size: 1.5rem; font-weight: 700; color: var(--ui-teal-dark); }
     .metric-tile .label { font-size: 0.78rem; color: var(--ui-muted); margin-top: 2px; }
 
-    .insufficient {
-      padding: 20px;
-      text-align: center;
-      color: var(--ui-muted);
-      background: #f6f4ef;
-      border-radius: 10px;
-      font-size: 0.9rem;
-    }
-
     .empty-state { padding: 20px; text-align: center; color: var(--ui-muted); font-size: 0.85rem; }
 
     .report-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-bottom: 20px; }
     .report-table th { text-align: left; padding: 8px 10px; color: var(--ui-muted); font-weight: 600; border-bottom: 1.5px solid var(--ui-border); }
     .report-table td { padding: 8px 10px; border-bottom: 1px solid var(--ui-border); }
     .report-table-title { font-size: 0.85rem; font-weight: 700; color: var(--ui-teal-dark); margin-bottom: 8px; }
+
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-results {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: #fff;
+      border: 1.5px solid var(--ui-border);
+      border-radius: 8px;
+      box-shadow: var(--ui-shadow);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .autocomplete-results.open { display: block; }
+    .autocomplete-results .option {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .autocomplete-results .option:hover { background: var(--ui-teal-light); }
+    .autocomplete-results .option .opt-name { font-weight: 600; color: var(--ui-charcoal); }
+    .autocomplete-results .option .opt-email { color: var(--ui-muted); font-size: 0.78rem; }
+    .autocomplete-results .empty { padding: 8px 12px; color: var(--ui-muted); font-size: 0.82rem; }
+
+    .report-subtitle { font-size: 0.85rem; color: var(--ui-muted); margin-bottom: 14px; }
 
     .quick-range { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .quick-range .btn {
@@ -145,7 +162,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
   <header class="topbar">
-    <h1>Workplace Trial Reports</h1>
+    <h1>Personal Reports</h1>
     <div>
       <span id="adminWhoami"></span>
       <button class="btn" id="logoutBtn">Sign out</button>
@@ -158,56 +175,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </nav>
 
     <div class="card">
-      <h2>Mood slider usage</h2>
+      <h2>Personal usage report</h2>
+      <p class="report-subtitle">Look up a single member's Mood slider history and resource access &mdash; for support and duty-of-care follow-up.</p>
       <div class="field-row">
-        <div class="field">
-          <label for="businessNameInput">Business name</label>
-          <input type="text" id="businessNameInput" list="businessNameOptions" placeholder="Start typing..." autocomplete="off" />
-          <datalist id="businessNameOptions"></datalist>
+        <div class="field autocomplete-wrap">
+          <label for="personalUserInput">Member (email or name)</label>
+          <input type="text" id="personalUserInput" placeholder="Start typing..." autocomplete="off" />
+          <div class="autocomplete-results" id="personalUserResults"></div>
         </div>
         <div class="field">
-          <label for="startInput">Period start</label>
-          <input type="date" id="startInput" />
+          <label for="personalStartInput">Period start</label>
+          <input type="date" id="personalStartInput" />
         </div>
         <div class="field">
-          <label for="endInput">Period end</label>
-          <input type="date" id="endInput" />
+          <label for="personalEndInput">Period end</label>
+          <input type="date" id="personalEndInput" />
         </div>
       </div>
-      <div class="quick-range" data-start="startInput" data-end="endInput">
+      <div class="quick-range" data-start="personalStartInput" data-end="personalEndInput">
         <button type="button" class="btn" data-days="7">Last 7 days</button>
         <button type="button" class="btn" data-days="15">Last 15 days</button>
         <button type="button" class="btn" data-days="30">Last 30 days</button>
         <button type="button" class="btn" data-days="all">All time</button>
       </div>
-      <button class="btn primary" id="runReportBtn">Run report</button>
-      <p class="field-msg error" id="reportError"></p>
+      <button class="btn primary" id="runPersonalReportBtn">Run report</button>
+      <p class="field-msg error" id="personalReportError"></p>
 
-      <div id="reportResult" style="margin-top: 20px;"></div>
-    </div>
-
-    <div class="card">
-      <h2>Channel &amp; campaign performance</h2>
-      <div class="field-row">
-        <div class="field">
-          <label for="channelStartInput">Period start</label>
-          <input type="date" id="channelStartInput" />
-        </div>
-        <div class="field">
-          <label for="channelEndInput">Period end</label>
-          <input type="date" id="channelEndInput" />
-        </div>
-      </div>
-      <div class="quick-range" data-start="channelStartInput" data-end="channelEndInput">
-        <button type="button" class="btn" data-days="7">Last 7 days</button>
-        <button type="button" class="btn" data-days="15">Last 15 days</button>
-        <button type="button" class="btn" data-days="30">Last 30 days</button>
-        <button type="button" class="btn" data-days="all">All time</button>
-      </div>
-      <button class="btn primary" id="runChannelReportBtn">Run report</button>
-      <p class="field-msg error" id="channelReportError"></p>
-
-      <div id="channelReportResult" style="margin-top: 20px;"></div>
+      <div id="personalReportResult" style="margin-top: 20px;"></div>
     </div>
   </main>
 
@@ -254,69 +248,124 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
     });
 
-    function renderResult(data) {
-      var container = document.getElementById('reportResult');
+    function formatDateTime(value) {
+      if (!value) return '\u2014';
+      return new Date(value.replace(' ', 'T') + 'Z').toLocaleString();
+    }
 
-      if (data.insufficient_data) {
-        container.innerHTML = '<div class="insufficient">' + escapeHtml(data.message) + '</div>';
+    // -- Personal usage report --
+    var personalUserDebounce = null;
+    var selectedPersonalUser = null;
+
+    async function searchPersonalUsers(q) {
+      var resultsEl = document.getElementById('personalUserResults');
+      if (!q) {
+        resultsEl.classList.remove('open');
+        resultsEl.innerHTML = '';
         return;
       }
 
-      var m = data.metrics;
-      container.innerHTML =
-        '<div class="metric-grid">' +
-          '<div class="metric-tile"><div class="value">' + m.active_user_count + '</div><div class="label">Active users</div></div>' +
-          '<div class="metric-tile"><div class="value">' + m.total_checkins + '</div><div class="label">Total check-ins</div></div>' +
-          '<div class="metric-tile"><div class="value">' + m.checkin_user_count + '</div><div class="label">Users who checked in with Mood slider</div></div>' +
-          '<div class="metric-tile"><div class="value">' + m.pct_active_users_with_checkin + '%</div><div class="label">Active users who checked in with Mood slider</div></div>' +
-        '</div>';
-    }
-
-    var businessNameDebounce = null;
-
-    async function loadBusinessNameOptions(q) {
-      var params = new URLSearchParams({ action: 'business_names', q: q });
+      var params = new URLSearchParams({ action: 'user_search', q: q });
       var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
       if (!res.ok) return;
       var data = await res.json();
 
-      var datalist = document.getElementById('businessNameOptions');
-      datalist.innerHTML = '';
-      data.business_names.forEach(function (name) {
-        var opt = document.createElement('option');
-        opt.value = name;
-        datalist.appendChild(opt);
+      resultsEl.innerHTML = '';
+      if (!data.users.length) {
+        resultsEl.innerHTML = '<div class="empty">No members match.</div>';
+        resultsEl.classList.add('open');
+        return;
+      }
+
+      data.users.forEach(function (u) {
+        var opt = document.createElement('div');
+        opt.className = 'option';
+        opt.innerHTML =
+          '<div class="opt-name">' + escapeHtml(u.full_name || u.email) + '</div>' +
+          '<div class="opt-email">' + escapeHtml(u.email) + (u.business_name ? ' \u00B7 ' + escapeHtml(u.business_name) : '') + '</div>';
+        opt.addEventListener('click', function () {
+          selectedPersonalUser = u;
+          document.getElementById('personalUserInput').value = u.full_name ? (u.full_name + ' <' + u.email + '>') : u.email;
+          resultsEl.classList.remove('open');
+          resultsEl.innerHTML = '';
+        });
+        resultsEl.appendChild(opt);
       });
+      resultsEl.classList.add('open');
     }
 
-    document.getElementById('businessNameInput').addEventListener('input', function (e) {
-      clearTimeout(businessNameDebounce);
+    document.getElementById('personalUserInput').addEventListener('input', function (e) {
+      selectedPersonalUser = null;
+      clearTimeout(personalUserDebounce);
       var value = e.target.value.trim();
-      businessNameDebounce = setTimeout(function () { loadBusinessNameOptions(value); }, 250);
+      personalUserDebounce = setTimeout(function () { searchPersonalUsers(value); }, 250);
     });
 
-    document.getElementById('businessNameInput').addEventListener('focus', function (e) {
-      if (!e.target.value.trim()) loadBusinessNameOptions('');
+    document.addEventListener('click', function (e) {
+      var wrap = document.getElementById('personalUserInput').closest('.autocomplete-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('personalUserResults').classList.remove('open');
+      }
     });
 
-    async function runReport() {
-      var businessName = document.getElementById('businessNameInput').value.trim();
-      var start = document.getElementById('startInput').value;
-      var end = document.getElementById('endInput').value;
-      var errorEl = document.getElementById('reportError');
-      var resultEl = document.getElementById('reportResult');
+    function renderPersonalReport(data) {
+      var container = document.getElementById('personalReportResult');
+      var moodSummary = data.mood.summary;
+      var resourceSummary = data.resource_access.summary;
+
+      var moodRows = data.mood.records.length
+        ? data.mood.records.map(function (r) {
+            return '<tr><td>' + formatDateTime(r.checkin_at) + '</td><td>' + r.score + '</td><td>' + escapeHtml(r.source_page || '\u2014') + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="3" class="empty-state">No Mood slider check-ins for this period</td></tr>';
+
+      var resourceRows = data.resource_access.records.length
+        ? data.resource_access.records.map(function (r) {
+            return '<tr><td>' + formatDateTime(r.accessed_at) + '</td><td>' + escapeHtml(r.resource_key || '\u2014') + '</td><td>' + escapeHtml(r.kind || '\u2014') + '</td><td>' + escapeHtml(r.catalog || '\u2014') + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="4" class="empty-state">No resource access for this period</td></tr>';
+
+      container.innerHTML =
+        '<p class="report-subtitle"><strong>' + escapeHtml(data.user.full_name || data.user.email) + '</strong> \u00B7 ' + escapeHtml(data.user.email) +
+          (data.user.business_name ? ' \u00B7 ' + escapeHtml(data.user.business_name) : '') + '</p>' +
+        '<div class="metric-grid">' +
+          '<div class="metric-tile"><div class="value">' + moodSummary.total_checkins + '</div><div class="label">Mood check-ins</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.avg_score != null ? moodSummary.avg_score : '\u2014') + '</div><div class="label">Average mood score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + (moodSummary.min_score != null ? moodSummary.min_score : '\u2014') + ' / ' + (moodSummary.max_score != null ? moodSummary.max_score : '\u2014') + '</div><div class="label">Min / Max score</div></div>' +
+          '<div class="metric-tile"><div class="value">' + resourceSummary.total_opens + '</div><div class="label">Resources opened</div></div>' +
+          '<div class="metric-tile"><div class="value">' + resourceSummary.unique_resources + '</div><div class="label">Unique resources</div></div>' +
+        '</div>' +
+        '<div style="margin-top:20px;">' +
+          '<div class="report-table-title">Mood slider records</div>' +
+          '<table class="report-table"><tr><th>Time</th><th>Score</th><th>Page</th></tr>' + moodRows + '</table>' +
+        '</div>' +
+        '<div>' +
+          '<div class="report-table-title">Resource access</div>' +
+          '<table class="report-table"><tr><th>Time</th><th>Resource</th><th>Kind</th><th>Catalog</th></tr>' + resourceRows + '</table>' +
+        '</div>';
+    }
+
+    async function runPersonalReport() {
+      var start = document.getElementById('personalStartInput').value;
+      var end = document.getElementById('personalEndInput').value;
+      var errorEl = document.getElementById('personalReportError');
+      var resultEl = document.getElementById('personalReportResult');
 
       errorEl.textContent = '';
       resultEl.innerHTML = '';
 
-      if (!businessName || !start || !end) {
-        errorEl.textContent = 'Business name, period start, and period end are all required.';
+      if (!selectedPersonalUser) {
+        errorEl.textContent = 'Pick a member from the search results first.';
+        return;
+      }
+      if (!start || !end) {
+        errorEl.textContent = 'Period start and end are both required.';
         return;
       }
 
       var params = new URLSearchParams({
-        action: 'mood_usage',
-        business_name: businessName,
+        action: 'personal_usage',
+        user_id: selectedPersonalUser.id,
         start: start,
         end: end,
       });
@@ -329,56 +378,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         return;
       }
 
-      renderResult(data);
+      renderPersonalReport(data);
     }
 
-    document.getElementById('runReportBtn').addEventListener('click', runReport);
-
-    function renderChannelTable(title, list, cols, labels) {
-      var rows = list.length
-        ? list.map(function (r) {
-            return '<tr>' + cols.map(function (c) { return '<td>' + escapeHtml(r[c]) + '</td>'; }).join('') + '</tr>';
-          }).join('')
-        : '<tr><td colspan="' + cols.length + '" class="empty-state">No data for this period</td></tr>';
-
-      return (
-        '<div class="report-table-title">' + escapeHtml(title) + '</div>' +
-        '<table class="report-table">' +
-          '<tr>' + labels.map(function (l) { return '<th>' + escapeHtml(l) + '</th>'; }).join('') + '</tr>' +
-          rows +
-        '</table>'
-      );
-    }
-
-    async function runChannelReport() {
-      var start = document.getElementById('channelStartInput').value;
-      var end = document.getElementById('channelEndInput').value;
-      var errorEl = document.getElementById('channelReportError');
-      var resultEl = document.getElementById('channelReportResult');
-
-      errorEl.textContent = '';
-      resultEl.innerHTML = '';
-
-      if (!start || !end) {
-        errorEl.textContent = 'Period start and end are both required.';
-        return;
-      }
-
-      var params = new URLSearchParams({ action: 'channel_summary', start: start, end: end });
-      var res = await fetch('/api/admin/reports.php?' + params.toString(), { credentials: 'same-origin' });
-      var data = await res.json();
-
-      if (!res.ok) {
-        errorEl.textContent = data.message || 'Could not load this report.';
-        return;
-      }
-
-      resultEl.innerHTML =
-        renderChannelTable('Signups by source / campaign', data.signups_by_channel, ['utm_source', 'utm_campaign', 'signup_count'], ['Source', 'Campaign', 'Signups']) +
-        renderChannelTable('CTA clicks by source', data.cta_clicks_by_channel, ['action', 'utm_source', 'click_count'], ['CTA', 'Source', 'Clicks']);
-    }
-
-    document.getElementById('runChannelReportBtn').addEventListener('click', runChannelReport);
+    document.getElementById('runPersonalReportBtn').addEventListener('click', runPersonalReport);
 
     document.getElementById('logoutBtn').addEventListener('click', function () {
       fetch('/api/admin/auth.php?action=logout', { method: 'POST', credentials: 'same-origin' })
