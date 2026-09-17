@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/db.php';
+
 // ── Vision6 form endpoint — exact action= URL from the form tag ───────────────
 const VISION6_SUBSCRIBE_URL = 'https://app4.vision6.com.au/em/forms/subscribe.php'
     . '?db=993085&s=998863&a=1174284&k=1%2Cmky8Uq9M4_8whMu-oDGjW7AOjDjMCG0JKE2fD2b5DFE&wt=1';
@@ -67,4 +69,28 @@ function submit_to_vision6(string $email, string $fullName = ''): void
             $curlErr ?: substr((string) $response, 0, 200)
         ));
     }
+}
+
+/**
+ * Unsubscribes an email address from the newsletter.
+ *
+ * Clears newsletter_opt_in on any matching `users` row and `lead_magnet_signups`
+ * rows, so we stop treating this address as subscribed on our side. This does
+ * NOT call Vision6 — we only hold the public webform submit key (above), not
+ * an API key that can manage list membership, so removal from the actual
+ * Vision6 list still happens via the unsubscribe link Vision6 inserts into
+ * every campaign email it sends.
+ */
+function unsubscribe_from_newsletter(string $email): void
+{
+    $email = strtolower(trim($email));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return;
+    }
+
+    db()->prepare('UPDATE users SET newsletter_opt_in = 0 WHERE email = ?')
+        ->execute([$email]);
+
+    db()->prepare('UPDATE lead_magnet_signups SET newsletter_opt_in = 0 WHERE email = ?')
+        ->execute([$email]);
 }

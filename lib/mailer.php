@@ -343,10 +343,12 @@ function send_free_guide_email(string $toEmail): bool
         . "You can try it free for fourteen days (no card required) and see if it fits into your week.\n"
         . $registerUrl . "\n\n"
         . "One small step at a time.\n\n"
-        . "Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days";
+        . "Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days\n\n"
+        . "Unsubscribe from our newsletter: " . $siteUrl . "/unsubscribe.html?email=" . rawurlencode($toEmail);
 
     $safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     $safeRegisterUrl = htmlspecialchars($registerUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeUnsubUrl = htmlspecialchars($siteUrl . '/unsubscribe.html?email=' . rawurlencode($toEmail), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     $htmlBody = "<p>Hi {$safeName},</p>"
         . '<p>Thanks for downloading the free guide. I hope you got some valuable tips, and even one small thing you could try this week.</p>'
         . '<p>If you want to keep going, Tools for the Tough Days gives you a simple way to check in on how you\'re really tracking. '
@@ -356,7 +358,8 @@ function send_free_guide_email(string $toEmail): bool
         . '<p>You can try it free for fourteen days (no card required) and see if it fits into your week.<br>'
         . '<a href="' . $safeRegisterUrl . '">' . $safeRegisterUrl . '</a></p>'
         . '<p>One small step at a time.</p>'
-        . '<p>Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days</p>';
+        . '<p>Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days</p>'
+        . '<p style="font-size:12px;color:#999;"><a href="' . $safeUnsubUrl . '">Unsubscribe from our newsletter</a>.</p>';
 
     return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, [
         [
