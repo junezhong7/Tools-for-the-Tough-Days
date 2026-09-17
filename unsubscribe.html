@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsubscribe — Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --charcoal:      #1a2e2f;
+      --warm-grey:     #4a6566;
+      --sand:          #e8f4f4;
+      --cream:         #f7fbfb;
+      --white:         #ffffff;
+      --teal:          #26777B;
+      --teal-hover:    #1f6468;
+      --teal-dark:     #1a5558;
+      --teal-light:    #e8f4f4;
+      --border:        #d0e6e7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--charcoal); font-size: 15px; line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .crisis-bar { background: #aada37; color: var(--teal-dark); padding: 8px 20px; text-align: center; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; letter-spacing: 0.01em; }
+    .crisis-bar a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
+    .crisis-bar a:hover { text-decoration: underline; }
+
+    .main-wrap { max-width: 460px; margin: 0 auto; padding: 60px 20px; flex: 1; width: 100%; }
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 14px 40px rgba(26,46,47,0.10); padding: 36px 32px; text-align: center; }
+    .card img.logo { height: 44px; margin-bottom: 20px; }
+    .card h1 { font-family: 'Lora', serif; font-size: 21px; color: var(--teal-dark); margin-bottom: 10px; font-weight: 600; }
+    .card p.lead { font-size: 14px; color: var(--warm-grey); margin-bottom: 22px; }
+
+    label.field-label { display: block; font-size: 13px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; text-align: left; }
+    input[type="email"] {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px;
+      font-family: 'Nunito', sans-serif; font-size: 15px; color: var(--charcoal); margin-bottom: 16px;
+    }
+    input[type="email"]:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(38,119,123,0.12); }
+
+    .btn-submit {
+      width: 100%; background: var(--teal); color: #fff; border: none; padding: 13px 18px;
+      border-radius: 999px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-submit:hover:not(:disabled) { background: var(--teal-hover); }
+    .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    .form-message { font-size: 13px; margin-top: 12px; display: none; padding: 10px 12px; border-radius: 8px; text-align: left; }
+    .form-message.error { display: block; background: #fdeceb; color: #a83232; }
+
+    .success-state { display: none; }
+    .success-state h1 { margin-bottom: 10px; }
+
+    .trust-line { font-size: 12px; color: var(--warm-grey); margin-top: 18px; }
+    .trust-line a { color: var(--warm-grey); }
+
+    footer.mini-footer { text-align: center; padding: 24px 20px 40px; font-size: 12px; color: var(--warm-grey); }
+    footer.mini-footer a { color: var(--warm-grey); }
+  </style>
+</head>
+<body>
+
+  <div class="crisis-bar">
+    <span>If things feel urgent right now </span>
+    <a href="tel:131114">Lifeline 13 11 14</a>
+    <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000">Emergency 000</a>
+  </div>
+
+  <div class="main-wrap">
+    <div class="card">
+      <a href="index.html"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" class="logo" /></a>
+
+      <form id="unsubForm" novalidate>
+        <h1>Unsubscribe from our newsletter</h1>
+        <p class="lead">Enter the email address you subscribed with, and we'll stop sending you newsletter emails.</p>
+
+        <label class="field-label" for="unsubEmail">Email address</label>
+        <input type="email" id="unsubEmail" name="email" placeholder="you@example.com" required autocomplete="email" />
+
+        <button type="submit" class="btn-submit" id="submitBtn">Unsubscribe me</button>
+
+        <div class="form-message" id="formMessage"></div>
+      </form>
+
+      <div class="success-state" id="successState">
+        <h1>You're unsubscribed</h1>
+        <p class="lead" id="successText">You won't receive newsletter emails from us going forward.</p>
+        <p class="trust-line">Changed your mind? You can resubscribe any time from <a href="support.html">our site</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mini-footer">
+    &copy; 2026 Tools for the Tough Days &middot; Powered by Emotional Balance &middot; ABN 69 142 299 250
+    &middot; <a href="privacy-policy.html">Privacy</a>
+  </footer>
+
+  <script>
+    (function () {
+      var form = document.getElementById('unsubForm');
+      var submitBtn = document.getElementById('submitBtn');
+      var messageEl = document.getElementById('formMessage');
+      var successState = document.getElementById('successState');
+      var successText = document.getElementById('successText');
+      var emailInput = document.getElementById('unsubEmail');
+
+      var params = new URLSearchParams(window.location.search);
+      var prefill = params.get('email');
+      if (prefill) emailInput.value = prefill;
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var email = emailInput.value.trim();
+
+        messageEl.className = 'form-message';
+        messageEl.textContent = '';
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          messageEl.className = 'form-message error';
+          messageEl.textContent = 'Please enter a valid email address.';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Unsubscribing...';
+
+        fetch('/api/newsletter-unsubscribe.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ email: email }),
+        })
+          .then(function (response) {
+            return response.json().catch(function () { return {}; }).then(function (data) {
+              return { ok: response.ok, data: data };
+            });
+          })
+          .then(function (result) {
+            if (!result.ok) {
+              throw new Error(result.data.message || 'Something went wrong. Please try again.');
+            }
+
+            form.style.display = 'none';
+            successText.textContent = email + ' won\'t receive newsletter emails from us going forward.';
+            successState.style.display = 'block';
+          })
+          .catch(function (error) {
+            messageEl.className = 'form-message error';
+            messageEl.textContent = error.message || 'Something went wrong. Please try again.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Unsubscribe me';
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
