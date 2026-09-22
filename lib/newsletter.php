@@ -72,6 +72,28 @@ function submit_to_vision6(string $email, string $fullName = ''): void
 }
 
 /**
+ * Marks an email address as newsletter-subscribed everywhere we track it.
+ *
+ * `users.newsletter_opt_in` and `lead_magnet_signups.newsletter_opt_in` are
+ * independent flags (free-guide signup vs. account preference), so opting in
+ * on one surface (free guide form, registration checkbox, account preferences
+ * toggle) would otherwise leave the other out of sync. This brings both up to
+ * date for the given email, if a matching row exists on either table.
+ */
+function subscribe_to_newsletter(string $email): void
+{
+    $email = strtolower(trim($email));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return;
+    }
+
+    db()->prepare('UPDATE users SET newsletter_opt_in = 1 WHERE email = ? AND newsletter_opt_in = 0')
+        ->execute([$email]);
+    db()->prepare('UPDATE lead_magnet_signups SET newsletter_opt_in = 1 WHERE email = ? AND newsletter_opt_in = 0')
+        ->execute([$email]);
+}
+
+/**
  * Unsubscribes an email address from the newsletter.
  *
  * Clears newsletter_opt_in on any matching `users` row and `lead_magnet_signups`

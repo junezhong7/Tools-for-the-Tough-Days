@@ -159,6 +159,15 @@ function handle_save(int $userId, array $body): never
         db()->prepare('UPDATE users SET newsletter_opt_in = ? WHERE id = ?')
             ->execute([$newsletterOptIn, $userId]);
 
+        // Keep lead_magnet_signups (free-guide opt-in) in sync with the account-level preference
+        if ($userRow) {
+            if ($newsletterOptIn) {
+                subscribe_to_newsletter((string) $userRow['email']);
+            } else {
+                unsubscribe_from_newsletter((string) $userRow['email']);
+            }
+        }
+
         // Submit to Vision6 only when user switches from opted-out → opted-in
         if ($newsletterOptIn && $userRow && !(bool) $userRow['newsletter_opt_in']) {
             submit_to_vision6((string) $userRow['email'], (string) ($userRow['full_name'] ?? ''));
