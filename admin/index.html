@@ -183,6 +183,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <option value="none">No subscription</option>
       </select>
       <a class="btn" id="exportBtn" href="#">Export CSV</a>
+      <button class="btn" id="copyEmailsBtn" type="button">Copy emails (Outlook)</button>
+      <span id="copyEmailsMsg" style="margin-left:8px; font-size:0.85rem;"></span>
     </div>
 
     <div id="tableWrap">
@@ -438,6 +440,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       state.page = 1;
       loadMembers();
     });
+
+    function parseCsv(text) {
+      var rows = [], row = [], field = '', inQuotes = false;
+      for (var i = 0; i < text.length; i++) {
+        var c = text[i];
+        if (inQuotes) {
+          if (c === '"') {
+            if (text[i + 1] === '"') { field += '"'; i++; }
+            else { inQuotes = false; }
+          } else {
+            field += c;
+          }
+        } else if (c === '"') {
+          inQuotes = true;
+        } else if (c === ',') {
+          row.push(field); field = '';
+        } else if (c === '\r') {
+          // skip
+        } else if (c === '\n') {
+          row.push(field); rows.push(row); row = []; field = '';
+        } else {
+          field += c;
+        }
+      }
+      if (field.length || row.length) { row.push(field); rows.push(row); }
+      return rows;
+    }
+
+    async function copyFilteredEmails() {
+      var msg = document.getElementById('copyEmailsMsg');
+      msg.textContent = 'Loading…';
+      try {
+        var res = await fetch('/api/admin/export.php?' + buildQuery(), { credentials: 'same-origin' });
+        if (!res.ok) throw new Error('Export request failed');
+        var text = await res.text();
+        var rows = parseCsv(text);
+        var emails = rows.slice(1)
+          .map(function (r) { return (r[1] || '').trim(); })
+          .filter(Boolean);
+        var joined = emails.join('; ');
+        await navigator.clipboard.writeText(joined);
+        msg.textContent = 'Copied ' + emails.length + ' email' + (emails.length === 1 ? '' : 's') + ' (Outlook-ready)';
+      } catch (err) {
+        msg.textContent = 'Copy failed — see console.';
+        console.error(err);
+      }
+      setTimeout(function () { msg.textContent = ''; }, 5000);
+    }
+
+    document.getElementById('copyEmailsBtn').addEventListener('click', copyFilteredEmails);
 
     document.getElementById('prevPageBtn').addEventListener('click', function () {
       if (state.page > 1) { state.page -= 1; loadMembers(); }
