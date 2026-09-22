@@ -45,7 +45,13 @@ $stmt = db()->prepare(
      FROM user_preferences up
      JOIN users u ON u.id = up.user_id
      WHERE up.reminders_enabled = 1
-       AND u.status = "active"'
+       AND u.status = "active"
+       AND EXISTS (
+           SELECT 1 FROM subscriptions s
+           WHERE s.user_id = up.user_id
+             AND s.status IN ("active", "trialing", "past_due")
+             AND (s.current_period_end IS NULL OR s.current_period_end > NOW())
+       )'
 );
 $stmt->execute();
 $prefs = $stmt->fetchAll();
