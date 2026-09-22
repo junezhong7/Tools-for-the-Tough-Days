@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8" />
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -27,7 +28,6 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 </noscript>
 <!-- End Meta Pixel Code -->
-  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Account, Tools for the Tough Days</title>
   <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
@@ -324,6 +324,19 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .mood-chart-container { margin-bottom: 20px; }
     .mood-chart-wrapper { position: relative; height: 320px; background: var(--sand); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
     .mood-chart-wrapper canvas { max-height: 280px; }
+
+    /* MOOD GATE (no active subscription) */
+    .mood-card-wrap { position: relative; }
+    .mood-card-wrap.is-locked #moodContent { filter: blur(7px); pointer-events: none; user-select: none; }
+    .mood-lock-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      text-align: center; padding: 24px; border-radius: 12px;
+      background: rgba(250, 248, 244, 0.55);
+    }
+    .mood-card-wrap.is-locked .mood-lock-overlay { display: flex; }
+    .mood-lock-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--teal-dark); }
+    .mood-lock-copy { font-size: 13px; color: var(--warm-grey); max-width: 320px; line-height: 1.5; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="assets/theme-unified.css" />
@@ -363,7 +376,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="card-head">
           <div class="card-title">Mood Tracker</div>
         </div>
-        <div id="moodContent"></div>
+        <div class="mood-card-wrap" id="moodCardWrap">
+          <div id="moodContent"></div>
+          <div class="mood-lock-overlay" id="moodLockOverlay">
+            <div class="mood-lock-title">Subscribe to unlock your Mood Tracker</div>
+            <div class="mood-lock-copy">Your check-ins are still being recorded. Subscribe to see your mood history, trends, and follow-up alerts.</div>
+            <button class="btn-nav btn-teal" type="button" id="btnMoodUnlock">Browse Plans</button>
+          </div>
+        </div>
       </div>
 
       <!-- SUBSCRIPTION -->
@@ -602,6 +622,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         btn.textContent = isOpen ? 'Hide Plans' : 'Browse Plans';
       });
+
+      const unlockBtn = document.getElementById('btnMoodUnlock');
+      if (unlockBtn) {
+        unlockBtn.addEventListener('click', () => {
+          if (!panel.classList.contains('open')) {
+            btn.click();
+          }
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
     }
 
     async function loadDashboard() {
@@ -629,6 +659,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         renderSubscriptions(data.subscriptions);
         renderPayments(data.payments);
         renderMoodTracker(data.mood || null);
+        applyMoodGate(!!data.has_active_subscription);
 
       } catch (e) {
         document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
@@ -699,6 +730,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </tr>`).join('')}
         </tbody>
       </table>`;
+    }
+
+    function applyMoodGate(hasActiveSubscription) {
+      const wrap = document.getElementById('moodCardWrap');
+      if (!wrap) return;
+      wrap.classList.toggle('is-locked', !hasActiveSubscription);
     }
 
     function renderMoodTracker(moodPayload) {
