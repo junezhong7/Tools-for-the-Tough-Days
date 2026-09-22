@@ -13,17 +13,22 @@ require_once __DIR__ . '/../../lib/admin_auth.php';
 
 $admin = require_admin_auth();
 
-$q      = trim($_GET['q'] ?? '');
-$status = $_GET['status'] ?? 'all';
+$q          = trim($_GET['q'] ?? '');
+$status     = $_GET['status'] ?? 'all';
+$newsletter = $_GET['newsletter'] ?? 'all';
 
 $validStatuses = ['active', 'cancelled', 'past_due', 'unpaid', 'trialing', 'paused', 'pending'];
 if ($status !== 'all' && $status !== 'none' && !in_array($status, $validStatuses, true)) {
     json_error(422, 'INVALID_STATUS', 'Unknown subscription status filter.');
 }
 
-[$where, $params] = build_export_filter($q, $status);
+if (!in_array($newsletter, ['all', 'yes', 'no'], true)) {
+    json_error(422, 'INVALID_NEWSLETTER', 'Unknown newsletter filter.');
+}
 
-audit('admin.member.export', null, ['q' => $q, 'status' => $status], (int) $admin['id']);
+[$where, $params] = build_export_filter($q, $status, $newsletter);
+
+audit('admin.member.export', null, ['q' => $q, 'status' => $status, 'newsletter' => $newsletter], (int) $admin['id']);
 
 $filename = 'members-export-' . date('Y-m-d') . '.csv';
 header('Content-Type: text/csv; charset=utf-8');
@@ -90,7 +95,7 @@ exit;
  * Builds a WHERE clause + bound params array for the search/status filter.
  * @return array{0:string,1:array}
  */
-function build_export_filter(string $q, string $status): array
+function build_export_filter(string $q, string $status, string $newsletter = 'all'): array
 {
     $conditions = ['1=1'];
     $params     = [];
@@ -107,6 +112,12 @@ function build_export_filter(string $q, string $status): array
     } elseif ($status !== 'all') {
         $conditions[] = 's.status = ?';
         $params[] = $status;
+    }
+
+    if ($newsletter === 'yes') {
+        $conditions[] = 'u.newsletter_opt_in = 1';
+    } elseif ($newsletter === 'no') {
+        $conditions[] = 'u.newsletter_opt_in = 0';
     }
 
     return [implode(' AND ', $conditions), $params];
