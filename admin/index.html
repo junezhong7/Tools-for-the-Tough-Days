@@ -182,6 +182,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <option value="cancelled">Cancelled</option>
         <option value="none">No subscription</option>
       </select>
+      <select id="newsletterFilter">
+        <option value="all">Newsletter: all</option>
+        <option value="yes">Newsletter: subscribed</option>
+        <option value="no">Newsletter: not subscribed</option>
+      </select>
       <a class="btn" id="exportBtn" href="#">Export CSV</a>
       <button class="btn" id="copyEmailsBtn" type="button">Copy emails (Outlook)</button>
       <span id="copyEmailsMsg" style="margin-left:8px; font-size:0.85rem;"></span>
@@ -258,7 +263,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <script src="/admin/admin-guard.js"></script>
   <script>
-    var state = { q: '', status: 'all', page: 1, pageSize: 25, totalPages: 1 };
+    var state = { q: '', status: 'all', newsletter: 'all', page: 1, pageSize: 25, totalPages: 1 };
     var currentMemberId = null;
     var searchDebounce = null;
 
@@ -276,6 +281,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var params = new URLSearchParams(Object.assign({
         q: state.q,
         status: state.status,
+        newsletter: state.newsletter,
         page: state.page,
         page_size: state.pageSize,
       }, extra || {}));
@@ -437,6 +443,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     document.getElementById('statusFilter').addEventListener('change', function (e) {
       state.status = e.target.value;
+      state.page = 1;
+      loadMembers();
+    });
+
+    document.getElementById('newsletterFilter').addEventListener('change', function (e) {
+      state.newsletter = e.target.value;
       state.page = 1;
       loadMembers();
     });
