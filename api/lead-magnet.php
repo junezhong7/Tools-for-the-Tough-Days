@@ -75,6 +75,7 @@ try {
 
 if ($newsletterOptIn) {
     submit_to_vision6($email); // best-effort; errors are logged, never thrown
+    subscribe_to_newsletter($email); // keep users.newsletter_opt_in in sync if this email already has an account
 }
 
 $emailSent = send_free_guide_email($email);

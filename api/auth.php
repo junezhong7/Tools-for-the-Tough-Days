@@ -166,6 +166,7 @@ function handle_register(array $body): never
 
         if ($newsletterOptIn) {
             submit_to_vision6($email, $fullName);
+            subscribe_to_newsletter($email); // keep lead_magnet_signups in sync if this email signed up for the free guide before
         }
 
         json_ok([
@@ -366,6 +367,7 @@ function handle_google_auth(array $body): never
 
         if ($newsletterOptIn) {
             submit_to_vision6($email, $fullName ?: '');
+            subscribe_to_newsletter($email); // keep lead_magnet_signups in sync if this email signed up for the free guide before
         }
 
         json_ok([
@@ -513,6 +515,7 @@ function handle_facebook_auth(array $body): never
 
         if ($newsletterOptIn) {
             submit_to_vision6($email, $fullName ?: '');
+            subscribe_to_newsletter($email); // keep lead_magnet_signups in sync if this email signed up for the free guide before
         }
 
         json_ok([
