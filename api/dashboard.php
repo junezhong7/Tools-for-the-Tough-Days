@@ -31,6 +31,17 @@ $subStmt = db()->prepare(
 $subStmt->execute([$userId]);
 $subscriptions = $subStmt->fetchAll();
 
+$activeSubStmt = db()->prepare(
+    'SELECT 1
+     FROM subscriptions
+     WHERE user_id = ?
+       AND status IN ("active", "trialing", "past_due")
+       AND (current_period_end IS NULL OR current_period_end > NOW())
+     LIMIT 1'
+);
+$activeSubStmt->execute([$userId]);
+$hasActiveSubscription = (bool) $activeSubStmt->fetchColumn();
+
 // Recent payments (last 20)
 $payStmt = db()->prepare(
     'SELECT id, amount_cents, currency, status, description, created_at
@@ -132,4 +143,5 @@ json_ok([
     'subscriptions' => $subscriptions,
     'payments'      => $payments,
     'mood'          => $mood,
+    'has_active_subscription' => $hasActiveSubscription,
 ]);
