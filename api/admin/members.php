@@ -2,8 +2,9 @@
 /**
  * Tools for the Tough Days — Admin Members API
  *
- * GET /api/admin/members.php                          list + search + pagination
- * GET /api/admin/members.php?action=detail&member_id=N single member + full history
+ * GET /api/admin/members.php                                 list + search + pagination
+ * GET /api/admin/members.php?action=detail&member_id=N        single member + full history
+ * GET /api/admin/members.php?action=unregistered_newsletter    free-guide leads with no account
  */
 
 declare(strict_types=1);
@@ -25,6 +26,9 @@ switch ($action) {
         break;
     case 'detail':
         handle_detail();
+        break;
+    case 'unregistered_newsletter':
+        handle_unregistered_newsletter();
         break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
@@ -143,6 +147,37 @@ function format_member_row(array $row): array
             'is_stripe_managed'    => $row['stripe_subscription_id'] !== null,
         ] : null,
     ];
+}
+
+// ─────────────────────────────────────────────
+// UNREGISTERED NEWSLETTER LEADS
+// (free-guide signups opted into the newsletter with no matching users row)
+// ─────────────────────────────────────────────
+function handle_unregistered_newsletter(): never
+{
+    $q = trim($_GET['q'] ?? '');
+
+    $conditions = ['l.newsletter_opt_in = 1', 'NOT EXISTS (SELECT 1 FROM users u WHERE u.email = l.email)'];
+    $params     = [];
+
+    if ($q !== '') {
+        $conditions[] = 'l.email LIKE ?';
+        $params[] = '%' . $q . '%';
+    }
+
+    $where = implode(' AND ', $conditions);
+
+    $stmt = db()->prepare(
+        "SELECT DISTINCT l.email
+         FROM lead_magnet_signups l
+         WHERE {$where}
+         ORDER BY l.email ASC
+         LIMIT 5000"
+    );
+    $stmt->execute($params);
+    $emails = array_column($stmt->fetchAll(), 'email');
+
+    json_ok(['emails' => $emails, 'total' => count($emails)]);
 }
 
 // ─────────────────────────────────────────────

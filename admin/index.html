@@ -215,6 +215,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span id="pageInfo"></span>
       <button class="btn" id="nextPageBtn">Next &rarr;</button>
     </div>
+
+    <div id="leadsOnlySection" style="display:none; margin-top:24px; padding:20px; background:#fff; border-radius:10px; box-shadow: var(--ui-shadow);">
+      <h3 style="font-size:0.95rem; color: var(--ui-teal-dark); margin-bottom:6px;">Free guide subscribers without an account</h3>
+      <p class="modal-sub" id="leadsOnlyMsg" style="margin-bottom:12px;"></p>
+      <button class="btn" id="copyLeadsOnlyBtn" type="button" style="display:none;">Copy emails (Outlook)</button>
+      <span id="copyLeadsOnlyMsg" style="margin-left:8px; font-size:0.85rem;"></span>
+      <div id="leadsOnlyList" style="margin-top:12px; max-height:240px; overflow-y:auto; font-size:0.85rem; line-height:1.7; color: var(--ui-charcoal);"></div>
+    </div>
   </main>
 
   <!-- Member detail / actions modal -->
@@ -293,6 +301,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!res.ok) return;
       var data = await res.json();
       renderMembers(data);
+      loadLeadsOnlySection();
+    }
+
+    async function loadLeadsOnlySection() {
+      var section = document.getElementById('leadsOnlySection');
+      var msg = document.getElementById('leadsOnlyMsg');
+      var list = document.getElementById('leadsOnlyList');
+      var copyBtn = document.getElementById('copyLeadsOnlyBtn');
+
+      if (state.newsletter !== 'yes') {
+        section.style.display = 'none';
+        return;
+      }
+
+      section.style.display = 'block';
+      msg.textContent = 'Loading…';
+      list.innerHTML = '';
+      copyBtn.style.display = 'none';
+      copyBtn.dataset.emails = '';
+
+      try {
+        var params = new URLSearchParams({ action: 'unregistered_newsletter', q: state.q });
+        var res = await fetch('/api/admin/members.php?' + params.toString(), { credentials: 'same-origin' });
+        if (!res.ok) throw new Error('Request failed');
+        var data = await res.json();
+        var emails = data.emails || [];
+
+        msg.textContent = emails.length
+          ? emails.length + ' free-guide subscriber' + (emails.length === 1 ? '' : 's') + ' opted into the newsletter but never created an account:'
+          : 'No free-guide subscribers without an account match this filter.';
+        list.innerHTML = emails.map(function (e) { return escapeHtml(e); }).join('<br>');
+
+        if (emails.length) {
+          copyBtn.style.display = 'inline-block';
+          copyBtn.dataset.emails = JSON.stringify(emails);
+        }
+      } catch (err) {
+        msg.textContent = 'Failed to load — see console.';
+        console.error(err);
+      }
     }
 
     function renderMembers(data) {
@@ -502,6 +550,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     document.getElementById('copyEmailsBtn').addEventListener('click', copyFilteredEmails);
+
+    document.getElementById('copyLeadsOnlyBtn').addEventListener('click', async function () {
+      var msgEl = document.getElementById('copyLeadsOnlyMsg');
+      try {
+        var emails = JSON.parse(this.dataset.emails || '[]');
+        await navigator.clipboard.writeText(emails.join('; '));
+        msgEl.textContent = 'Copied ' + emails.length + ' email' + (emails.length === 1 ? '' : 's') + ' (Outlook-ready)';
+      } catch (err) {
+        msgEl.textContent = 'Copy failed — see console.';
+        console.error(err);
+      }
+      setTimeout(function () { msgEl.textContent = ''; }, 5000);
+    });
 
     document.getElementById('prevPageBtn').addEventListener('click', function () {
       if (state.page > 1) { state.page -= 1; loadMembers(); }
