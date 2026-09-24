@@ -5,6 +5,7 @@
  * GET /api/admin/members.php                                 list + search + pagination
  * GET /api/admin/members.php?action=detail&member_id=N        single member + full history
  * GET /api/admin/members.php?action=unregistered_newsletter    free-guide leads with no account
+ * GET /api/admin/members.php?action=free_guide_no_newsletter   free-guide leads not on the newsletter
  */
 
 declare(strict_types=1);
@@ -29,6 +30,9 @@ switch ($action) {
         break;
     case 'unregistered_newsletter':
         handle_unregistered_newsletter();
+        break;
+    case 'free_guide_no_newsletter':
+        handle_free_guide_no_newsletter();
         break;
     default:
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
@@ -159,6 +163,40 @@ function handle_unregistered_newsletter(): never
 
     $conditions = ['l.newsletter_opt_in = 1', 'NOT EXISTS (SELECT 1 FROM users u WHERE u.email = l.email)'];
     $params     = [];
+
+    if ($q !== '') {
+        $conditions[] = 'l.email LIKE ?';
+        $params[] = '%' . $q . '%';
+    }
+
+    $where = implode(' AND ', $conditions);
+
+    $stmt = db()->prepare(
+        "SELECT DISTINCT l.email
+         FROM lead_magnet_signups l
+         WHERE {$where}
+         ORDER BY l.email ASC
+         LIMIT 5000"
+    );
+    $stmt->execute($params);
+    $emails = array_column($stmt->fetchAll(), 'email');
+
+    json_ok(['emails' => $emails, 'total' => count($emails)]);
+}
+
+// ─────────────────────────────────────────────
+// FREE GUIDE LEADS NOT ON THE NEWSLETTER
+// (downloaded the guide but never opted in — on either table)
+// ─────────────────────────────────────────────
+function handle_free_guide_no_newsletter(): never
+{
+    $q = trim($_GET['q'] ?? '');
+
+    $conditions = [
+        'l.newsletter_opt_in = 0',
+        'NOT EXISTS (SELECT 1 FROM users u WHERE u.email = l.email AND u.newsletter_opt_in = 1)',
+    ];
+    $params = [];
 
     if ($q !== '') {
         $conditions[] = 'l.email LIKE ?';
