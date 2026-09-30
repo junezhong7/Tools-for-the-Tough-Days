@@ -275,6 +275,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (window.gtag) {
               gtag('event', 'generate_lead', { method: 'free_guide' });
             }
+
+            if (window.fbq) {
+              // Manual advanced matching: the Pixel hashes the email (SHA-256) in the browser before sending.
+              fbq('init', '1022504650555050', { em: email });
+              fbq('track', 'Lead', { content_name: 'free_guide' }, {
+                eventID: 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10),
+              });
+            }
           })
           .catch(function (error) {
             messageEl.className = 'form-message error';
