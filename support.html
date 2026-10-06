@@ -237,7 +237,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; margin-bottom: 20px; }
     .hero-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
     .hero-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 700; margin-bottom: 16px; }
-    .hero h1 { font-family: 'Lora', serif; font-size: clamp(28px, 4vw, 44px); color: #fff; line-height: 1.18; margin-bottom: 12px; font-weight: 600; }
+    .hero h1 { font-family: 'Lora', serif; font-size: clamp(28px, 4vw, 44px); color: #fff; line-height: 1.18; margin-bottom: 12px; font-weight: 400; }
     .hero h1 em { color: #c8f0f2; font-style: italic; }
     .hero-sub { color: rgba(255,255,255,0.9); font-size: 17px; font-weight: 500; }
     .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
@@ -686,8 +686,6 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     :root {
       --section-space: 88px;
       --section-space-mobile: 56px;
-      --hero-space-top: 96px;
-      --hero-space-bottom: 72px;
     }
     body { font-size: 18px; line-height: 1.75; }
 
@@ -699,12 +697,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .nav-links a, .nav-links button, .nav-login { font-size: 15px; }
     .nav-login { padding: 10px 20px; }
 
-    /* Hero */
-    .hero-content { max-width: 820px; }
-    .hero-eyebrow { font-size: 14px; letter-spacing: 0.12em; margin-bottom: 24px; }
-    .hero h1 { font-size: clamp(38px, 5.6vw, 64px); line-height: 1.12; margin-bottom: 24px; }
-    .hero-sub { font-size: clamp(18px, 1.8vw, 22px); line-height: 1.6; max-width: 640px; margin: 0 auto; }
-    .hero-btns { gap: 16px; margin-top: 40px; }
+    /* Hero sizing lives in assets/readability.css (matches index.html) */
     .btn-solid, .btn-ghost { font-size: 17px; padding: 17px 34px; border-radius: 999px; }
 
     /* Members area */
@@ -767,7 +760,6 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       .nav-inner { height: auto; }
       .nav-links { gap: 12px; }
       .hero { padding: var(--hero-space-top) 20px var(--hero-space-bottom); }
-      :root { --hero-space-top: 64px; --hero-space-bottom: 48px; }
       .resource-search-box { padding: 28px 20px; }
       .landing-timeline { gap: 32px; }
       .landing-reviewed { gap: 40px; }
