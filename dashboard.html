@@ -340,6 +340,141 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Signed-in working page: no hero/sections, so only the crisis bar, nav and body size
+       come from the shared file. Everything below is scaled a step up but kept compact. */
+    nav { padding: 0 40px; }
+    nav .btn-nav { padding: 10px 20px; border-radius: 8px; }
+    .nav-right { gap: 12px; }
+
+    .page { max-width: 960px; padding: 56px 24px 96px; }
+    .page-title { font-size: clamp(32px, 3.4vw, 40px); line-height: 1.2; margin-bottom: 6px; }
+    .page-sub { font-size: 16px; margin-bottom: 36px; }
+
+    /* Cards */
+    .card { padding: 32px 36px; margin-bottom: 24px; border-radius: 18px; }
+    .card-head { margin-bottom: 20px; gap: 16px; }
+    .card-title { font-size: 14px; letter-spacing: 0.08em; }
+    .card > .card-title { margin-bottom: 20px; }
+    .card-head .btn-nav, .mood-lock-overlay .btn-nav { font-size: 15px; padding: 11px 22px; border-radius: 8px; }
+    .empty { font-size: 16px; padding: 44px 20px; }
+    .loading { font-size: 17px; }
+
+    /* Subscription cards */
+    .sub-card { padding: 22px 24px; margin-bottom: 16px; border-radius: 14px; }
+    .sub-badge { font-size: 12px; padding: 4px 12px; margin-bottom: 12px; }
+    .sub-name { font-size: 22px; margin-bottom: 6px; }
+    .sub-meta { font-size: 15px; line-height: 1.65; margin-bottom: 16px; }
+    .sub-actions { gap: 12px; }
+    .btn-sm { font-size: 15px; padding: 10px 20px; }
+
+    /* Inline pricing */
+    .plans-panel { padding: 32px 28px; margin-bottom: 24px; border-radius: 16px; }
+    .plans-title { font-size: clamp(28px, 3vw, 34px); margin-bottom: 10px; }
+    .plans-subtitle { font-size: 16px; line-height: 1.6; max-width: 640px; margin-bottom: 32px; }
+    .plans-section-title { font-size: 13px; letter-spacing: 0.1em; margin-bottom: 16px; }
+    .plans-grid-two { gap: 16px; margin-bottom: 28px; }
+    .plans-grid-three { gap: 16px; }
+    .plan-top { padding: 22px 22px 18px; }
+    .plan-body { padding: 0 22px 22px; }
+    .plan-card.business .plan-body { padding: 22px; }
+    .plan-label { font-size: 13px; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .plan-top:has(.plan-pill) .plan-label { padding-right: 104px; } /* keep clear of the corner pill */
+    .plans-grid-three .plan-label { line-height: 1.5; min-height: 3em; } /* label may wrap beside the pill; keep prices aligned */
+    .plan-price { font-size: 46px; }
+    .plan-price-note { font-size: 15px; margin-top: 8px; line-height: 1.5; }
+    .plan-copy { font-size: 15px; line-height: 1.65; margin-bottom: 20px; }
+    .plan-list { gap: 10px; margin-bottom: 20px; }
+    .plan-list li { font-size: 15px; line-height: 1.55; }
+    .plan-cta { font-size: 16px; padding: 14px 16px; }
+    .plan-pill { font-size: 11px; padding: 5px 10px; top: 16px; right: 16px; }
+    .plans-footer { font-size: 15px; margin-top: 24px; }
+
+    /* Payments table */
+    .pay-table { font-size: 16px; }
+    .pay-table th { font-size: 13px; padding: 10px 14px; }
+    .pay-table td { padding: 16px 14px; }
+    .pay-status { font-size: 13px; padding: 3px 10px; }
+
+    /* Mood tracker */
+    .mood-chart-container { margin-bottom: 24px; }
+    .mood-chart-wrapper { height: 340px; padding: 16px; border-radius: 12px; }
+    .mood-chart-wrapper canvas { max-height: 304px; }
+    .mood-wrap { gap: 20px; }
+    .mood-panel { padding: 20px; border-radius: 14px; }
+    .mood-head { margin-bottom: 16px; }
+    .mood-month { font-size: 26px; }
+    .mood-nav-btn { font-size: 15px; padding: 8px 16px; }
+    .mood-grid { gap: 6px; }
+    .mood-weekday { font-size: 12px; padding-bottom: 6px; }
+    .mood-day { min-height: 64px; padding: 8px; font-family: inherit; }
+    .mood-date { font-size: 13px; text-align: left; }
+    .mood-score { font-size: 18px; }
+    .mood-legend { font-size: 14px; margin-top: 16px; }
+    .mood-swatches { gap: 6px; }
+    .mood-swatch { width: 24px; height: 12px; }
+    .mood-side-title { font-size: 13px; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .mood-detail-date { font-size: 17px; margin-bottom: 8px; }
+    .mood-detail-score { font-size: 40px; margin-bottom: 18px; }
+    .mood-summary { gap: 10px; margin-bottom: 20px; }
+    .mood-kpi { padding: 12px 14px; }
+    .mood-kpi-label { font-size: 14px; margin-bottom: 2px; }
+    .mood-kpi-value { font-size: 20px; }
+    .mood-alert-list { gap: 10px; }
+    .mood-alert { padding: 12px 14px; }
+    .mood-alert-type { font-size: 15px; }
+    .mood-alert-meta { font-size: 14px; line-height: 1.5; }
+    #moodSidePanel .empty { font-size: 15px; }
+    .mood-lock-title { font-size: 24px; }
+    .mood-lock-copy { font-size: 16px; max-width: 380px; line-height: 1.6; }
+
+    /* Change password */
+    .card > .card-title[style] { margin-bottom: 20px !important; }
+    .pw-form { gap: 18px; max-width: 440px; }
+    .pw-field { gap: 8px; }
+    .pw-label { font-size: 14px; letter-spacing: 0.05em; }
+    .pw-input { font-size: 17px; padding: 14px 16px; border-radius: 10px; }
+    .btn-change-pw { font-size: 16px; padding: 14px 26px; border-radius: 10px; margin-top: 4px; }
+
+    /* Danger zone */
+    .danger-title { font-size: 14px; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .danger-copy { font-size: 16px; line-height: 1.6; margin-bottom: 18px; }
+    .danger-controls { gap: 12px; }
+    .danger-input { font-size: 17px; padding: 14px 16px; border-radius: 10px; max-width: 400px; }
+    .btn-delete-account { font-size: 16px; padding: 14px 24px; border-radius: 10px; }
+
+    .toast { font-size: 16px; padding: 14px 28px; }
+
+    @media (max-width: 860px) {
+      .mood-day { min-height: 56px; }
+    }
+    @media (max-width: 800px) {
+      nav { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+      nav > .nav-logo { margin-left: 0; min-height: 56px; }
+      .nav-logo img { height: 52px; }
+      .nav-right { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+      nav .btn-nav { font-size: 14px; padding: 9px 14px; }
+      .page { padding: 36px 16px 72px; }
+      .page-sub { margin-bottom: 28px; }
+      .card { padding: 24px 18px; margin-bottom: 20px; }
+      .plans-panel { padding: 24px 16px; }
+      .plans-grid-three .plan-label { min-height: 0; }
+      .mood-panel { padding: 16px 12px; }
+      .mood-month { font-size: 22px; }
+      .mood-grid { gap: 4px; }
+      .mood-weekday { font-size: 11px; letter-spacing: 0.02em; }
+      .mood-day { min-height: 50px; padding: 5px; }
+      .mood-date { font-size: 12px; }
+      .mood-score { font-size: 15px; }
+      .mood-chart-wrapper { height: 280px; padding: 10px; }
+      .mood-chart-wrapper canvas { max-height: 258px; }
+      .pay-table { font-size: 15px; }
+      .pay-table th, .pay-table td { padding-left: 8px; padding-right: 8px; }
+      .danger-input { min-width: 0; width: 100%; max-width: none; flex-basis: 100%; }
+    }
+  </style>
 </head>
 <body data-auth="required">
 <!-- Google Tag Manager (noscript) -->
@@ -952,6 +1087,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
 
       const ctx = canvas.getContext('2d');
+      Chart.defaults.font.size = 14; // readability pass: axis + tooltip text (Chart.js default is 12)
       if (window.moodChartInstance) {
         window.moodChartInstance.destroy();
       }
