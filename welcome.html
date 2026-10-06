@@ -214,6 +214,88 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   .main-wrap { animation: fadeUp 0.5s 0.15s ease both; }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Post-signup page: a modest hero so the next steps are visible straight away. */
+    .hero { padding: 72px 40px 56px; overflow-x: clip; } /* clip the theme orbs that caused sideways scroll */
+    .hero-badge { font-size: 15px; padding: 8px 20px; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(34px, 4.4vw, 52px); line-height: 1.15; margin-bottom: 20px; }
+    .hero-content { max-width: 760px; }
+    .hero-sub { max-width: 600px; }
+
+    /* --main-space is never defined, which voided this padding entirely */
+    .main-wrap { padding: 48px 40px 104px; }
+    .section-label { font-size: 13px; letter-spacing: 0.12em; margin-bottom: 24px; }
+
+    /* Step cards */
+    .steps-grid { gap: 24px; margin-bottom: 56px; }
+    .step-card { border-radius: 20px; }
+    .step-header { gap: 20px; padding: 36px 40px 0; }
+    .step-num { width: 40px; height: 40px; font-size: 17px; margin-top: 2px; }
+    .step-title { font-size: 24px; line-height: 1.3; margin-bottom: 8px; }
+    .step-sub { font-size: 17px; line-height: 1.65; }
+    .step-body { padding: 24px 40px 40px 100px; }
+    .video-placeholder { font-size: 16px; }
+    .play-btn { width: 72px; height: 72px; }
+
+    .guide-item { gap: 16px; padding: 20px 0; }
+    .guide-icon { font-size: 22px; }
+    .guide-item h4 { font-size: 18px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+    .guide-item p { font-size: 17px; line-height: 1.7; }
+
+    /* Timeline */
+    .timeline { margin-bottom: 64px; }
+    .timeline-item, .tl-item { gap: 24px; padding-bottom: 40px; }
+    .timeline-item:not(:last-child)::before, .tl-item:not(:last-child)::before { left: 23px; top: 50px; }
+    .tl-circle { width: 48px; height: 48px; font-size: 19px; }
+    .tl-content { padding-top: 8px; }
+    .tl-content h3 { font-size: 21px; font-weight: 600; line-height: 1.35; margin-top: 0; margin-bottom: 8px; }
+    .tl-content p { font-size: 17px; line-height: 1.7; }
+    .tl-tag { font-size: 14px; padding: 4px 14px; margin-top: 12px; }
+
+    /* What to tell your team */
+    .what-to-tell, .tell-section { padding: 40px 44px; margin-bottom: 56px; border-radius: 20px; }
+    .what-to-tell h3, .tell-section h3 { font-size: 26px; line-height: 1.3; margin-bottom: 20px; }
+    .tell-item { gap: 14px; padding: 16px 0; }
+    .tell-icon { font-size: 20px; }
+    .tell-item p { font-size: 17px; line-height: 1.7; }
+
+    /* Booking card */
+    .booking-card { padding: 48px 44px; border-radius: 20px; }
+    .booking-card h3 { font-size: 28px; line-height: 1.3; margin-bottom: 14px; }
+    .booking-card p { font-size: 17px; max-width: 540px; margin-bottom: 28px; }
+    .btn-book { font-size: 17px; padding: 16px 34px; }
+    .booking-card .btn-book-note { font-size: 15px; margin-top: 16px; margin-bottom: 0; }
+
+    /* Step 3 button + note, privacy reminder, questions row (inline-styled) */
+    .step-body > a[style] { font-size: 17px !important; padding: 16px 32px !important; }
+    .step-body > p[style] { font-size: 15px !important; margin-top: 16px !important; }
+    .main-wrap > div[style*="border-radius:14px"] { padding: 32px 36px !important; gap: 18px !important; margin-bottom: 56px !important; }
+    .main-wrap > div[style*="border-radius:14px"] h4 { font-size: 19px !important; font-weight: 600 !important; margin-bottom: 8px !important; }
+    .main-wrap > div[style*="border-radius:14px"] p { font-size: 16px !important; }
+    .main-wrap > div[style*="text-align:center"] { padding-top: 40px !important; }
+    .main-wrap > div[style*="text-align:center"] p { font-size: 16px !important; margin-bottom: 12px !important; }
+    .main-wrap > div[style*="text-align:center"] a { font-size: 16px !important; display: inline-block; margin: 4px 12px !important; }
+
+    /* Reassurance strip */
+    .reassure-strip { padding: 32px 40px; gap: 16px 40px; }
+    .reassure-item { font-size: 16px; }
+
+    @media (max-width: 800px) {
+      .hero { padding: 48px 20px 40px; }
+      .main-wrap { padding: 40px 20px 72px; }
+      .reassure-strip { padding: 24px 20px; }
+    }
+    @media (max-width: 700px) {
+      .step-header { padding: 28px 22px 0; gap: 16px; }
+      .step-body { padding: 20px 22px 28px; }
+      .what-to-tell { padding: 28px 22px; }
+      .booking-card { padding: 36px 22px; }
+      .timeline-item { gap: 16px; }
+      .main-wrap > div[style*="border-radius:14px"] { padding: 24px 22px !important; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->

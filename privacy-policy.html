@@ -423,6 +423,60 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       z-index: 1;
     }
   </style>
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Legal page: keep the header modest so the document starts quickly. */
+    .page-header.hero { padding: 64px 24px 56px; }
+    .page-header .eyebrow { font-size: 14px; margin-bottom: 16px; }
+    .page-header.hero h1 { font-size: clamp(36px, 4.4vw, 52px); line-height: 1.15; margin-bottom: 16px; }
+    .page-header .updated { font-size: 16px; }
+    .page-header .legal-note { font-size: 15px; padding: 9px 22px; margin-top: 22px; }
+
+    /* Document column: ~760px line length */
+    .page-body { max-width: 808px; padding: 72px 24px 104px; }
+
+    .toc { padding: 32px 40px; margin-bottom: 64px; }
+    .toc h2 { font-size: 14px; margin-bottom: 20px; }
+    .toc ol { padding-left: 22px; }
+    .toc li { margin-bottom: 10px; font-size: 17px; }
+    .toc a { font-size: 17px; }
+
+    .legal-section { margin-bottom: 64px; scroll-margin-top: 110px; }
+    .legal-section h2 { font-size: clamp(26px, 2.6vw, 30px); line-height: 1.3; margin-bottom: 24px; padding-bottom: 14px; }
+    .legal-section h3 { font-size: 20px; line-height: 1.4; margin: 36px 0 14px; }
+    .legal-section p { font-size: 18px; line-height: 1.75; margin-bottom: 20px; }
+    .legal-section ul, .legal-section ol { padding-left: 26px; margin-bottom: 22px; }
+    .legal-section li { font-size: 18px; line-height: 1.75; margin-bottom: 12px; }
+
+    .highlight-box, .warning-box { padding: 24px 28px; margin: 28px 0; }
+    .highlight-box p, .warning-box p { font-size: 18px; line-height: 1.7; }
+
+    .contact-card { padding: 32px 40px; margin-top: 32px; }
+    .contact-card h3 { font-size: 20px; margin: 0 0 16px; }
+    .contact-card p { font-size: 17px; line-height: 1.7; margin-bottom: 8px; }
+
+    /* Inline-styled table and notes (privacy policy) */
+    .legal-section table { font-size: 17px !important; }
+    .legal-section th, .legal-section td { padding: 16px 20px !important; line-height: 1.6; }
+    .legal-section p[style*="font-style:italic"] { font-size: 16px !important; }
+
+    footer { font-size: 15px; }
+    .footer-links { margin-bottom: 16px; }
+    .footer-links a { display: inline-block; margin: 4px 12px; }
+    .footer-crisis { font-size: 14px; margin-top: 14px; }
+
+    @media (max-width: 800px) {
+      .page-header.hero { padding: 48px 20px 44px; }
+      .page-body { padding: 48px 20px 72px; }
+      .toc { padding: 24px 22px; margin-bottom: 48px; }
+      .legal-section { margin-bottom: 52px; }
+      .legal-section p, .legal-section li { font-size: 17px; }
+      .legal-section th, .legal-section td { padding: 12px 14px !important; }
+      .highlight-box, .warning-box { padding: 20px 20px; }
+      .contact-card { padding: 24px 22px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->

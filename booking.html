@@ -144,6 +144,51 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* theme-unified's hero orbs poke past the right edge and cause sideways scroll on phones */
+    .hero { overflow-x: clip; }
+
+    .hero h1 { text-wrap: balance; }
+
+    /* Two-column layout - give the info column more room for the larger type */
+    .booking-layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); max-width: 1200px; }
+    .booking-info { padding: 72px 48px; }
+    .booking-info h2 { font-size: 30px; margin-bottom: 16px; }
+    .booking-info p { font-size: 18px; line-height: 1.7; margin-bottom: 32px; }
+    .detail-list { margin-bottom: 40px; }
+    .detail-list li { font-size: 17px; gap: 14px; padding: 16px 0; }
+    .detail-list li .icon { font-size: 18px; }
+    .detail-list li .text small { font-size: 15px; line-height: 1.55; margin-top: 4px; }
+    .reassure-box { padding: 24px 26px; border-radius: 14px; }
+    .reassure-box p { font-size: 16px; line-height: 1.65; margin: 0; }
+    .reassure-box strong { font-size: 17px; margin-bottom: 10px; }
+
+    /* Right panel (inline-styled in markup) */
+    .booking-embed > div { padding: 56px 48px !important; }
+    .booking-embed h2 { font-size: clamp(28px, 3vw, 38px) !important; line-height: 1.2; margin-bottom: 16px !important; }
+    .booking-embed p:not(:last-child) { font-size: 18px !important; max-width: 460px !important; margin: 0 auto 40px !important; }
+    .booking-embed a { font-size: 17px !important; padding: 17px 40px !important; }
+    .booking-embed p:last-child { font-size: 14px !important; margin-top: 20px !important; }
+
+    /* Cards below */
+    .below-inner { max-width: 1100px; gap: 32px; }
+    .below-card { padding: 40px 32px; border-radius: 16px; }
+    .below-icon { font-size: 32px; margin-bottom: 14px; }
+    .below-card h4 { font-size: 20px; line-height: 1.35; margin-bottom: 12px; }
+    .below-card p { font-size: 16px; line-height: 1.65; }
+
+    @media (max-width: 800px) {
+      .booking-layout { grid-template-columns: 1fr; }
+      .booking-info { padding: 48px 20px; }
+      .booking-embed { min-height: 0; }
+      .booking-embed > div { padding: 56px 20px !important; }
+      .below-booking { padding: 48px 20px; }
+      .below-inner { gap: 20px; }
+      .below-card { padding: 32px 24px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->

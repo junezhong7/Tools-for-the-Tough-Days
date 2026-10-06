@@ -728,10 +728,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .section-label { font-size: 13px; letter-spacing: 0.12em; margin-bottom: 20px; }
     .section-intro h2, .section-h2 { font-size: clamp(32px, 3.6vw, 46px); line-height: 1.2; margin-bottom: 16px; }
     .section-intro p, .section-p { font-size: 19px; line-height: 1.7; margin-bottom: 12px; }
-    .section-intro { max-width: 760px; }
-    #how-it-works .section-intro { max-width: none; }
-    #how-it-works .section-intro p { max-width: 760px; }
-    .landing-faq-teaser .section-intro, .landing-faq-teaser .section-p { margin-left: auto; margin-right: auto; }
+    /* Headings use the full content width; only body copy is capped for readability. */
+    .section-intro p { max-width: 760px; }
+    .landing-faq-teaser .section-intro p, .landing-faq-teaser .section-p { margin-left: auto; margin-right: auto; }
 
     .landing-timeline { gap: 28px; margin-top: 56px; }
     .landing-timeline::before { top: 28px; }
@@ -777,6 +776,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       footer { padding: 36px 20px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/readability.css" />
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->

@@ -261,6 +261,117 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* theme-unified's hero orbs poke past the right edge and cause sideways scroll on phones */
+    .hero { overflow-x: clip; }
+
+    /* Scenario tabs */
+    .tab-btn { font-size: 16px; padding: 22px 24px; gap: 8px; }
+
+    /* Scenario header */
+    /* line the header and tabs up with the centred content column below */
+    .scenario-tabs { padding-left: max(40px, calc((100% - 1168px) / 2)); padding-right: max(40px, calc((100% - 1168px) / 2)); }
+    .scen-header { padding: 56px max(40px, calc((100% - 1120px) / 2)); gap: 24px; }
+    .scen-icon { font-size: 44px; }
+    .scen-icon:empty { display: none; }
+    .scen-tag { font-size: 13px; padding: 5px 14px; margin-bottom: 14px; }
+    .scen-header h2 { font-size: clamp(28px, 3vw, 36px); line-height: 1.2; margin-bottom: 12px; }
+    .scen-header p { font-size: 18px; max-width: 680px; }
+
+    /* Layout */
+    .scen-body { max-width: 1200px; padding: 64px 40px; grid-template-columns: minmax(0, 1fr) 400px; gap: 48px; }
+    .mock-screen { border-radius: 20px; }
+
+    /* Welcome banner + check-in */
+    .wb { padding: 32px 36px; }
+    .wb-eyebrow { font-size: 13px; margin-bottom: 10px; }
+    .wb-heading { font-size: 28px; margin-bottom: 8px; }
+    .wb-sub { font-size: 17px; }
+    .return-checkin { padding: 30px 36px; }
+    .return-checkin h3 { font-size: 18px; margin-bottom: 20px; }
+    .slider-labels { font-size: 14px; margin-bottom: 20px; }
+    .checkin-btn { font-size: 16px; padding: 14px 28px; }
+
+    /* Continue / new resources */
+    .continue-section, .new-section { padding: 30px 36px; }
+    .continue-section h3, .new-section h3 { font-size: 13px; margin-bottom: 18px; }
+    .continue-card { gap: 16px; padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .continue-icon { font-size: 24px; }
+    .continue-title { font-size: 16px; margin-bottom: 4px; }
+    .continue-meta { font-size: 14px; }
+    .prog-bar { width: 72px; height: 5px; }
+    .prog-label { font-size: 13px; margin-top: 5px; }
+    .new-chip { font-size: 12px; padding: 3px 10px; margin-right: 8px; }
+    .new-resource { padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .new-resource-title { font-size: 16px; margin: 6px 0 8px; }
+    .new-resource-meta { font-size: 14px; gap: 10px; }
+    .fmt-tag { font-size: 13px; padding: 3px 10px; }
+
+    /* Crisis return box */
+    .crisis-return-box { padding: 28px 30px; margin: 30px 36px; border-radius: 14px; }
+    .crisis-return-box h3 { font-size: 22px; margin-bottom: 10px; }
+    .crisis-return-box p { font-size: 16px; margin-bottom: 18px; }
+    .crisis-return-box p[style] { font-size: 14px !important; margin-bottom: 0; }
+    .crisis-numbers { gap: 12px; margin-bottom: 14px; }
+    .crisis-num-btn, .crisis-secondary { font-size: 15px; padding: 12px 20px; }
+    .mock-screen > div[style] > p[style] { font-size: 16px !important; }
+
+    /* Privacy strip */
+    .privacy-strip { padding: 18px 36px; gap: 16px; flex-wrap: wrap; }
+    .privacy-strip p, .privacy-strip button { font-size: 14px; }
+
+    /* Employer portal */
+    .employer-dash { padding: 30px 36px; }
+    .employer-dash > p[style] { font-size: 13px !important; margin-bottom: 16px !important; }
+    .anon-note { font-size: 15px; padding: 16px 18px; margin-bottom: 22px; border-radius: 10px; }
+    .new-content-alert { padding: 18px 20px; gap: 16px; margin-bottom: 20px; }
+    .nca-num, .dash-num { font-size: 36px; }
+    .nca-text { font-size: 16px; }
+    .nca-sub { font-size: 14px; }
+    .dash-grid { gap: 16px; margin-bottom: 28px; }
+    .dash-card { padding: 20px 22px; border-radius: 12px; }
+    .dash-label { font-size: 14px; margin-top: 4px; }
+    .dash-note { font-size: 13px; margin-top: 8px; }
+    .employer-action { gap: 16px; padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .ea-icon { font-size: 22px; }
+    .ea-title { font-size: 16px; }
+    .ea-sub { font-size: 14px; }
+    .ea-arrow { font-size: 22px; }
+
+    /* Topic browser (inline-styled in markup) */
+    .topic-chip { font-size: 15px; padding: 9px 16px; }
+    div:has(> div > div > .topic-chip) { padding-left: 36px !important; padding-right: 36px !important; padding-bottom: 40px !important; }
+    div:has(> div > div > .topic-chip) > h3 { font-size: 14px !important; margin: 12px 0 28px !important; }
+    div:has(> div > div > .topic-chip) > div { margin-bottom: 28px !important; }
+    div:has(> div > div > .topic-chip) > div:last-child { margin-bottom: 0 !important; }
+    div:has(+ div > .topic-chip) { font-size: 13px !important; margin-bottom: 14px !important; }
+    div:has(> .topic-chip) { gap: 10px !important; }
+
+    /* Sidebar cards */
+    .sidebar-card { padding: 30px 28px; margin-bottom: 24px; border-radius: 16px; }
+    .sidebar-card h3 { font-size: 22px; line-height: 1.3; margin-bottom: 12px; }
+    .sidebar-card p { font-size: 16px; margin-bottom: 18px; }
+    .sidebar-card ul li { font-size: 16px; padding: 10px 0 10px 20px; }
+    .sidebar-card ul li::before { line-height: 1.5; }
+    .sidebar-link { font-size: 16px; margin-top: 18px; }
+
+    @media (max-width: 860px) {
+      .scen-body { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .scenario-tabs { padding: 0 8px; }
+      .tab-btn { font-size: 15px; padding: 18px 14px; }
+      .scen-header { padding: 36px 20px; }
+      .scen-body { padding: 40px 20px; gap: 32px; }
+      .wb, .return-checkin, .continue-section, .new-section, .employer-dash { padding: 24px 20px; }
+      .crisis-return-box { margin: 24px 20px; padding: 24px 20px; }
+      .privacy-strip { padding: 16px 20px; }
+      div:has(> div > div > .topic-chip) { padding-left: 20px !important; padding-right: 20px !important; }
+      .sidebar-card { padding: 26px 20px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->

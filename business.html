@@ -387,6 +387,131 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+
+    /* Hero + section CTA buttons (match .btn-solid scale from shared sheet) */
+    .hero-ctas { gap: 16px; margin-top: 40px; margin-bottom: 0; }
+    .section .hero-ctas { margin-top: 48px !important; }
+    .btn-primary, .btn-secondary, .btn-secondary-light { font-size: 17px; padding: 17px 34px; border-radius: 999px; }
+    a[data-tooltip]::after { font-size: 16px; padding: 10px 14px; }
+
+    /* Problem section */
+    .section .section-inner > p.wf-problem-quote { font-size: clamp(26px, 2.6vw, 32px); line-height: 1.35; margin-bottom: 16px; color: var(--charcoal); }
+    .wf-problem-quote[style*="margin-top"] { margin-top: 48px !important; }
+    .wf-stat-callout { font-size: 17px; line-height: 1.65; padding: 24px 28px; margin-top: 32px; border-radius: 14px; }
+    .insight-badge { padding: 20px 24px; }
+    .insight-badge p { font-size: 16px; }
+
+    /* Trial timeline */
+    .wf-timeline { gap: 28px; margin-top: 56px; }
+    .wf-timeline.wf-timeline-days .wf-tl-num { width: 68px; height: 68px; font-size: 15px; margin-bottom: 20px; }
+    .wf-timeline.wf-timeline-days::before { top: 34px; }
+    .wf-tl-step h4 { font-size: 18px; line-height: 1.4; margin-bottom: 10px; }
+    .wf-tl-step p { font-size: 16px; line-height: 1.6; }
+    .privacy-badge { padding: 20px 24px; border-radius: 14px; }
+    .privacy-badge[style*="margin-top"] { margin-top: 48px !important; }
+    .privacy-badge p { font-size: 17px; line-height: 1.65; }
+
+    /* Built for HR box */
+    .wf-trust-box { padding: 56px; border-radius: 20px; }
+    .wf-trust-box .section-label { margin-bottom: 16px !important; }
+    .wf-trust-box h2 { font-size: clamp(28px, 3vw, 36px) !important; }
+    .wf-trust-box > p { font-size: 18px; }
+    .wf-assoc-grid { gap: 28px 40px; margin-top: 32px; }
+    .wf-assoc-item { font-size: 17px; line-height: 1.65; padding-left: 20px; }
+
+    /* Pricing - tier cards (inline-styled; scaled via scoped attribute selectors) */
+    #pricing-section > .section-inner { max-width: 1120px !important; }
+    .biz-price-grid { gap: 28px !important; margin-top: 48px !important; }
+    .biz-price-grid > div > div { padding: 26px 28px !important; }
+    .biz-price-grid [style*="font-size:11px"] { font-size: 13px !important; margin-bottom: 8px !important; }
+    .biz-price-grid [style*="font-size:10px"] { font-size: 11px !important; padding: 4px 12px !important; top: 14px !important; }
+    .biz-price-grid [style*="font-size:36px"] { font-size: 46px !important; }
+    .biz-price-grid [style*="font-size:12px"] { font-size: 14px !important; }
+    .biz-price-grid [style*="font-size:13px"] { font-size: 15px !important; }
+    .biz-price-grid [style*="font-size:14px"] { font-size: 16px !important; }
+    .biz-price-grid [style*="line-height:1.7"] { font-size: 16px !important; line-height: 1.65 !important; }
+    .biz-price-grid [style*="text-transform:uppercase;letter-spacing:0.06em"] { font-size: 13px !important; margin-bottom: 16px !important; }
+    .biz-price-grid [style*="flex-direction:column;gap:8px"] { gap: 12px !important; margin-bottom: 20px !important; }
+    .biz-price-grid [style*="justify-content:space-between"] { gap: 12px; }
+    .biz-price-grid [style*="justify-content:space-between"] > span:last-child { white-space: nowrap; }
+    .biz-price-grid [style*="justify-content:space-between"] > span[style*="white-space:nowrap"] { white-space: normal !important; text-align: right; }
+    .biz-price-grid [style*="background:var(--amber-light)"] { padding: 12px 14px !important; margin-bottom: 16px !important; border-radius: 10px !important; }
+    .biz-price-grid [style*="font-size:12px;color:var(--teal-dark)"] { margin-bottom: 16px !important; }
+    .biz-price-grid a { font-size: 16px !important; padding: 14px !important; border-radius: 999px !important; }
+    .biz-price-grid a[style*="margin-top"] { margin-top: 20px !important; }
+
+    /* Pricing - enterprise row */
+    #enterprise-section { padding: 36px 40px !important; margin-top: 28px !important; gap: 24px !important; }
+    #enterprise-section [style*="font-size:11px"] { font-size: 13px !important; margin-bottom: 8px !important; }
+    #enterprise-section [style*="font-size:28px"] { font-size: 34px !important; }
+    #enterprise-section [style*="font-size:13px"] { font-size: 16px !important; margin-top: 6px !important; }
+    #enterprise-section > a { font-size: 16px !important; padding: 15px 30px !important; border-radius: 999px !important; }
+
+    /* Counselling sessions */
+    .biz-note { padding: 20px 24px !important; margin: 32px 0 48px !important; border-radius: 14px !important; }
+    .biz-note p { font-size: 16px !important; line-height: 1.65 !important; }
+    .biz-session-grid { gap: 28px !important; }
+    .biz-session-grid > div > div { padding: 28px 32px !important; }
+    .biz-session-grid [style*="font-size:11px"] { font-size: 13px !important; margin-bottom: 8px !important; }
+    .biz-session-grid [style*="font-size:10px"] { font-size: 11px !important; padding: 4px 12px !important; top: 14px !important; }
+    .biz-session-grid [style*="font-size:42px"] { font-size: 50px !important; }
+    .biz-session-grid [style*="font-size:13px"] { font-size: 15px !important; }
+    .biz-session-grid [style*="font-size:13px;color:var(--charcoal)"] { font-size: 16px !important; line-height: 1.55; gap: 12px !important; }
+    .biz-session-grid [style*="flex-direction:column;gap:10px"] { gap: 14px !important; margin-bottom: 24px !important; }
+    .biz-session-grid [style*="font-size:12px"] { font-size: 14px !important; }
+    .biz-session-grid [style*="background:var(--amber-light)"] { padding: 12px 14px !important; margin-bottom: 20px !important; border-radius: 10px !important; }
+    .biz-session-grid a { font-size: 16px !important; padding: 15px !important; border-radius: 999px !important; }
+
+    /* Trust bar */
+    .wf-trust-bar { padding: 32px 40px; gap: 20px 48px; }
+    .wf-trust-bar div { font-size: 16px; font-weight: 600; }
+
+    /* Reassurance (centered section) */
+    .reassure-list { margin-top: 28px !important; max-width: 520px !important; }
+    .reassure-list li { font-size: 17px; padding: 10px 0; }
+    .section-inner[style*="text-align:center"] > p { margin-left: auto; margin-right: auto; }
+
+    /* Newsletter */
+    .section a[href*="vision6"] { font-size: 17px !important; padding: 17px 34px !important; border-radius: 999px !important; margin-top: 12px; }
+    .section-inner > p[style*="font-size:11px"] { font-size: 14px !important; margin-top: 20px !important; }
+
+    /* Final CTA */
+    .final-cta { padding: 88px 40px; }
+    .final-cta h2 { font-size: clamp(32px, 3.6vw, 44px); line-height: 1.2; margin-bottom: 16px; }
+    .final-cta p { font-size: 19px; margin-bottom: 32px; }
+    .final-cta p[style*="font-size:13px"] { font-size: 15px !important; margin-top: 24px !important; margin-bottom: 0; }
+
+    /* Topic modal + suggest-a-resource widget */
+    .topic-modal { max-width: 580px; padding: 32px; }
+    .topic-modal-title { font-size: 30px; }
+    .topic-modal-sub { font-size: 15px; margin-bottom: 20px; }
+    .topic-option { font-size: 16px; padding: 14px 16px; }
+    .topic-option .badge { font-size: 11px; }
+    .topic-access-notice p { font-size: 16px; }
+    .topic-access-notice a { font-size: 15px; padding: 10px 22px; }
+    .suggest-resource-btn { font-size: 15px; padding: 14px 20px; }
+    .suggest-resource-box h3 { font-size: 26px; }
+    .suggest-resource-box .sr-desc, .suggest-resource-box textarea { font-size: 16px; }
+    .suggest-resource-submit { font-size: 16px; padding: 14px; }
+    .suggest-resource-msg { font-size: 15px; }
+
+    @media (max-width: 800px) {
+      .biz-price-grid, .biz-session-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+      .biz-price-grid > div > div, .biz-session-grid > div > div { padding: 22px !important; }
+      #enterprise-section { padding: 28px 24px !important; }
+      .wf-trust-box { padding: 36px 24px; }
+      .wf-assoc-grid { grid-template-columns: 1fr; }
+      .wf-timeline { flex-direction: column; align-items: stretch; gap: 32px; }
+      .wf-timeline::before { display: none; }
+      .wf-trust-bar { padding: 24px 20px; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+      .final-cta { padding: 56px 20px; }
+      .hero-ctas { align-items: center; }
+      .hero-ctas a { width: 100%; max-width: 340px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -450,7 +575,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
-    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
+    <div class="browse-topics-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); text-align: center; margin-bottom: 24px;">Browse by topic: 6 areas, 30+ sub-topics</div>
 
     <!-- Category buttons -->
     <div class="cat-nav" id="cat-nav"></div>
@@ -563,7 +688,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2>Transparent pricing, no quote required</h2>
     <p>Every tier offers two options, resource library access on its own, or combined with EAP counselling for a complete support solution.</p>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:32px;">
+    <div class="biz-price-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:32px;">
 
       <!-- STARTER -->
       <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
@@ -735,11 +860,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section-label">Counselling sessions</div>
     <h2>Add counselling sessions to <em>your EAP bundle.</em></h2>
     <p>Counselling sessions are available exclusively to businesses on an annual EAP bundle, they cannot be purchased as a standalone product. Once your bundle is active, purchase sessions as your team needs them. Each session is a private, confidential one-on-one with a Registered Psychologist or Registered Counsellor. You never see who books or what is discussed.</p>
-    <div style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:14px 18px;display:flex;gap:10px;align-items:flex-start;margin:20px 0 32px;">
+    <div class="biz-note" style="background:var(--teal-light);border:1px solid rgba(38,119,123,0.2);border-radius:10px;padding:14px 18px;display:flex;gap:10px;align-items:flex-start;margin:20px 0 32px;">
       <span style="font-size:20px;flex-shrink:0;"></span>
       <p style="font-size:13px;color:var(--teal-dark);margin:0;line-height:1.6;">Session bundles can only be purchased after your annual EAP bundle subscription is active. If you haven't subscribed yet, choose a bundle above first.</p>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="biz-session-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
       <!-- 3 SESSIONS -->
       <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
