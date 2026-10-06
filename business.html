@@ -348,6 +348,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   .topic-option:hover { border-color: rgba(38,119,123,0.4); }
   .topic-option[data-kind="video"]:hover { background: #bce8eb; border-color: rgba(38,119,123,0.5); }
   .topic-option.disabled { color: var(--warm-grey); background: #f7f4f0; cursor: not-allowed; border-style: dashed; }
+  .topic-access-notice { background: var(--teal-light, #e8f4f4); border: 1px solid rgba(38,119,123,0.3); border-radius: 10px; padding: 14px 16px; text-align: center; }
+  .topic-access-notice p { margin: 0 0 10px; font-size: 14px; color: var(--charcoal, #1a2e2f); line-height: 1.5; }
+  .topic-access-notice a { display: inline-block; background: var(--teal, #26777B); color: #fff; padding: 8px 20px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; }
   .topic-option .badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 2px 8px; color: var(--warm-grey); white-space: nowrap; }
 
   /* SUGGEST A RESOURCE WIDGET */
@@ -431,9 +434,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <path d="M0,0 C360,60 1080,0 1440,40 L1440,0 Z" fill="#1a5558"/>
 </svg>
 
-<!-- CATEGORY NAVIGATION STRIP - signed-in members only, same gate as support.html -->
+<!-- CATEGORY NAVIGATION STRIP - open to everyone; opening PDF/video content requires a subscription -->
 <div style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
-  <div id="resource-library-block" style="display: none; max-width: 880px; margin: 0 auto;">
+  <div id="resource-library-block" style="max-width: 880px; margin: 0 auto;">
     <!-- Keyword search -->
     <div class="resource-search-box">
       <label for="resourceSearchInput" class="resource-search-label">Not sure where to start? Tell us what's going on</label>
@@ -1361,10 +1364,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var kind = String(link.getAttribute('data-kind') || 'pdf').toLowerCase();
       var query = new URLSearchParams({ action: 'issue', catalog: 'workplace', resource_key: resourceKey, kind: kind });
       fetch('/api/resources.php?' + query.toString(), { credentials: 'same-origin', cache: 'no-store' })
-        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) { throw new Error(d.message || 'Unable to open this resource right now.'); } return d; }); })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) { var err = new Error(d.message || 'Unable to open this resource right now.'); err.status = r.status; throw err; } return d; }); })
         .then(function (data) { window.location.href = data.viewer_url; })
-        .catch(function (error) { alert(error.message || 'Unable to open this resource.'); });
+        .catch(function (error) {
+          if (error.status === 401 || error.status === 403) { showAccessNotice(error.status); return; }
+          alert(error.message || 'Unable to open this resource.');
+        });
     });
+
+    // Everyone can browse titles; opening PDF/video content needs sign-in + an active subscription.
+    function showAccessNotice(status) {
+      var existing = optionsEl.querySelector('.topic-access-notice');
+      if (existing) { existing.remove(); }
+      var notice = document.createElement('div');
+      notice.className = 'topic-access-notice';
+      if (status === 401) {
+        var redirect = encodeURIComponent(window.location.pathname);
+        notice.innerHTML = '<p>Sign in to open this resource. PDFs and videos are available with an active subscription.</p>'
+          + '<a href="/login.html?redirect=' + redirect + '">Sign in</a>';
+      } else {
+        notice.innerHTML = '<p>This resource needs an active subscription.</p>'
+          + '<a href="#pricing-section">View plans</a>';
+        notice.querySelector('a').addEventListener('click', closeModal);
+      }
+      optionsEl.insertBefore(notice, optionsEl.firstChild);
+    }
 
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', function (event) { if (event.target === overlay) { closeModal(); } });
@@ -1372,10 +1396,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   })();
 
-  (function showResourceLibraryForLoggedInUsers() {
-    const libraryBlock = document.getElementById('resource-library-block');
+  (function showSuggestButtonForLoggedInUsers() {
     const suggestBtn = document.getElementById('suggestResourceBtn');
-    if (!libraryBlock && !suggestBtn) {
+    if (!suggestBtn) {
       return;
     }
 
@@ -1393,16 +1416,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       })
       .then(function (data) {
         if (data && data.user) {
-          if (libraryBlock) {
-            libraryBlock.style.display = '';
-          }
           if (suggestBtn) {
             suggestBtn.style.display = '';
           }
         }
       })
       .catch(function () {
-        // Keep the resource library hidden if the auth check fails.
+        // Keep the suggest button hidden if the auth check fails.
       });
   })();
 </script>

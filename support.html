@@ -346,6 +346,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       cursor: not-allowed;
       border-style: dashed;
     }
+    .topic-access-notice { background: var(--teal-light, #e3f2f2); border: 1px solid rgba(38,119,123,0.3); border-radius: 10px; padding: 14px 16px; text-align: center; }
+    .topic-access-notice p { margin: 0 0 10px; font-size: 14px; color: var(--charcoal, #2a2a2a); line-height: 1.5; }
+    .topic-access-notice a { display: inline-block; background: var(--teal, #26777b); color: #fff; padding: 8px 20px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; }
     .topic-option .badge {
       font-size: 10px;
       text-transform: uppercase;
@@ -807,7 +810,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="checkin-toast" id="checkinToast" role="status" aria-live="polite">
-    Thanks for checking in. Your score is saved and available in the Mood Tracker on your <a href="/dashboard.html">Dashboard</a>.
+    <span id="checkinToastMember" style="display:none;">Thanks for checking in. Your score is saved and available in the Mood Tracker on your <a href="/dashboard.html">Dashboard</a>.</span>
+    <span id="checkinToastGuest">Thanks for checking in. <a href="/login.html">Sign in</a> to save your scores and track your mood over time.</span>
   </div>
 
   <section class="hero">
@@ -830,7 +834,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- CATEGORY NAVIGATION STRIP -->
   <div id="browse-topics" style="background: var(--sand); border-bottom: 1px solid var(--border); padding: 36px 40px;">
     <div style="max-width: 880px; margin: 0 auto;">
-      <div class="mood-card mood-card-sand" id="mood-tracker-card" style="display: none;">
+      <div class="mood-card mood-card-sand" id="mood-tracker-card">
         <p class="mood-question">Before we start, how are you feeling right now?</p>
         <div class="mood-value-display">
           <div class="mood-number" id="mood-num">5</div>
@@ -848,8 +852,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="mood-submit" id="mood-btn" onclick="submitMood()">Check in and show me what's available </button>
       </div>
 
-      <!-- Resource library (topic browsing) + Crisis Support card - signed-in members only, same gate as Mood Tracker above -->
-      <div id="resource-library-block" style="display: none;">
+      <!-- Resource library (topic browsing) + Crisis Support card - open to everyone -->
+      <div id="resource-library-block">
         <!-- Keyword search -->
         <div class="resource-search-box">
           <label for="resourceSearchInput" class="resource-search-label">Not sure where to start? Tell us what's going on</label>
@@ -1495,7 +1499,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
 
       if (!response.ok) {
-        throw new Error(data.message || 'Unable to open this resource right now.');
+        const error = new Error(data.message || 'Unable to open this resource right now.');
+        error.status = response.status;
+        throw error;
       }
 
       return data.viewer_url;
@@ -1645,6 +1651,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
     }
 
+    // Everyone can browse titles; opening PDF/video content needs sign-in + an active subscription.
+    function showAccessNotice(status) {
+      const existing = options.querySelector('.topic-access-notice');
+      if (existing) {
+        existing.remove();
+      }
+
+      const notice = document.createElement('div');
+      notice.className = 'topic-access-notice';
+      if (status === 401) {
+        const redirect = encodeURIComponent(window.location.pathname + '#browse-topics');
+        notice.innerHTML = '<p>Sign in to open this resource. PDFs and videos are available with an active subscription.</p>'
+          + '<a href="/login.html?redirect=' + redirect + '">Sign in</a>';
+      } else {
+        notice.innerHTML = '<p>This resource needs an active subscription.</p>'
+          + '<a href="/dashboard.html">View subscription plans</a>';
+      }
+      options.insertBefore(notice, options.firstChild);
+    }
+
     function closeModal() {
       overlay.classList.remove('show');
       document.body.style.overflow = '';
@@ -1682,6 +1708,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           window.location.href = viewerUrl;
         })
         .catch(function (error) {
+          if (error.status === 401 || error.status === 403) {
+            showAccessNotice(error.status);
+            return;
+          }
           alert(error.message || 'Unable to open this resource.');
         });
     });
@@ -1738,7 +1768,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
+  // Set by the auth check below; mood scores are only saved for signed-in users.
+  let isSignedIn = false;
+
   function logMoodSubmission(score) {
+    if (!isSignedIn) {
+      return;
+    }
     try {
       fetch('/api/mood.php?action=submit', {
         method: 'POST',
@@ -1790,7 +1826,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (btn) {
       btn.disabled = true;
       btn.classList.add('is-processing');
-      btn.textContent = 'Saving your check-in...';
+      btn.textContent = isSignedIn ? 'Saving your check-in...' : 'One moment...';
     }
 
     logMoodSubmission(val);
@@ -1816,13 +1852,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }, 450);
   }
 
-  (function showMoodTrackerForLoggedInUsers() {
-    const moodCard = document.getElementById('mood-tracker-card');
-    const libraryBlock = document.getElementById('resource-library-block');
+  (function applySignedInState() {
     const suggestBtn = document.getElementById('suggestResourceBtn');
-    if (!moodCard && !libraryBlock && !suggestBtn) {
-      return;
-    }
+    const toastMember = document.getElementById('checkinToastMember');
+    const toastGuest = document.getElementById('checkinToastGuest');
 
     fetch('/api/auth.php?action=me', {
       method: 'GET',
@@ -1840,11 +1873,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       })
       .then(function (data) {
         if (data && data.user) {
-          if (moodCard) {
-            moodCard.style.display = '';
+          isSignedIn = true;
+          if (toastMember) {
+            toastMember.style.display = '';
           }
-          if (libraryBlock) {
-            libraryBlock.style.display = '';
+          if (toastGuest) {
+            toastGuest.style.display = 'none';
           }
           if (suggestBtn) {
             suggestBtn.style.display = '';
@@ -1852,7 +1886,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
       })
       .catch(function () {
-        // Keep mood tracker and resource library hidden if auth check fails.
+        // Treat as signed out if auth check fails.
       });
   })();
 
