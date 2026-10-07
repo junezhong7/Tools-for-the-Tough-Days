@@ -219,15 +219,14 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   .mood-preview-line { fill: none; stroke: var(--teal); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
   .mood-preview-line.is-today { stroke-dasharray: 4 4; }
   .mood-preview-dot { fill: #fff; stroke: var(--teal); stroke-width: 2; }
-  .mood-preview-today { fill: var(--teal); stroke: #fff; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; }
+  .mood-preview-today { fill: var(--teal); stroke: #fff; stroke-width: 2.5; }
   .mood-preview-axis { font-family: 'Nunito', sans-serif; font-size: 10px; fill: var(--warm-grey); }
   .mood-preview-axis.is-today { font-weight: 800; fill: var(--teal-dark); }
-  .mood-preview-badge { transform-box: fill-box; transform-origin: center; }
   .mood-preview-badge rect { fill: var(--teal-dark); }
   .mood-preview-badge text { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; fill: #fff; }
   .mood-preview-note { font-size: 12px; color: var(--warm-grey); margin-top: 4px; }
   .checkin-toast.show .mood-preview-today,
-  .checkin-toast.show .mood-preview-badge { animation: moodPreviewPop 0.5s ease 0.7s both; }
+  .checkin-toast.show .mood-preview-badge { animation: moodPreviewFade 0.5s ease 0.7s both; }
   .checkin-toast.show .mood-preview-line.is-today { animation: moodPreviewFade 0.4s ease 0.5s both; }
   .checkin-guest-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
   .checkin-toast .checkin-guest-btn {
@@ -237,7 +236,6 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   .checkin-toast .checkin-guest-btn.is-primary { background: #fff; color: var(--teal-dark); border-color: #fff; }
   .checkin-toast .checkin-guest-btn:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
   .checkin-toast .checkin-guest-btn.is-primary:hover { background: #d7f1f3; color: var(--teal-dark); }
-  @keyframes moodPreviewPop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
   @keyframes moodPreviewFade { from { opacity: 0; } to { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
     .checkin-toast.show .mood-preview-today,
@@ -396,6 +394,8 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .topic-access-notice { background: var(--teal-light, #e3f2f2); border: 1px solid rgba(38,119,123,0.3); border-radius: 10px; padding: 14px 16px; text-align: center; }
     .topic-access-notice p { margin: 0 0 10px; font-size: 14px; color: var(--charcoal, #2a2a2a); line-height: 1.5; }
     .topic-access-notice a { display: inline-block; background: var(--teal, #26777b); color: #fff; padding: 8px 20px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; }
+    .topic-access-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .topic-access-notice a.is-secondary { background: #fff; color: var(--teal, #26777b); border: 1px solid var(--teal, #26777b); }
     .topic-option .badge {
       font-size: 10px;
       text-transform: uppercase;
@@ -1712,8 +1712,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       notice.className = 'topic-access-notice';
       if (status === 401) {
         const redirect = encodeURIComponent(window.location.pathname + '#browse-topics');
-        notice.innerHTML = '<p>Sign in to open this resource. PDFs and videos are available with an active subscription.</p>'
-          + '<a href="/login.html?redirect=' + redirect + '">Sign in</a>';
+        notice.innerHTML = '<p>Sign in or create a free account to open this resource. PDFs and videos are available with an active subscription.</p>'
+          + '<div class="topic-access-actions">'
+          + '<a href="/register.html?redirect=' + redirect + '">Create a free account</a>'
+          + '<a class="is-secondary" href="/login.html?redirect=' + redirect + '">Sign in</a>'
+          + '</div>';
       } else {
         notice.innerHTML = '<p>This resource needs an active subscription.</p>'
           + '<a href="/dashboard.html">View subscription plans</a>';
