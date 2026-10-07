@@ -627,13 +627,13 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .subtopic-pill:hover { border-color: rgba(38,119,123,0.4); transform: translateY(-1px); }
     .subtopic-pill.coming-soon { color: var(--warm-grey); background: #f7f4f0; cursor: default; border-style: dashed; pointer-events: none; }
     .cs-badge { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--border); border-radius: 99px; padding: 1px 6px; color: var(--warm-grey); }
-    .crisis-nav-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
-    .crisis-nav-left { display: flex; align-items: center; gap: 12px; }
+    .crisis-nav-card { display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: nowrap; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 18px; margin: 16px auto 0; width: fit-content; max-width: 100%; }
+    .crisis-nav-left { display: flex; align-items: center; gap: 12px; flex: 1 1 auto; min-width: 0; }
     .crisis-nav-icon { font-size: 22px; }
-    .crisis-nav-title { font-size: 14px; font-weight: 500; color: var(--red-crisis); margin-bottom: 2px; }
-    .crisis-nav-sub { font-size: 12px; color: #7a2020; }
-    .crisis-nav-btn { background: var(--red-crisis); color: #fff; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
-    .crisis-nav-btn:hover { background: #a93226; color: #fff; }
+    .crisis-nav-title { font-size: 14px; font-weight: 700; color: var(--teal-dark); margin-bottom: 2px; }
+    .crisis-nav-sub { font-size: 12px; color: var(--warm-grey); }
+    .crisis-nav-btn { background: var(--teal); color: #fff; padding: 9px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+    .crisis-nav-btn:hover { background: var(--teal-hover); color: #fff; }
 
     .welcome-popup {
       position: fixed;
