@@ -176,6 +176,8 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     text-align: center;
     font-size: clamp(16px, 2.1vw, 20px);
     line-height: 1.45;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
   }
   .checkin-toast.show {
     opacity: 1;
@@ -196,6 +198,51 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   .checkin-toast a:hover {
     color: #d7f1f3;
     border-bottom-color: rgba(215, 241, 243, 0.75);
+  }
+  .checkin-toast-close {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; color: rgba(255,255,255,0.7);
+    font-size: 24px; line-height: 1; cursor: pointer; padding: 4px 8px;
+  }
+  .checkin-toast-close:hover { color: #fff; }
+
+  /* Guest preview: shows what a check-in looks like in the dashboard Mood Tracker */
+  .mood-preview {
+    background: var(--cream); color: var(--charcoal);
+    border-radius: 12px; padding: 14px 16px 10px; margin: 18px 0 16px;
+    text-align: left; box-shadow: 0 6px 18px rgba(10, 30, 32, 0.25);
+  }
+  .mood-preview-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .mood-preview-title { font-family: 'Lora', serif; font-size: 16px; font-weight: 600; color: var(--teal-dark); }
+  .mood-preview-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--warm-grey); background: var(--sand); border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px; }
+  .mood-preview svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .mood-preview-line { fill: none; stroke: var(--teal); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .mood-preview-line.is-today { stroke-dasharray: 4 4; }
+  .mood-preview-dot { fill: #fff; stroke: var(--teal); stroke-width: 2; }
+  .mood-preview-today { fill: var(--teal); stroke: #fff; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; }
+  .mood-preview-axis { font-family: 'Nunito', sans-serif; font-size: 10px; fill: var(--warm-grey); }
+  .mood-preview-axis.is-today { font-weight: 800; fill: var(--teal-dark); }
+  .mood-preview-badge { transform-box: fill-box; transform-origin: center; }
+  .mood-preview-badge rect { fill: var(--teal-dark); }
+  .mood-preview-badge text { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; fill: #fff; }
+  .mood-preview-note { font-size: 12px; color: var(--warm-grey); margin-top: 4px; }
+  .checkin-toast.show .mood-preview-today,
+  .checkin-toast.show .mood-preview-badge { animation: moodPreviewPop 0.5s ease 0.7s both; }
+  .checkin-toast.show .mood-preview-line.is-today { animation: moodPreviewFade 0.4s ease 0.5s both; }
+  .checkin-guest-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+  .checkin-toast .checkin-guest-btn {
+    display: inline-block; padding: 10px 20px; border-radius: 999px; font-size: 15px; font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.6); color: #fff;
+  }
+  .checkin-toast .checkin-guest-btn.is-primary { background: #fff; color: var(--teal-dark); border-color: #fff; }
+  .checkin-toast .checkin-guest-btn:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
+  .checkin-toast .checkin-guest-btn.is-primary:hover { background: #d7f1f3; color: var(--teal-dark); }
+  @keyframes moodPreviewPop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+  @keyframes moodPreviewFade { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .checkin-toast.show .mood-preview-today,
+    .checkin-toast.show .mood-preview-badge,
+    .checkin-toast.show .mood-preview-line.is-today { animation: none; }
   }
   .crisis-alert {
     display: none; background: var(--red-crisis-bg); border: 1.5px solid var(--red-crisis);
@@ -805,7 +852,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="checkin-toast" id="checkinToast" role="status" aria-live="polite">
     <span id="checkinToastMember" style="display:none;">Thanks for checking in. Your score is saved and available in the Mood Tracker on your <a href="/dashboard.html">Dashboard</a>.</span>
-    <span id="checkinToastGuest">Thanks for checking in. <a href="/login.html">Sign in</a> to save your scores and track your mood over time.</span>
+    <div id="checkinToastGuest">
+      <button type="button" class="checkin-toast-close" id="checkinToastClose" aria-label="Close">&times;</button>
+      <div>Thanks for checking in. Here's how today would look in your Mood Tracker:</div>
+      <div class="mood-preview" id="moodPreview" aria-hidden="true"></div>
+      <div>Sign in to save your scores and track your mood over time.</div>
+      <div class="checkin-guest-actions">
+        <a class="checkin-guest-btn is-primary" href="/register.html">Create a free account</a>
+        <a class="checkin-guest-btn" href="/login.html">Sign in</a>
+      </div>
+    </div>
   </div>
 
   <section class="hero">
@@ -1791,10 +1847,75 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  function showCheckinToast() {
+  // Guest-only demo: draws a sample week plus today's real score so visitors can
+  // see what the dashboard Mood Tracker would show. Nothing is saved.
+  function renderGuestMoodPreview(score) {
+    const box = document.getElementById('moodPreview');
+    if (!box) {
+      return;
+    }
+
+    const sample = [5, 4, 6, 5, 6, 5];
+    const values = sample.concat([score]);
+    const w = 320, h = 130, left = 22, right = 298, top = 22, bottom = 100;
+    const xAt = function (i) { return left + (right - left) * i / (values.length - 1); };
+    const yAt = function (v) { return bottom - (bottom - top) * (v - 1) / 9; };
+
+    const labels = [];
+    for (let i = values.length - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      labels.push(i === 0 ? 'Today' : d.toLocaleDateString('en-AU', { weekday: 'short' }));
+    }
+
+    const pastPoints = sample.map(function (v, i) { return xAt(i) + ',' + yAt(v); }).join(' ');
+    const last = values.length - 1;
+    const tx = xAt(last), ty = yAt(score);
+    const badgeY = ty - 24 < 2 ? ty + 10 : ty - 24;
+
+    let svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img">';
+    [1, 5, 10].forEach(function (v) {
+      svg += '<line x1="' + left + '" x2="' + right + '" y1="' + yAt(v) + '" y2="' + yAt(v) + '" stroke="#d0e6e7" stroke-width="1"/>';
+      svg += '<text class="mood-preview-axis" x="' + (left - 8) + '" y="' + (yAt(v) + 3) + '" text-anchor="end">' + v + '</text>';
+    });
+    svg += '<polyline class="mood-preview-line" points="' + pastPoints + '"/>';
+    svg += '<line class="mood-preview-line is-today" x1="' + xAt(last - 1) + '" y1="' + yAt(sample[sample.length - 1]) + '" x2="' + tx + '" y2="' + ty + '"/>';
+    sample.forEach(function (v, i) {
+      svg += '<circle class="mood-preview-dot" cx="' + xAt(i) + '" cy="' + yAt(v) + '" r="3.5"/>';
+    });
+    svg += '<circle class="mood-preview-today" cx="' + tx + '" cy="' + ty + '" r="7"/>';
+    svg += '<g class="mood-preview-badge"><rect x="' + (tx - 52) + '" y="' + badgeY + '" width="44" height="18" rx="9"/>' +
+      '<text x="' + (tx - 30) + '" y="' + (badgeY + 13) + '" text-anchor="middle">You: ' + score + '</text></g>';
+    labels.forEach(function (label, i) {
+      svg += '<text class="mood-preview-axis' + (i === last ? ' is-today' : '') + '" x="' + xAt(i) + '" y="' + (h - 12) + '" text-anchor="middle">' + label + '</text>';
+    });
+    svg += '</svg>';
+
+    box.innerHTML =
+      '<div class="mood-preview-head"><span class="mood-preview-title">Mood Tracker</span><span class="mood-preview-tag">Preview</span></div>' +
+      svg +
+      '<div class="mood-preview-note">Earlier days are example data. With an account, every check-in is added here.</div>';
+  }
+
+  let checkinToastTimer = null;
+
+  function hideCheckinToast() {
+    const toast = document.getElementById('checkinToast');
+    clearTimeout(checkinToastTimer);
+    if (toast) {
+      toast.classList.add('fade-out');
+      toast.classList.remove('show');
+    }
+  }
+
+  function showCheckinToast(score) {
     const toast = document.getElementById('checkinToast');
     if (!toast) {
       return;
+    }
+
+    if (!isSignedIn) {
+      renderGuestMoodPreview(score);
     }
 
     toast.classList.remove('fade-out');
@@ -1803,11 +1924,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       toast.classList.add('show');
     });
 
-    setTimeout(function () {
-      toast.classList.add('fade-out');
-      toast.classList.remove('show');
-    }, 3800);
+    // Guests get longer to look at the preview; hovering keeps it open.
+    clearTimeout(checkinToastTimer);
+    checkinToastTimer = setTimeout(hideCheckinToast, isSignedIn ? 3800 : 12000);
   }
+
+  (function bindCheckinToast() {
+    const toast = document.getElementById('checkinToast');
+    const closeBtn = document.getElementById('checkinToastClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', hideCheckinToast);
+    }
+    if (toast) {
+      toast.addEventListener('mouseenter', function () { clearTimeout(checkinToastTimer); });
+      toast.addEventListener('mouseleave', function () {
+        if (toast.classList.contains('show')) {
+          checkinToastTimer = setTimeout(hideCheckinToast, 4000);
+        }
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toast && toast.classList.contains('show')) {
+        hideCheckinToast();
+      }
+    });
+  })();
 
   function submitMood() {
     const val = parseInt(document.getElementById('mood-slider').value);
@@ -1836,7 +1977,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
-      showCheckinToast();
+      showCheckinToast(val);
 
       if (btn) {
         btn.classList.remove('is-processing');
