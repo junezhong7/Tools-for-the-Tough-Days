@@ -572,6 +572,65 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .pull-quote { animation: fadeUp 0.6s 0.1s ease both; }
   </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    .hero-inner { max-width: 1200px; gap: 64px; grid-template-columns: 1fr 300px; }
+    /* Banner text matches the other pages (index.html / assets/readability.css) */
+    .hero-eyebrow { font-size: 14px; margin-bottom: 16px; }
+    .hero-text h1 { font-size: clamp(34px, 4.4vw, 52px); font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
+    .hero-text p { font-size: clamp(18px, 1.6vw, 20px); line-height: 1.6; max-width: 600px; }
+    .hero-text p.hero-eyebrow { font-size: 14px; line-height: 1.4; letter-spacing: 0.12em; opacity: 1; color: rgba(255,255,255,0.8); }
+    .hero-credential { font-size: 15px; padding: 9px 20px; margin-top: 28px; gap: 10px; }
+    .hero-photo-wrap img { max-width: 300px; }
+
+    .section { max-width: 920px; }
+    .pull-quote { padding: 28px 32px; margin-bottom: 48px; }
+    .pull-quote p { font-size: clamp(21px, 2vw, 25px); line-height: 1.6; }
+    .body-copy p { font-size: 19px; line-height: 1.8; margin-bottom: 22px; }
+
+    .experience-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin: 48px 0; }
+    .exp-card { padding: 30px 28px; }
+    .exp-card h3 { font-size: 15px; line-height: 1.4; margin-bottom: 10px; }
+    .exp-card p { font-size: 17px; line-height: 1.6; }
+
+    .diff-banner { padding: 64px 56px; margin: 72px 0; border-radius: 20px; }
+    .section .diff-banner h2 { font-size: clamp(28px, 3vw, 36px); line-height: 1.25; margin-bottom: 20px; }
+    .diff-banner p { font-size: 19px; max-width: 660px; margin-bottom: 32px; }
+    .diff-banner .badge { font-size: 15px; padding: 11px 24px; }
+
+    .personal-section { padding: 44px 44px; gap: 32px; margin-bottom: 64px; border-radius: 20px; }
+    .personal-icon { width: 56px; height: 56px; }
+    .personal-section h3 { font-size: 22px; margin-bottom: 14px; }
+    .personal-section p { font-size: 18px; line-height: 1.75; }
+
+    .reg-note { font-size: 15px; margin-top: 56px; padding-top: 32px; }
+
+    .cta-section { padding: 88px 24px 96px; }
+    .cta-section h2 { font-size: clamp(30px, 3.4vw, 40px); margin-bottom: 32px; }
+    .cta-section p { font-size: 19px; max-width: 560px; }
+    .btn-primary { font-size: 17px; padding: 17px 40px; }
+    .btn-secondary { font-size: 17px; padding: 15px 36px; }
+
+    footer .footer-links { margin-bottom: 16px; }
+    .footer-social { margin: 16px 0; }
+    .footer-crisis { font-size: 14px; margin-top: 16px; }
+
+    @media (max-width: 800px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 0; }
+      .hero-photo-wrap img { max-width: 240px; }
+      .hero-credential { display: inline-block; font-size: 14px; line-height: 1.7; padding: 10px 18px; border-radius: 16px; }
+      .hero-credential svg { vertical-align: -2px; margin-right: 4px; }
+      .section { padding: var(--section-space-mobile) 20px; }
+      .pull-quote { padding: 22px 22px; margin-bottom: 36px; }
+      .body-copy p { font-size: 18px; }
+      .experience-grid { grid-template-columns: 1fr; gap: 18px; margin: 36px 0; }
+      .diff-banner { padding: 44px 24px; margin: 48px 0; }
+      .diff-banner p { font-size: 18px; }
+      .personal-section { padding: 30px 24px; gap: 20px; }
+      .cta-section { padding: 64px 20px 72px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -581,7 +640,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- Crisis bar -->
   <div class="crisis-bar">
-    If things feel urgent right now :
+    If things feel urgent right now:
     <a href="tel:131114">Lifeline 13 11 14</a>
     <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
     <a href="tel:000">Emergency 000</a>
@@ -596,7 +655,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span style="display:none;">Tools for the<br><strong>Tough Days</strong></span>
       </a>
       <ul class="nav-links">
-        <li><a href="support.html">For Personal Life</a></li>
+        <li><a href="index.html">For Personal Life</a></li>
         <li><a href="business.html">For Workplaces</a></li>
         <li><a href="#" class="active">About Nic</a></li>
         <li><a href="login.html" id="navSignIn" class="nav-login">Sign In</a></li>

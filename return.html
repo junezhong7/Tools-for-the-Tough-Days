@@ -29,9 +29,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 </noscript>
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome Back ?Tools for the Tough Days</title>
+<title>Welcome Back — Tools for the Tough Days</title>
 <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
-<meta name="description" content="Welcome back to Tools for the Tough Days. Pick up where you left off or start fresh ?clinically reviewed support whenever you need it.">
+<meta name="description" content="Welcome back to Tools for the Tough Days. Pick up where you left off or start fresh — clinically reviewed support whenever you need it.">
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
@@ -40,7 +40,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window, document, "clarity", "script", "waf821qhxo");
 </script>
-<!-- GA4 placeholder ?replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- GA4 placeholder — replace G-XXXXXXXXXX with your Measurement ID -->
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZVJ1JE6CR"></script>
 <script>
@@ -261,6 +261,117 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* theme-unified's hero orbs poke past the right edge and cause sideways scroll on phones */
+    .hero { overflow-x: clip; }
+
+    /* Scenario tabs */
+    .tab-btn { font-size: 16px; padding: 22px 24px; gap: 8px; }
+
+    /* Scenario header */
+    /* line the header and tabs up with the centred content column below */
+    .scenario-tabs { padding-left: max(40px, calc((100% - 1168px) / 2)); padding-right: max(40px, calc((100% - 1168px) / 2)); }
+    .scen-header { padding: 56px max(40px, calc((100% - 1120px) / 2)); gap: 24px; }
+    .scen-icon { font-size: 44px; }
+    .scen-icon:empty { display: none; }
+    .scen-tag { font-size: 13px; padding: 5px 14px; margin-bottom: 14px; }
+    .scen-header h2 { font-size: clamp(28px, 3vw, 36px); line-height: 1.2; margin-bottom: 12px; }
+    .scen-header p { font-size: 18px; max-width: 680px; }
+
+    /* Layout */
+    .scen-body { max-width: 1200px; padding: 64px 40px; grid-template-columns: minmax(0, 1fr) 400px; gap: 48px; }
+    .mock-screen { border-radius: 20px; }
+
+    /* Welcome banner + check-in */
+    .wb { padding: 32px 36px; }
+    .wb-eyebrow { font-size: 13px; margin-bottom: 10px; }
+    .wb-heading { font-size: 28px; margin-bottom: 8px; }
+    .wb-sub { font-size: 17px; }
+    .return-checkin { padding: 30px 36px; }
+    .return-checkin h3 { font-size: 18px; margin-bottom: 20px; }
+    .slider-labels { font-size: 14px; margin-bottom: 20px; }
+    .checkin-btn { font-size: 16px; padding: 14px 28px; }
+
+    /* Continue / new resources */
+    .continue-section, .new-section { padding: 30px 36px; }
+    .continue-section h3, .new-section h3 { font-size: 13px; margin-bottom: 18px; }
+    .continue-card { gap: 16px; padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .continue-icon { font-size: 24px; }
+    .continue-title { font-size: 16px; margin-bottom: 4px; }
+    .continue-meta { font-size: 14px; }
+    .prog-bar { width: 72px; height: 5px; }
+    .prog-label { font-size: 13px; margin-top: 5px; }
+    .new-chip { font-size: 12px; padding: 3px 10px; margin-right: 8px; }
+    .new-resource { padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .new-resource-title { font-size: 16px; margin: 6px 0 8px; }
+    .new-resource-meta { font-size: 14px; gap: 10px; }
+    .fmt-tag { font-size: 13px; padding: 3px 10px; }
+
+    /* Crisis return box */
+    .crisis-return-box { padding: 28px 30px; margin: 30px 36px; border-radius: 14px; }
+    .crisis-return-box h3 { font-size: 22px; margin-bottom: 10px; }
+    .crisis-return-box p { font-size: 16px; margin-bottom: 18px; }
+    .crisis-return-box p[style] { font-size: 14px !important; margin-bottom: 0; }
+    .crisis-numbers { gap: 12px; margin-bottom: 14px; }
+    .crisis-num-btn, .crisis-secondary { font-size: 15px; padding: 12px 20px; }
+    .mock-screen > div[style] > p[style] { font-size: 16px !important; }
+
+    /* Privacy strip */
+    .privacy-strip { padding: 18px 36px; gap: 16px; flex-wrap: wrap; }
+    .privacy-strip p, .privacy-strip button { font-size: 14px; }
+
+    /* Employer portal */
+    .employer-dash { padding: 30px 36px; }
+    .employer-dash > p[style] { font-size: 13px !important; margin-bottom: 16px !important; }
+    .anon-note { font-size: 15px; padding: 16px 18px; margin-bottom: 22px; border-radius: 10px; }
+    .new-content-alert { padding: 18px 20px; gap: 16px; margin-bottom: 20px; }
+    .nca-num, .dash-num { font-size: 36px; }
+    .nca-text { font-size: 16px; }
+    .nca-sub { font-size: 14px; }
+    .dash-grid { gap: 16px; margin-bottom: 28px; }
+    .dash-card { padding: 20px 22px; border-radius: 12px; }
+    .dash-label { font-size: 14px; margin-top: 4px; }
+    .dash-note { font-size: 13px; margin-top: 8px; }
+    .employer-action { gap: 16px; padding: 18px 20px; margin-bottom: 12px; border-radius: 12px; }
+    .ea-icon { font-size: 22px; }
+    .ea-title { font-size: 16px; }
+    .ea-sub { font-size: 14px; }
+    .ea-arrow { font-size: 22px; }
+
+    /* Topic browser (inline-styled in markup) */
+    .topic-chip { font-size: 15px; padding: 9px 16px; }
+    div:has(> div > div > .topic-chip) { padding-left: 36px !important; padding-right: 36px !important; padding-bottom: 40px !important; }
+    div:has(> div > div > .topic-chip) > h3 { font-size: 14px !important; margin: 12px 0 28px !important; }
+    div:has(> div > div > .topic-chip) > div { margin-bottom: 28px !important; }
+    div:has(> div > div > .topic-chip) > div:last-child { margin-bottom: 0 !important; }
+    div:has(+ div > .topic-chip) { font-size: 13px !important; margin-bottom: 14px !important; }
+    div:has(> .topic-chip) { gap: 10px !important; }
+
+    /* Sidebar cards */
+    .sidebar-card { padding: 30px 28px; margin-bottom: 24px; border-radius: 16px; }
+    .sidebar-card h3 { font-size: 22px; line-height: 1.3; margin-bottom: 12px; }
+    .sidebar-card p { font-size: 16px; margin-bottom: 18px; }
+    .sidebar-card ul li { font-size: 16px; padding: 10px 0 10px 20px; }
+    .sidebar-card ul li::before { line-height: 1.5; }
+    .sidebar-link { font-size: 16px; margin-top: 18px; }
+
+    @media (max-width: 860px) {
+      .scen-body { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .scenario-tabs { padding: 0 8px; }
+      .tab-btn { font-size: 15px; padding: 18px 14px; }
+      .scen-header { padding: 36px 20px; }
+      .scen-body { padding: 40px 20px; gap: 32px; }
+      .wb, .return-checkin, .continue-section, .new-section, .employer-dash { padding: 24px 20px; }
+      .crisis-return-box { margin: 24px 20px; padding: 24px 20px; }
+      .privacy-strip { padding: 16px 20px; }
+      div:has(> div > div > .topic-chip) { padding-left: 20px !important; padding-right: 20px !important; }
+      .sidebar-card { padding: 26px 20px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -270,7 +381,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- Crisis bar -->
 <div class="crisis-bar">
-  <span>If things feel urgent right now </span>
+  <span>If things feel urgent right now:</span>
   <a href="tel:131114">Lifeline 13 11 14</a>
   <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
   <a href="tel:000">Emergency 000</a>
@@ -309,14 +420,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 
-<!-- ═══════════SCENARIO 1: ANONYMOUS RETURN ══════════?->
+<!-- ═══════════SCENARIO 1: ANONYMOUS RETURN ══════════-->
 <div class="scenario-view active" id="scen-anon">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--sand);color:var(--warm-grey)">General public · No login required</span>
       <h2>Welcome back</h2>
-      <p>Your privacy is protected ?your history is stored only on this device, never on our servers. Take a fresh mood check-in and we'll find what's most helpful for today.</p>
+      <p>Your privacy is protected — your history is stored only on this device, never on our servers. Take a fresh mood check-in and we'll find what's most helpful for today.</p>
     </div>
   </div>
 
@@ -332,10 +443,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="return-checkin">
-          <h3>Take a moment ?how's today, honestly?</h3>
+          <h3>Take a moment — how's today, honestly?</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="6">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Find what's helpful </button>
+          <button class="checkin-btn" onclick="window.location.href='index.html'">Find what's helpful </button>
         </div>
 
         <div class="continue-section">
@@ -343,7 +454,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="continue-card">
             <div class="continue-icon"></div>
             <div>
-              <div class="continue-title">Anxiety and avoidance ?breaking the cycle</div>
+              <div class="continue-title">Anxiety and avoidance — breaking the cycle</div>
               <div class="continue-meta"> Anxiety · ANX-P04</div>
             </div>
             <div class="continue-progress">
@@ -367,7 +478,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="privacy-strip">
-          <p>Your data is stored only in this browser ?never on our servers.</p>
+          <p>Your data is stored only in this browser — never on our servers.</p>
           <button>Clear my history</button>
         </div>
 
@@ -378,45 +489,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> I need help right now</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
-              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
-              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+              <a href="index.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="index.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="index.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
-              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
-              <a href="support.html" class="topic-chip">Really down on myself</a>
-              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
-              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
-              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
-              <a href="support.html" class="topic-chip">Expecting father</a>
-              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+              <a href="index.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="index.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="index.html" class="topic-chip">Really down on myself</a>
+              <a href="index.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="index.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="index.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="index.html" class="topic-chip">Expecting father</a>
+              <a href="index.html" class="topic-chip">Drinking, drugs or gambling</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Building better habits</a>
-              <a href="support.html" class="topic-chip">Relationship pressure</a>
-              <a href="support.html" class="topic-chip">Tough with the kids</a>
-              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
-              <a href="support.html" class="topic-chip">Getting older</a>
-              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
-              <a href="support.html" class="topic-chip">Worried about someone else</a>
+              <a href="index.html" class="topic-chip">Building better habits</a>
+              <a href="index.html" class="topic-chip">Relationship pressure</a>
+              <a href="index.html" class="topic-chip">Tough with the kids</a>
+              <a href="index.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="index.html" class="topic-chip">Getting older</a>
+              <a href="index.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="index.html" class="topic-chip">Worried about someone else</a>
             </div>
           </div>
 
           <div>
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Money stress</a>
-              <a href="support.html" class="topic-chip">Big life change</a>
-              <a href="support.html" class="topic-chip">Stressed about the future</a>
+              <a href="index.html" class="topic-chip">Money stress</a>
+              <a href="index.html" class="topic-chip">Big life change</a>
+              <a href="index.html" class="topic-chip">Stressed about the future</a>
             </div>
           </div>
         </div>
@@ -438,8 +549,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="sidebar-card">
         <h3>Want to unlock more?</h3>
-        <p>Subscribe for $15/month and access all 370+ clinically reviewed resources ?covering anxiety, sleep, relationships, financial stress and more.</p>
-        <a href="support.html" class="sidebar-link" id="return-free-resources-link">See all free resources </a><br>
+        <p>Subscribe for $15/month and access all 370+ clinically reviewed resources — covering anxiety, sleep, relationships, financial stress and more.</p>
+        <a href="index.html" class="sidebar-link" id="return-free-resources-link">See all free resources </a><br>
         <a href="https://buy.stripe.com/5kQ00iasf7WybU0dV57EQ00" class="sidebar-link">Subscribe $15/month </a>
       </div>
     </div>
@@ -447,14 +558,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 
-<!-- ═══════════SCENARIO 2: EMPLOYEE WITH ACCESS CODE ══════════?->
+<!-- ═══════════SCENARIO 2: EMPLOYEE WITH ACCESS CODE ══════════-->
 <div class="scenario-view" id="scen-employee">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--teal-light);color:var(--teal)">Team member · Access code recognised</span>
       <h2>Welcome back, team member</h2>
-      <p>Your access is through your employer's subscription. Your individual usage is completely private ?your employer sees only anonymous team totals, never your activity.</p>
+      <p>Your access is through your employer's subscription. Your individual usage is completely private — your employer sees only anonymous team totals, never your activity.</p>
     </div>
   </div>
 
@@ -466,14 +577,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="wb wb-employee">
           <div class="wb-eyebrow">Your team subscription</div>
           <div class="wb-heading">Welcome back.</div>
-          <div class="wb-sub">Your access is private ?your employer sees only anonymous team data, never your individual activity.</div>
+          <div class="wb-sub">Your access is private — your employer sees only anonymous team data, never your individual activity.</div>
         </div>
 
         <div class="return-checkin">
           <h3>How are you feeling right now?</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="7">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Show me what's available </button>
+          <button class="checkin-btn" onclick="window.location.href='index.html'">Show me what's available </button>
         </div>
 
         <div class="continue-section">
@@ -516,7 +627,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="privacy-strip">
-          <p>Your employer sees only anonymous team totals ?never your individual history.</p>
+          <p>Your employer sees only anonymous team totals — never your individual history.</p>
           <button>Clear my history</button>
         </div>
 
@@ -527,45 +638,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> I need help right now</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
-              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
-              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+              <a href="index.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="index.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="index.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
-              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
-              <a href="support.html" class="topic-chip">Really down on myself</a>
-              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
-              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
-              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
-              <a href="support.html" class="topic-chip">Expecting father</a>
-              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+              <a href="index.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="index.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="index.html" class="topic-chip">Really down on myself</a>
+              <a href="index.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="index.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="index.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="index.html" class="topic-chip">Expecting father</a>
+              <a href="index.html" class="topic-chip">Drinking, drugs or gambling</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Building better habits</a>
-              <a href="support.html" class="topic-chip">Relationship pressure</a>
-              <a href="support.html" class="topic-chip">Tough with the kids</a>
-              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
-              <a href="support.html" class="topic-chip">Getting older</a>
-              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
-              <a href="support.html" class="topic-chip">Worried about someone else</a>
+              <a href="index.html" class="topic-chip">Building better habits</a>
+              <a href="index.html" class="topic-chip">Relationship pressure</a>
+              <a href="index.html" class="topic-chip">Tough with the kids</a>
+              <a href="index.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="index.html" class="topic-chip">Getting older</a>
+              <a href="index.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="index.html" class="topic-chip">Worried about someone else</a>
             </div>
           </div>
 
           <div>
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Money stress</a>
-              <a href="support.html" class="topic-chip">Big life change</a>
-              <a href="support.html" class="topic-chip">Stressed about the future</a>
+              <a href="index.html" class="topic-chip">Money stress</a>
+              <a href="index.html" class="topic-chip">Big life change</a>
+              <a href="index.html" class="topic-chip">Stressed about the future</a>
             </div>
           </div>
         </div>
@@ -587,7 +698,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="sidebar-card">
         <h3>Book a session</h3>
-        <p>As a team member, you have access to book a free 15-min call directly with Nic ?a Registered Psychologist with 20+ years of experience.</p>
+        <p>As a team member, you have access to book a free 15-min call directly with Nic — a Registered Psychologist with 20+ years of experience.</p>
         <a href="booking.html" class="sidebar-link">Book a free 15-min call </a>
       </div>
     </div>
@@ -595,14 +706,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 
-<!-- ═══════════SCENARIO 3: RETURN AFTER CRISIS ══════════?->
+<!-- ═══════════SCENARIO 3: RETURN AFTER CRISIS ══════════-->
 <div class="scenario-view" id="scen-crisis">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--red-light);color:var(--red-crisis)">Previous visit: crisis support accessed</span>
       <h2>We're glad you're back</h2>
-      <p>Last time you visited, things were really tough. We never assume how you're feeling today ?take a fresh check-in and we'll guide you from there with warmth.</p>
+      <p>Last time you visited, things were really tough. We never assume how you're feeling today — take a fresh check-in and we'll guide you from there with warmth.</p>
     </div>
   </div>
 
@@ -621,7 +732,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <h3>Take your time with this - there's no rush.</h3>
           <input type="range" class="mini-slider" min="1" max="10" value="5">
           <div class="slider-labels"><span>Really struggling</span><span>Doing well</span></div>
-          <button class="checkin-btn" onclick="window.location.href='support.html'">Tell us how you're doing </button>
+          <button class="checkin-btn" onclick="window.location.href='index.html'">Tell us how you're doing </button>
         </div>
 
         <div class="crisis-return-box">
@@ -635,7 +746,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div style="padding:18px 28px;border-top:1px solid var(--border)">
-          <p style="font-size:13px;color:var(--warm-grey)">Your check-in result will guide you to the right resources for today ?whatever that looks like right now.</p>
+          <p style="font-size:13px;color:var(--warm-grey)">Your check-in result will guide you to the right resources for today — whatever that looks like right now.</p>
         </div>
 
         <!-- TOPIC BROWSER -->
@@ -645,45 +756,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--red-crisis);margin-bottom:8px;"> Crisis support</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip crisis-chip">I'm in crisis</a>
-              <a href="support.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
-              <a href="support.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
+              <a href="index.html" class="topic-chip crisis-chip">I'm in crisis</a>
+              <a href="index.html" class="topic-chip crisis-chip">Domestic violence or abuse</a>
+              <a href="index.html" class="topic-chip crisis-chip">Grief or devastating loss</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My mental health</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Feeling low or depressed</a>
-              <a href="support.html" class="topic-chip">Anxiety or constant worry</a>
-              <a href="support.html" class="topic-chip">Really down on myself</a>
-              <a href="support.html" class="topic-chip">Feeling flat or angry</a>
-              <a href="support.html" class="topic-chip">Struggling since having a baby</a>
-              <a href="support.html" class="topic-chip">Pregnant and struggling</a>
-              <a href="support.html" class="topic-chip">Expecting father</a>
-              <a href="support.html" class="topic-chip">Drinking, drugs or gambling</a>
+              <a href="index.html" class="topic-chip">Feeling low or depressed</a>
+              <a href="index.html" class="topic-chip">Anxiety or constant worry</a>
+              <a href="index.html" class="topic-chip">Really down on myself</a>
+              <a href="index.html" class="topic-chip">Feeling flat or angry</a>
+              <a href="index.html" class="topic-chip">Struggling since having a baby</a>
+              <a href="index.html" class="topic-chip">Pregnant and struggling</a>
+              <a href="index.html" class="topic-chip">Expecting father</a>
+              <a href="index.html" class="topic-chip">Drinking, drugs or gambling</a>
             </div>
           </div>
 
           <div style="margin-bottom:16px;">
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> My wellbeing</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Building better habits</a>
-              <a href="support.html" class="topic-chip">Relationship pressure</a>
-              <a href="support.html" class="topic-chip">Tough with the kids</a>
-              <a href="support.html" class="topic-chip">Struggling with my teenager</a>
-              <a href="support.html" class="topic-chip">Getting older</a>
-              <a href="support.html" class="topic-chip">Don't feel like I belong</a>
-              <a href="support.html" class="topic-chip">Worried about someone else</a>
+              <a href="index.html" class="topic-chip">Building better habits</a>
+              <a href="index.html" class="topic-chip">Relationship pressure</a>
+              <a href="index.html" class="topic-chip">Tough with the kids</a>
+              <a href="index.html" class="topic-chip">Struggling with my teenager</a>
+              <a href="index.html" class="topic-chip">Getting older</a>
+              <a href="index.html" class="topic-chip">Don't feel like I belong</a>
+              <a href="index.html" class="topic-chip">Worried about someone else</a>
             </div>
           </div>
 
           <div>
             <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;"> Life outside of work</div>
             <div style="display:flex;flex-wrap:wrap;gap:7px;">
-              <a href="support.html" class="topic-chip">Money stress</a>
-              <a href="support.html" class="topic-chip">Big life change</a>
-              <a href="support.html" class="topic-chip">Stressed about the future</a>
+              <a href="index.html" class="topic-chip">Money stress</a>
+              <a href="index.html" class="topic-chip">Big life change</a>
+              <a href="index.html" class="topic-chip">Stressed about the future</a>
             </div>
           </div>
         </div>
@@ -704,10 +815,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="sidebar-card">
         <h3>24/7 crisis support</h3>
         <ul>
-          <li>Lifeline ?a href="tel:131114" style="color:var(--teal)">13 11 14</a></li>
-          <li>Beyond Blue ?a href="tel:1300224636" style="color:var(--teal)">1300 22 4636</a></li>
-          <li>1800RESPECT ?a href="tel:1800737732" style="color:var(--teal)">1800 737 732</a></li>
-          <li>Emergency ?a href="tel:000" style="color:var(--teal)">000</a></li>
+          <li>Lifeline — <a href="tel:131114" style="color:var(--teal)">13 11 14</a></li>
+          <li>Beyond Blue — <a href="tel:1300224636" style="color:var(--teal)">1300 22 4636</a></li>
+          <li>1800RESPECT — <a href="tel:1800737732" style="color:var(--teal)">1800 737 732</a></li>
+          <li>Emergency — <a href="tel:000" style="color:var(--teal)">000</a></li>
         </ul>
       </div>
     </div>
@@ -715,14 +826,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 
-<!-- ═══════════SCENARIO 4: EMPLOYER PORTAL ══════════?->
+<!-- ═══════════SCENARIO 4: EMPLOYER PORTAL ══════════-->
 <div class="scenario-view" id="scen-employer">
   <div class="scen-header">
     <div class="scen-icon"></div>
     <div>
       <span class="scen-tag" style="background:var(--blue-bg);color:var(--blue)">Employer · Subscription active</span>
       <h2>Your employer dashboard</h2>
-      <p>Anonymous aggregate data only ?you'll never see individual employee names, resources accessed, or personal activity. Your team's privacy is fully protected.</p>
+      <p>Anonymous aggregate data only — you'll never see individual employee names, resources accessed, or personal activity. Your team's privacy is fully protected.</p>
     </div>
   </div>
 
@@ -815,7 +926,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="scen-sidebar">
       <div class="sidebar-card">
         <h3>Your team's privacy</h3>
-        <p>Individual employee activity is never visible to you or any other employer. The data you see is anonymous and aggregated ?it shows team trends only.</p>
+        <p>Individual employee activity is never visible to you or any other employer. The data you see is anonymous and aggregated — it shows team trends only.</p>
         <ul>
           <li>No individual names or activity</li>
           <li>No specific resources accessed shown</li>

@@ -17,6 +17,18 @@ if ($action === 'stream') {
     handle_stream();
 }
 
+// Browsing the catalogue (topic map + resource titles) is public so everyone can see
+// what is available. Opening content (issue/resolve) still requires a session and an
+// active subscription.
+if ($action === 'topics' || $action === 'list') {
+    $viewer = current_user();
+    $viewerId = $viewer ? (int) ($viewer['id'] ?? 0) : null;
+    if ($action === 'topics') {
+        handle_topics($viewerId ?: null);
+    }
+    handle_list($viewerId ?: null);
+}
+
 // All other actions require a valid session.
 $user = require_auth();
 $userId = (int) ($user['id'] ?? 0);
@@ -25,12 +37,6 @@ if ($userId <= 0) {
 }
 
 switch ($action) {
-    case 'topics':
-        handle_topics($userId);
-        break;
-    case 'list':
-        handle_list($userId);
-        break;
     case 'issue':
         handle_issue($userId);
         break;
@@ -41,13 +47,8 @@ switch ($action) {
         json_error(400, 'INVALID_ACTION', 'Unknown action.');
 }
 
-function handle_topics(int $userId): never
+function handle_topics(?int $userId): never
 {
-    if (!user_has_active_subscription($userId)) {
-        audit('resource.topics.denied.subscription', $userId, []);
-        json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
-    }
-
     $catalog = get_resource_catalog();
     $topics = get_topic_prefix_map($catalog);
 
@@ -120,13 +121,8 @@ function get_topic_prefix_map(string $catalog = 'personal'): array
     return $map;
 }
 
-function handle_list(int $userId): never
+function handle_list(?int $userId): never
 {
-    if (!user_has_active_subscription($userId)) {
-        audit('resource.list.denied.subscription', $userId, []);
-        json_error(403, 'SUBSCRIPTION_REQUIRED', 'Active subscription required.');
-    }
-
     $catalog = get_resource_catalog();
     $prefixesRaw = trim((string) ($_GET['prefixes'] ?? ''));
     if ($prefixesRaw === '') {

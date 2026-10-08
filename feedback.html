@@ -29,9 +29,9 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 </noscript>
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Share Your Feedback ?Tools for the Tough Days</title>
+<title>Share Your Feedback — Tools for the Tough Days</title>
 <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
-<meta name="description" content="We'd love to hear from you. Tell us what's working, what's missing, or why you're leaving ?every piece of feedback helps us improve.">
+<meta name="description" content="We'd love to hear from you. Tell us what's working, what's missing, or why you're leaving — every piece of feedback helps us improve.">
 <!-- Microsoft Clarity -->
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
@@ -187,6 +187,56 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   }
 </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Utility form page: modest hero so the reason cards are visible straight away. */
+    .hero-sub { max-width: 620px; }
+
+    .main-wrap { max-width: 840px; padding: 56px 40px 104px; }
+    .section-label { font-size: 13px; letter-spacing: 0.12em; margin-bottom: 24px; }
+
+    /* Reason cards */
+    .reason-grid { gap: 20px; margin-bottom: 48px; }
+    .reason-card { padding: 28px 28px; border-radius: 16px; }
+    .reason-icon { font-size: 28px; margin-bottom: 12px; }
+    .reason-title { font-size: 19px; font-weight: 600; line-height: 1.35; margin-bottom: 8px; }
+    .reason-sub { font-size: 16px; line-height: 1.6; }
+
+    /* Form panels */
+    .form-panel { padding: 44px 48px; border-radius: 20px; margin-bottom: 48px; }
+    .form-panel h2 { font-size: clamp(26px, 2.8vw, 32px); line-height: 1.25; margin-bottom: 12px; }
+    .form-panel .panel-sub { font-size: 17px; line-height: 1.7; margin-bottom: 32px; }
+    .form-group { margin-bottom: 26px; }
+    .form-group label { font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 10px; }
+    .opt { font-size: 15px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea { font-size: 17px; padding: 14px 18px; border-radius: 10px; }
+    .form-group select { padding-right: 44px; background-position: right 18px center; }
+    .form-group textarea { min-height: 140px; line-height: 1.65; }
+    .form-group textarea[style*="min-height"] { min-height: 130px !important; }
+    .star-row { gap: 10px; }
+    .star-btn { font-size: 32px; }
+    .star-label { font-size: 14px; margin-top: 8px; }
+    .submit-btn { font-size: 17px; padding: 16px 36px; }
+    .privacy-note { font-size: 15px; margin-top: 18px; }
+
+    /* Success state */
+    .success-state { padding: 64px 40px; border-radius: 20px; }
+    .success-state h2 { font-size: clamp(28px, 3vw, 34px); margin-bottom: 14px; }
+    .success-state p { font-size: 18px; max-width: 520px; margin-bottom: 32px; }
+    .success-state a { font-size: 17px; padding: 15px 32px; }
+
+    @media (max-width: 800px) {
+      .main-wrap { padding: 40px 20px 72px; }
+      .form-panel { padding: 32px 22px; }
+      .success-state { padding: 44px 22px; }
+    }
+    @media (max-width: 700px) {
+      .reason-card { padding: 22px 22px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -195,7 +245,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <div class="crisis-bar">
-  <span>If things feel urgent right now </span>
+  <span>If things feel urgent right now:</span>
   <a href="tel:131114">Lifeline 13 11 14</a>
   <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
   <a href="tel:000">Emergency 000</a>
@@ -204,7 +254,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <nav>
   <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
   <div class="nav-links">
-    <a href="support.html">For Personal Life</a>
+    <a href="index.html">For Personal Life</a>
     <a href="business.html">For Workplaces</a>
     <a href="about-nic.html">About Nic</a>
     <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
@@ -219,7 +269,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="hero-content">
     <div class="hero-eyebrow">Your voice matters</div>
     <h1>Share your <em>feedback</em></h1>
-    <p class="hero-sub">Every piece of feedback helps us build something better. Tell us what's working, what's missing, or why you're leaving ?we read every response personally.</p>
+    <p class="hero-sub">Every piece of feedback helps us build something better. Tell us what's working, what's missing, or why you're leaving — we read every response personally.</p>
   </div>
 </section>
 
@@ -233,7 +283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="reason-card" onclick="selectReason('cancel')">
         <span class="reason-icon"></span>
         <div class="reason-title">I'm cancelling my subscription</div>
-        <div class="reason-sub">Tell us why you're leaving ?it helps us improve for everyone.</div>
+        <div class="reason-sub">Tell us why you're leaving — it helps us improve for everyone.</div>
       </button>
 
       <button class="reason-card" onclick="selectReason('missing')">
@@ -245,13 +295,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="reason-card" onclick="selectReason('suggestion')">
         <span class="reason-icon"></span>
         <div class="reason-title">I have a suggestion</div>
-        <div class="reason-sub">An idea for a new resource, feature, or improvement ?we're listening.</div>
+        <div class="reason-sub">An idea for a new resource, feature, or improvement — we're listening.</div>
       </button>
 
       <button class="reason-card" onclick="selectReason('general')">
         <span class="reason-icon"></span>
         <div class="reason-title">General feedback</div>
-        <div class="reason-sub">Something else you'd like to share ?good or not so good.</div>
+        <div class="reason-sub">Something else you'd like to share — good or not so good.</div>
       </button>
 
     </div>
@@ -260,7 +310,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- SUCCESS STATE (shown after submission) -->
   <div class="success-state" id="success-state">
     <div class="s-icon"></div>
-    <h2>Thank you ?that really helps.</h2>
+    <h2>Thank you — that really helps.</h2>
     <p>Nic reads every response personally. Your feedback directly shapes what gets built and improved on this platform.</p>
     <a href="index.html">Back to the platform</a>
   </div>
@@ -268,7 +318,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- PANEL: Cancelling -->
   <div class="form-panel" id="panel-cancel">
     <h2>Sorry to see you go</h2>
-    <p class="panel-sub">Before you leave, could you take a moment to tell us why? It takes less than a minute and genuinely helps us improve ?for you and for everyone who comes after.</p>
+    <p class="panel-sub">Before you leave, could you take a moment to tell us why? It takes less than a minute and genuinely helps us improve — for you and for everyone who comes after.</p>
 
     <div class="form-group">
       <label>What's the main reason you're cancelling? <span class="opt">(choose one)</span></label>
@@ -288,22 +338,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="form-group">
       <label>How would you rate your overall experience? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-cancel">
-        <button class="star-btn" onclick="setStars('cancel',1)"></button>
-        <button class="star-btn" onclick="setStars('cancel',2)"></button>
-        <button class="star-btn" onclick="setStars('cancel',3)"></button>
-        <button class="star-btn" onclick="setStars('cancel',4)"></button>
-        <button class="star-btn" onclick="setStars('cancel',5)"></button>
+        <button class="star-btn" onclick="setStars('cancel',1)">⭐</button>
+        <button class="star-btn" onclick="setStars('cancel',2)">⭐</button>
+        <button class="star-btn" onclick="setStars('cancel',3)">⭐</button>
+        <button class="star-btn" onclick="setStars('cancel',4)">⭐</button>
+        <button class="star-btn" onclick="setStars('cancel',5)">⭐</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>
 
     <div class="form-group">
       <label>Is there anything we could have done differently? <span class="opt">(optional)</span></label>
-      <textarea placeholder="Your honest thoughts ?even a sentence helps..."></textarea>
+      <textarea placeholder="Your honest thoughts — even a sentence helps..."></textarea>
     </div>
 
     <div class="form-group">
-      <label>Your email <span class="opt">(optional ?only if you'd like us to follow up)</span></label>
+      <label>Your email <span class="opt">(optional — only if you'd like us to follow up)</span></label>
       <input type="email" placeholder="your@email.com.au">
     </div>
 
@@ -344,17 +394,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="form-group">
       <label>How would you rate what was available? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-missing">
-        <button class="star-btn" onclick="setStars('missing',1)"></button>
-        <button class="star-btn" onclick="setStars('missing',2)"></button>
-        <button class="star-btn" onclick="setStars('missing',3)"></button>
-        <button class="star-btn" onclick="setStars('missing',4)"></button>
-        <button class="star-btn" onclick="setStars('missing',5)"></button>
+        <button class="star-btn" onclick="setStars('missing',1)">⭐</button>
+        <button class="star-btn" onclick="setStars('missing',2)">⭐</button>
+        <button class="star-btn" onclick="setStars('missing',3)">⭐</button>
+        <button class="star-btn" onclick="setStars('missing',4)">⭐</button>
+        <button class="star-btn" onclick="setStars('missing',5)">⭐</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>
 
     <div class="form-group">
-      <label>Your email <span class="opt">(optional ?we'll let you know when relevant resources are added)</span></label>
+      <label>Your email <span class="opt">(optional — we'll let you know when relevant resources are added)</span></label>
       <input type="email" placeholder="your@email.com.au">
     </div>
 
@@ -385,7 +435,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div class="form-group">
-      <label>Your email <span class="opt">(optional ?if you'd like Nic to follow up with you)</span></label>
+      <label>Your email <span class="opt">(optional — if you'd like Nic to follow up with you)</span></label>
       <input type="email" placeholder="your@email.com.au">
     </div>
 
@@ -396,7 +446,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- PANEL: General -->
   <div class="form-panel" id="panel-general">
     <h2>Tell us what's on your mind</h2>
-    <p class="panel-sub">Good or not so good ?Nic reads every response personally and takes all of it seriously.</p>
+    <p class="panel-sub">Good or not so good — Nic reads every response personally and takes all of it seriously.</p>
 
     <div class="form-group">
       <label>Your feedback</label>
@@ -406,11 +456,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="form-group">
       <label>How would you rate your overall experience? <span class="opt">(optional)</span></label>
       <div class="star-row" id="stars-general">
-        <button class="star-btn" onclick="setStars('general',1)"></button>
-        <button class="star-btn" onclick="setStars('general',2)"></button>
-        <button class="star-btn" onclick="setStars('general',3)"></button>
-        <button class="star-btn" onclick="setStars('general',4)"></button>
-        <button class="star-btn" onclick="setStars('general',5)"></button>
+        <button class="star-btn" onclick="setStars('general',1)">⭐</button>
+        <button class="star-btn" onclick="setStars('general',2)">⭐</button>
+        <button class="star-btn" onclick="setStars('general',3)">⭐</button>
+        <button class="star-btn" onclick="setStars('general',4)">⭐</button>
+        <button class="star-btn" onclick="setStars('general',5)">⭐</button>
       </div>
       <div class="star-label">Click to rate</div>
     </div>

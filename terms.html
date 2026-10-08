@@ -49,7 +49,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
   gtag('config', 'G-VZVJ1JE6CR');
 </script>
 <script src="/scripts/utm-tracker.js"></script>
-  <!-- GA4 placeholder ?replace G-XXXXXXXXXX with your Measurement ID -->
+  <!-- GA4 placeholder — replace G-XXXXXXXXXX with your Measurement ID -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -127,7 +127,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       text-align: center;
     }
     .page-header .eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 12px; }
-    .page-header h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 600; margin-bottom: 14px; }
+    .page-header h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400; margin-bottom: 14px; }
     .page-header .updated { font-size: 0.84rem; opacity: 0.7; font-style: italic; }
     .page-header .legal-note { display: inline-block; margin-top: 18px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); border-radius: 50px; padding: 7px 18px; font-size: 0.8rem; font-weight: 600; }
 
@@ -261,6 +261,58 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
       z-index: 1;
     }
   </style>
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Legal page: keep the header modest so the document starts quickly. */
+    .page-header.hero { padding-left: 24px; padding-right: 24px; }
+    .page-header .eyebrow { font-size: 14px; margin-bottom: 16px; }
+    .page-header .updated { font-size: 16px; }
+    .page-header .legal-note { font-size: 15px; padding: 9px 22px; margin-top: 22px; }
+
+    /* Document column: ~760px line length */
+    .page-body { max-width: 808px; padding: 72px 24px 104px; }
+
+    .toc { padding: 32px 40px; margin-bottom: 64px; }
+    .toc h2 { font-size: 14px; margin-bottom: 20px; }
+    .toc ol { padding-left: 22px; }
+    .toc li { margin-bottom: 10px; font-size: 17px; }
+    .toc a { font-size: 17px; }
+
+    .legal-section { margin-bottom: 64px; scroll-margin-top: 110px; }
+    .legal-section h2 { font-size: clamp(26px, 2.6vw, 30px); line-height: 1.3; margin-bottom: 24px; padding-bottom: 14px; }
+    .legal-section h3 { font-size: 20px; line-height: 1.4; margin: 36px 0 14px; }
+    .legal-section p { font-size: 18px; line-height: 1.75; margin-bottom: 20px; }
+    .legal-section ul, .legal-section ol { padding-left: 26px; margin-bottom: 22px; }
+    .legal-section li { font-size: 18px; line-height: 1.75; margin-bottom: 12px; }
+
+    .highlight-box, .warning-box { padding: 24px 28px; margin: 28px 0; }
+    .highlight-box p, .warning-box p { font-size: 18px; line-height: 1.7; }
+
+    .contact-card { padding: 32px 40px; margin-top: 32px; }
+    .contact-card h3 { font-size: 20px; margin: 0 0 16px; }
+    .contact-card p { font-size: 17px; line-height: 1.7; margin-bottom: 8px; }
+
+    /* Inline-styled table and notes (privacy policy) */
+    .legal-section table { font-size: 17px !important; }
+    .legal-section th, .legal-section td { padding: 16px 20px !important; line-height: 1.6; }
+    .legal-section p[style*="font-style:italic"] { font-size: 16px !important; }
+
+    footer { font-size: 15px; }
+    .footer-links { margin-bottom: 16px; }
+    .footer-links a { display: inline-block; margin: 4px 12px; }
+    .footer-crisis { font-size: 14px; margin-top: 14px; }
+
+    @media (max-width: 800px) {
+      .page-body { padding: 48px 20px 72px; }
+      .toc { padding: 24px 22px; margin-bottom: 48px; }
+      .legal-section { margin-bottom: 52px; }
+      .legal-section p, .legal-section li { font-size: 17px; }
+      .legal-section th, .legal-section td { padding: 12px 14px !important; }
+      .highlight-box, .warning-box { padding: 20px 20px; }
+      .contact-card { padding: 24px 22px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -269,7 +321,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
   <div class="crisis-bar">
-    If things feel urgent right now ?
+    If things feel urgent right now:
     <a href="tel:131114">Lifeline 13 11 14</a>
     <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
     <a href="tel:000">Emergency 000</a>
@@ -282,7 +334,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="nav-logo-text">Tools for the Tough Days</span>
       </a>
       <ul class="nav-links">
-        <li><a href="support.html">For Personal Life</a></li>
+        <li><a href="index.html">For Personal Life</a></li>
         <li><a href="business.html">For Workplaces</a></li>
         <li><a href="about-nic.html">About Nic</a></li>
         <li><a href="login.html" id="navSignIn" class="nav-login">Sign In</a></li>
@@ -345,7 +397,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h2>2. About this platform</h2>
       <p>Tools for the Tough Days is operated by Nic Marcon (ABN 69 142 299 250), a Registered Psychologist with the Psychology Board of Australia (AHPRA).</p>
       <p>The Platform provides access to clinically reviewed psychoeducational resources including written materials and audio content covering topics such as stress, anxiety, relationships, sleep, self-esteem, and workplace wellbeing.</p>
-      <p>All resources on the Platform have been clinically authored and reviewed by Nic Marcon personally before publication.</p>
+      <p>All resources on the Platform have been reviewed and approved by Nic Marcon personally before publication.</p>
     </div>
 
     <div class="legal-section" id="t3">
@@ -539,7 +591,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
     </div>
     <div class="footer-links">
-      <a href="index.html#individuals">For Personal Life</a>
+      <a href="index.html">For Personal Life</a>
       <a href="business.html">For Workplaces</a>
       <a href="about-nic.html">About Nic</a>
       <a href="faq.html">FAQs</a>
