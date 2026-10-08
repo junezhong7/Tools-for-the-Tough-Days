@@ -21,6 +21,16 @@ nav > .nav-logo { min-height: 80px; }
 .nav-links a, .nav-links button, .nav-login, nav .btn-nav { font-size: 15px; }
 .nav-login { padding: 10px 20px; }
 
+/* Same nav width on every page, matching the homepage (1200px band, logo inset 100px).
+   Covers both markups: nav > .nav-inner and the logo/links placed directly under nav. */
+@media (min-width: 801px) {
+  .nav-inner .nav-logo { margin-left: 100px; }
+  nav:has(> .nav-logo) { padding-left: 0; padding-right: 0; }
+  nav > .nav-logo { margin-left: max(124px, calc((100% - 1200px) / 2 + 124px)); }
+  nav > .nav-links,
+  nav > ul.nav-links { margin-right: max(24px, calc((100% - 1200px) / 2 + 24px)); }
+}
+
 /* Hero - compact banner, matches index.html */
 .hero { padding-top: var(--hero-space-top); padding-bottom: var(--hero-space-bottom); overflow-x: clip; } /* clip the theme orbs that caused sideways scroll */
 .hero-content { max-width: 760px; }

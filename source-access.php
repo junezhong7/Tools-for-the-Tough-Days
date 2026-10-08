@@ -63,19 +63,19 @@ function is_allowed_target_host(string $host): bool
 
 $target = trim((string) ($_GET['target'] ?? ''));
 if ($target === '') {
-    redirect_to('/support.html?source_access=missing_target');
+    redirect_to('/?source_access=missing_target');
 }
 
 $parts = parse_url($target);
 if (!is_array($parts) || !isset($parts['scheme'], $parts['host'])) {
-    redirect_to('/support.html?source_access=invalid_target');
+    redirect_to('/?source_access=invalid_target');
 }
 
 $scheme = strtolower((string) $parts['scheme']);
 $host = strtolower((string) $parts['host']);
 
 if (($scheme !== 'https' && $scheme !== 'http') || !is_allowed_target_host($host)) {
-    redirect_to('/support.html?source_access=blocked_target');
+    redirect_to('/?source_access=blocked_target');
 }
 
 $user = current_user();
@@ -85,7 +85,7 @@ if ($user === null) {
 
 $userId = (int) ($user['id'] ?? 0);
 if ($userId <= 0 || !user_has_active_subscription($userId)) {
-    redirect_to('/support.html?source_access=subscription_required');
+    redirect_to('/?source_access=subscription_required');
 }
 
 redirect_to($target);

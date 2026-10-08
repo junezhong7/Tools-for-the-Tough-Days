@@ -484,7 +484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- CRISIS BAR -->
   <div class="crisis-bar">
-    <span>If things feel urgent right now :</span>
+    <span>If things feel urgent right now:</span>
     <a href="tel:131114">Lifeline 13 11 14</a>
     <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
     <a href="tel:000">Emergency 000</a>
@@ -493,7 +493,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <nav>
     <a class="nav-logo" href="/index.html"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
     <div class="nav-right">
-      <a href="/support.html" class="btn-nav btn-outline">My Resources</a>
+      <a href="/index.html" class="btn-nav btn-outline">My Resources</a>
       <a href="/my-preference.html" class="btn-nav btn-outline">My Preferences</a>
       <button class="btn-nav btn-teal" id="btnLogout" type="button">Sign Out</button>
     </div>
@@ -834,9 +834,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           : s.cancel_at_period_end
           ? `<button class="btn-sm btn-success" onclick="resumeSub(${s.id}, this)">Keep Subscription</button>`
           : s.status === 'pending'
-          ? `<a class="btn-sm btn-link-soft" href="/support.html">Choose a Plan</a>`
+          ? `<a class="btn-sm btn-link-soft" href="/index.html">Choose a Plan</a>`
           : s.status === 'cancelled'
-          ? `<a class="btn-sm btn-link-soft" href="/support.html">Subscribe Again</a>`
+          ? `<a class="btn-sm btn-link-soft" href="/index.html">Subscribe Again</a>`
           : '';
 
         return `<div class="${cardCls}">

@@ -129,7 +129,7 @@
 
   function getRedirectTarget() {
     var params = new URLSearchParams(window.location.search);
-    return params.get('redirect') || '/support.html';
+    return params.get('redirect') || '/';
   }
 
   function getCurrentPathWithQuery() {

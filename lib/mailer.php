@@ -19,7 +19,7 @@ function send_trial_day10_email(string $toEmail, ?string $fullName = null): bool
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $platformUrl    = $siteUrl . '/support.html';
+    $platformUrl    = $siteUrl . '/';
     $membershipUrl  = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $platformUrl);
 
     $subject = 'Your trial ends soon — a quick note';
@@ -66,7 +66,7 @@ function send_trial_day14_email(string $toEmail, ?string $fullName = null): bool
     $firstName     = extract_first_name($fullName);
     $greeting      = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl       = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $membershipUrl = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $siteUrl . '/support.html');
+    $membershipUrl = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $siteUrl . '/');
 
     $subject = 'Your trial has ended — here\'s how to continue';
 
@@ -562,7 +562,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
 function send_newsletter_unsubscribe_email(string $toEmail): bool
 {
     $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $resubscribeUrl = $siteUrl . '/support.html';
+    $resubscribeUrl = $siteUrl . '/';
 
     $subject = "You've been unsubscribed";
 
@@ -590,7 +590,7 @@ function send_resource_suggestion_email(string $fromEmail, ?string $fromName, st
 {
     $recipients = ['nic.marcon@emotionalbalance.com.au', 'june.zhong@emotionalbalance.com.au'];
     $name = trim((string) $fromName);
-    $catalogLabel = $catalog === 'workplace' ? 'Workplace library (business.html)' : 'Personal library (support.html)';
+    $catalogLabel = $catalog === 'workplace' ? 'Workplace library (business.html)' : 'Personal library (homepage)';
     $fromLine = $name !== '' ? "{$name} <{$fromEmail}>" : $fromEmail;
 
     $subject = 'Resource suggestion from a member';
@@ -989,7 +989,7 @@ function send_checkin_reminder_email(
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
-    $checkinUrl = $siteUrl . '/support.html?utm_source=email&utm_medium=checkin';
+    $checkinUrl = $siteUrl . '/?utm_source=email&utm_medium=checkin';
     $prefsUrl   = $siteUrl . '/my-preference.html';
 
     $allMessages = load_reminder_messages();

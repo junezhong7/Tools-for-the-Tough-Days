@@ -713,7 +713,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             errEl.style.display = 'block';
           } else {
             sessionStorage.setItem('showWelcomeAfterLogin', '1');
-            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
+            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
             window.location.href = redirect;
           }
         })
@@ -752,7 +752,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               errEl.style.display = 'block';
             } else {
               sessionStorage.setItem('showWelcomeAfterLogin', '1');
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
+              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
               window.location.href = redirect;
             }
           })
@@ -829,7 +829,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             } else {
               // Redirect to dashboard (or the page they came from)
               sessionStorage.setItem('showWelcomeAfterLogin', '1');
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/support.html';
+              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
               window.location.href = redirect;
             }
           })
