@@ -502,7 +502,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . "Registered Psychologist\n"
         . "Tools for the Tough Days\n"
         . "www.toolsforthetoughdays.com.au\n\n"
-        . "Every resource on this platform is clinically authored and reviewed by Nic Marcon, Registered Psychologist, before publication.\n\n"
+        . "Every resource on this platform is reviewed and approved by Nic Marcon, Registered Psychologist, before publication.\n\n"
         . "Marcon Emotional Balance Centres Pty Ltd, Brisbane, Queensland. You are receiving this because you asked for the newsletter.\n"
         . "Unsubscribe: " . $unsubUrl;
 
@@ -547,7 +547,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . '</td></tr>'
         . '<tr><td style="padding:32px 44px 0;"><div style="border-top:1px solid #e2e0d8; font-size:1px; line-height:1px;">&nbsp;</div></td></tr>'
         . '<tr><td style="padding:20px 44px 44px; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#8a8a8a;">'
-        . '<p style="margin:0 0 10px;">Every resource on this platform is clinically authored and reviewed by Nic Marcon, Registered Psychologist, before publication.</p>'
+        . '<p style="margin:0 0 10px;">Every resource on this platform is reviewed and approved by Nic Marcon, Registered Psychologist, before publication.</p>'
         . '<p style="margin:0;">Marcon Emotional Balance Centres Pty Ltd, Brisbane, Queensland. You are receiving this because you asked for the newsletter. '
         . '<a href="' . $safeUnsubUrl . '" style="color:#8a8a8a; text-decoration:underline;">Unsubscribe</a></p>'
         . '</td></tr>'
