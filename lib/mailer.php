@@ -19,7 +19,7 @@ function send_trial_day10_email(string $toEmail, ?string $fullName = null): bool
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $platformUrl    = $siteUrl . '/support.html';
+    $platformUrl    = $siteUrl . '/';
     $membershipUrl  = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $platformUrl);
 
     $subject = 'Your trial ends soon — a quick note';
@@ -66,7 +66,7 @@ function send_trial_day14_email(string $toEmail, ?string $fullName = null): bool
     $firstName     = extract_first_name($fullName);
     $greeting      = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl       = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $membershipUrl = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $siteUrl . '/support.html');
+    $membershipUrl = (string) (getenv('FOUNDATION_MEMBERSHIP_URL') ?: $siteUrl . '/');
 
     $subject = 'Your trial has ended — here\'s how to continue';
 
@@ -502,7 +502,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . "Registered Psychologist\n"
         . "Tools for the Tough Days\n"
         . "www.toolsforthetoughdays.com.au\n\n"
-        . "Every resource on this platform is clinically authored and reviewed by Nic Marcon, Registered Psychologist, before publication.\n\n"
+        . "Every resource on this platform is reviewed and approved by Nic Marcon, Registered Psychologist, before publication.\n\n"
         . "Marcon Emotional Balance Centres Pty Ltd, Brisbane, Queensland. You are receiving this because you asked for the newsletter.\n"
         . "Unsubscribe: " . $unsubUrl;
 
@@ -547,7 +547,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . '</td></tr>'
         . '<tr><td style="padding:32px 44px 0;"><div style="border-top:1px solid #e2e0d8; font-size:1px; line-height:1px;">&nbsp;</div></td></tr>'
         . '<tr><td style="padding:20px 44px 44px; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#8a8a8a;">'
-        . '<p style="margin:0 0 10px;">Every resource on this platform is clinically authored and reviewed by Nic Marcon, Registered Psychologist, before publication.</p>'
+        . '<p style="margin:0 0 10px;">Every resource on this platform is reviewed and approved by Nic Marcon, Registered Psychologist, before publication.</p>'
         . '<p style="margin:0;">Marcon Emotional Balance Centres Pty Ltd, Brisbane, Queensland. You are receiving this because you asked for the newsletter. '
         . '<a href="' . $safeUnsubUrl . '" style="color:#8a8a8a; text-decoration:underline;">Unsubscribe</a></p>'
         . '</td></tr>'
@@ -562,7 +562,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
 function send_newsletter_unsubscribe_email(string $toEmail): bool
 {
     $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
-    $resubscribeUrl = $siteUrl . '/support.html';
+    $resubscribeUrl = $siteUrl . '/';
 
     $subject = "You've been unsubscribed";
 
@@ -590,7 +590,7 @@ function send_resource_suggestion_email(string $fromEmail, ?string $fromName, st
 {
     $recipients = ['nic.marcon@emotionalbalance.com.au', 'june.zhong@emotionalbalance.com.au'];
     $name = trim((string) $fromName);
-    $catalogLabel = $catalog === 'workplace' ? 'Workplace library (business.html)' : 'Personal library (support.html)';
+    $catalogLabel = $catalog === 'workplace' ? 'Workplace library (business.html)' : 'Personal library (homepage)';
     $fromLine = $name !== '' ? "{$name} <{$fromEmail}>" : $fromEmail;
 
     $subject = 'Resource suggestion from a member';
@@ -989,7 +989,7 @@ function send_checkin_reminder_email(
     $firstName  = extract_first_name($fullName);
     $greeting   = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
     $siteUrl    = defined('SITE_URL') ? SITE_URL : 'https://www.toolsforthetoughdays.com.au';
-    $checkinUrl = $siteUrl . '/support.html?utm_source=email&utm_medium=checkin';
+    $checkinUrl = $siteUrl . '/?utm_source=email&utm_medium=checkin';
     $prefsUrl   = $siteUrl . '/my-preference.html';
 
     $allMessages = load_reminder_messages();

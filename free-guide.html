@@ -77,7 +77,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
     .hero-logo { height: 56px; margin-bottom: 20px; }
     .hero-eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: #c8f0f2; margin-bottom: 12px; }
-    .hero h1 { font-family: 'Lora', serif; font-size: clamp(24px, 4vw, 36px); color: #fff; line-height: 1.2; margin-bottom: 14px; font-weight: 600; }
+    .hero h1 { font-family: 'Lora', serif; font-size: clamp(24px, 4vw, 36px); color: #fff; line-height: 1.2; margin-bottom: 14px; font-weight: 400; }
     .hero-sub { color: rgba(255,255,255,0.92); font-size: 17px; font-weight: 500; max-width: 480px; margin: 0 auto; }
 
     /* MAIN */
@@ -149,6 +149,55 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     }
   </style>
   <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <style>
+    /* READABILITY PASS - page-specific (shared rules live in assets/readability.css) */
+    /* Short lead-capture page: keep the hero compact so the form stays near the fold. */
+    .hero-logo { height: 64px; margin-bottom: 24px; }
+    .hero-eyebrow { color: #c8f0f2; }
+    .hero-sub { max-width: 620px; }
+
+    .main-wrap { max-width: 1040px; padding: 0 24px 96px; }
+    .card { border-radius: 24px; }
+
+    .card-preview { padding: 48px 44px; }
+    .card-preview h2 { font-size: 24px; margin-bottom: 28px; }
+    .tip-item { gap: 16px; margin-bottom: 22px; }
+    .tip-num { width: 34px; height: 34px; font-size: 16px; }
+    .tip-text strong { font-size: 18px; line-height: 1.45; padding-top: 3px; }
+    .tip-text span { font-size: 16px; }
+    .tip-more { font-size: 16px; margin-top: 12px; }
+
+    .card-form { padding: 48px 44px; }
+    .card-form h3 { font-size: clamp(24px, 2.4vw, 28px); line-height: 1.25; margin-bottom: 12px; }
+    .card-form p.lead { font-size: 17px; line-height: 1.6; margin-bottom: 28px; }
+    label.field-label { font-size: 15px; margin-bottom: 8px; }
+    input[type="email"] { font-size: 17px; padding: 16px 18px; border-radius: 12px; margin-bottom: 20px; }
+    .opt-row { gap: 12px; margin-bottom: 28px; }
+    .opt-row input[type="checkbox"] { width: 20px; height: 20px; margin-top: 3px; }
+    .opt-row label { font-size: 15px; line-height: 1.55; }
+    .btn-submit { font-size: 17px; padding: 17px 24px; }
+    .form-message { font-size: 15px; padding: 12px 16px; margin-top: 16px; }
+    .trust-line { font-size: 14px; margin-top: 22px; }
+    .success-state h3 { font-size: 28px; margin-bottom: 14px; }
+    .success-state p { font-size: 17px; }
+    .success-state p.trust-line { font-size: 14px; }
+
+    /* Theme turns the footer dark teal; the original grey text was unreadable on it. */
+    footer.mini-footer { display: block; padding: 32px 24px 40px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.75); }
+    footer.mini-footer a { color: rgba(255,255,255,0.85); }
+
+    @media (max-width: 800px) {
+      .hero-logo { height: 48px; margin-bottom: 16px; }
+      .hero h1 { font-size: clamp(30px, 8vw, 38px); margin-bottom: 14px; }
+      .main-wrap { padding: 0 16px 64px; }
+      .card-form { padding: 32px 22px 28px; }
+      .card-preview { padding: 28px 22px; }
+      .card-preview h2 { margin-bottom: 20px; }
+      .tip-text strong { font-size: 17px; }
+      .card-form p.lead { margin-bottom: 20px; }
+    }
+  </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -157,7 +206,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
   <div class="crisis-bar">
-    <span>If things feel urgent right now </span>
+    <span>If things feel urgent right now:</span>
     <a href="tel:131114">Lifeline 13 11 14</a>
     <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
     <a href="tel:000">Emergency 000</a>
