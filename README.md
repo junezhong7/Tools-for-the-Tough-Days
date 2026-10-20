@@ -48,6 +48,8 @@ Set these in Azure Web App application settings:
 - `PASSWORD_RESET_TTL_MIN` (optional, default 60, min 10, max 180)
 - `SUBSCRIPTION_EMAIL_SCOPE` (`include_renewals` to send renewal emails, anything else for initial subscription only)
 - `TEST_RECIPIENTS` (optional comma/space separated monitor recipients)
+- `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` (push notifications; see below)
+- `VAPID_SUBJECT` (optional, `mailto:` or `https:` contact for push services; defaults to `SITE_URL`)
 
 Database connection settings must also be configured for [lib/db.php](lib/db.php).
 
@@ -143,6 +145,22 @@ The app now sends transactional emails for:
 SMTP uses STARTTLS on port 587 and AUTH LOGIN credentials from environment variables.
 
 If Stripe cannot deliver webhooks from the public internet during testing, use Stripe CLI locally and forward events to the app URL once the site is reachable.
+
+## Push Notifications (Web Push)
+
+Members can turn on notifications per device under **My Preferences → Notifications**. This is managed separately from email reminders: each browser/phone is one row in `push_subscriptions` (created automatically on first use). Admins can see who has notifications on and send a notification to one member or everyone at `/admin/push.html`.
+
+- [lib/webpush.php](lib/webpush.php) signs (VAPID) and encrypts (RFC 8291) messages with PHP's built-in OpenSSL, with no extra dependencies.
+- [sw.js](sw.js) displays notifications; [manifest.json](manifest.json) lets the site be added to a Home Screen.
+- Android browsers work straight away. On iPhone/iPad (iOS 16.4+), notifications only work after **Share → Add to Home Screen**, opening the site from that icon, and turning them on there.
+
+Generate a key pair once per environment and store it as `VAPID_PUBLIC_KEY` (GitHub variable) and `VAPID_PRIVATE_KEY` (GitHub secret):
+
+```bash
+npx web-push generate-vapid-keys
+```
+
+Changing the key pair invalidates every existing subscription, so members would need to turn notifications on again.
 
 ## Notes
 
