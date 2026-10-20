@@ -125,6 +125,9 @@ jobs:
               GOOGLE_CLIENT_ID="${{ vars.GOOGLE_CLIENT_ID }}" \
               FACEBOOK_APP_ID="${{ vars.FACEBOOK_APP_ID }}" \
               FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}" \
+              VAPID_PUBLIC_KEY="${{ vars.VAPID_PUBLIC_KEY }}" \
+              VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}" \
+              VAPID_SUBJECT="${{ vars.VAPID_SUBJECT }}" \
               WEBSITES_ENABLE_APP_SERVICE_STORAGE="${{ vars.WEBSITES_ENABLE_APP_SERVICE_STORAGE }}" \
               WEBSITES_PORT="${{ vars.WEBSITES_PORT }}" \
               DOCKER_ENABLE_CI="${{ vars.DOCKER_ENABLE_CI }}" \
