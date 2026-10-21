@@ -485,6 +485,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
 
   /* ── PUSH NOTIFICATIONS ── */
   #pushSection [hidden] { display: none !important; }
+  #pushStatus a { color: var(--teal); font-weight: 600; }
   .push-hint {
     background: var(--teal-light);
     border-left: 4px solid var(--teal);
@@ -1080,10 +1081,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="push-hint" id="pushIosHint" hidden>
           On iPhone and iPad, notifications only work from the Home Screen app:
           <ol>
-            <li>Tap the Share button in Safari, then <strong>Add to Home Screen</strong>.</li>
-            <li>Open Tools for the Tough Days from your Home Screen and sign in.</li>
-            <li>Come back to My Preferences and turn this on.</li>
+            <li>Tap the Share button in Safari, then <strong>Add to Home Screen</strong>. Keep <strong>Open as Web App</strong> switched on.</li>
+            <li>Open Tools for the Tough Days from the new Home Screen icon and sign in. The app has its own sign-in, separate from Safari.</li>
+            <li>Go to My Preferences in the app and turn this on.</li>
           </ol>
+          Already added it? Open it from the Home Screen icon instead of Safari. If the icon opens with Safari's address bar, delete it and add it again.
         </div>
         <button type="button" class="push-test-btn" id="pushTestBtn" hidden>Send a test notification</button>
       </div>
