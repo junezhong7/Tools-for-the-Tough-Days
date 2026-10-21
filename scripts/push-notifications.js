@@ -44,6 +44,16 @@
     setStatus(text);
   }
 
+  // The page itself loads without a session, so say so instead of looking broken.
+  function showSignedOut() {
+    disable('');
+    var link = document.createElement('a');
+    link.href = '/login.html?redirect=' + encodeURIComponent('/my-preference.html');
+    link.textContent = 'Sign in';
+    statusEl.textContent = '';
+    statusEl.append(link, ' to turn notifications on.');
+  }
+
   function urlBase64ToUint8Array(value) {
     var padded = value + '='.repeat((4 - value.length % 4) % 4);
     var raw = window.atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
@@ -203,9 +213,9 @@
   (async function init() {
     if (!supported) {
       if (isIos && !isStandalone) {
-        // iPhone/iPad only allow push from a Home Screen app, never a Safari tab.
+        // iPhone/iPad only allow push from a Home Screen app, never a browser tab.
         iosHint.hidden = false;
-        disable('Add this site to your Home Screen first (see below).');
+        disable('On iPhone, turn this on from the Home Screen app, not a browser tab (see below).');
       } else {
         disable('This browser does not support notifications.');
       }
@@ -214,6 +224,10 @@
 
     try {
       var res = await fetch('/api/push.php?action=config', { credentials: 'include' });
+      if (res.status === 401) {
+        showSignedOut();
+        return;
+      }
       var config = res.ok ? await res.json() : null;
       if (!config || !config.configured) {
         disable('Notifications are not available yet.');
