@@ -329,36 +329,34 @@ function send_free_guide_email(string $toEmail): bool
         return false;
     }
 
-    $name = ucfirst(explode('@', $toEmail)[0]);
-    $registerUrl = 'https://www.toolsforthetoughdays.com.au/register.html';
+    $platformUrl = 'https://www.toolsforthetoughdays.com.au/';
 
     $subject = 'Your free guide: 8 Tools for Your Tough Days';
 
-    $textBody = "Hi {$name},\n\n"
-        . "Thanks for downloading the free guide. I hope you got some valuable tips, and even one small thing you could try this week.\n\n"
-        . "If you want to keep going, Tools for the Tough Days gives you a simple way to check in on how you're really tracking. "
-        . "A daily mood slider feeds straight into your dashboard, giving you a clear visual picture of how you're going, "
-        . "alongside 370+ resources you can read or listen to at your own pace. You're also fully in control of when and how often "
-        . "you hear from us, since we believe regular notifications can help you stay on track and focused.\n\n"
-        . "You can try it free for fourteen days (no card required) and see if it fits into your week.\n"
-        . $registerUrl . "\n\n"
-        . "One small step at a time.\n\n"
-        . "Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days\n\n"
+    $textBody = "Hi there,\n\n"
+        . "Thanks for requesting 8 Tools for Your Tough Days. Your free PDF guide is attached.\n\n"
+        . "Inside, you'll find eight simple, practical strategies to help you navigate challenging moments — whether you're feeling overwhelmed, stressed or simply having one of those days.\n\n"
+        . "These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.\n\n"
+        . "Want more support beyond the guide?\n\n"
+        . "You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.\n\n"
+        . "Try the platform free for 14 days — no credit card required.\n\n"
+        . "Explore your free 14-day trial: " . $platformUrl . "\n\n"
+        . "There's no pressure to do everything at once. Start with what feels useful to you.\n\n"
+        . "The Tools for the Tough Days Team\n\n"
         . "Unsubscribe from our newsletter: " . $siteUrl . "/unsubscribe.html?email=" . rawurlencode($toEmail);
 
-    $safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    $safeRegisterUrl = htmlspecialchars($registerUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safePlatformUrl = htmlspecialchars($platformUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     $safeUnsubUrl = htmlspecialchars($siteUrl . '/unsubscribe.html?email=' . rawurlencode($toEmail), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    $htmlBody = "<p>Hi {$safeName},</p>"
-        . '<p>Thanks for downloading the free guide. I hope you got some valuable tips, and even one small thing you could try this week.</p>'
-        . '<p>If you want to keep going, Tools for the Tough Days gives you a simple way to check in on how you\'re really tracking. '
-        . 'A daily mood slider feeds straight into your dashboard, giving you a clear visual picture of how you\'re going, '
-        . 'alongside 370+ resources you can read or listen to at your own pace. You\'re also fully in control of when and how often '
-        . 'you hear from us, since we believe regular notifications can help you stay on track and focused.</p>'
-        . '<p>You can try it free for fourteen days (no card required) and see if it fits into your week.<br>'
-        . '<a href="' . $safeRegisterUrl . '">' . $safeRegisterUrl . '</a></p>'
-        . '<p>One small step at a time.</p>'
-        . '<p>Nic Marcon, Registered Psychologist, Founder of Tools for the Tough Days</p>'
+    $htmlBody = '<p>Hi there,</p>'
+        . '<p>Thanks for requesting <em>8 Tools for Your Tough Days</em>. Your free PDF guide is attached.</p>'
+        . '<p>Inside, you\'ll find eight simple, practical strategies to help you navigate challenging moments — whether you\'re feeling overwhelmed, stressed or simply having one of those days.</p>'
+        . '<p>These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.</p>'
+        . '<p><strong>Want more support beyond the guide?</strong></p>'
+        . '<p>You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.</p>'
+        . '<p>Try the platform free for 14 days — no credit card required.</p>'
+        . '<p><a href="' . $safePlatformUrl . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Explore your free 14-day trial</a></p>'
+        . '<p>There\'s no pressure to do everything at once. Start with what feels useful to you.</p>'
+        . '<p>The Tools for the Tough Days Team</p>'
         . '<p style="font-size:12px;color:#999;"><a href="' . $safeUnsubUrl . '">Unsubscribe from our newsletter</a>.</p>';
 
     return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, [
