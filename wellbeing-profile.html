@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wellbeing Profile, Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="data/TOUGH%20DAYS_LOGO.png" />
+  <meta name="description" content="Watch a short introduction, answer the questionnaire and explore your Wellbeing Profile, guided 90-day journey and Wellbeing Bundle." />
+  <!-- Design preview: keep out of search results until the live version replaces it. -->
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Site crisis bar + nav, same rules as index.html */
+    :root {
+      --white:      #ffffff;
+      --warm-grey:  #4a6566;
+      --teal:       #26777B;
+      --teal-hover: #1f6468;
+      --teal-dark:  #1a5558;
+      --border:     #d0e6e7;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Nunito', sans-serif; }
+
+    /* CRISIS BAR */
+    .crisis-bar { background: #aada37; color: var(--teal-dark); padding: 8px 20px; text-align: center; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; letter-spacing: 0.01em; }
+    .crisis-bar a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
+    .crisis-bar a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,119,123,0.07); }
+    .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-left: 100px; }
+    .nav-logo img { height: 62px; max-height: 62px; max-width: 240px; width: auto; object-fit: contain; display: block; }
+    .nav-logo-text { display: none; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; font-weight: 700; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-login { color: var(--teal-dark); border: 1px solid var(--border); padding: 8px 16px; border-radius: 999px; background: var(--white); }
+    .nav-login:hover { border-color: rgba(38,119,123,0.35); color: var(--teal); }
+
+    @media (max-width: 800px) {
+      .nav-inner { padding: 0 16px; height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px; }
+      .nav-logo { margin-left: 0; }
+      .nav-links { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <!-- Wellbeing Profile sketch styles (from the ChatGPT design preview) -->
+  <style>html{color-scheme:light}body{background:#edf5f5}.wbp-main{padding:20px}#wellbeing-sketch{max-width:1100px;margin:auto}.cursor-interaction{cursor:pointer}#ws-driver-preview{display:block;width:100%;max-width:100%;font:inherit;padding:10px;margin:8px 0 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:var(--paper)}@media(max-width:600px){.wbp-main{padding:8px}}</style>
+  <style>
+#wellbeing-sketch{--paper:light-dark(#F7FBFB,#172526);--ink:light-dark(#1A2E2F,#E8F1F1);--soft:light-dark(#E4F1F1,#233C3E);--quiet:light-dark(#4A6566,#B7CDCE);--line:light-dark(#D3E3E4,#3F5C5E);--teal:light-dark(#1A5558,#8ECACC);--teal-medium:light-dark(#2F878C,#66B4B9);--on-teal:light-dark(#FFFFFF,#102D2F);--orange:light-dark(#C8752A,#E3A26A);color:var(--ink);font:16px/1.65 system-ui,sans-serif;background:var(--paper);border-radius:12px;overflow:hidden}
+#wellbeing-sketch *{box-sizing:border-box}
+#wellbeing-sketch .ws-car-story{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:16px 0}
+#wellbeing-sketch .ws-car-story img{display:block;width:240px;max-width:100%;height:auto;margin:auto}
+#wellbeing-sketch .ws-car-story p{flex:1 1 220px;min-width:0}
+#wellbeing-sketch [hidden]{display:none!important}
+#wellbeing-sketch h1,#wellbeing-sketch h2,#wellbeing-sketch h3,#wellbeing-sketch p{margin:0}
+#wellbeing-sketch h1{font:400 34px/1.2 Georgia,serif;max-width:650px;margin:8px 0 18px}
+#wellbeing-sketch h2{font:400 25px/1.3 Georgia,serif;margin:0 0 12px}
+#wellbeing-sketch h3{font-size:17px;font-weight:600;margin:0 0 7px}
+#wellbeing-sketch p+p{margin-top:14px}
+#wellbeing-sketch .ws-top{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between;align-items:center}
+#wellbeing-sketch .ws-name{font:400 23px Georgia,serif}
+#wellbeing-sketch .ws-small{font-size:13px;color:var(--quiet)}
+#wellbeing-sketch .ws-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:14px 24px;border-bottom:1px solid var(--line)}
+#wellbeing-sketch button,#wellbeing-sketch summary{font:inherit;color:inherit}
+#wellbeing-sketch button{border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:var(--paper);text-align:left;white-space:normal}
+#wellbeing-sketch button[aria-selected=true],#wellbeing-sketch button.ws-active{background:var(--soft);border-color:var(--quiet)}
+#wellbeing-sketch .ws-primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#wellbeing-sketch .ws-stage{padding:32px clamp(18px,4vw,40px)}
+#wellbeing-sketch .ws-prose{max-width:680px;margin:auto}
+#wellbeing-sketch .ws-kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet)}
+#wellbeing-sketch .ws-art{display:block;width:100%;max-width:680px;height:auto;margin:22px auto 16px;border-radius:5px}
+#wellbeing-sketch .ws-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin:22px 0}
+#wellbeing-sketch .ws-three p{font-size:15px}
+#wellbeing-sketch .ws-divider{margin:24px 0;padding-top:23px;border-top:1px solid var(--line)}
+#wellbeing-sketch details{border-bottom:1px solid var(--line);padding:14px 0}
+#wellbeing-sketch summary{list-style-position:outside;margin-left:18px;padding:2px 4px}
+#wellbeing-sketch details>div{padding:14px 0 4px}
+#wellbeing-sketch .ws-actions{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0 0}
+#wellbeing-sketch .ws-status{margin:12px 0 0;color:var(--quiet);font-size:14px}
+#wellbeing-sketch .ws-highlights{display:grid;gap:22px;margin:26px 0}
+#wellbeing-sketch .ws-highlights section{padding-left:16px;border-left:2px solid var(--line)}
+#wellbeing-sketch .ws-report{display:grid;grid-template-columns:205px minmax(0,1fr);gap:32px}
+#wellbeing-sketch .ws-contents details{padding:9px 0}
+#wellbeing-sketch .ws-contents button{display:block;width:100%;margin:6px 0;border:0;font-size:14px;padding:7px 10px}
+#wellbeing-sketch .ws-contents summary{font-size:14px}
+#wellbeing-sketch .ws-reader{min-width:0}
+#wellbeing-sketch .ws-reader p{margin:0 0 15px}
+#wellbeing-sketch .ws-reader ul{padding-left:22px;margin:10px 0 18px}
+#wellbeing-sketch .ws-note{padding:16px 20px;background:var(--soft);border-radius:8px;margin:22px 0}
+#wellbeing-sketch .ws-sample{padding:16px 20px;background:var(--soft);border-radius:8px;margin:18px 0;min-width:0;overflow-wrap:anywhere}
+#wellbeing-sketch .ws-sample p:last-child{margin-bottom:0}
+#wellbeing-sketch .ws-example{margin:0 0 25px;font-size:13px;color:var(--quiet)}
+#wellbeing-sketch .ws-offer{padding:24px;background:var(--soft);border-radius:9px;margin:24px 0}
+#wellbeing-sketch .ws-price{font:400 32px Georgia,serif;margin:12px 0}
+#wellbeing-sketch .ws-footer{border-top:1px solid var(--line);padding:16px 24px;font-size:13px;color:var(--quiet)}
+@media(max-width:600px){#wellbeing-sketch .ws-three,#wellbeing-sketch .ws-report{grid-template-columns:1fr}#wellbeing-sketch .ws-stage{padding:24px 18px}#wellbeing-sketch .ws-tabs{padding:12px 18px}#wellbeing-sketch h1{font-size:28px}#wellbeing-sketch .ws-contents{border-bottom:1px solid var(--line);padding-bottom:18px}#wellbeing-sketch .ws-top{padding:15px 18px}}
+@media(pointer:coarse){#wellbeing-sketch button,#wellbeing-sketch summary{min-height:44px}}
+
+#wellbeing-sketch{--ws-symbol-sheet:url("data:image/webp;base64,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")}
+#wellbeing-sketch .ws-symbol{width:140px;max-width:100%;aspect-ratio:1;background-image:var(--ws-symbol-sheet);background-size:300% auto;background-repeat:no-repeat;margin:0 auto 14px;border-radius:8px}
+#wellbeing-sketch .ws-shield{background-position:0% 43%}
+#wellbeing-sketch .ws-heart{background-position:50% 43%}
+#wellbeing-sketch .ws-compass{background-position:100% 43%}
+#wellbeing-sketch .ws-symbol-small{width:90px;margin:12px 0}
+#wellbeing-sketch .ws-report-symbols{display:flex;gap:14px;margin:0 0 22px}
+#wellbeing-sketch .ws-report-symbols .ws-symbol{width:100px;margin:0}
+#wellbeing-sketch .ws-summary-opening{margin:12px 0 18px}
+#wellbeing-sketch .ws-question-progress,#wellbeing-sketch .ws-scale-ends{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin:18px 0 7px;font-size:13px;color:var(--quiet)}
+#wellbeing-sketch progress{display:block;appearance:none;width:100%;height:6px;border:0;border-radius:6px;background:var(--soft);accent-color:var(--ink);margin:0 0 18px}
+#wellbeing-sketch progress::-webkit-progress-bar{background:var(--soft);border-radius:6px}
+#wellbeing-sketch progress::-webkit-progress-value{background:var(--ink);border-radius:6px}
+#wellbeing-sketch progress::-moz-progress-bar{background:var(--ink);border-radius:6px}
+#wellbeing-sketch fieldset{border:0;padding:0;margin:26px 0 0;min-width:0}
+#wellbeing-sketch legend{font:400 27px/1.35 Georgia,serif;margin-bottom:12px;padding:0}
+#wellbeing-sketch .ws-answer{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:7px;margin-top:9px;background:var(--paper)}
+#wellbeing-sketch .ws-answer:has(input:checked){background:var(--soft);border-color:var(--quiet)}
+#wellbeing-sketch .ws-answer input{margin-top:6px;accent-color:var(--ink);flex-shrink:0;width:17px;height:17px}
+#wellbeing-sketch input[type=range]{display:block;width:100%;margin:22px 0;accent-color:var(--ink)}
+#wellbeing-sketch .ws-hours{display:flex;flex-wrap:wrap;gap:22px;margin:18px 0}
+#wellbeing-sketch .ws-hours label{display:grid;gap:7px}
+#wellbeing-sketch select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:8px 12px;border-radius:7px;max-width:100%}
+@media(max-width:600px){#wellbeing-sketch #ws-intro .ws-three{gap:22px}#wellbeing-sketch #ws-intro .ws-three section{display:grid;grid-template-columns:78px minmax(0,1fr);column-gap:14px;align-items:start}#wellbeing-sketch #ws-intro .ws-three .ws-symbol{grid-row:1/3;width:78px;margin:0}#wellbeing-sketch #ws-intro .ws-three p{grid-column:2}#wellbeing-sketch legend{font-size:24px}#wellbeing-sketch .ws-tabs button{padding:7px 10px;font-size:14px}}
+
+/* Website palette applied to the existing reading flow */
+#wellbeing-sketch .ws-top{background:var(--teal);color:var(--on-teal);border-bottom-color:var(--teal)}
+#wellbeing-sketch .ws-top .ws-small{color:var(--on-teal)}
+#wellbeing-sketch h1,#wellbeing-sketch h2,#wellbeing-sketch h3,#wellbeing-sketch legend{color:var(--teal)}
+#wellbeing-sketch .ws-kicker{color:var(--teal)}
+#wellbeing-sketch .ws-primary{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-tabs button[aria-selected=true]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-contents button.ws-active{background:var(--soft);color:var(--teal);border-left:3px solid var(--orange)}
+#wellbeing-sketch .ws-highlights section{border-left-color:var(--orange)}
+#wellbeing-sketch .ws-answer:has(input:checked){border-color:var(--teal-medium)}
+#wellbeing-sketch .ws-answer input,#wellbeing-sketch input[type=range]{accent-color:var(--teal)}
+#wellbeing-sketch progress{accent-color:var(--teal-medium)}
+#wellbeing-sketch progress::-webkit-progress-value{background:var(--teal-medium)}
+#wellbeing-sketch progress::-moz-progress-bar{background:var(--teal-medium)}
+#wellbeing-sketch .ws-price{color:var(--teal)}
+#wellbeing-sketch button:focus-visible,#wellbeing-sketch summary:focus-visible,#wellbeing-sketch input:focus-visible,#wellbeing-sketch select:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+#wellbeing-sketch .ws-roadmap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:20px 0 12px}
+#wellbeing-sketch .ws-roadmap button{display:flex;flex-direction:column;gap:5px;min-width:0;padding:12px;border-color:var(--line)}
+#wellbeing-sketch .ws-roadmap button span{font-size:12px;color:var(--quiet)}
+#wellbeing-sketch .ws-roadmap button strong{font-size:15px;font-weight:500}
+#wellbeing-sketch .ws-roadmap button[aria-pressed=true]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-roadmap button[aria-pressed=true] span{color:var(--on-teal)}
+#wellbeing-sketch #ws-phase-detail{border-left:3px solid var(--orange);margin:0 0 14px}
+#wellbeing-sketch .ws-daily-flow{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+#wellbeing-sketch .ws-daily-flow span{font-size:13px;color:var(--teal)}
+#wellbeing-sketch .ws-daily-flow span+span:before{content:'›';margin-right:8px;color:var(--quiet)}
+#wellbeing-sketch #ws-journey details h3{margin-top:18px}
+#wellbeing-sketch .ws-week-list{padding-left:24px;margin:12px 0 0}
+#wellbeing-sketch .ws-week-list li{margin:5px 0}
+@media(max-width:500px){#wellbeing-sketch .ws-roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+#wellbeing-sketch .ws-goal-labels{padding-left:21px;margin:7px 0 16px}
+#wellbeing-sketch .ws-goal-labels li{margin:4px 0;color:var(--teal)}
+#wellbeing-sketch .ws-goal-benefits{padding-left:21px;margin:15px 0}
+#wellbeing-sketch .ws-goal-benefits li{margin:9px 0}
+#wellbeing-sketch .ws-goal-reminder:empty{display:none}
+#wellbeing-sketch .ws-goal-reminder:not(:empty){margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+#wellbeing-sketch .ws-answer:has(input:disabled){opacity:.6}
+#wellbeing-sketch button:disabled{opacity:.55}
+  </style>
+  <style>
+    /* Site integration: stop shared site type styles leaking into the sketch */
+    #wellbeing-sketch h3{font-family:inherit}
+  </style>
+  <script>
+(()=>{let state=null;try{state=JSON.parse(localStorage.getItem('wellbeing-sketch-review-state')||'null');}catch{}window.openai={widgetState:state,setWidgetState:async next=>{window.openai.widgetState=next;try{localStorage.setItem('wellbeing-sketch-review-state',JSON.stringify(next));}catch{}}};})();
+  </script>
+</head>
+<body>
+
+  <div class="crisis-bar">
+    <span>If things feel urgent right now:</span>
+    <a href="tel:131114">Lifeline 13 11 14</a>
+    <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000">Emergency 000</a>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
+      <div class="nav-links">
+        <a href="index.html">For Personal Life</a>
+        <a href="business.html">For Workplaces</a>
+        <a href="wellbeing-profile.html" class="active" aria-current="page">Wellbeing Profile</a>
+        <a href="about-nic.html">About Nic</a>
+        <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+        <a href="register.html" class="nav-login" id="navSignUp">Sign up - Free 14 day trial</a>
+        <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+        <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+<main class="wbp-main">
+<div id="wellbeing-sketch" aria-label="Wellbeing Profile reading flow sketch" style="--ws-gap: 22px;">
+ <header class="ws-top"><span class="ws-name">Tools for the Tough Days</span><span class="ws-small">Wellbeing Profile · experience preview</span></header>
+ <div class="ws-tabs" aria-label="Screens to review" role="tablist">
+  <button class="cursor-interaction" type="button" id="ws-tab-intro" role="tab" aria-selected="true" aria-controls="ws-intro" data-screen="intro">Before you begin</button>
+  <button class="cursor-interaction" type="button" id="ws-tab-questionnaire" role="tab" aria-selected="false" aria-controls="ws-questionnaire" data-screen="questionnaire">Questionnaire</button>
+  <button class="cursor-interaction" type="button" id="ws-tab-summary" role="tab" aria-selected="false" aria-controls="ws-summary" data-screen="summary">Free summary</button>
+  <button class="cursor-interaction" type="button" id="ws-tab-journey" role="tab" aria-selected="false" aria-controls="ws-journey" data-screen="journey">90-day journey</button>
+  <button class="cursor-interaction" type="button" id="ws-tab-report" role="tab" aria-selected="false" aria-controls="ws-report" data-screen="report">Full report</button>
+  <button class="cursor-interaction" type="button" id="ws-tab-bundle" role="tab" aria-selected="false" aria-controls="ws-bundle" data-screen="bundle">Bundle preview</button>
+ </div>
+ <section class="ws-stage" id="ws-intro" role="tabpanel" aria-labelledby="ws-tab-intro">
+  <div class="ws-prose">
+   <div class="ws-kicker">Before you begin</div><h1>Your Wellbeing Profile</h1>
+   <p>Watch this short introduction, then begin when you’re ready.</p>
+   <video id="ws-intro-video" controls="" playsinline="" preload="metadata" aria-label="Your Wellbeing Profile introduction, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" src="assets/wellbeing-profile/intro-music-v1.mp4">Your browser cannot play this video. You can read the transcript below.</video>
+   <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="questionnaire">Start the questionnaire</button></div>
+   <details><summary class="cursor-interaction">Read the video transcript</summary><div><p>Welcome to your Wellbeing Profile, from Tools for the Tough Days!</p><p>This questionnaire explores how you’ve been feeling, how you respond on tough days, and what helps you.</p><p>We’ll use what you share to create your Wellbeing Profile. It’s a starting point to understand how you respond in different situations, and consider what might support your wellbeing.</p><p>As you answer, think about your life as it is right now. Your responses may vary depending on what’s happening and how you’re feeling. They can also change over time.</p><p>To help you understand yourself a little better, we use three characters as metaphors.</p><p>The Bodyguard represents ways of protecting yourself or getting through difficulty, such as pushing through, keeping busy or pulling back.</p><p>The Teenager represents feelings and emotional needs. It can bring energy, excitement and enthusiasm, as well as hurt, frustration or a wish for connection.</p><p>And the Adult represents your capacity to pause, consider different perspectives, and choose a response.</p><p>Imagine these three travelling together in the same car. Each brings something useful. In different situations, one or another may take the wheel, depending on what’s happening and how you’re feeling.</p><p>These are responses we can all recognise in ourselves. They aren’t labels for your age, maturity or whole personality.</p><p>The aim is to notice who’s at the wheel and consider what you need, with more room to choose your next step. When you’re ready, let’s begin!</p></div></details>
+   <details><summary class="cursor-interaction">Prefer descriptions without the characters?</summary><div><h3 data-presentation-heading="">Prefer descriptions without the characters?</h3>
+    <p class="ws-small" id="ws-presentation-help-intro" data-presentation-help="">We’ll describe your responses directly, without the Bodyguard, Teenager or Adult names, symbols or car analogy. Your answers and results stay the same.</p>
+    <div class="ws-actions"><button type="button" class="cursor-interaction" data-language="" aria-describedby="ws-presentation-help-intro">Show my results without the characters</button></div>
+   </div></details>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-questionnaire" role="tabpanel" aria-labelledby="ws-tab-questionnaire" hidden="">
+  <div class="ws-prose">
+   <p class="ws-example">Questionnaire preview · try example answers · your goals shape the invitation; the driver profile remains an example</p>
+   <div class="ws-kicker">During the questionnaire</div>
+   <div class="ws-question-progress"><span id="ws-question-step">Question 1 of 20</span><span id="ws-question-group">What is going on</span></div>
+   <progress id="ws-question-progress" value="5" max="100" aria-label="Questionnaire progress"></progress>
+   <p class="ws-small">Think about the last few weeks, and especially the harder moments.</p>
+   <form id="ws-question-form"><fieldset><legend id="ws-question-title">What’s been hardest lately?</legend><p id="ws-question-hint" class="ws-small">Pick any that fit.</p><div id="ws-question-options"><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.a"><span>Feeling flat or low</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.b"><span>Worry or racing thoughts</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.c"><span>Feeling on edge or irritable</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.d"><span>Trouble sleeping</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.e"><span>Feeling disconnected from people</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.f"><span>No motivation or energy</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.g"><span>Feeling overwhelmed</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.h"><span>Being hard on yourself</span></label></div></fieldset></form>
+   <div class="ws-actions"><button type="button" class="cursor-interaction" data-question-prev="">Back to introduction</button><button type="button" class="ws-primary cursor-interaction" data-question-next="">Next question</button></div>
+   <p class="ws-small ws-status" id="ws-question-status" aria-live="polite"></p>
+   <div class="ws-actions"><button type="button" class="cursor-interaction" data-goal-preview="" hidden="" disabled="">Preview the message for these goals</button></div>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-summary" role="tabpanel" aria-labelledby="ws-tab-summary" hidden="">
+  <div class="ws-prose">
+<div id="ws-summary-welcome" data-character="">
+ <video id="ws-summary-video" controls="" playsinline="" preload="metadata" aria-label="Welcome to your free Wellbeing Profile summary, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" src="assets/wellbeing-profile/summary-music-v1.mp4">Your browser cannot play this video. You can read the transcript below.</video>
+ <details><summary class="cursor-interaction">Read the welcome video transcript</summary><div><p>Your Wellbeing Profile is ready!</p><p>It reflects what you’ve shared about life right now, and gives you a starting point to explore how you respond in different situations, including on tough days.</p><p>As you listen, consider what feels familiar.</p><p>You can tell us if the description fits, or take a different path based on what you’d like support with.</p></div></details>
+</div>
+
+   <section id="ws-primary-video-section" data-character="" aria-label="Your primary driver video">
+ <details><summary class="cursor-interaction">Sketch review: try a different primary driver</summary><div>
+  <label for="ws-driver-preview">Example primary driver</label>
+  <select id="ws-driver-preview" aria-describedby="ws-driver-preview-help"><option value="TH">Teenager: Hurting</option><option value="TF">Teenager: Fired Up</option><option value="BS">Bodyguard: Shutting Down</option><option value="BP" selected="">Bodyguard: Pushing Through</option><option value="AS">Adult: Stretched</option><option value="AD">Adult: Steady</option></select>
+  <p class="ws-example" id="ws-summary-example">Illustrative primary driver: Bodyguard: Pushing Through · not calculated from your answers</p>
+  <p class="ws-small" id="ws-driver-preview-help">This control is for reviewing the sketch. In the finished platform, your questionnaire result will select the relevant video automatically.</p>
+ </div></details>
+ <video id="ws-primary-video" controls="" playsinline="" preload="metadata" src="assets/wellbeing-profile/BP-music-v1.mp4" poster="assets/wellbeing-profile/BP-brand-v2.jpg" aria-label="Bodyguard: Pushing Through, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" data-profile="BP">Your browser cannot play this video. The written summary is available below.</video>
+ <p class="ws-small" id="ws-primary-playback" role="status" aria-live="polite"></p>
+</section>
+
+   <div id="ws-written-summary" data-neutral="" hidden="">
+   <div class="ws-kicker">Your wellbeing at a glance</div><div id="ws-summary-symbol" data-character="" class="ws-symbol ws-symbol-small ws-shield" role="img" aria-label="Bodyguard shield"></div><h1 data-result-title="">Bodyguard: Pushing Through</h1>
+   <p id="ws-summary-lead">You might keep busy, work through the list and make sure everyone else is looked after, even when you’re running low.</p>
+   <div class="ws-highlights">
+    <section><h3>Strengths</h3><p id="ws-summary-strength">Perseverance and dependability</p></section>
+    <section><h3>Challenges</h3><p id="ws-summary-challenge">When your own needs slip down the list</p></section>
+    <section><h3>Key insight</h3><p id="ws-summary-insight">When would rest, support or another approach fit?</p></section>
+   </div>
+      </div>
+   <div class="ws-divider"><h2>Does this sound like you?</h2><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-fit="" aria-expanded="false" aria-controls="ws-after-fit">This fits</button><button type="button" class="cursor-interaction" data-disagree="">This description doesn’t fit me</button></div><p class="ws-status" id="ws-fit-status" aria-live="polite"></p><div id="ws-review" hidden=""><p>Thank you for letting us know. This summary reflects your answers, but it may not capture how you see yourself. You can review your answers or leave this result unconfirmed.</p><div class="ws-actions"><button type="button" class="cursor-interaction" data-review-answers="">Review my answers</button><button type="button" class="cursor-interaction" data-unconfirmed="">Leave result unconfirmed</button></div></div></div>
+   <section id="ws-unconfirmed-next" class="ws-divider" aria-label="A journey based on your goals" hidden="">
+    <div id="ws-unconfirmed-goal-message"><h2>Your result is unconfirmed. A guided 90-day journey can still support you.</h2><p>Thank you for telling us the description doesn’t fit. We can start with what you told us you’d like to work towards.</p><p>A guided 90-day journey can help you notice what happens in everyday life, explore small practical changes and build a wellbeing practice that fits.</p><p>Daily notifications invite you to brief insights and manageable actions, with time to explore what helps you.</p></div>
+    <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="journey">Explore a journey based on my goals</button><button type="button" class="cursor-interaction" data-edit-goals="">Review my goals</button></div>
+   </section>
+   <div id="ws-after-fit" hidden="">
+<section id="ws-fit-journey" data-character="" aria-label="Your guided 90-day wellbeing journey">
+ <h2>Your next step: the guided 90-day wellbeing journey</h2>
+ <video id="ws-fit-journey-video" controls="" playsinline="" preload="metadata" src="assets/wellbeing-profile/journey-BP-music-v1.mp4" poster="assets/wellbeing-profile/this-fits-90-day-journey-mood-v3.jpg" aria-label="Your guided 90-day wellbeing journey, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" data-profile="BP">Your browser cannot play this video. You can read the narration below.</video>
+ <p class="ws-small" data-reminder-preference="" hidden=""></p>
+ <p class="ws-small" id="ws-fit-journey-status" role="status" aria-live="polite"></p>
+ <details><summary class="cursor-interaction">Read the journey video transcript</summary><div><p>It’s helpful to know that this description feels familiar. Recognising a response is a starting point. When you learn to identify your patterns, you can notice them earlier, understand what you need and have more room to choose a different response. That gives you a practical starting point for making the changes you want in your life.</p><p>Your primary driver describes the response that may take the wheel on tough days.</p><p>Your answers may also identify a secondary driver: a distinct response that may come forward on really tough days, when things feel especially difficult or you’re running on empty.</p><p>Understanding both can help you recognise how your responses may change as things get harder, and consider what support you might need.</p><p>As a general example, someone might keep going and hold everything together at first, then pull back and go quiet when they become exhausted. Understanding that shift can help them recognise what they need sooner.</p><p>In our car analogy, that might mean a different character taking the wheel, or a different response from the same character.</p><p>If you choose to purchase the Wellbeing Bundle, your personalised full report will explain your secondary driver, where your answers identify one, and how it may work alongside your primary driver.</p><p>The guided 90-day wellbeing journey gives you a structured way to build that understanding and practise small changes, with the goals you selected helping connect the journey to what matters to you.</p><p>You begin by noticing. In the first week, you look for familiar patterns in everyday moments: what’s happening, how you’re feeling, how you respond and what you might need.</p><p>Over the following weeks, you gradually explore those responses and try simple, practical actions. Weekly activities give you time to reflect on what’s working and consider what you’d like to adjust.</p><p>As the journey continues, you bring useful options together in your Tough-Day Guide, so you have familiar tools to return to on tough days. You also build one manageable wellbeing practice to carry forward.</p><p>To help you return to the journey, you choose a reminder time that connects with something you already do.</p><p>For example, if you usually have a morning cuppa, you might choose that as your reminder time. At your chosen time, you’ll receive a notification inviting you to open that day’s guided step.</p><p>When you open your daily guided step, you’ll begin with a brief mood check-in. Using the mood slider, you can record how you’re feeling that day.</p><p>Your check-ins are saved so you can look back over time, notice changes and recognise patterns in how you’ve been feeling.</p><p>Some days may feel easier and others tougher. Looking back can help you reflect on those changes alongside what you’ve been learning and practising.</p><p>You then continue to that day’s insight and practical action. Each guided step builds on what came before, giving you a structured way to move through the journey.</p><p>You’ll also have access to over 370 resources on Tools for the Tough Days, to read or listen to while your platform access is active.</p><p>The aim is to understand yourself better, recognise what you need and practise responding with more choice.</p><p>Take a look inside the Wellbeing Bundle to see what’s included and how your journey could begin.</p></div></details>
+</section>
+<div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="bundle">Look inside your Wellbeing Bundle</button></div>
+
+   <details><summary class="cursor-interaction">More about your results</summary><div>
+    <div id="ws-approved-summary"><p>This response can help you persevere, get things done and be someone others depend on.</p></div>
+    <h3 data-character="">Your primary driver</h3>
+    <p data-character="">Your primary driver describes the response that may take the wheel on tough days.</p>
+    <p data-neutral="" hidden="">Your main response describes how you may tend to respond when things get tough.</p>
+    <div id="ws-secondary-invitation"><h3>Explore more with your Wellbeing Bundle</h3><p>Your answers may also identify a secondary driver: a distinct response that may come forward on really tough days, when things feel especially difficult or you’re running on empty. If you choose to purchase the Wellbeing Bundle, your personalised full report will explain this response, where identified, and how it may work alongside your primary driver.</p></div>
+    <h3>A snapshot of you right now</h3>
+    <p>Your answers reflect a point in your life. Other responses may show up in different situations, and how you respond can change over time.</p>
+   </div></details>
+   <details><summary class="cursor-interaction" data-presentation-heading="">Prefer descriptions without the characters?</summary><div>
+    <p class="ws-small" id="ws-presentation-help-summary" data-presentation-help="">We’ll describe your responses directly, without the Bodyguard, Teenager or Adult names, symbols or car analogy. Your answers and results stay the same.</p>
+    <div class="ws-actions"><button type="button" class="cursor-interaction" data-language="" aria-describedby="ws-presentation-help-summary">Show my results without the characters</button></div>
+   </div></details>
+   <div class="ws-divider"><div id="ws-summary-goal-message"><h2>Ready to make changes that fit your life?</h2><p>Understanding your patterns is a starting point. Your guided 90-day wellbeing journey helps you explore what you can do differently in everyday life.</p><p>Start by noticing what happens for you. Gradually try small practical actions, review what fits and build a wellbeing practice you can carry forward. Brief daily insights and weekly activities give you a clear way to begin.</p></div><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="journey">See how my 90-day journey could help</button></div></div>
+   </div>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-journey" role="tabpanel" aria-labelledby="ws-tab-journey" hidden="">
+  <div class="ws-prose">
+   <div class="ws-kicker">Your next step</div>
+   <div id="ws-journey-goal-message"><h1>Get to know yourself, one small step at a time</h1><p>The guided 90-day wellbeing journey gives you a way to explore how you respond in everyday life and practise looking after yourself with more understanding.</p><div class="ws-actions"><button type="button" class="cursor-interaction" data-edit-goals="">Choose my goals</button></div></div><p class="ws-small" data-reminder-preference="" hidden=""></p>
+   <p><strong>A daily notification helps you keep going.</strong> Each notification invites you to open that day’s brief insight, small practical action and optional reflection.</p>
+   <div class="ws-divider"><h2>How the journey builds</h2><p>Your profile is a starting point. Across the guided 90-day wellbeing journey, you’ll notice which responses show up in everyday life, explore what brings them forward, and gradually practise small ways of supporting yourself. This helps you build a fuller understanding of yourself as situations and feelings change, with more room to choose how you respond.</p></div>
+   <div class="ws-roadmap" role="group" aria-label="Explore the stages of the journey">
+    <button type="button" class="cursor-interaction" data-phase="0" aria-pressed="false" aria-controls="ws-phase-detail"><span>Week 1</span><strong>Start by noticing</strong></button>
+    <button type="button" class="cursor-interaction" data-phase="1" aria-pressed="false" aria-controls="ws-phase-detail"><span>Weeks 2–4</span><strong>Try small changes</strong></button>
+    <button type="button" class="cursor-interaction" data-phase="2" aria-pressed="true" aria-controls="ws-phase-detail"><span>Weeks 5–6</span><strong>Understand more</strong></button>
+    <button type="button" class="cursor-interaction" data-phase="3" aria-pressed="false" aria-controls="ws-phase-detail"><span>Weeks 7–8</span><strong>Build flexibility</strong></button>
+    <button type="button" class="cursor-interaction" data-phase="4" aria-pressed="false" aria-controls="ws-phase-detail"><span>Weeks 9–10</span><strong>Use it in daily life</strong></button>
+    <button type="button" class="cursor-interaction" data-phase="5" aria-pressed="false" aria-controls="ws-phase-detail"><span>Weeks 11–12</span><strong>Keep what helps</strong></button>
+   </div>
+   <div id="ws-phase-detail" class="ws-note" aria-live="polite"><div class="ws-kicker" id="ws-phase-period">Weeks 5–6 · Days 29–42</div><h3 id="ws-phase-title">Understand more</h3><p id="ws-phase-description">Explore a supported second response where one is identified, or deepen shared skills for consideration and choice. Notice which conditions make a useful response easier to draw on.</p></div>
+   <p class="ws-small"><strong>Days 85–90:</strong> Reflect on your learning, keep a useful practice and consider whether you’d like to revisit the questionnaire.</p>
+   <details><summary class="cursor-interaction">What does a day look like?</summary><div>
+    <div class="ws-daily-flow"><span>Optional mood check-in</span><span>A brief insight</span><span>One small action</span><span>Optional reflection</span></div>
+    <p>Small daily observations build into that week’s activity. Alongside the learning, you work with one chosen wellbeing habit and adjust it to fit your life.</p>
+    <section class="ws-sample" aria-label="Day 3 sample"><p class="ws-kicker">Day 3 · sample small action</p><h3>First, notice</h3><p>During a routine activity, briefly notice your shoulders, jaw and breathing. Identify one physical signal you associate with feeling under pressure.</p></section>
+    <section class="ws-sample" aria-label="Day 8 sample"><p class="ws-kicker">Day 8 · sample small action</p><h3>Then, try something simple</h3><p>Choose one low-stakes task and consider whether it needs your usual level of effort. If appropriate, try doing it a little more simply.</p></section>
+   </div></details>
+   <details data-character=""><summary class="cursor-interaction">Where do my primary and secondary drivers fit?</summary><div><p>Your primary driver is the response your answers suggest most often takes the wheel when things get tough. You begin by getting to know that response.</p><p>In Weeks 5–6, where your answers support a distinct secondary driver, you explore that response too. Without a distinct secondary, the journey continues with shared skills for consideration and choice.</p><p>Later weeks help you consider these responses in context and practise alternatives that fit. There is no fixed order in which one driver must take over from another.</p></div></details>
+   <details data-neutral="" hidden=""><summary class="cursor-interaction">How is the journey connected to my answers?</summary><div><p>You begin by exploring your main way of responding. In Weeks 5–6, you explore another distinct response where your answers support one, or develop shared skills for consideration and choice. Later weeks help you consider these responses in context and practise alternatives that fit.</p></div></details>
+   <details><summary class="cursor-interaction">See the twelve weekly focuses for this example</summary><div><p class="ws-small">Pushing Through example with no distinct secondary. The weekly focus varies with the journey matched to your results.</p><ol class="ws-week-list">
+    <li>Noticing your main response</li><li>Exploring ways to ease off</li><li>Understanding your expectations</li><li>Making room for choice</li><li>Recognising choices and their conditions</li><li>Supporting a considered response</li><li>Effort and choices in context</li><li>Developing flexible responses</li><li>Patterns across everyday life</li><li>Relationships and workable limits</li><li>Navigating tough days</li><li>Carrying forward what fits</li>
+   </ol></div></details>
+   <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="bundle">See the bundle and what’s included</button><button type="button" class="cursor-interaction" data-go="summary">Back to my summary</button></div>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-report" role="tabpanel" aria-labelledby="ws-tab-report" hidden="">
+  <p class="ws-example">Report structure sketch · one section at a time · examples are not a completed personal report</p>
+  <div class="ws-report">
+   <aside class="ws-contents" aria-label="Report contents"><h3>In your report</h3>
+    <details><summary class="cursor-interaction">Getting oriented</summary><div><button type="button" class="cursor-interaction" data-section="1" aria-current="false">How to read this report</button><button type="button" class="cursor-interaction" data-section="2" data-crew-label="" aria-current="false">Meet your crew</button></div></details>
+    <details open=""><summary class="cursor-interaction">Your patterns</summary><div><button type="button" class="cursor-interaction" data-section="3" aria-current="false">When things get tough</button><button type="button" class="cursor-interaction ws-active" data-section="4" aria-current="page">When it gets really hard</button><button type="button" class="cursor-interaction" data-section="5" aria-current="false">What is underneath</button><button type="button" class="cursor-interaction" data-section="6" aria-current="false">How you cope</button></div></details>
+    <details><summary class="cursor-interaction">Your life and resources</summary><div><button type="button" class="cursor-interaction" data-section="7" aria-current="false">What is on your plate</button><button type="button" class="cursor-interaction" data-section="8" aria-current="false">What helps you</button></div></details>
+    <details><summary class="cursor-interaction">Your next steps</summary><div><button type="button" class="cursor-interaction" data-section="9" aria-current="false">Your ninety day journey</button><button type="button" class="cursor-interaction" data-section="10" aria-current="false">Your Tough Day Guide</button><button type="button" class="cursor-interaction" data-section="11" aria-current="false">Looking ahead</button></div></details>
+    <details><summary class="cursor-interaction">About the report</summary><div><button type="button" class="cursor-interaction" data-section="12" aria-current="false">About this report</button></div></details>
+   </aside>
+   <article class="ws-reader"><div class="ws-kicker" id="ws-section-number">Section 4 of 12</div><h1 id="ws-section-title">When it gets really hard</h1><div id="ws-section-content"><h2>Included with your 90-day journey</h2><p>Your secondary driver, where your answers identify one, is revealed after you purchase the 90-day journey. You can then explore this response and what may bring it forward in different situations.</p></div><div class="ws-actions"><button type="button" class="cursor-interaction" data-prev="">Previous section</button><button type="button" class="cursor-interaction" data-next="">Next section</button></div></article>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-bundle" role="tabpanel" aria-labelledby="ws-tab-bundle" hidden="">
+  <div class="ws-prose">
+   <p class="ws-example">Your bundle at a glance</p>
+   <div class="ws-kicker">Understanding you and supporting your everyday wellbeing</div>
+   <h1>Your Wellbeing Bundle</h1>
+   <p>A personalised report to help you understand your responses, with a guided programme and practical tools to help you use that understanding in everyday life.</p>
+   <div id="ws-bundle-goal-message" class="ws-goal-reminder"></div>
+   <div class="ws-offer">
+    <div class="ws-price">$129 upfront</div>
+    <h2>Your bundle includes</h2>
+    <ul><li>Your personalised full report</li><li>Your guided 90-day wellbeing journey, with daily notifications</li><li>Your personal Tough-Day Guide</li><li>Your first three months of platform access, including over 370 resources to read or listen to</li></ul>
+    <p class="ws-small" id="ws-billing-copy">Includes your first three months of subscription. From month 4, membership continues at $29.95 per month unless cancelled.</p>
+    <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-purchase="" aria-expanded="false" aria-controls="ws-purchase-preview" aria-describedby="ws-billing-copy">Start your journey now</button></div>
+    <div id="ws-purchase-preview" class="ws-note" role="region" aria-label="Purchase preview" hidden="">
+     <h3>Purchase preview</h3><p>Your Wellbeing Bundle: $129 upfront, including your first three months. Membership continues at $29.95 per month from month 4 unless cancelled.</p>
+     <p class="ws-small">The live version would take you to checkout here. This sketch does not collect payment details or take a payment.</p>
+     <div class="ws-actions"><button type="button" class="cursor-interaction" data-close-purchase="">Back to the bundle</button></div>
+    </div>
+   </div>
+   <h2>A look inside your bundle</h2>
+   <p>Explore what you’ll receive and how each part helps you put your profile into practice.</p>
+   <details><summary class="cursor-interaction">Your personalised full report: understand your patterns</summary><div>
+    <p>Explore the responses reflected in your questionnaire answers, including strengths, possible challenges, coping responses and what helps you.</p>
+    <p data-character="">Your report explores your primary driver and, where your answers support a distinct second pattern, your secondary driver and how the two may fit together.</p>
+    <p data-neutral="" data-bundle-response="" hidden="">Your report explores your main way of responding and, where your answers support another distinct response, how these responses may fit together.</p>
+    <section class="ws-sample" aria-label="Full report sample"><p class="ws-kicker">Inside your full report</p><h3>A sample of what you’ll read</h3>
+    <p>Pushing through can sometimes make it harder to notice when to stop. Your own needs may slip down the list when there is always something else to finish. The aim is to recognise when persistence is useful and when rest or support would fit better.</p>
+    <p class="ws-small">Illustrative extract. Your report reflects the answers and choices you shared.</p>
+    </section>
+   </div></details>
+   <details><summary class="cursor-interaction">Your guided 90-day journey: practise in everyday life</summary><div>
+    <p>Receive daily notifications throughout your 90-day journey, inviting you to open that day’s lesson. Each lesson includes a brief insight, one small action and an optional reflection.</p>
+    <p>Alongside the learning, choose one manageable wellbeing habit and connect it with an existing routine. Review what fits and adjust your practice as you go.</p>
+    <section class="ws-sample" aria-label="Daily journey sample"><p class="ws-kicker">Day 8 · sample small action</p><h3>Try a simpler approach</h3><p>Choose one low-stakes task and consider whether it needs your usual level of effort. If appropriate, try doing it a little more simply.</p></section>
+    <p class="ws-small">A self-guided programme, with structured steps and opportunities to reflect.</p>
+   </div></details>
+   <details><summary class="cursor-interaction">Your Tough-Day Guide: something practical to return to</summary><div>
+    <p>A concise personal reference that brings together useful observations and familiar activities from your answers.</p>
+    <section class="ws-sample" aria-label="Tough-Day Guide preview"><p class="ws-kicker">Inside your Tough-Day Guide</p><h3>Three simple steps</h3><ol><li>Notice what is happening.</li><li>Try one familiar small thing.</li><li>Know where to turn.</li></ol></section>
+    <p class="ws-small">An everyday wellbeing reference, rather than an emergency response or clinical safety plan.</p>
+   </div></details>
+   <details><summary class="cursor-interaction">Three months of platform access: your programme and over 370 resources</summary><div>
+    <p>Your first three months of access are included in the bundle, giving you a place to work through your programme and return to the report, lessons and tools.</p><p>While your platform subscription is active, you can also access over 370 wellbeing resources to read or listen to. Explore topics that matter to you and choose the format that suits you that day.</p>
+    <p>You keep your report, lessons and Tough-Day Guide after cancellation.</p>
+   </div></details>
+   <div class="ws-actions"><button type="button" class="cursor-interaction" data-go="journey">Revisit the 90-day journey</button><button type="button" class="cursor-interaction" data-go="summary">Back to my summary</button></div>
+  </div>
+ </section>
+ <div class="ws-footer">Design preview only. Source wording and proposed edits remain separate. Use example answers to explore the layout. Answers stay in this preview only and are not saved. Your selected goals shape the invitation and journey introduction. The driver profile is a fixed example, not a calculated result. No payment is taken.</div>
+</div>
+</main>
+<script type="application/json" id="ws-source-data">{"characterSummary": ["When life becomes demanding, your Bodyguard tends to take the wheel by pushing through. You might keep working when you’re tired, take on more than you planned or tell yourself you’ll rest later. That drive can help you persevere, stay dependable and achieve things you care about.", "But it can also make it easy to miss your own limits. Your Bodyguard isn’t doing anything wrong. It’s responding in a way that may have worked before. Noticing when that drive shows up can help you understand your patterns with more kindness."], "neutralSummary": ["When life becomes demanding, you may respond by pushing through. You might keep working when you’re tired, take on more than you planned or tell yourself you’ll rest later. That drive can help you persevere, stay dependable and achieve things you care about.", "Continuing can also make it easy to miss your own limits. It does not mean you are doing something wrong. Notice when the effort is useful and when it leaves less room for rest, support or adjustment. Understanding when that drive shows up can help you respond to yourself with more kindness."], "sections": {"1": {"title": "How to read this report", "html": "<p>Begin with the section that feels most useful to you. You can return to the others later.</p><details><summary class=\"cursor-interaction\">What this report can and cannot tell you</summary><div><p>This report is built from the answers you chose to share. It can help you notice what happens when things get tough and consider what might help. It is not an assessment, a diagnosis or a label. Nobody is one thing all the time. Think of it as a mirror held up at a particular angle: it shows some things and leaves others out. Take your time; you do not need to read it all in one go. Notice what fits and what does not. If something does not sound like you, trust your own experience. Your responses are not evidence that something is wrong with you.</p></div></details>"}, "2": {"title": "Meet your crew", "html": "<p>Inside all of us, imagine a little crew sharing a car. The Teenager is a way of talking about feelings that arrive first and strongly: sensitive, honest, and wanting to be heard. The Bodyguard is a way of talking about responses that try to protect us: keeping busy, pushing through, or pulling back. The Adult is a way of talking about moments when we pause, listen to what we need and choose a next step. All three can be useful metaphors, but none is a diagnosis or a measure of how well you are doing.</p><details><summary class=\"cursor-interaction\">Why we call them drivers</summary><div><p>Your primary driver describes the response that may take the wheel on tough days. Your answers may also identify a secondary driver: a distinct response that may come forward on really tough days, when things feel especially difficult or you’re running on empty. Secondary-driver details are included with the Wellbeing Bundle.</p><p>These are patterns to check against your experience. They do not mean the characters always take turns in a set order or that one must take over from another.</p></div></details>", "neutral": "<p>Your answers describe experiences, demands and ways of responding that you recognise. We will keep those answers in view without using character names or imagery. Different responses can be useful in different circumstances; no single response explains every situation.</p>"}, "3": {"title": "When things get tough", "html": "<h2>Bodyguard: Pushing Through</h2><p>When things get tough, the Bodyguard tends to grab the wheel. Your Bodyguard keeps you moving: pushing through, keeping busy and making sure everyone else is looked after.</p><details><summary class=\"cursor-interaction\">What this can look like</summary><div><p>When the pressure&#x27;s on, your Bodyguard goes to work. You stay on top of things, get through the list and hold it all together. You might find yourself saying yes before you&#x27;ve thought about it, or taking on one more thing because it&#x27;s quicker than asking someone else.</p><p>It holds you to high standards. It doesn&#x27;t like loose ends, and it can be hard on you when something isn&#x27;t done properly. It also finds it hard to switch off. Even when you stop, part of you is still running.</p><p>Under strain, you might find it harder to ease off or change course. Noticing that effort or frustration building can help you consider whether continuing, asking for support or taking a pause would fit the situation.</p></div></details><details><summary class=\"cursor-interaction\">The job it is doing for you</summary><div><p>Your Bodyguard isn&#x27;t trying to wear you out. Keeping busy, being capable and getting things right may help you manage demands. That can be useful when something needs your attention. It can also make it harder to leave room for rest, support or a standard that is good enough for the situation.</p><p>If you recognise putting other people first, it may be worth noticing how that fits with your own needs. Being dependable can remain a strength without carrying every responsibility yourself.</p></div></details><details><summary class=\"cursor-interaction\">Strengths</summary><div><p>People who recognise this pattern often notice the same strengths in themselves:</p><ul><li>getting through hard times without falling over</li><li>being dependable when others need them</li><li>noticing what needs doing before anyone else does</li><li>doing things properly</li></ul><p>These are real strengths. Nothing in this report is about getting rid of them.</p></div></details><details><summary class=\"cursor-interaction\">Possible costs</summary><div><p>Pushing through can sometimes make it harder to notice when to stop. Your own needs may slip down the list when there is always something else to finish. The aim is to recognise when persistence is useful and when rest or support would fit better.</p><p>Over time, that can show up as worry, racing thoughts, feeling on edge or trouble sleeping. It can also leave you feeling disconnected from people, because there isn&#x27;t much left over for them.</p></div></details><details><summary class=\"cursor-interaction\">Early signs to notice</summary><div><p>People with this pattern often notice some of these first:</p><ul><li>a tight jaw or shoulders, or holding your breath</li><li>a to-do list that keeps running in your head, especially at night</li><li>saying yes before you&#x27;ve checked whether you can</li><li>feeling irritable when someone slows you down</li><li>struggling to sit still, even when there&#x27;s nothing to do</li></ul><p>Noticing these early is the first step. Your plan starts here.</p></div></details>", "neutral": "<h2>Keeping going under pressure</h2><p>When life becomes demanding, you may respond by pushing through. You might keep working when you’re tired, take on more than you planned or tell yourself you’ll rest later. That drive can help you persevere, stay dependable and achieve things you care about.</p><p>Continuing can also make it easy to miss your own limits. It does not mean you are doing something wrong. Notice when the effort is useful and when it leaves less room for rest, support or adjustment. Understanding when that drive shows up can help you respond to yourself with more kindness.</p>"}, "4": {"title": "When it gets really hard", "html": "<h2>Included with your 90-day journey</h2><p>Your secondary driver, where your answers identify one, is revealed after you purchase the 90-day journey. You can then explore this response and what may bring it forward in different situations.</p>", "neutral": "<h2>Included with your 90-day journey</h2><p>Any distinct secondary response is explored after you purchase the 90-day journey.</p>"}, "5": {"title": "What is underneath", "html": "<p>This section reflects how you rated five statements about the way you tend to see things. Your answers describe your experience; they do not tell us why it developed or define who you are.</p><p class=\"ws-example\">Placement sketch: each statement would retain its exact saved rating. No ratings are invented here.</p><details><summary class=\"cursor-interaction\">1. Worrying people will leave, or that something is wrong with you</summary><div><p>&quot;Deep down I worry people will let me down or leave, or that there&#x27;s something wrong with me.&quot;</p></div></details><details><summary class=\"cursor-interaction\">2. Doubting you can handle things on your own</summary><div><p>&quot;I often doubt I can handle things on my own, or feel like I&#x27;ll end up failing.&quot;</p></div></details><details><summary class=\"cursor-interaction\">3. Finding it hard to make yourself do things</summary><div><p>&quot;When I don&#x27;t feel like doing something, I find it really hard to make myself do it anyway.&quot;</p></div></details><details><summary class=\"cursor-interaction\">4. Putting everyone else first</summary><div><p>&quot;I put everyone else&#x27;s needs ahead of my own, even when it wears me down.&quot;</p></div></details><details><summary class=\"cursor-interaction\">5. High standards and finding it hard to switch off</summary><div><p>&quot;I hold myself to very high standards, and I find it hard to switch off or relax.&quot;</p></div></details>"}, "6": {"title": "How you cope", "html": "<p class=\"ws-example\">Example extract for a selected coping response. The overall helpfulness rating is not invented in this sketch.</p><h2>Push through and keep busy</h2><p>Keeping busy can help you meet responsibilities and keep things moving when life is difficult. Notice whether the effort is useful in the situation and whether it leaves room to recognise what you need. If you are continuing while tired or stretched, consider a manageable adjustment, such as a clear stopping point, a pause or a change in priorities. Persistence can remain a strength while you make room for rest and support that fits your circumstances.</p>"}, "7": {"title": "What is on your plate", "html": "<p class=\"ws-example\">Example life-area extract. A personal report would show the areas the person actually selected.</p><h2>Work or study</h2><p>Pressure, conflict or change at work or study can affect how you feel and what you have available for the rest of life. Consider the demands and the practical conditions around them. If an Employee Assistance Program or student support service is available, check what it offers, who can use it and its privacy arrangements.</p>"}, "8": {"title": "What helps you", "html": "<p class=\"ws-example\">Example activity extract, rather than an inferred preference.</p><h2>Listening to music</h2><p>You selected listening to music as helpful. Choose a familiar song or piece that fits the moment and give it your attention for a brief time. Notice what the experience offers.</p><details><summary class=\"cursor-interaction\">Support that fits your circumstances</summary><div><p>What helps can depend on the situation, your preferences and what is available and safe.</p></div></details>"}, "9": {"title": "Your ninety day journey", "html": "<p>Your journey contains 90 daily lessons. Each offers a brief insight, one small action and an optional reflection. The learning activities help you notice what fits in ordinary situations and keep useful observations together. They are not a growing list of habits you must maintain.</p><p>Alongside that learning, keep one chosen wellbeing habit that feels manageable and relevant. Try it in the circumstances where it fits, notice what happens and adjust when needed. You can keep it, make it smaller, change it, pause it or stop it through the existing controls.</p><details><summary class=\"cursor-interaction\">How the journey unfolds</summary><div><ul><li>Days 1–28: awareness and choice</li><li>Days 29–42: explore a supported additional pattern, or deepen shared skills</li><li>Days 43–56: responses in context</li><li>Days 57–70: everyday settings and workable limits</li><li>Days 71–84: useful resources and reflection</li><li>Days 85–90: consolidate and consider an optional questionnaire revisit</li></ul></div></details>"}, "10": {"title": "Your Tough Day Guide", "html": "<p>This guide brings together a few familiar observations and manageable options for an ordinary difficult day. It is an everyday wellbeing reference, not an emergency response or a clinical safety plan. If the situation needs urgent or specialist help, access that help without completing these steps.</p><h2>1. Notice what is happening</h2><p>Notice what is happening, what you need and what the situation is asking of you. Choose one manageable consideration, recognising when a self-guided activity is not enough.</p><h2>2. Try one familiar small thing</h2><p>Begin with a manageable activity that fits your circumstances.</p><h2>3. Know where to turn</h2><p>Some situations need more help than an everyday activity can provide. Consider an appropriate professional service or support route for what is happening. When personal contact is available and safe, it may be one option; it is never a condition for using this guide or obtaining specialist help.</p>"}, "11": {"title": "Looking ahead", "html": "<p>Your wellbeing is something you can keep understanding and supporting over time. During the journey, you will have opportunities to notice responses, explore manageable activities and review what fits your circumstances. You can build on what helps, revise a choice or leave an option that is not useful for you.</p><details><summary class=\"cursor-interaction\">Revisiting your profile</summary><div><p>At the close of the 90-day journey, you can choose to complete the full Wellbeing Profile questionnaire again. A new set of answers can help you reflect on what is different, what remains similar and what matters next. It does not overwrite your earlier answers or guarantee a particular change in result.</p></div></details>"}, "12": {"title": "About this report", "html": "<p>Your Wellbeing Profile is part of Tools for the Tough Days. This report brings together the questionnaire answers you chose to share and offers reflections and practical possibilities for everyday wellbeing. It is designed for adults aged 18 years and over.</p><p>The report is for self-reflection and learning. It is not a psychological assessment, diagnosis, treatment plan or clinical safety plan, and it does not replace professional mental health care. A result or character description does not explain your history, establish a condition or predict how you will respond in every situation.</p>"}}, "questions": [{"id": "1.1", "section": 1, "type": "multi", "question": "What’s been hardest lately?", "hint": "Pick any that fit.", "options": [{"id": "1.1.a", "text": "Feeling flat or low"}, {"id": "1.1.b", "text": "Worry or racing thoughts"}, {"id": "1.1.c", "text": "Feeling on edge or irritable"}, {"id": "1.1.d", "text": "Trouble sleeping"}, {"id": "1.1.e", "text": "Feeling disconnected from people"}, {"id": "1.1.f", "text": "No motivation or energy"}, {"id": "1.1.g", "text": "Feeling overwhelmed"}, {"id": "1.1.h", "text": "Being hard on yourself"}]}, {"id": "1.2", "section": 1, "type": "slider", "question": "How much is this getting in the way of your day-to-day right now?", "min": 0, "max": 10, "minLabel": "Barely", "maxLabel": "A lot"}, {"id": "1.3", "section": 1, "type": "multi", "question": "What would you most like this journey to help you work towards?", "hint": "Choose one or two things that matter most to you right now.", "options": [{"id": "1.3.b", "text": "Understand my feelings, needs and patterns better."}, {"id": "1.3.a", "text": "Find practical ways to manage stress and difficult moments."}, {"id": "1.3.c", "text": "Pause and respond with more choice when things get tough."}, {"id": "1.3.f", "text": "Make time for my wellbeing and build practices that fit my life."}, {"id": "1.3.d", "text": "Recognise my limits and feel more comfortable asking for support or setting boundaries."}, {"id": "1.3.e", "text": "Reconnect with what matters to me and what helps me feel like myself."}], "required": true, "maxSelections": 2}, {"id": "1.4", "section": 1, "type": "multi", "optional": true, "question": "Is any of this connected to a particular part of your life?", "hint": "Pick any that fit.", "options": [{"id": "1.4.a", "text": "Work or study, like pressure, conflict or losing a job"}, {"id": "1.4.b", "text": "Money, like bills, debt or a big money setback"}, {"id": "1.4.c", "text": "Relationships or family, like conflict, a break-up or separation"}, {"id": "1.4.d", "text": "Health, like an illness or diagnosis, for me or someone close"}, {"id": "1.4.e", "text": "Loss or grief, like someone close to me dying"}, {"id": "1.4.f", "text": "Loneliness or feeling cut off from people"}, {"id": "1.4.g", "text": "Becoming a parent, or caring for someone who’s unwell"}, {"id": "1.4.h", "text": "Moving house or city, or another big change"}, {"id": "1.4.i", "text": "An accident or a frightening event"}, {"id": "1.4.j", "text": "Alcohol or other substances"}, {"id": "1.4.k", "text": "Feeling unsafe at home or in a relationship"}]}, {"id": "1.5", "section": 1, "type": "single", "question": "Did any of this start or happen in the last six months?", "options": [{"id": "1.5.a", "text": "Yes"}, {"id": "1.5.b", "text": "No"}], "showIf": "At least one option ticked in 1.4"}, {"id": "2.1", "section": 2, "type": "multi", "question": "What would you most like to be different a month from now?", "hint": "Pick any that fit.", "options": [{"id": "2.1.a", "text": "Sleeping better"}, {"id": "2.1.b", "text": "Feeling calmer day to day"}, {"id": "2.1.c", "text": "Being less hard on myself"}, {"id": "2.1.d", "text": "Coping better when things spike"}, {"id": "2.1.e", "text": "Feeling more connected"}, {"id": "2.1.f", "text": "Having a routine that sticks"}, {"id": "2.1.g", "text": "Understanding my patterns"}]}, {"id": "2.2", "section": 2, "type": "single", "question": "Most days, how much time could you realistically set aside to work on yourself?", "options": [{"id": "2.2.a", "text": "2 minutes"}, {"id": "2.2.b", "text": "5 minutes"}, {"id": "2.2.c", "text": "10 minutes"}, {"id": "2.2.d", "text": "15 minutes or more"}]}, {"id": "3.1", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "Deep down I worry people will let me down or leave, or that there’s something wrong with me.", "options": [{"id": "3.1.0", "value": 0, "text": "Not like me"}, {"id": "3.1.1", "value": 1, "text": "A little like me"}, {"id": "3.1.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.1.3", "value": 3, "text": "Quite like me"}, {"id": "3.1.4", "value": 4, "text": "Very like me"}]}, {"id": "3.2", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I often doubt I can handle things on my own, or feel like I’ll end up failing.", "options": [{"id": "3.2.0", "value": 0, "text": "Not like me"}, {"id": "3.2.1", "value": 1, "text": "A little like me"}, {"id": "3.2.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.2.3", "value": 3, "text": "Quite like me"}, {"id": "3.2.4", "value": 4, "text": "Very like me"}]}, {"id": "3.3", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "When I don’t feel like doing something, I find it really hard to make myself do it anyway.", "options": [{"id": "3.3.0", "value": 0, "text": "Not like me"}, {"id": "3.3.1", "value": 1, "text": "A little like me"}, {"id": "3.3.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.3.3", "value": 3, "text": "Quite like me"}, {"id": "3.3.4", "value": 4, "text": "Very like me"}]}, {"id": "3.4", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I put everyone else’s needs ahead of my own, even when it wears me down.", "options": [{"id": "3.4.0", "value": 0, "text": "Not like me"}, {"id": "3.4.1", "value": 1, "text": "A little like me"}, {"id": "3.4.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.4.3", "value": 3, "text": "Quite like me"}, {"id": "3.4.4", "value": 4, "text": "Very like me"}]}, {"id": "3.5", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I hold myself to very high standards, and I find it hard to switch off or relax.", "options": [{"id": "3.5.0", "value": 0, "text": "Not like me"}, {"id": "3.5.1", "value": 1, "text": "A little like me"}, {"id": "3.5.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.5.3", "value": 3, "text": "Quite like me"}, {"id": "3.5.4", "value": 4, "text": "Very like me"}]}, {"id": "4.1", "section": 4, "type": "multi", "question": "When things get tough, what do you tend to do?", "hint": "Pick the ones that fit you most.", "options": [{"id": "4.1.a", "text": "Push through and keep busy"}, {"id": "4.1.b", "text": "Withdraw and go quiet"}, {"id": "4.1.c", "text": "Distract yourself"}, {"id": "4.1.d", "text": "Get hard on yourself"}, {"id": "4.1.e", "text": "Reach out to someone"}, {"id": "4.1.f", "text": "Try to numb it out"}, {"id": "4.1.g", "text": "Overthink and analyse"}, {"id": "4.1.h", "text": "Get short or snappy with people"}, {"id": "4.1.i", "text": "Act first, think later"}, {"id": "4.1.j", "text": "Slow down and work out what I need"}, {"id": "4.1.k", "text": "Look for comfort or reassurance"}, {"id": "4.1.l", "text": "Put pressure on myself to get everything right, even when things are difficult"}]}, {"id": "4.2", "section": 4, "type": "single", "question": "And when it gets really hard, or you’re running on empty, what happens then?", "hint": "Pick the one that’s most like you.", "options": [{"id": "4.2.a", "text": "Push through and keep busy"}, {"id": "4.2.b", "text": "Withdraw and go quiet"}, {"id": "4.2.c", "text": "Distract yourself"}, {"id": "4.2.d", "text": "Get hard on yourself"}, {"id": "4.2.e", "text": "Reach out to someone"}, {"id": "4.2.f", "text": "Try to numb it out"}, {"id": "4.2.g", "text": "Overthink and analyse"}, {"id": "4.2.h", "text": "Get short or snappy with people"}, {"id": "4.2.i", "text": "Act first, think later"}, {"id": "4.2.j", "text": "Slow down and work out what I need"}, {"id": "4.2.k", "text": "Look for comfort or reassurance"}, {"id": "4.2.l", "text": "Put pressure on myself to get everything right, even when things are difficult"}]}, {"id": "4.3", "section": 4, "type": "slider", "question": "And how’s that working for you?", "min": 0, "max": 4, "minLabel": "It helps", "maxLabel": "It makes things worse"}, {"id": "4.4", "section": 4, "type": "single", "question": "When frustration gets the better of you, which is closest?", "options": [{"id": "4.4.a", "text": "It bursts out before I can stop it"}, {"id": "4.4.b", "text": "It builds up for a while, then I snap"}, {"id": "4.4.c", "text": "I’m standing my ground or protecting something that matters"}, {"id": "4.4.d", "text": "A bit of all of these"}, {"id": "4.4.e", "text": "I get irritable, but it doesn’t usually spill over"}], "showIf": "1.1 “Feeling on edge or irritable”, or 4.1 “Get short or snappy with people” or “Act first, think later”, or 4.2 “Get short or snappy with people”"}, {"id": "5.1", "section": 5, "type": "multi", "question": "When you’re struggling, what helps most from other people?", "hint": "Pick any that fit.", "options": [{"id": "5.1.a", "text": "Having someone just listen"}, {"id": "5.1.b", "text": "Being given practical steps"}, {"id": "5.1.c", "text": "Being left to work it out alone"}, {"id": "5.1.d", "text": "Gentle encouragement"}, {"id": "5.1.e", "text": "Being checked in on"}, {"id": "5.1.f", "text": "Honest, direct feedback"}, {"id": "5.1.g", "text": "Not being a burden to anyone"}, {"id": "5.1.h", "text": "I don’t have anyone I can turn to right now"}]}, {"id": "6.1", "section": 6, "type": "multi", "question": "What kind of things are you most likely to actually use?", "hint": "Pick any that fit.", "options": [{"id": "6.1.a", "text": "Short audio or guided exercises"}, {"id": "6.1.b", "text": "Reading something quick"}, {"id": "6.1.c", "text": "Practical tasks to try"}, {"id": "6.1.d", "text": "Videos"}, {"id": "6.1.e", "text": "Reminders or prompts through the day"}, {"id": "6.1.f", "text": "Tracking how you’re going"}]}, {"id": "6.2", "section": 6, "type": "single", "question": "When are you most likely to use something like this?", "options": [{"id": "6.2.a", "text": "First thing in the morning"}, {"id": "6.2.b", "text": "During the workday"}, {"id": "6.2.c", "text": "Evening"}, {"id": "6.2.d", "text": "Late at night"}, {"id": "6.2.e", "text": "Whenever it hits"}]}, {"id": "6.3", "section": 6, "type": "quiet_hours", "question": "Any times you don’t want to hear from us?", "hint": "Set your quiet hours. Nothing is sent inside this window.", "default": [22, 7]}, {"id": "6.3a", "section": 6, "type": "reminder_time", "optional": true, "question": "If you start the 90-day journey, what time would suit a daily reminder?", "hint": "Choose a time that fits an everyday routine, such as after breakfast. You’ll confirm reminders when you set up your journey."}, {"id": "6.5", "section": 6, "type": "multi", "question": "When life gets difficult, which of these things already help you, even a little?", "hint": "Pick any that fit.", "options": [{"id": "6.5.a", "text": "Time alone"}, {"id": "6.5.b", "text": "A trusted person"}, {"id": "6.5.c", "text": "Movement"}, {"id": "6.5.d", "text": "Getting outdoors"}, {"id": "6.5.e", "text": "Listening to music"}, {"id": "6.5.f", "text": "Writing"}, {"id": "6.5.g", "text": "Quiet"}, {"id": "6.5.h", "text": "Something creative"}, {"id": "6.5.i", "text": "Time with an animal"}, {"id": "6.5.j", "text": "Something practical"}, {"id": "6.5.k", "text": "Humour"}, {"id": "6.5.l", "text": "Rest"}, {"id": "6.5.m", "text": "Family"}, {"id": "6.5.n", "text": "Something else"}, {"id": "6.5.o", "text": "I’m not sure yet"}], "exclusive": ["6.5.o"]}, {"id": "6.5b", "section": 6, "type": "single", "question": "Which one helps most?", "options": "Built from the 6.5 answers ticked, excluding Something else and I’m not sure yet", "showIf": "Two or more of 6.5.a to 6.5.m ticked"}], "questionGroups": {"1": "What is going on", "2": "Goals and available time", "3": "How you tend to see things", "4": "When things get tough", "5": "Other people", "6": "What suits you"}, "journeyPhases": [{"period": "Week 1 · Days 1–7", "title": "Start by noticing", "description": "Get to know your main response. Begin with small observations of situations, feelings, expectations and early signals. Bring what you notice together in a simple weekly activity."}, {"period": "Weeks 2–4 · Days 8–28", "title": "Try small changes", "description": "Build on what you have noticed. Try a brief pause, a simpler approach or a different pace where it fits. Explore expectations and make a little more room to choose how you respond."}, {"period": "Weeks 5–6 · Days 29–42", "title": "Understand more", "description": "Explore a supported second response where one is identified, or deepen shared skills for consideration and choice. Notice which conditions make a useful response easier to draw on."}, {"period": "Weeks 7–8 · Days 43–56", "title": "Build flexibility", "description": "Consider your responses in the situations where they happen. Explore one realistic alternative at a time and begin gathering a small toolkit of options you find useful."}, {"period": "Weeks 9–10 · Days 57–70", "title": "Use it in daily life", "description": "Connect your learning with everyday demands, relationships and workable limits. Try manageable adjustments that fit your responsibilities, energy and circumstances."}, {"period": "Weeks 11–12 · Days 71–84", "title": "Keep what helps", "description": "Prepare or revisit your Tough-Day Guide. Bring together what you have noticed, review your chosen habit and everyday cue, and make a practical plan for carrying useful learning forward."}], "goalMessages": {"1.3.a": {"label": "Find practical ways to manage stress and difficult moments.", "title": "Build practical responses, one small step at a time", "message": "You said you’d like practical ways to manage stress and difficult moments. The guided 90-day wellbeing programme helps you build a set of responses over time. You begin by noticing what happens when things get difficult, then explore small actions you can try in everyday situations. As the weeks progress, you bring together what you find useful in your personal Tough-Day Guide.", "benefit": "For difficult moments, explore small practical responses and bring useful options together in your Tough-Day Guide.", "journey": "Your guided 90-day programme begins with noticing what happens in difficult moments. You gradually explore small practical responses, review what fits and bring useful options together in your Tough-Day Guide."}, "1.3.b": {"label": "Understand my feelings, needs and patterns better.", "title": "Get to know yourself through everyday life", "message": "You said you’d like to understand your feelings, needs and patterns better. Across the guided 90-day wellbeing programme, you explore how your patterns show up in everyday life, what they offer and when a different response might help. Brief daily insights, small actions and weekly activities help you build on your understanding and consider what supports you.", "benefit": "For understanding yourself, use daily observations and weekly activities to explore your patterns and what supports you.", "journey": "Across your guided 90-day programme, you explore familiar patterns in everyday situations. Brief insights, daily observations and weekly activities help you build understanding and consider what supports you."}, "1.3.c": {"label": "Pause and respond with more choice when things get tough.", "title": "Make more room to choose your response", "message": "You said you’d like to pause and respond with more choice when things get tough. The guided 90-day wellbeing programme helps you explore where that room for choice is available. You start by noticing familiar reactions, then gradually practise small pauses, practical adjustments and alternative approaches. The daily steps give you opportunities to discover what feels workable in your own circumstances.", "benefit": "For more choice, practise noticing familiar reactions and exploring small pauses, adjustments or alternative approaches.", "journey": "Your guided 90-day programme moves from noticing familiar reactions to practising small pauses and alternative approaches. Each stage gives you opportunities to explore what is workable in your circumstances."}, "1.3.d": {"label": "Recognise my limits and feel more comfortable asking for support or setting boundaries.", "title": "Make room for your needs, limits and support", "message": "You said you’d like to recognise your limits and feel more comfortable asking for support or setting boundaries. Across the guided 90-day wellbeing programme, you begin by noticing demands, your needs and familiar responses. You gradually explore small ways to ask for help, express a need or set a workable limit, and reflect on what fits your circumstances.", "benefit": "For limits and support, notice your needs and explore small ways to ask for help or set workable boundaries.", "journey": "Your guided 90-day programme starts with noticing your needs, demands and limits. Gradually explore small ways to ask for support, express what you need and set boundaries that fit your circumstances."}, "1.3.e": {"label": "Reconnect with what matters to me and what helps me feel like myself.", "title": "Reconnect with what matters and supports you", "message": "You said you’d like to reconnect with what matters to you and what helps you feel like yourself. The guided 90-day wellbeing programme gives you a structured way to explore what matters to you, what is asking a lot of you and what supports your wellbeing. You begin with noticing, gradually try manageable changes and build on the practices you find useful in everyday life.", "benefit": "For reconnecting with yourself, explore what matters to you and make room for activities and practices you find useful.", "journey": "Your guided 90-day programme helps you explore what matters, what is asking a lot of you and what supports you. You gradually try manageable changes and build on what you find useful."}, "1.3.f": {"label": "Make time for my wellbeing and build practices that fit my life.", "title": "Build a wellbeing practice that fits your life", "message": "You said you’d like to make time for your wellbeing and build practices that fit your life. The guided 90-day wellbeing programme combines brief daily learning with one chosen wellbeing habit. You connect that habit with an existing routine, try a manageable version and review what fits as the weeks unfold. The daily insights and weekly activities help you understand your responses while keeping your chosen practice realistic.", "benefit": "For a manageable practice, connect one chosen wellbeing habit with an existing routine and adjust it as you learn what fits.", "journey": "Your guided 90-day programme combines brief daily learning with one chosen wellbeing habit. Connect it with an existing routine, keep its size manageable and review what fits as the weeks unfold."}}, "goalPairs": {"1.3.a|1.3.b": "Understand your patterns and explore practical ways to respond", "1.3.a|1.3.c": "Build practical responses and make more room to choose", "1.3.a|1.3.d": "Explore practical responses and make room for support", "1.3.a|1.3.e": "Explore practical responses and reconnect with what supports you", "1.3.a|1.3.f": "Build practical responses into a manageable wellbeing practice", "1.3.b|1.3.c": "Understand your patterns and make more room to choose", "1.3.b|1.3.d": "Understand your patterns, needs and limits", "1.3.b|1.3.e": "Understand your patterns and reconnect with what matters", "1.3.b|1.3.f": "Understand your patterns and build a practice that fits", "1.3.c|1.3.d": "Make room for choice, support and workable boundaries", "1.3.c|1.3.e": "Make room for choice and reconnect with what supports you", "1.3.c|1.3.f": "Practise making room for choice in everyday life", "1.3.d|1.3.e": "Reconnect with what matters and make room for your needs", "1.3.d|1.3.f": "Make room for your wellbeing, limits and support", "1.3.e|1.3.f": "Reconnect with what supports you through a manageable practice"}, "driverVideoPreviews": [{"id": "TH", "slug": "teenager-hurting", "character": "teenager", "title": "Teenager: Hurting", "tone": "gentle", "highlights": ["Caring deeply and noticing what matters", "When hard feelings shape how you see yourself", "What care or connection might help?"], "paragraphs": ["Your answers suggest that on tough days, the Teenager may take the wheel through a response we call Hurting.", "You might feel things deeply, replay a difficult moment, or feel disconnected, even when people are around.", "That sensitivity can also help you care deeply, understand other people’s feelings and notice when something matters.", "The challenge comes when a difficult feeling starts to shape how you see yourself. Feeling low can start to sound like ‘I’m not good enough.’", "A useful starting point is noticing those moments and considering what care or connection might help.", "Does this sound like you?"], "plainTitle": "Feeling hurt or disconnected"}, {"id": "TF", "slug": "teenager-fired-up", "character": "teenager", "title": "Teenager: Fired Up", "tone": "upbeat", "highlights": ["Energy, excitement, enthusiasm and courage", "When your response arrives before a pause", "Notice the rush. Make space to choose."], "paragraphs": ["Your answers suggest that on tough days, the Teenager may take the wheel through a response we call Fired Up.", "This can bring energy, excitement, enthusiasm and the courage to try something new. Under pressure, it might also look like frustration, a shorter fuse or an urge to act straight away.", "That energy can help you get things moving. The challenge is that sometimes your response arrives before you’ve had time to consider what you need.", "A useful starting point is noticing that rush and creating a little space before deciding what to do next.", "Does this sound like you?"], "plainTitle": "Strong feelings and a rush to respond"}, {"id": "BS", "slug": "bodyguard-shutting-down", "character": "bodyguard", "title": "Bodyguard: Shutting Down", "tone": "gentle", "highlights": ["Independence and respect for others’ space", "When pulling back makes connection harder", "When does space help? When might support help?"], "paragraphs": ["Your answers suggest that on tough days, the Bodyguard may take the wheel through a response we call Shutting Down.", "You might go quiet, pull back from people, or find it hard to put your feelings into words. Keeping things at a distance may give you some breathing room.", "You may also recognise strengths like independence, staying calm on the outside and respecting other people’s need for space.", "The challenge is that pulling back can also make comfort and connection harder to reach.", "A useful starting point is noticing when space helps, and when a small step towards support might help too.", "Does this sound like you?"], "plainTitle": "Pulling back under pressure"}, {"id": "BP", "slug": "bodyguard-pushing-through", "character": "bodyguard", "title": "Bodyguard: Pushing Through", "tone": "warmly", "highlights": ["Perseverance and dependability", "When your own needs slip down the list", "When would rest, support or another approach fit?"], "paragraphs": ["Your answers suggest that on tough days, the Bodyguard may take the wheel through a response we call Pushing Through.", "You might keep busy, work through the list and make sure everyone else is looked after, even when you’re running low.", "This response can help you persevere, get things done and be someone others depend on.", "The challenge is that your own needs can keep slipping to the bottom of the list. Even when you stop, your mind might keep going.", "A useful starting point is noticing when pushing through helps, and when rest, support or a different approach might fit better.", "Does this sound like you?"], "plainTitle": "Keeping going under pressure"}, {"id": "AS", "slug": "adult-stretched", "character": "adult", "title": "Adult: Stretched", "tone": "warmly", "highlights": ["Perspective, practical steps and supporting others", "When life asks more of your energy", "Notice the load. Make room for rest and support."], "paragraphs": ["Your answers suggest a response we call Adult, Stretched.", "On tough days, you may still be able to pause, see different perspectives and work out a practical next step. Right now, though, life may be asking a lot of you.", "You might recognise strengths like staying level-headed, understanding what you need and supporting the people around you.", "The challenge is keeping those strengths available when your energy is running low. Small decisions may feel bigger, or the things that usually help you may start slipping.", "A useful starting point is noticing the load you’re carrying and making room for rest and support.", "Does this sound like you?"], "plainTitle": "Managing a demanding load"}, {"id": "AD", "slug": "adult-steady", "character": "adult", "title": "Adult: Steady", "tone": "warmly", "highlights": ["Perspective and choosing what supports you", "When busy periods squeeze out useful routines", "Notice what helps you stay steady."], "paragraphs": ["Your answers suggest a response we call Adult, Steady.", "On tough days, you may usually be able to pause, notice how you’re feeling and choose a response that considers your needs and the situation.", "You might recognise strengths like keeping perspective, reaching out when it helps and making room for the things that support your wellbeing.", "Even when things feel steady, busy periods can squeeze out those useful routines.", "A useful starting point is understanding what helps you stay steady, noticing when those habits begin to slip and choosing what you’d like to keep building on.", "Does this sound like you?"], "plainTitle": "Responding steadily under pressure"}]}</script>
+<script>
+(()=>{
+const root=document.getElementById('wellbeing-sketch');
+const data=JSON.parse(document.getElementById('ws-source-data').textContent);
+const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
+const state={driverPreview:'BP',screen:'summary',section:3,neutral:false,spacing:22,phase:0,resultFit:'pending'};
+// Illustrative pairing for copy review only, not a calculated or confirmed result.
+const previewHasSecondary=true;
+function secondaryInvitation(hasSecondary,neutral){
+ return '<h3>Explore more with your Wellbeing Bundle</h3><p>Your answers may also identify a secondary '+(neutral?'response':'driver')+': a distinct response that may come forward on really tough days, when things feel especially difficult or you’re running on empty. If you choose to purchase the Wellbeing Bundle, your personalised full report will explain this response, where identified, and how it may work alongside your primary '+(neutral?'response':'driver')+'.</p>';
+}
+
+function renderFit(){
+ const fits=state.resultFit==='fits';
+ q('#ws-after-fit').hidden=!fits;
+ q('#ws-unconfirmed-next').hidden=state.resultFit!=='unconfirmed';
+ q('[data-fit]').setAttribute('aria-expanded',String(fits));
+ q('[data-fit]').setAttribute('aria-controls','ws-after-fit');
+ q('#ws-review').hidden=state.resultFit!=='disagrees'&&state.resultFit!=='unconfirmed';
+ q('#ws-fit-status').textContent=fits?'Thank you. You can explore a little more below.':state.resultFit==='unconfirmed'?'You haven’t confirmed this description. You can still review your answers.':'';
+}
+const escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const paragraphs=a=>a.map(t=>'<p>'+escape(t)+'</p>').join('');
+function render(){
+if(state.screen!=='intro')q('#ws-intro-video').pause();
+if(state.screen!=='summary'||state.neutral)q('#ws-summary-video').pause();
+if(state.resultFit==='unconfirmed')state.neutral=true;
+renderFit();
+qa('[data-screen]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.screen===state.screen)));
+qa('[role=tabpanel]').forEach(p=>p.hidden=p.id!=='ws-'+state.screen);
+qa('[data-character]').forEach(n=>n.hidden=state.neutral);qa('[data-neutral]').forEach(n=>n.hidden=!state.neutral);
+qa('[data-language]').forEach(b=>b.textContent=state.neutral?'Show the character descriptions again':'Show my results without the characters');
+qa('[data-presentation-heading]').forEach(n=>n.textContent=state.neutral?'Prefer the character descriptions?':'Prefer descriptions without the characters?');
+qa('[data-presentation-help]').forEach(n=>n.textContent=state.neutral?'Your responses are shown without character names, symbols or the car analogy. You can switch back at any time. Your answers and results stay the same.':'We’ll describe your responses directly, without the Bodyguard, Teenager or Adult names, symbols or car analogy. Your answers and results stay the same.');
+
+q('[data-result-title]').textContent=state.neutral?'Keeping going under pressure':'Bodyguard: Pushing Through';
+q('#ws-secondary-invitation').innerHTML=secondaryInvitation(previewHasSecondary,state.neutral);
+q('[data-crew-label]').textContent=state.neutral?'Understanding your responses':'Meet your crew';
+q('#ws-approved-summary').innerHTML=paragraphs([state.neutral?'Keeping going may help you meet demands, but it can leave less room for your own needs. Notice when persistence helps and when a pause or support would be useful.':'Your Bodyguard may protect you by keeping you moving and getting things done. That can be useful, but it may also make it harder to notice your limits.']);
+const section=data.sections[state.section];q('#ws-section-number').textContent='Section '+state.section+' of 12';q('#ws-section-title').textContent=state.section===2&&state.neutral?'Understanding your responses':section.title;
+const reportSymbols=!state.neutral&&state.section===2?'<div class="ws-report-symbols" aria-label="Bodyguard shield, Teenager heart and Adult compass"><span class="ws-symbol ws-shield" role="img" aria-label="Bodyguard shield"></span><span class="ws-symbol ws-heart" role="img" aria-label="Teenager heart"></span><span class="ws-symbol ws-compass" role="img" aria-label="Adult compass"></span></div>':!state.neutral&&state.section===3?'<div class="ws-symbol ws-shield ws-symbol-small" role="img" aria-label="Bodyguard shield"></div>':'';
+q('#ws-section-content').innerHTML=reportSymbols+(state.neutral&&section.neutral?section.neutral:section.html);
+qa('[data-section]').forEach(b=>{b.classList.toggle('ws-active',Number(b.dataset.section)===state.section);b.setAttribute('aria-current',Number(b.dataset.section)===state.section?'page':'false')});
+q('[data-prev]').disabled=state.section===1;q('[data-next]').disabled=state.section===12;
+root.style.setProperty('--ws-gap',state.spacing+'px');
+renderJourneyPhase();
+renderGoalMessages();
+renderReminderPreferences();
+renderQuestion();
+renderDriverPreview();
+renderGoalRoute();
+qa('video').forEach(v=>{if(v.closest('[hidden]'))v.pause();});
+}
+function renderGoalRoute(){
+ const goalOnly=state.resultFit==='unconfirmed';
+ qa('[data-language]').forEach(b=>b.disabled=goalOnly);
+ q('[data-bundle-response]').textContent=goalOnly?'Your selected goals provide the starting point for this alternative journey. A result you haven’t confirmed is not used to personalise it.':'Your report explores your main way of responding and, where your answers support another distinct response, how these responses may fit together.';
+ q('#ws-bundle [aria-label="Full report sample"]').hidden=goalOnly;
+ qa('#ws-journey details').forEach(n=>{
+  const label=n.querySelector('summary')?.textContent||'';
+  if(n.hasAttribute('data-character')||n.hasAttribute('data-neutral')||label.includes('twelve weekly focuses'))n.hidden=goalOnly||(n.hasAttribute('data-character')?state.neutral:n.hasAttribute('data-neutral')?!state.neutral:false);
+ });
+ if(!goalOnly)return;
+ q('[data-result-title]').textContent='A description you haven’t confirmed';
+ q('#ws-report [data-crew-label]').textContent='Understanding yourself';
+ q('#ws-section-title').textContent='Start with what matters to you';
+ q('#ws-section-content').innerHTML='<p>You haven’t confirmed the response description. Your selected goals can guide the next steps you explore.</p><p>This preview shows an alternative invitation and journey outline. The full content for a journey based on your goals is still to be developed.</p>';
+}
+
+function renderJourneyPhase(){
+ const stage=data.journeyPhases[state.phase];
+ q('#ws-phase-period').textContent=stage.period;
+ q('#ws-phase-title').textContent=stage.title;
+ q('#ws-phase-description').textContent=state.resultFit==='unconfirmed'&&state.phase===0?'Begin by noticing everyday situations, feelings and needs in relation to your goals. Bring what you notice together in a simple weekly activity.':state.resultFit==='unconfirmed'&&state.phase===2?'Review what you have noticed in relation to your goals. Explore your needs and the conditions that help you make a useful choice.':stage.description;
+ qa('[data-phase]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.phase)===state.phase)));
+}
+
+function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{sketchRevision:16,driverPreview:state.driverPreview,view:state.screen,reportSection:state.section,journeyPhase:state.phase,language:state.neutral?'plain':'characters'},privateContent:{spacing:state.spacing}}).catch(()=>{});}
+function applySaved(s){if(!s)return;const m=s.modelContent||{};if(data.driverVideoPreviews.some(d=>d.id===m.driverPreview))state.driverPreview=m.driverPreview;if(m.sketchRevision===16&&['intro','questionnaire','summary','journey','report','bundle'].includes(m.view))state.screen=m.view;if(Number(m.reportSection)>=1&&Number(m.reportSection)<=12)state.section=Number(m.reportSection);if(Number.isInteger(m.journeyPhase)&&m.journeyPhase>=0&&m.journeyPhase<6)state.phase=m.journeyPhase;if([13,14,15,16].includes(m.sketchRevision)&&m.language)state.neutral=m.language==='plain';render();}
+root.addEventListener('play',e=>{if(e.target.tagName==='VIDEO')qa('video').forEach(v=>{if(v!==e.target)v.pause();});},true);
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.screen||b.dataset.go){state.screen=b.dataset.screen||b.dataset.go;render();save();}
+if(b.dataset.section){state.section=Number(b.dataset.section);render();save();}
+if(b.hasAttribute('data-prev')||b.hasAttribute('data-next')){state.section+=b.hasAttribute('data-next')?1:-1;render();save();}
+if(b.dataset.phase!==undefined){state.phase=Number(b.dataset.phase);renderJourneyPhase();save();}
+if(b.hasAttribute('data-edit-goals')){questionIndex=visibleQuestions().findIndex(item=>item.id==='1.3');state.screen='questionnaire';render();save();}
+if(b.hasAttribute('data-language')&&state.resultFit!=='unconfirmed'){state.neutral=!state.neutral;render();save();}
+if(b.hasAttribute('data-purchase')){q('#ws-purchase-preview').hidden=false;q('[data-purchase]').setAttribute('aria-expanded','true');}
+if(b.hasAttribute('data-close-purchase')){q('#ws-purchase-preview').hidden=true;q('[data-purchase]').setAttribute('aria-expanded','false');q('[data-purchase]').focus();}
+if(b.hasAttribute('data-fit')){state.resultFit='fits';render();q('#ws-fit-journey-status').textContent='';if(!state.neutral){const playback=q('#ws-fit-journey-video').play();if(playback)playback.catch(()=>{q('#ws-fit-journey-status').textContent='Press play to watch your journey introduction.';});}}
+if(b.hasAttribute('data-disagree')){state.resultFit='disagrees';render();}
+if(b.hasAttribute('data-unconfirmed')){state.resultFit='unconfirmed';render();}
+if(b.hasAttribute('data-review-answers')){state.screen='questionnaire';questionIndex=0;render();save();}
+});
+qa('[data-screen]').forEach((b,i,a)=>b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const n=(i+(e.key==='ArrowRight'?1:-1)+a.length)%a.length;a[n].click();a[n].focus();}}));
+const answers={};let questionIndex=0;
+function normaliseGoals(values){
+ const optionIds=data.questions.find(item=>item.id==='1.3').options.map(item=>item.id);
+ const requested=new Set(Array.isArray(values)?values:[]);
+ return optionIds.filter(id=>requested.has(id)).slice(0,2);
+}
+function goalMessage(values){
+ const ids=normaliseGoals(values);
+ if(!ids.length)return null;
+ if(ids.length===1){const item=data.goalMessages[ids[0]];return {ids,title:item.title,body:item.message,benefits:[],journey:item.journey};}
+ const key=[...ids].sort().join('|');
+ return {ids,title:data.goalPairs[key],body:'Your guided 90-day wellbeing programme brings these goals together. You begin by noticing familiar responses, then gradually try small, practical alternatives and build on what you find useful in everyday life.',benefits:ids.map(id=>data.goalMessages[id].benefit),journey:'Over the 90 days, brief insights, small daily actions and weekly activities help you explore both of your goals. The roadmap below shows how the learning builds.'};
+}
+function renderGoalMessages(){
+ const message=goalMessage(answers['1.3']);
+ const labels=message?'<p class="ws-small">'+(message.ids.length===1?'You said you’re hoping for:':'You said you’re hoping for:')+'</p><ul class="ws-goal-labels">'+message.ids.map(id=>'<li>'+escape(data.goalMessages[id].label)+'</li>').join('')+'</ul>':'';
+ const edit='<div class="ws-actions"><button type="button" class="cursor-interaction" data-edit-goals>Change my goals</button></div>';
+ q('#ws-unconfirmed-goal-message').innerHTML='<h2>Your result is unconfirmed. A guided 90-day journey can still support you.</h2><p>Thank you for telling us the description doesn’t fit. We can start with what you told us you’d like to work towards.</p>'+labels+(message?paragraphs([message.ids.length===1?message.journey:'The guided 90-day wellbeing journey can bring these goals together. '+message.benefits.join(' ')]):'<p>A guided 90-day journey can help you notice what happens in everyday life, explore small practical changes and build a wellbeing practice that fits.</p>')+'<p>Daily notifications invite you to brief insights and manageable actions, with time to explore what helps you.</p>';
+ q('#ws-summary-goal-message').innerHTML='<h2>Ready to make changes that fit your life?</h2>'+(message?'<p class="ws-small">Your '+(message.ids.length===1?'goal':'goals')+': '+message.ids.map(id=>escape(data.goalMessages[id].label.replace(/\.$/,''))).join('; ')+'</p>':'')+paragraphs([message?(message.ids.length===1?message.journey:'The guided 90-day wellbeing journey brings your goals together. '+message.benefits.join(' ')):previewHasSecondary?'Understanding your patterns is a starting point. Your guided 90-day wellbeing journey helps you explore what you can do differently in everyday life.':'Your main response gives you plenty to work with. Your guided 90-day wellbeing journey helps you explore when pushing through serves you and when a pause, support or a different approach could help.','Start by noticing what happens for you. Gradually try small practical actions, review what fits and build a wellbeing practice you can carry forward. Brief daily insights and weekly activities give you a clear way to begin.']);
+ q('#ws-journey-goal-message').innerHTML=message?'<h1>'+escape(message.title)+'</h1>'+labels+paragraphs([message.journey])+edit:'<h1>Get to know yourself, one small step at a time</h1><p>The guided 90-day wellbeing journey gives you a way to explore how you respond in everyday life and practise looking after yourself with more understanding.</p><div class="ws-actions"><button type="button" class="cursor-interaction" data-edit-goals>Choose my goals</button></div>';
+ q('#ws-bundle-goal-message').innerHTML=message?'<p class="ws-small">Chosen with your goals in mind</p>'+labels+'<p>Your report and guided 90-day programme give you a structured way to explore '+(message.ids.length===1?'this goal':'these goals')+'. The bundle below brings the learning, practical activities and reference tools together.</p>'+edit:'';
+}
+function updateGoalControls(){
+ const isGoals=visibleQuestions()[questionIndex].id==='1.3';
+ const count=normaliseGoals(answers['1.3']).length;
+ q('[data-goal-preview]').hidden=!isGoals;
+ q('[data-goal-preview]').disabled=count<1;
+ q('[data-question-next]').disabled=isGoals&&count<1;
+ if(isGoals){
+  q('#ws-question-status').textContent=count?count+' of 2 goals selected. You can continue with one or two.':'Select at least one goal to continue.';
+  qa('[data-answer="1.3"]').forEach(el=>{el.disabled=count===2&&!el.checked;});
+ }
+}
+
+
+const reminderZones=[['Australia/Brisbane','Brisbane'],['Australia/Sydney','Sydney / Canberra'],['Australia/Melbourne','Melbourne'],['Australia/Hobart','Hobart'],['Australia/Adelaide','Adelaide'],['Australia/Darwin','Darwin'],['Australia/Perth','Perth'],['Australia/Broken_Hill','Broken Hill'],['Australia/Eucla','Eucla'],['Australia/Lord_Howe','Lord Howe Island']];
+function reminderError(){
+ const pref=answers['6.3a'];if(!pref||pref.mode!=='time')return '';
+ if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(pref.time||''))return 'Choose a reminder time, or select “I’ll decide when I start”.';
+ if(!reminderZones.some(z=>z[0]===pref.timezone))return 'Choose the time zone for your reminder.';
+ const quiet=answers['6.3'];
+ if(quiet&&quiet.length===2&&quiet.every(v=>v!==''&&v!==undefined)){
+  const from=Number(quiet[0])*60,to=Number(quiet[1])*60;const parts=pref.time.split(':').map(Number),at=parts[0]*60+parts[1];
+  if(from===to)return 'Your quiet hours have the same start and end. Review them on the previous question.';
+  if(from<to?at>=from&&at<to:at>=from||at<to)return 'That time falls within your quiet hours. Choose another time, review your quiet hours, or decide when you start.';
+ }
+ return '';
+}
+function renderReminderPreferences(){
+ const p=answers['6.3a'];let message='';
+ if(p?.mode==='time'&&!reminderError()){
+  const parts=p.time.split(':').map(Number),hour=parts[0];const label=(hour%12||12)+':'+String(parts[1]).padStart(2,'0')+' '+(hour<12?'am':'pm');
+  const zone=reminderZones.find(z=>z[0]===p.timezone)[1];message='Your preferred daily reminder: '+label+' ('+zone+' time). You’ll confirm this during journey setup. Reminders are not switched on yet.';
+ }else if(p?.mode==='later')message='You can choose your reminder time when you set up your journey.';
+ qa('[data-reminder-preference]').forEach(el=>{el.textContent=message;el.hidden=!message;});
+}
+
+function choices(id){return Array.isArray(answers[id])?answers[id]:answers[id]?[answers[id]]:[];}
+function visibleQuestions(){return data.questions.filter(item=>{
+ if(item.id==='1.5')return choices('1.4').length>0;
+ if(item.id==='4.4')return choices('1.1').includes('1.1.c')||choices('4.1').some(v=>['4.1.h','4.1.i'].includes(v))||answers['4.2']==='4.2.h';
+ if(item.id==='6.5b')return choices('6.5').filter(v=>!['6.5.n','6.5.o'].includes(v)).length>=2;
+ return true;
+});}
+function renderQuestion(){
+ const items=visibleQuestions();questionIndex=Math.min(Math.max(0,questionIndex),items.length-1);const item=items[questionIndex];
+ q('#ws-question-step').textContent='Question '+(questionIndex+1)+' of '+items.length;
+ q('#ws-question-group').textContent=data.questionGroups[item.section];
+ q('#ws-question-progress').value=Math.round((questionIndex+1)/items.length*100);
+ q('#ws-question-title').textContent=item.question;
+ q('#ws-question-hint').textContent=[item.lead,item.hint,item.optional?'Optional':''].filter(Boolean).join(' · ');
+ q('[data-question-prev]').textContent=questionIndex===0?'Back to introduction':'Previous question';
+ q('[data-question-next]').textContent=questionIndex===items.length-1?'View example summary':'Next question';
+ q('#ws-question-status').textContent='';
+ let markup='';
+ if(item.type==='slider'){
+ const v=answers[item.id];markup='<div class="ws-scale-ends"><span>'+escape(item.minLabel)+'</span><span>'+escape(item.maxLabel)+'</span></div><label class="ws-small" for="ws-slider">Your rating: <output id="ws-slider-value">'+(v===undefined?'Choose a rating':v)+'</output></label><input id="ws-slider" data-answer="'+item.id+'" type="range" min="'+item.min+'" max="'+item.max+'" step="1" value="'+(v===undefined?item.min:v)+'">';
+ }else if(item.type==='reminder_time'){
+ const p=answers[item.id]||{};const choose=p.mode==='time';
+ markup='<label class="ws-answer cursor-interaction"><input type="radio" name="ws-reminder-choice" data-reminder-choice value="time" '+(choose?'checked':'')+'><span>Choose a time</span></label>'+
+ '<label class="ws-answer cursor-interaction"><input type="radio" name="ws-reminder-choice" data-reminder-choice value="later" '+(p.mode==='later'?'checked':'')+'><span>I’ll decide when I start</span></label>'+
+ '<div id="ws-reminder-fields" '+(choose?'':'hidden')+'><div class="ws-hours"><label for="ws-reminder-clock">Preferred reminder time<input id="ws-reminder-clock" type="time" step="60" data-reminder-clock value="'+escape(p.time||'')+'"></label><label for="ws-reminder-zone">Time zone<select id="ws-reminder-zone" data-reminder-zone><option value="">Choose your time zone</option>'+reminderZones.map(z=>'<option value="'+z[0]+'" '+(p.timezone===z[0]?'selected':'')+'>'+z[1]+'</option>').join('')+'</select></label></div><p class="ws-small">Your quiet hours apply in this time zone. You can change your preference during journey setup.</p></div>'+
+ '<p class="ws-small">Choosing a time here does not turn reminders on.</p>';
+ }else if(item.type==='quiet_hours'){
+ const value=answers[item.id]||['',''];markup='<div class="ws-hours">'+['From','To'].map((label,i)=>'<label>'+label+'<select data-hour="'+i+'" aria-label="Quiet hours '+label.toLowerCase()+'"><option value="">Choose a time</option>'+Array.from({length:24},(_,h)=>'<option value="'+h+'" '+(String(value[i])===String(h)?'selected':'')+'>'+String(h).padStart(2,'0')+':00</option>').join('')+'</select></label>').join('')+'</div><p class="ws-small">Choosing times here does not turn reminders on.</p>';
+ }else{
+ let options=item.options;if(item.id==='6.5b')options=data.questions.find(v=>v.id==='6.5').options.filter(o=>choices('6.5').includes(o.id)&&!['6.5.n','6.5.o'].includes(o.id));
+ markup=options.map((o,i)=>'<label class="ws-answer cursor-interaction"><input type="'+(item.type==='multi'?'checkbox':'radio')+'" name="ws-answer" data-answer="'+item.id+'" value="'+o.id+'" '+(choices(item.id).includes(o.id)?'checked':'')+'><span>'+escape(o.text)+'</span></label>').join('');
+ }
+ q('#ws-question-options').innerHTML=markup;
+updateGoalControls();
+}
+root.addEventListener('input',e=>{
+ const el=e.target;
+ if(el.dataset.reminderChoice!==undefined){
+  answers['6.3a']=el.value==='time'?{...(answers['6.3a']||{}),mode:'time'}:{mode:'later'};
+  renderQuestion();renderReminderPreferences();return;
+ }
+ if(el.dataset.reminderClock!==undefined||el.dataset.reminderZone!==undefined){
+  const p=answers['6.3a']||{mode:'time'};
+  if(el.dataset.reminderClock!==undefined)p.time=el.value;else p.timezone=el.value;
+  answers['6.3a']=p;renderReminderPreferences();q('#ws-question-status').textContent='';return;
+ }
+ if(el.dataset.answer){const id=el.dataset.answer;const item=data.questions.find(v=>v.id===id);
+ if(id!=='1.3'){state.resultFit='pending';renderFit();}
+ if(item.type==='slider'){answers[id]=Number(el.value);q('#ws-slider-value').textContent=el.value;}
+ else if(item.type==='multi'){
+ let selected=choices(id).filter(v=>v!==el.value);if(el.checked)selected.push(el.value);
+ if(id==='6.5'){if(el.value==='6.5.o'&&el.checked)selected=['6.5.o'];else selected=selected.filter(v=>v!=='6.5.o');delete answers['6.5b'];}
+ if(id==='1.3'){
+ const allowed=data.questions.find(item=>item.id==='1.3').options.map(item=>item.id);
+ if(!allowed.includes(el.value))return;
+ if(selected.length>2){el.checked=false;q('#ws-question-status').textContent='Choose up to two goals. Untick one if you’d like to change your selection.';return;}
+ answers[id]=normaliseGoals(selected);renderGoalMessages();updateGoalControls();
+}else{answers[id]=selected;if(id==='6.5')renderQuestion();}
+ }else answers[id]=el.value;
+ }
+ if(el.dataset.hour!==undefined){const item=visibleQuestions()[questionIndex];const value=answers[item.id]||['',''];value[Number(el.dataset.hour)]=el.value;answers[item.id]=value;}
+});
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.hasAttribute('data-question-prev')){if(questionIndex===0)state.screen='intro';else questionIndex--;render();save();}
+ if(b.hasAttribute('data-goal-preview')){
+ if(!normaliseGoals(answers['1.3']).length){q('#ws-question-status').textContent='Select at least one goal to preview your invitation.';return;}
+ state.screen='summary';render();save();
+}
+if(b.hasAttribute('data-question-next')){
+ const active=visibleQuestions()[questionIndex];
+ if(active.id==='6.3a'){
+  if(!answers['6.3a'])answers['6.3a']={mode:'later'};
+  const error=reminderError();if(error){q('#ws-question-status').textContent=error;return;}
+  renderReminderPreferences();
+ }
+
+ const items=visibleQuestions();
+ if(items[questionIndex].id==='1.3'&&!normaliseGoals(answers['1.3']).length){q('#ws-question-status').textContent='Select at least one goal to continue.';return;}
+ if(questionIndex===items.length-1){
+  if(reminderError()){questionIndex=items.findIndex(item=>item.id==='6.3a');render();q('#ws-question-status').textContent=reminderError();return;}
+
+  if(!normaliseGoals(answers['1.3']).length){questionIndex=items.findIndex(item=>item.id==='1.3');state.screen='questionnaire';render();q('#ws-question-status').textContent='Choose one or two goals before continuing to your summary.';return;}
+  state.screen='summary';q('#ws-fit-status').textContent='Your invitation reflects your selected goals. The Pushing Through profile is an example, not a calculated result.';
+ }else questionIndex++;
+ render();save();
+}
+});
+function renderDriverPreview(){
+ const sample=data.driverVideoPreviews.find(s=>s.id===state.driverPreview)||data.driverVideoPreviews.find(s=>s.id==='BP');
+ const video=q('#ws-primary-video');
+ const journey=q('#ws-fit-journey-video');
+ if(journey.dataset.profile!==sample.id){
+  journey.pause();journey.src='assets/wellbeing-profile/journey-'+sample.id+'-music-v1.mp4';journey.dataset.profile=sample.id;journey.load();
+ }
+ if(video.dataset.profile!==sample.id){
+  video.pause();video.src='assets/wellbeing-profile/'+sample.id+'-music-v1.mp4';video.poster='assets/wellbeing-profile/'+sample.id+'-brand-v2.jpg';
+  video.dataset.profile=sample.id;video.setAttribute('aria-label',sample.title+', narrated by Charlie');video.load();
+ }
+ if(state.screen!=='summary'||state.neutral||state.resultFit==='unconfirmed')video.pause();
+ q('#ws-driver-preview').value=sample.id;
+ q('#ws-summary-example').textContent='Illustrative primary driver: '+sample.title+' · not calculated from your answers';
+ const symbol=q('#ws-summary-symbol');
+ symbol.classList.remove('ws-shield','ws-heart','ws-compass');
+ symbol.classList.add(sample.character==='teenager'?'ws-heart':sample.character==='bodyguard'?'ws-shield':'ws-compass');
+ symbol.setAttribute('aria-label',sample.character==='teenager'?'Teenager heart':sample.character==='bodyguard'?'Bodyguard shield':'Adult compass');
+ q('[data-result-title]').textContent=state.neutral?sample.plainTitle:sample.title;
+ q('#ws-summary-lead').textContent=sample.paragraphs[1];
+ q('#ws-summary-strength').textContent=sample.highlights[0];
+ q('#ws-summary-challenge').textContent=sample.highlights[1];
+ q('#ws-summary-insight').textContent=sample.highlights[2];
+ q('#ws-approved-summary').innerHTML=paragraphs([sample.paragraphs[2]]);
+ if(state.section===3&&state.resultFit!=='unconfirmed')q('#ws-section-content').innerHTML='<h2>'+escape(state.neutral?sample.plainTitle:sample.title)+'</h2>'+paragraphs(sample.paragraphs.slice(1,-1));
+}
+q('#ws-driver-preview').addEventListener('change',e=>{
+ if(!data.driverVideoPreviews.some(s=>s.id===e.target.value))return;
+ state.driverPreview=e.target.value;state.resultFit='pending';
+ q('#ws-primary-playback').textContent='';render();save();
+ const playback=q('#ws-primary-video').play();
+ if(playback)playback.catch(()=>{q('#ws-primary-playback').textContent='Press play on the video to begin.';});
+});
+q('#ws-primary-video').addEventListener('error',()=>{q('#ws-primary-playback').textContent='The video could not load. You can still read your summary below.';});
+
+q('#ws-fit-journey-video').addEventListener('error',()=>{q('#ws-fit-journey-status').textContent='The video could not load. You can read the narration below.';});
+q('#ws-question-form').addEventListener('submit',e=>e.preventDefault());
+
+render();applySaved(window.openai?.widgetState);window.addEventListener('openai:set_globals',e=>applySaved(e.detail?.globals?.widgetState));
+if(globalThis.Tweak){const t=new Tweak({container:root,onChange:render});t.addSelect(state,'screen',{label:'Screen',options:[{label:'Before you begin',value:'intro'},{label:'Questionnaire',value:'questionnaire'},{label:'Free summary',value:'summary'},{label:'90-day journey',value:'journey'},{label:'Full report',value:'report'},{label:'Bundle preview',value:'bundle'}]});}
+})();
+</script>
+
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
+<script src="scripts/nav-mobile.js"></script>
+</body>
+</html>
