@@ -369,6 +369,69 @@ function send_free_guide_email(string $toEmail): bool
 }
 
 /**
+ * One-off: the free guide plus an apology, for people whose original
+ * free-guide email failed during the November 2026 Brevo IP-blocking outage.
+ * Used by cron/resend-free-guide-apology-once.php. Kept separate from
+ * send_free_guide_email() so the live signup email is untouched.
+ */
+function send_free_guide_apology_email(string $toEmail): bool
+{
+    $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $pdfPath = __DIR__ . '/../data/8-Tools-for-Your-Tough-Days-Guide.pdf';
+
+    if (!is_readable($pdfPath)) {
+        error_log('send_free_guide_apology_email: PDF attachment missing at ' . $pdfPath);
+        return false;
+    }
+
+    $platformUrl = 'https://www.toolsforthetoughdays.com.au/';
+    $unsubUrl    = $siteUrl . '/unsubscribe.html?email=' . rawurlencode($toEmail);
+
+    $subject = 'Sorry for the delay: your free guide, 8 Tools for Your Tough Days';
+
+    $textBody = "Hi there,\n\n"
+        . "Recently you asked for our free guide, 8 Tools for Your Tough Days. Because of a technical problem on our end, the email with your guide never reached you. I'm sorry about that, and thank you for your patience.\n\n"
+        . "Your free PDF guide is attached to this email.\n\n"
+        . "Inside, you'll find eight simple, practical strategies to help you navigate challenging moments — whether you're feeling overwhelmed, stressed or simply having one of those days.\n\n"
+        . "These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.\n\n"
+        . "Want more support beyond the guide?\n\n"
+        . "You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.\n\n"
+        . "Try the platform free for 14 days — no credit card required.\n\n"
+        . "Explore your free 14-day trial: " . $platformUrl . "\n\n"
+        . "There's no pressure to do everything at once. Start with what feels useful to you.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au\n\n"
+        . "Unsubscribe from our newsletter: " . $unsubUrl;
+
+    $safePlatformUrl = htmlspecialchars($platformUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $safeUnsubUrl    = htmlspecialchars($unsubUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = '<p>Hi there,</p>'
+        . '<p>Recently you asked for our free guide, <em>8 Tools for Your Tough Days</em>. Because of a technical problem on our end, the email with your guide never reached you. I\'m sorry about that, and thank you for your patience.</p>'
+        . '<p><strong>Your free PDF guide is attached to this email.</strong></p>'
+        . '<p>Inside, you\'ll find eight simple, practical strategies to help you navigate challenging moments — whether you\'re feeling overwhelmed, stressed or simply having one of those days.</p>'
+        . '<p>These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.</p>'
+        . '<p><strong>Want more support beyond the guide?</strong></p>'
+        . '<p>You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.</p>'
+        . '<p>Try the platform free for 14 days — no credit card required.</p>'
+        . '<p><a href="' . $safePlatformUrl . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Explore your free 14-day trial</a></p>'
+        . '<p>There\'s no pressure to do everything at once. Start with what feels useful to you.</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>'
+        . 'Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>'
+        . '<p style="font-size:12px;color:#999;"><a href="' . $safeUnsubUrl . '">Unsubscribe from our newsletter</a>.</p>';
+
+    return send_transactional_email($toEmail, $subject, $textBody, $htmlBody, [
+        [
+            'path'     => $pdfPath,
+            'filename' => '8-Tools-for-Your-Tough-Days.pdf',
+            'mime'     => 'application/pdf',
+        ],
+    ]);
+}
+
+/**
  * Sends the first lead-magnet follow-up email (a walkthrough of the mood
  * slider) five days after someone downloads the free guide. Only meant to be
  * sent to addresses that opted into the newsletter at signup — see
