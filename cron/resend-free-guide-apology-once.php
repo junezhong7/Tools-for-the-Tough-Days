@@ -12,7 +12,9 @@
  * apology) to every affected address:
  *   - lead_magnet_signups.email_sent = 0, created since 11 Nov 00:00 AEST
  *   - de-duplicated by email
- *   - skipping anyone who has since received the guide successfully
+ *   - skipping anyone who received the guide successfully after the outage
+ *     began (a success *before* it, followed by a failed re-request, still
+ *     gets the apology — they asked again, so they likely couldn't find it)
  *   - skipping anyone already sent this apology (lead_magnet_sequence_sends)
  * On success the address's affected rows are marked email_sent = 1.
  *
@@ -71,7 +73,8 @@ if (is_readable($configFile)) {
 }
 
 const APOLOGY_EMAIL_KEY = 'free_guide_apology_2026_11';
-const OUTAGE_FROM_UTC   = '2026-11-10 14:00:00'; // 11 Nov 2026 00:00 AEST
+const OUTAGE_FROM_UTC   = '2026-11-10 14:00:00'; // 11 Nov 2026 00:00 AEST — failed rows from here
+const OUTAGE_START_UTC  = '2026-11-11 12:00:00'; // last success 11:57, first failure 13:15 UTC
 const PREVIEW_RECIPIENTS = [
     'nic.marcon@emotionalbalance.com.au',
     'june.zhong@emotionalbalance.com.au',
@@ -134,7 +137,7 @@ $stmt = db()->prepare(
      GROUP BY l.email
      ORDER BY first_signup ASC"
 );
-$stmt->execute([OUTAGE_FROM_UTC, OUTAGE_FROM_UTC, APOLOGY_EMAIL_KEY]);
+$stmt->execute([OUTAGE_FROM_UTC, OUTAGE_START_UTC, APOLOGY_EMAIL_KEY]);
 $affected = $stmt->fetchAll();
 
 if ($dryRun) {
