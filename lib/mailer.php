@@ -283,6 +283,58 @@ function send_subscription_email(
     return send_transactional_email($toEmail, $subject, $body, $htmlBody);
 }
 
+/**
+ * Confirmation for the Black Friday 30-day pass (one-time payment, no renewal).
+ * $periodEnd is the UTC DATETIME from subscriptions.current_period_end.
+ */
+function send_black_friday_pass_email(string $toEmail, ?string $fullName, ?string $periodEnd): bool
+{
+    $firstName = extract_first_name($fullName);
+    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $dashboardUrl = $siteUrl . '/dashboard.html';
+
+    $untilText = '';
+    if ($periodEnd) {
+        try {
+            $end = (new DateTimeImmutable($periodEnd, new DateTimeZone('UTC')))
+                ->setTimezone(new DateTimeZone('Australia/Brisbane'));
+            $untilText = $end->format('j F Y');
+        } catch (Throwable $e) {
+            $untilText = '';
+        }
+    }
+    $accessLine = $untilText !== ''
+        ? "You now have full access to Tools for the Tough Days until {$untilText}."
+        : 'You now have 30 days of full access to Tools for the Tough Days.';
+
+    $subject = 'Your 30 days of Tools for the Tough Days are ready';
+    $body = $greeting . "\n\n"
+        . "Thank you for making a little more time for yourself this Black Friday. {$accessLine}\n\n"
+        . "That includes the full resource library to read or listen to, the daily mood check-in and your check-in history on your dashboard.\n\n"
+        . "A good place to start is a quick check-in today. It takes about a minute, and over the next few weeks you will begin to notice patterns in how you feel and what helps.\n\n"
+        . "Go to your dashboard: {$dashboardUrl}\n\n"
+        . "This was a one-time payment of $19. Your access will not renew automatically and you will not be charged again.\n\n"
+        . "If you have any questions, just reply to this email.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $h = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = '<p>' . $h($greeting) . '</p>'
+        . '<p>Thank you for making a little more time for yourself this Black Friday. ' . $h($accessLine) . '</p>'
+        . '<p>That includes the full resource library to read or listen to, the daily mood check-in and your check-in history on your dashboard.</p>'
+        . '<p>A good place to start is a quick check-in today. It takes about a minute, and over the next few weeks you will begin to notice patterns in how you feel and what helps.</p>'
+        . '<p><a href="' . $h($dashboardUrl) . '">Go to your dashboard</a></p>'
+        . '<p>This was a one-time payment of $19. Your access will not renew automatically and you will not be charged again.</p>'
+        . '<p>If you have any questions, just reply to this email.</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $body, $htmlBody);
+}
+
 function should_send_renewal_emails(): bool
 {
     $scope = strtolower(trim((string) getenv('SUBSCRIPTION_EMAIL_SCOPE')));

@@ -114,6 +114,30 @@ if (empty($product)) {
   die('Missing product parameter.');
 }
 
+// ── BLACK FRIDAY 30-DAY PASS: window, sign-in and eligibility before Stripe ──
+// The pass must belong to an account (the webhook grants access to that account),
+// so signed-out visitors register first and come straight back here.
+if ($product === 'black_friday_30d') {
+  require_once __DIR__ . '/lib/black_friday.php';
+
+  $offerState = black_friday_state();
+  if ($offerState !== 'open') {
+    header('Location: ' . SITE_URL . '/black-friday.html?status=' . $offerState);
+    exit;
+  }
+
+  if (!$authUserId) {
+    header('Location: ' . SITE_URL . '/register.html?redirect=' . rawurlencode('/checkout.php?product=black_friday_30d'));
+    exit;
+  }
+
+  $ineligible = black_friday_ineligibility($authUserId);
+  if ($ineligible !== null) {
+    header('Location: ' . SITE_URL . '/black-friday.html?status=' . $ineligible);
+    exit;
+  }
+}
+
 // ─────────────────────────────────────────────
 // BUILD CHECKOUT SESSION
 // ─────────────────────────────────────────────
@@ -202,6 +226,35 @@ try {
     $session_params['success_url'] = SITE_URL . '/welcome-business.html?session_id={CHECKOUT_SESSION_ID}';
   }
 
+  // ── BLACK FRIDAY 30-DAY PASS (one-off, no renewal) ──
+  elseif ($product === 'black_friday_30d') {
+    $session_params['mode'] = 'payment';
+    // Optional catalogue price; otherwise an inline $19 AUD price so no Stripe setup is needed.
+    $bfPriceId = trim((string) (getenv('STRIPE_PRICE_BLACK_FRIDAY_30D') ?: ''));
+    $selected_price_id = $bfPriceId !== '' ? $bfPriceId : 'inline';
+    $session_params['line_items'] = [[
+      'quantity' => 1,
+    ] + ($bfPriceId !== '' ? ['price' => $bfPriceId] : ['price_data' => [
+      'currency'     => 'aud',
+      'unit_amount'  => BLACK_FRIDAY_PRICE_CENTS,
+      'product_data' => [
+        'name'        => BLACK_FRIDAY_PRODUCT_NAME,
+        'description' => 'One-time payment. Access ends after 30 days and does not renew.',
+      ],
+    ]])];
+    if (!$authCustomerId) {
+      // Create a Stripe customer so later upgrades reuse it, and prefill the account email.
+      $session_params['customer_creation'] = 'always';
+      $session_params['customer_email'] = $authUser['email'];
+    }
+    $session_params['payment_intent_data'] = [
+      'description' => '30 days of full access (Black Friday). One-time payment, no auto-renewal.',
+      'metadata'    => $session_params['metadata'],
+    ];
+    $session_params['success_url'] = SITE_URL . '/black-friday.html?status=success&session_id={CHECKOUT_SESSION_ID}';
+    $session_params['cancel_url'] = SITE_URL . '/black-friday.html?status=cancelled';
+  }
+
   // ── UNKNOWN PRODUCT ─────────────────────────
   else {
     http_response_code(400);
@@ -213,7 +266,7 @@ try {
 
     // ── RECORD PENDING SUBSCRIPTION IN DB ──────
     if ($authUserId && function_exists('db')) {
-      $planType = in_array($product, ['individual_monthly','individual_yearly']) ? 'individual'
+      $planType = in_array($product, ['individual_monthly','individual_yearly','black_friday_30d']) ? 'individual'
                 : (in_array($product, ['sessions_3','sessions_6']) ? 'counselling' : 'business');
       try {
         db()->prepare(

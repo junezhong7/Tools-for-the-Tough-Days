@@ -67,6 +67,14 @@ $stmt = db()->prepare(
            SELECT 1 FROM trial_sequence_sends tss
            WHERE tss.user_id   = u.id
              AND tss.email_key = 'trial_day10'
+       )
+       AND NOT EXISTS (
+           -- Already has other access (paid plan, Black Friday pass): no trial nudges.
+           SELECT 1 FROM subscriptions other
+           WHERE other.user_id = u.id
+             AND other.product_key <> 'free_trial'
+             AND other.status IN ('active', 'trialing', 'past_due')
+             AND (other.current_period_end IS NULL OR other.current_period_end > NOW())
        )"
 );
 $stmt->execute();
@@ -118,6 +126,14 @@ $stmt14 = db()->prepare(
            SELECT 1 FROM trial_sequence_sends tss
            WHERE tss.user_id   = u.id
              AND tss.email_key = 'trial_day14'
+       )
+       AND NOT EXISTS (
+           -- Already has other access (paid plan, Black Friday pass): no trial nudges.
+           SELECT 1 FROM subscriptions other
+           WHERE other.user_id = u.id
+             AND other.product_key <> 'free_trial'
+             AND other.status IN ('active', 'trialing', 'past_due')
+             AND (other.current_period_end IS NULL OR other.current_period_end > NOW())
        )"
 );
 $stmt14->execute();

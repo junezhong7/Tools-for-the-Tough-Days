@@ -169,6 +169,12 @@
   <style>
     /* Site integration: stop shared site type styles leaking into the sketch */
     #wellbeing-sketch h3{font-family:inherit}
+    /* Links styled like the sketch's buttons (Black Friday offer in Bundle preview) */
+    #wellbeing-sketch .ws-link-button{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:var(--paper);color:var(--ink);text-decoration:none;font:inherit}
+    #wellbeing-sketch .ws-link-button.ws-primary{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+    #wellbeing-sketch .ws-link-button:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+    #wellbeing-sketch .ws-bf-offer{border-left:3px solid var(--orange)}
+    @media(pointer:coarse){#wellbeing-sketch .ws-link-button{min-height:44px}}
   </style>
   <script>
 (()=>{let state=null;try{state=JSON.parse(localStorage.getItem('wellbeing-sketch-review-state')||'null');}catch{}window.openai={widgetState:state,setWidgetState:async next=>{window.openai.widgetState=next;try{localStorage.setItem('wellbeing-sketch-review-state',JSON.stringify(next));}catch{}}};})();
@@ -356,6 +362,15 @@
      <p class="ws-small">The live version would take you to checkout here. This sketch does not collect payment details or take a payment.</p>
      <div class="ws-actions"><button type="button" class="cursor-interaction" data-close-purchase="">Back to the bundle</button></div>
     </div>
+   </div>
+   <!-- Live Black Friday offer (real checkout), unlike the bundle purchase above which is still a preview. Hidden once the offer ends. -->
+   <div class="ws-offer ws-bf-offer" id="ws-bf-offer" aria-labelledby="ws-bf-title">
+    <div class="ws-kicker">Black Friday · 27–30 November</div>
+    <div class="ws-price" id="ws-bf-title">$19 for 30 days</div>
+    <h2>Not ready for the full bundle? Start with the daily habit.</h2>
+    <p>Try Tools for the Tough Days for 30 days: the full resource library to read or listen to, a quick daily mood check-in and your check-in history on your dashboard.</p>
+    <p class="ws-small" id="ws-bf-terms">One-time payment of $19 AUD. Does not renew, so you won’t be charged again. One per account. Does not include the personalised full report or the 90-day journey.</p>
+    <div class="ws-actions"><a class="ws-primary ws-link-button" href="/checkout.php?product=black_friday_30d" aria-describedby="ws-bf-terms">Get 30 days for $19</a><a class="ws-link-button" href="/black-friday.html">Offer details</a></div>
    </div>
    <h2>A look inside your bundle</h2>
    <p>Explore what you’ll receive and how each part helps you put your profile into practice.</p>
@@ -710,6 +725,12 @@ if(globalThis.Tweak){const t=new Tweak({container:root,onChange:render});t.addSe
 })();
 </script>
 
+<script>
+// Hide the Black Friday option in Bundle preview once the offer has ended (stays visible if the check fails).
+fetch('/api/black-friday.php',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json()).then(d=>{
+ if(d.state==='ended'){const el=document.getElementById('ws-bf-offer');if(el)el.hidden=true;}
+}).catch(()=>{});
+</script>
 <script src="auth-guard.js"></script>
 <script src="auth-nav.js"></script>
 <script src="scripts/nav-mobile.js"></script>

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/mailer.php';
+require_once __DIR__ . '/../lib/black_friday.php';
 
 // Load Stripe and config
 if (file_exists(__DIR__ . '/../config.php')) {
@@ -122,6 +123,20 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session, ?string $e
         upsert_subscription($userId, $stripeSub, $sessionId);
 
         send_initial_subscription_email_once($userId, $sessionId, $subscriptionId, $eventId);
+    } elseif ($session->mode === 'payment' && ($session->metadata['product_key'] ?? '') === BLACK_FRIDAY_PRODUCT_KEY) {
+        if (($session->payment_status ?? '') !== 'paid') {
+            error_log("checkout.session.completed: black friday session {$sessionId} not paid ({$session->payment_status})");
+            return;
+        }
+        $result = black_friday_grant_pass(
+            $userId,
+            $sessionId,
+            is_string($customerId) ? $customerId : null,
+            is_string($session->payment_intent ?? null) ? $session->payment_intent : null,
+            (int) ($session->amount_total ?? BLACK_FRIDAY_PRICE_CENTS),
+            (string) ($session->currency ?? 'aud')
+        );
+        send_black_friday_email_once($userId, $sessionId, $result['period_end'], $eventId);
     } elseif ($session->mode === 'payment') {
         // One-off payment (counselling sessions)
         $productKey = $session->metadata['product_key'] ?? 'counselling';
@@ -502,6 +517,33 @@ function send_subscription_renewal_email_once(
         'stripe_subscription_id' => $stripeSubscriptionId,
         'invoice_id' => $invoiceId,
         'event_id' => $eventId,
+        'sent' => $sent,
+    ]);
+}
+
+function send_black_friday_email_once(int $userId, string $checkoutSessionId, ?string $periodEnd, ?string $eventId): void
+{
+    $action = 'email.black_friday.' . $checkoutSessionId;
+    if (audit_action_exists($action)) {
+        return;
+    }
+
+    $contact = load_user_contact($userId);
+    if (!$contact) {
+        return;
+    }
+
+    $sent = false;
+    try {
+        $sent = send_black_friday_pass_email($contact['email'], $contact['full_name'] ?? null, $periodEnd);
+    } catch (Throwable $e) {
+        error_log('black friday email failed for user ' . $userId . ': ' . $e->getMessage());
+    }
+
+    audit_webhook($action, $userId, [
+        'session_id' => $checkoutSessionId,
+        'event_id' => $eventId,
+        'period_end' => $periodEnd,
         'sent' => $sent,
     ]);
 }

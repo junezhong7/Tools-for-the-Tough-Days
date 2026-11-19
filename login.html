@@ -695,6 +695,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <script src="/auth-guard.js"></script>
   <script>
+    // Post-sign-in destination: same-site paths only (blocks //other-site and javascript: links).
+    function safeRedirect() {
+      const r = new URLSearchParams(window.location.search).get('redirect') || '';
+      return r.charAt(0) === '/' && r.charAt(1) !== '/' && r.charAt(1) !== '\\' ? r : '/';
+    }
+    // Keep the destination when switching between sign in and sign up (e.g. Black Friday checkout).
+    (function () {
+      const r = safeRedirect();
+      if (r === '/') return;
+      document.querySelectorAll('a[href="/login.html"], a[href="/register.html"]').forEach(function (a) {
+        a.href = a.getAttribute('href') + '?redirect=' + encodeURIComponent(r);
+      });
+    })();
+  </script>
+  <script>
     // Google Sign-In callback
     function handleGoogleCredential(response) {
       const errEl = document.getElementById('googleError');
@@ -713,7 +728,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             errEl.style.display = 'block';
           } else {
             sessionStorage.setItem('showWelcomeAfterLogin', '1');
-            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+            const redirect = safeRedirect();
             window.location.href = redirect;
           }
         })
@@ -752,7 +767,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               errEl.style.display = 'block';
             } else {
               sessionStorage.setItem('showWelcomeAfterLogin', '1');
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+              const redirect = safeRedirect();
               window.location.href = redirect;
             }
           })
@@ -829,7 +844,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             } else {
               // Redirect to dashboard (or the page they came from)
               sessionStorage.setItem('showWelcomeAfterLogin', '1');
-              const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+              const redirect = safeRedirect();
               window.location.href = redirect;
             }
           })
