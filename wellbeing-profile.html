@@ -549,6 +549,27 @@ function visibleQuestions(){return data.questions.filter(item=>{
  if(item.id==='6.5b')return choices('6.5').filter(v=>!['6.5.n','6.5.o'].includes(v)).length>=2;
  return true;
 });}
+// Every shown question is required unless the data marks it optional (1.4, 6.3a).
+// Goals (1.3) keep their own controls in updateGoalControls().
+function isAnswered(item){
+ const v=answers[item.id];
+ if(item.type==='multi')return choices(item.id).length>0;
+ if(item.type==='quiet_hours')return Array.isArray(v)&&v.length===2&&v.every(x=>x!==''&&x!==undefined);
+ return v!==undefined&&v!=='';
+}
+function requiredMessage(item){
+ if(item.type==='multi')return 'Choose at least one answer to continue.';
+ if(item.type==='slider')return 'Choose a rating on the slider to continue.';
+ if(item.type==='quiet_hours')return 'Choose a start and end time to continue.';
+ return 'Choose an answer to continue.';
+}
+function updateRequiredControls(){
+ const item=visibleQuestions()[questionIndex];
+ if(item.id==='1.3'||item.optional)return;
+ const missing=!isAnswered(item);
+ q('[data-question-next]').disabled=missing;
+ q('#ws-question-status').textContent=missing?requiredMessage(item):'';
+}
 function renderQuestion(){
  const items=visibleQuestions();questionIndex=Math.min(Math.max(0,questionIndex),items.length-1);const item=items[questionIndex];
  q('#ws-question-step').textContent='Question '+(questionIndex+1)+' of '+items.length;
@@ -569,6 +590,7 @@ function renderQuestion(){
  '<div id="ws-reminder-fields" '+(choose?'':'hidden')+'><div class="ws-hours"><label for="ws-reminder-clock">Preferred reminder time<input id="ws-reminder-clock" type="time" step="60" data-reminder-clock value="'+escape(p.time||'')+'"></label><label for="ws-reminder-zone">Time zone<select id="ws-reminder-zone" data-reminder-zone><option value="">Choose your time zone</option>'+reminderZones.map(z=>'<option value="'+z[0]+'" '+(p.timezone===z[0]?'selected':'')+'>'+z[1]+'</option>').join('')+'</select></label></div><p class="ws-small">Your quiet hours apply in this time zone. You can change your preference during journey setup.</p></div>'+
  '<p class="ws-small">Choosing a time here does not turn reminders on.</p>';
  }else if(item.type==='quiet_hours'){
+ if(!answers[item.id]&&Array.isArray(item.default))answers[item.id]=item.default.map(String);
  const value=answers[item.id]||['',''];markup='<div class="ws-hours">'+['From','To'].map((label,i)=>'<label>'+label+'<select data-hour="'+i+'" aria-label="Quiet hours '+label.toLowerCase()+'"><option value="">Choose a time</option>'+Array.from({length:24},(_,h)=>'<option value="'+h+'" '+(String(value[i])===String(h)?'selected':'')+'>'+String(h).padStart(2,'0')+':00</option>').join('')+'</select></label>').join('')+'</div><p class="ws-small">Choosing times here does not turn reminders on.</p>';
  }else{
  let options=item.options;if(item.id==='6.5b')options=data.questions.find(v=>v.id==='6.5').options.filter(o=>choices('6.5').includes(o.id)&&!['6.5.n','6.5.o'].includes(o.id));
@@ -576,6 +598,7 @@ function renderQuestion(){
  }
  q('#ws-question-options').innerHTML=markup;
 updateGoalControls();
+updateRequiredControls();
 }
 root.addEventListener('input',e=>{
  const el=e.target;
@@ -603,7 +626,18 @@ root.addEventListener('input',e=>{
  }else answers[id]=el.value;
  }
  if(el.dataset.hour!==undefined){const item=visibleQuestions()[questionIndex];const value=answers[item.id]||['',''];value[Number(el.dataset.hour)]=el.value;answers[item.id]=value;}
+ updateRequiredControls();
 });
+// A range input only fires "input" when its value changes, so choosing the starting
+// value (e.g. 0) by clicking or arrowing at the end would never register an answer.
+function recordUntouchedSlider(e){
+ const el=e.target;
+ if(el.id!=='ws-slider'||answers[el.dataset.answer]!==undefined)return;
+ if(e.type==='keyup'&&!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','PageUp','PageDown',' ','Enter'].includes(e.key))return;
+ el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+root.addEventListener('pointerup',recordUntouchedSlider);
+root.addEventListener('keyup',recordUntouchedSlider);
 root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  if(b.hasAttribute('data-question-prev')){if(questionIndex===0)state.screen='intro';else questionIndex--;render();save();}
  if(b.hasAttribute('data-goal-preview')){
@@ -620,8 +654,12 @@ if(b.hasAttribute('data-question-next')){
 
  const items=visibleQuestions();
  if(items[questionIndex].id==='1.3'&&!normaliseGoals(answers['1.3']).length){q('#ws-question-status').textContent='Select at least one goal to continue.';return;}
+ if(!active.optional&&!isAnswered(active)){q('#ws-question-status').textContent=requiredMessage(active);return;}
  if(questionIndex===items.length-1){
   if(reminderError()){questionIndex=items.findIndex(item=>item.id==='6.3a');render();q('#ws-question-status').textContent=reminderError();return;}
+  // Answers changed on the way back can reveal a follow-up question that was never answered.
+  const unanswered=items.find(item=>!item.optional&&item.id!=='1.3'&&!isAnswered(item));
+  if(unanswered){questionIndex=items.indexOf(unanswered);render();q('#ws-question-status').textContent='Please answer this question before viewing your summary.';return;}
 
   if(!normaliseGoals(answers['1.3']).length){questionIndex=items.findIndex(item=>item.id==='1.3');state.screen='questionnaire';render();q('#ws-question-status').textContent='Choose one or two goals before continuing to your summary.';return;}
   state.screen='summary';q('#ws-fit-status').textContent='Your invitation reflects your selected goals. The Pushing Through profile is an example, not a calculated result.';
