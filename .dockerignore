@@ -10,3 +10,5 @@ stripe-php/README.md
 stripe-php/CHANGELOG.md
 stripe-php/justfile
 Dockerfile
+# Developer tests: keep out of the deployed image (they would be web-reachable)
+tests
