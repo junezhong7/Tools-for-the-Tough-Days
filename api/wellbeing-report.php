@@ -12,6 +12,7 @@
  *              -> {run_id, checkout_url}. Answers are scored again here; nothing is charged yet.
  *   secondary  {run_id, selected, response}   answer the "does this also fit?" question once
  *   language   {run_id, language}             'characters' | 'plain'
+ *   email      {run_id}                       email a copy of the report again (rate limited)
  *
  * Answers are never logged. Unpaid runs are deleted after 30 days (lib/wellbeing_report.php).
  */
@@ -29,7 +30,7 @@ header('Cache-Control: no-store');
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 // The page asks on every load; a signed-out visitor simply has no report.
 if ($method === 'GET' && !isset($_GET['session_id']) && current_user() === null) {
-    json_ok(['report' => null, 'signed_in' => false]);
+    json_ok(['report' => null, 'signed_in' => false, 'has_resource_access' => false]);
 }
 $user = require_auth();
 $userId = (int) $user['id'];
@@ -49,7 +50,11 @@ try {
             json_ok(['report' => $run && $run['purchased_at'] ? wr_report_for_run($run) : null, 'payment' => 'confirmed']);
         }
         $run = wr_latest_purchased_run($userId);
-        json_ok(['report' => $run ? wr_report_for_run($run) : null]);
+        json_ok([
+            'report' => $run ? wr_report_for_run($run) : null,
+            'signed_in' => true,
+            'has_resource_access' => wr_has_resource_access($userId),
+        ]);
     }
 
     if ($method !== 'POST') {
@@ -75,6 +80,20 @@ try {
             'run_id' => $runId,
             'checkout_url' => '/checkout.php?product=' . WR_PRODUCT_KEY . '&run=' . $runId,
         ], 201);
+    }
+
+    if ($action === 'email') {
+        $run = wr_find_run((int) ($body['run_id'] ?? 0), $userId);
+        if (!$run || $run['purchased_at'] === null) {
+            json_error(404, 'NOT_FOUND', 'Report not found.');
+        }
+        if ($run['report_emailed_at'] !== null && strtotime((string) $run['report_emailed_at']) > time() - WR_EMAIL_RESEND_SECONDS) {
+            json_error(429, 'TOO_SOON', 'We sent your report a moment ago. Please check your inbox, including junk or spam.');
+        }
+        if (!wr_email_report($run)) {
+            json_error(502, 'EMAIL_FAILED', 'We couldn’t send the email just now. Your report is still saved here; please try again later.');
+        }
+        json_ok(['sent' => true, 'email' => (string) $user['email']]);
     }
 
     if ($action === 'secondary' || $action === 'language') {

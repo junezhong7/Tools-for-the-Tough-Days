@@ -261,6 +261,9 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
     $priceToKey = [
         'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual_monthly',
         'price_1TLDMFC8xESC1BMDRVGsCGIY' => 'individual_yearly',
+        // Resource library offered on the Wellbeing Profile page ($9.95 / $99)
+        'price_1Udf9FC8xESC1BMDo43Vx9az' => 'individual_resource_monthly',
+        'price_1UdfGLC8xESC1BMDlTmUCSs9' => 'individual_resource_yearly',
         'price_1TLElkC8xESC1BMD1IkfyBQl' => 'starter_only',
         'price_1TLEnfC8xESC1BMDuM43gQNr' => 'growth_only',
         'price_1TLEpWC8xESC1BMDuTCnIF2F' => 'team_only',

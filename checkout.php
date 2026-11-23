@@ -64,6 +64,10 @@ $prices = [
   'individual_monthly'   => getenv('STRIPE_PRICE_INDIVIDUAL_MONTHLY') ?: 'price_1TLD1mC8xESC1BMDifb6wvHd',  // $15/mo (coupon applied = $10 x 3 months)
   'individual_yearly'    => getenv('STRIPE_PRICE_INDIVIDUAL_YEARLY') ?: 'price_1TLDMFC8xESC1BMDRVGsCGIY',  // $120/yr
 
+  // ── RESOURCE LIBRARY (offered on the Wellbeing Profile page) ──
+  'individual_resource_monthly' => getenv('STRIPE_PRICE_RESOURCE_MONTHLY') ?: 'price_1Udf9FC8xESC1BMDo43Vx9az',  // $9.95/mo
+  'individual_resource_yearly'  => getenv('STRIPE_PRICE_RESOURCE_YEARLY') ?: 'price_1UdfGLC8xESC1BMDlTmUCSs9',   // $99/yr
+
   // ── BUSINESS — RESOURCES ONLY ───────────────
   'starter_only'         => getenv('STRIPE_PRICE_STARTER_ONLY') ?: 'price_1TLElkC8xESC1BMD1IkfyBQl',  // $150/mo · 6–20 staff
   'growth_only'          => getenv('STRIPE_PRICE_GROWTH_ONLY') ?: 'price_1TLEnfC8xESC1BMDuM43gQNr',  // $250/mo · 21–50 staff
@@ -114,6 +118,28 @@ if (empty($product)) {
   die('Missing product parameter.');
 }
 
+// ── RESOURCE LIBRARY from the Wellbeing Profile page: needs an account, one subscription at a time ──
+if (in_array($product, ['individual_resource_monthly', 'individual_resource_yearly'], true)) {
+  if (!$authUserId) {
+    header('Location: ' . SITE_URL . '/login.html?redirect=' . rawurlencode('/wellbeing-profile.html?view=resources'));
+    exit;
+  }
+  if (function_exists('db')) {
+    $active = db()->prepare(
+      "SELECT 1 FROM subscriptions
+       WHERE user_id = ? AND stripe_subscription_id IS NOT NULL
+         AND status IN ('active', 'trialing', 'past_due')
+         AND (current_period_end IS NULL OR current_period_end > NOW())
+       LIMIT 1"
+    );
+    $active->execute([$authUserId]);
+    if ($active->fetchColumn()) {
+      header('Location: ' . SITE_URL . '/dashboard.html');
+      exit;
+    }
+  }
+}
+
 // ── FULL WELLBEING PROFILE REPORT: needs an account and a saved, unpaid questionnaire run ──
 // The page saves the run (api/wellbeing-report.php) and then sends the buyer here with its id.
 $wellbeingRunId = null;
@@ -125,7 +151,7 @@ if ($product === 'wellbeing_report') {
   }
   $run = wr_find_run((int) ($_GET['run'] ?? 0), $authUserId);
   if (!$run) {
-    header('Location: ' . SITE_URL . '/wellbeing-profile.html?view=report&report=missing');
+    header('Location: ' . SITE_URL . '/wellbeing-profile.html?report=missing');
     exit;
   }
   if ($run['purchased_at'] !== null) {
@@ -187,6 +213,19 @@ try {
     $session_params['success_url'] = SITE_URL . '/my-preference.html?new_subscriber=1&session_id={CHECKOUT_SESSION_ID}';
   }
 
+  // ── RESOURCE LIBRARY (Wellbeing Profile page) ──
+  elseif (in_array($product, ['individual_resource_monthly', 'individual_resource_yearly'], true)) {
+    $selected_price_id = $prices[$product];
+    $session_params['mode'] = 'subscription';
+    $session_params['line_items'] = [[
+      'price'    => $prices[$product],
+      'quantity' => 1,
+    ]];
+    $plan = $product === 'individual_resource_monthly' ? 'monthly' : 'yearly';
+    $session_params['success_url'] = SITE_URL . '/wellbeing-profile.html?subscribed=' . $plan . '&session_id={CHECKOUT_SESSION_ID}';
+    $session_params['cancel_url'] = SITE_URL . '/wellbeing-profile.html?view=resources';
+  }
+
   // ── BUSINESS — RESOURCES ONLY ───────────────
   elseif (in_array($product, ['starter_only', 'growth_only', 'team_only'])) {
     $selected_price_id = $prices[$product];
@@ -242,7 +281,7 @@ try {
       'metadata'    => $session_params['metadata'],
     ];
     $session_params['success_url'] = SITE_URL . '/wellbeing-profile.html?report_session={CHECKOUT_SESSION_ID}';
-    $session_params['cancel_url'] = SITE_URL . '/wellbeing-profile.html?view=report&report_cancelled=' . $wellbeingRunId;
+    $session_params['cancel_url'] = SITE_URL . '/wellbeing-profile.html?report_cancelled=' . $wellbeingRunId;
   }
 
   // ── UNKNOWN PRODUCT ─────────────────────────
@@ -257,7 +296,7 @@ try {
     // ── RECORD PENDING SUBSCRIPTION IN DB ──────
     // (not for the report: it is a one-off purchase recorded on its questionnaire run)
     if ($authUserId && function_exists('db') && $product !== 'wellbeing_report') {
-      $planType = in_array($product, ['individual_monthly','individual_yearly']) ? 'individual'
+      $planType = in_array($product, ['individual_monthly','individual_yearly','individual_resource_monthly','individual_resource_yearly']) ? 'individual'
                 : (in_array($product, ['sessions_3','sessions_6']) ? 'counselling' : 'business');
       try {
         db()->prepare(
