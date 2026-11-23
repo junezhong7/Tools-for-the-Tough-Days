@@ -98,6 +98,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     /* INLINE PRICING */
     .plans-panel { display: none; margin-bottom: 16px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 16px; }
     .plans-panel.open { display: block; }
+    #plansPanel { scroll-margin-top: 100px; } /* clear the fixed header when scrolled to */
     .plans-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--teal-dark); text-align: center; margin-bottom: 8px; }
     .plans-subtitle { max-width: 620px; margin: 0 auto 24px; text-align: center; color: var(--warm-grey); font-size: 14px; }
     .plans-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 14px; }
@@ -803,6 +804,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         renderPayments(data.payments);
         renderMoodTracker(data.mood || null);
         applyMoodGate(!!data.has_active_subscription);
+
+        // New members arrive from sign-up with ?plans=1 (there is no free trial): show the plans.
+        if (new URLSearchParams(window.location.search).get('plans') === '1') {
+          history.replaceState(null, '', window.location.pathname + window.location.hash);
+          if (!data.has_active_subscription) {
+            const plansPanel = document.getElementById('plansPanel');
+            if (!plansPanel.classList.contains('open')) document.getElementById('btnTogglePlans').click();
+            plansPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
 
       } catch (e) {
         document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
