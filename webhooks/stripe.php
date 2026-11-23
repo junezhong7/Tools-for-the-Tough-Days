@@ -122,6 +122,12 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session, ?string $e
         upsert_subscription($userId, $stripeSub, $sessionId);
 
         send_initial_subscription_email_once($userId, $sessionId, $subscriptionId, $eventId);
+    } elseif ($session->mode === 'payment' && ($session->metadata['product_key'] ?? '') === 'wellbeing_report') {
+        // Full Wellbeing Profile Report: recorded on its questionnaire run, never as platform access.
+        require_once __DIR__ . '/../lib/wellbeing_report.php';
+        if (wr_confirm_checkout_session($session, $userId) === null) {
+            error_log("checkout.session.completed: wellbeing report session {$sessionId} not recorded (unpaid or metadata mismatch)");
+        }
     } elseif ($session->mode === 'payment') {
         // One-off payment (counselling sessions)
         $productKey = $session->metadata['product_key'] ?? 'counselling';

@@ -114,6 +114,27 @@ if (empty($product)) {
   die('Missing product parameter.');
 }
 
+// ── FULL WELLBEING PROFILE REPORT: needs an account and a saved, unpaid questionnaire run ──
+// The page saves the run (api/wellbeing-report.php) and then sends the buyer here with its id.
+$wellbeingRunId = null;
+if ($product === 'wellbeing_report') {
+  require_once __DIR__ . '/lib/wellbeing_report.php';
+  if (!$authUserId) {
+    header('Location: ' . SITE_URL . '/login.html?redirect=' . rawurlencode('/wellbeing-profile.html?view=report'));
+    exit;
+  }
+  $run = wr_find_run((int) ($_GET['run'] ?? 0), $authUserId);
+  if (!$run) {
+    header('Location: ' . SITE_URL . '/wellbeing-profile.html?view=report&report=missing');
+    exit;
+  }
+  if ($run['purchased_at'] !== null) {
+    header('Location: ' . SITE_URL . '/wellbeing-profile.html?view=report');
+    exit;
+  }
+  $wellbeingRunId = (int) $run['id'];
+}
+
 // ─────────────────────────────────────────────
 // BUILD CHECKOUT SESSION
 // ─────────────────────────────────────────────
@@ -202,6 +223,28 @@ try {
     $session_params['success_url'] = SITE_URL . '/welcome-business.html?session_id={CHECKOUT_SESSION_ID}';
   }
 
+  // ── FULL WELLBEING PROFILE REPORT (one-off; not platform access) ──
+  elseif ($product === WR_PRODUCT_KEY) {
+    $selected_price_id = wr_price_id();
+    $session_params['mode'] = 'payment';
+    $session_params['line_items'] = [[
+      'price'    => $selected_price_id,
+      'quantity' => 1,
+    ]];
+    $session_params['metadata']['run_id'] = (string) $wellbeingRunId;
+    if (!$authCustomerId) {
+      // Create a Stripe customer so later purchases reuse it, and prefill the account email.
+      $session_params['customer_creation'] = 'always';
+      $session_params['customer_email'] = $authUser['email'];
+    }
+    $session_params['payment_intent_data'] = [
+      'description' => WR_PRODUCT_NAME . ' (one-time payment)',
+      'metadata'    => $session_params['metadata'],
+    ];
+    $session_params['success_url'] = SITE_URL . '/wellbeing-profile.html?report_session={CHECKOUT_SESSION_ID}';
+    $session_params['cancel_url'] = SITE_URL . '/wellbeing-profile.html?view=report&report_cancelled=' . $wellbeingRunId;
+  }
+
   // ── UNKNOWN PRODUCT ─────────────────────────
   else {
     http_response_code(400);
@@ -212,7 +255,8 @@ try {
   $session = \Stripe\Checkout\Session::create($session_params);
 
     // ── RECORD PENDING SUBSCRIPTION IN DB ──────
-    if ($authUserId && function_exists('db')) {
+    // (not for the report: it is a one-off purchase recorded on its questionnaire run)
+    if ($authUserId && function_exists('db') && $product !== 'wellbeing_report') {
       $planType = in_array($product, ['individual_monthly','individual_yearly']) ? 'individual'
                 : (in_array($product, ['sessions_3','sessions_6']) ? 'counselling' : 'business');
       try {

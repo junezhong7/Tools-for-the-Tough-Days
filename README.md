@@ -33,6 +33,7 @@ Set these in Azure Web App application settings:
 - `STRIPE_PRICE_TEAM_BUNDLE`
 - `STRIPE_PRICE_SESSIONS_3`
 - `STRIPE_PRICE_SESSIONS_6`
+- `STRIPE_PRICE_WELLBEING_REPORT` (optional; defaults to the live $39.95 Full Wellbeing Profile Report price — set a test-mode price when the key is a test key)
 - `AZURE_STORAGE_ACCOUNT`
 - `AZURE_STORAGE_CONTAINER`
 - `AZURE_STORAGE_PREFIX`

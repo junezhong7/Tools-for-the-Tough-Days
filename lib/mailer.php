@@ -283,6 +283,41 @@ function send_subscription_email(
     return send_transactional_email($toEmail, $subject, $body, $htmlBody);
 }
 
+/**
+ * Receipt-style note for the Full Wellbeing Profile Report ($39.95 one-off).
+ * Never includes any answer or report content: it only links back to the account.
+ */
+function send_wellbeing_report_email(string $toEmail, ?string $fullName = null): bool
+{
+    $firstName = extract_first_name($fullName);
+    $greeting = $firstName !== '' ? "Hi {$firstName}," : 'Hi there,';
+    $siteUrl = defined('SITE_URL') ? rtrim((string) SITE_URL, '/') : 'https://www.toolsforthetoughdays.com.au';
+    $reportUrl = $siteUrl . '/wellbeing-profile.html?view=report';
+
+    $subject = 'Your Full Wellbeing Profile Report is ready';
+    $body = $greeting . "\n\n"
+        . "Thank you for purchasing your Full Wellbeing Profile Report. It is saved to your Tools for the Tough Days account, so you can come back to it at any time.\n\n"
+        . "View your report (you may need to sign in): {$reportUrl}\n\n"
+        . "This was a one-time payment of \$39.95 AUD. It is not a subscription, and you will not be charged again.\n\n"
+        . "If you have any questions, just reply to this email.\n\n"
+        . "Warm regards,\n"
+        . "Nic Marcon\n"
+        . "Registered Psychologist\n"
+        . "Tools for the Tough Days\n"
+        . "www.toolsforthetoughdays.com.au";
+
+    $h = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $htmlBody = '<p>' . $h($greeting) . '</p>'
+        . '<p>Thank you for purchasing your Full Wellbeing Profile Report. It is saved to your Tools for the Tough Days account, so you can come back to it at any time.</p>'
+        . '<p><a href="' . $h($reportUrl) . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">View your report</a></p>'
+        . '<p>You may need to sign in first.</p>'
+        . '<p>This was a one-time payment of $39.95 AUD. It is not a subscription, and you will not be charged again.</p>'
+        . '<p>If you have any questions, just reply to this email.</p>'
+        . '<p>Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>';
+
+    return send_transactional_email($toEmail, $subject, $body, $htmlBody);
+}
+
 function should_send_renewal_emails(): bool
 {
     $scope = strtolower(trim((string) getenv('SUBSCRIPTION_EMAIL_SCOPE')));
