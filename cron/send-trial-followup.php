@@ -69,7 +69,7 @@ $stmt = db()->prepare(
              AND tss.email_key = 'trial_day10'
        )
        AND NOT EXISTS (
-           -- Already has other access (paid plan, Black Friday pass): no trial nudges.
+           -- Already has other access (e.g. a paid plan): no trial nudges.
            SELECT 1 FROM subscriptions other
            WHERE other.user_id = u.id
              AND other.product_key <> 'free_trial'
@@ -128,7 +128,7 @@ $stmt14 = db()->prepare(
              AND tss.email_key = 'trial_day14'
        )
        AND NOT EXISTS (
-           -- Already has other access (paid plan, Black Friday pass): no trial nudges.
+           -- Already has other access (e.g. a paid plan): no trial nudges.
            SELECT 1 FROM subscriptions other
            WHERE other.user_id = u.id
              AND other.product_key <> 'free_trial'

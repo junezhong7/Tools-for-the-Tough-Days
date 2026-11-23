@@ -515,7 +515,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const r = new URLSearchParams(window.location.search).get('redirect') || '';
       return r.charAt(0) === '/' && r.charAt(1) !== '/' && r.charAt(1) !== '\\' ? r : '/';
     }
-    // Keep the destination when switching between sign in and sign up (e.g. Black Friday checkout).
+    // Keep the destination when switching between sign in and sign up (e.g. a checkout that needs an account).
     (function () {
       const r = safeRedirect();
       if (r === '/') return;
