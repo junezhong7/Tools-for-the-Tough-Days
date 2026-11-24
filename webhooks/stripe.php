@@ -188,10 +188,11 @@ function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null):
 
     if (!$userId) return;
 
+    $stripeSubId = invoice_subscription_id($invoice);
     $subId = null;
-    if ($invoice->subscription) {
+    if ($stripeSubId) {
         $subStmt = db()->prepare('SELECT id FROM subscriptions WHERE stripe_subscription_id = ?');
-        $subStmt->execute([$invoice->subscription]);
+        $subStmt->execute([$stripeSubId]);
         $sub = $subStmt->fetch();
         $subId = $sub ? (int) $sub['id'] : null;
     }
@@ -214,14 +215,15 @@ function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null):
     ]);
 
     // Re-activate subscription if it was past_due
-    if ($invoice->subscription) {
+    if ($stripeSubId) {
         db()->prepare(
             "UPDATE subscriptions SET status = 'active'
              WHERE stripe_subscription_id = ? AND status = 'past_due'"
-        )->execute([$invoice->subscription]);
+        )->execute([$stripeSubId]);
 
-        if (should_send_renewal_emails()) {
-            send_subscription_renewal_email_once($userId, (string) $invoice->id, (string) $invoice->subscription, $eventId);
+        // Only real renewals; the first invoice of a new subscription gets the welcome email instead.
+        if (should_send_renewal_emails() && ($invoice->billing_reason ?? '') === 'subscription_cycle') {
+            send_subscription_renewal_email_once($userId, (string) $invoice->id, $stripeSubId, $eventId);
         }
     }
 
@@ -236,11 +238,12 @@ function handle_invoice_failed(\Stripe\Invoice $invoice): void
     $customerId = $invoice->customer;
     $userId     = user_id_from_customer($customerId);
 
-    if ($invoice->subscription) {
+    $stripeSubId = invoice_subscription_id($invoice);
+    if ($stripeSubId) {
         db()->prepare(
             "UPDATE subscriptions SET status = 'past_due'
              WHERE stripe_subscription_id = ?"
-        )->execute([$invoice->subscription]);
+        )->execute([$stripeSubId]);
     }
 
     audit_webhook('invoice.payment_failed', $userId, [
@@ -252,6 +255,19 @@ function handle_invoice_failed(\Stripe\Invoice $invoice): void
 // ─────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────
+
+/**
+ * The Stripe subscription an invoice belongs to. API versions from 2025-03-31.basil moved it
+ * from invoice.subscription to invoice.parent.subscription_details.subscription.
+ */
+function invoice_subscription_id(\Stripe\Invoice $invoice): ?string
+{
+    $sub = $invoice->subscription ?? ($invoice->parent->subscription_details->subscription ?? null);
+    if ($sub instanceof \Stripe\StripeObject) {
+        $sub = $sub->id ?? null;
+    }
+    return is_string($sub) && $sub !== '' ? $sub : null;
+}
 
 function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sessionId = null): void
 {
@@ -294,8 +310,12 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
     $productKey = $priceToKey[$priceId] ?? 'unknown';
     $planType   = str_starts_with($productKey, 'individual') ? 'individual' : 'business';
 
-    $periodStart = $s->current_period_start ? date('Y-m-d H:i:s', $s->current_period_start) : null;
-    $periodEnd   = $s->current_period_end   ? date('Y-m-d H:i:s', $s->current_period_end)   : null;
+    // Stripe API versions from 2025-03-31.basil keep the period dates on the subscription item, not the subscription.
+    $item        = $s->items->data[0] ?? null;
+    $startTs     = $s->current_period_start ?? ($item->current_period_start ?? null);
+    $endTs       = $s->current_period_end ?? ($item->current_period_end ?? null);
+    $periodStart = $startTs ? date('Y-m-d H:i:s', (int) $startTs) : null;
+    $periodEnd   = $endTs ? date('Y-m-d H:i:s', (int) $endTs) : null;
 
     $existingId = subscription_row_id_from_stripe($s->id);
     if ($existingId === null && $sessionId !== null) {
