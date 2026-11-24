@@ -259,9 +259,10 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
 
     // Determine product_key from price ID
     $priceToKey = [
+        // Old $15 / $120 prices (archived 27 Nov 2026), kept for subscriptions still on them
         'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual_monthly',
         'price_1TLDMFC8xESC1BMDRVGsCGIY' => 'individual_yearly',
-        // Resource library offered on the Wellbeing Profile page ($9.95 / $99)
+        // Library Access ($9.95 / $99): the main individual subscription and the Wellbeing Profile offer
         'price_1Udf9FC8xESC1BMDo43Vx9az' => 'individual_resource_monthly',
         'price_1UdfGLC8xESC1BMDlTmUCSs9' => 'individual_resource_yearly',
         'price_1TLElkC8xESC1BMD1IkfyBQl' => 'starter_only',
