@@ -271,6 +271,24 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
         'price_1TLeVDC8xESC1BMDxQFkfvDC' => 'growth_bundle',
         'price_1TLeVeC8xESC1BMD25LqYUGK' => 'team_bundle',
     ];
+    // Price IDs set per environment (e.g. Stripe sandbox prices on sand), the same settings checkout.php uses.
+    foreach ([
+        'STRIPE_PRICE_INDIVIDUAL_MONTHLY' => 'individual_monthly',
+        'STRIPE_PRICE_INDIVIDUAL_YEARLY'  => 'individual_yearly',
+        'STRIPE_PRICE_RESOURCE_MONTHLY'   => 'individual_resource_monthly',
+        'STRIPE_PRICE_RESOURCE_YEARLY'    => 'individual_resource_yearly',
+        'STRIPE_PRICE_STARTER_ONLY'       => 'starter_only',
+        'STRIPE_PRICE_GROWTH_ONLY'        => 'growth_only',
+        'STRIPE_PRICE_TEAM_ONLY'          => 'team_only',
+        'STRIPE_PRICE_STARTER_BUNDLE'     => 'starter_bundle',
+        'STRIPE_PRICE_GROWTH_BUNDLE'      => 'growth_bundle',
+        'STRIPE_PRICE_TEAM_BUNDLE'        => 'team_bundle',
+    ] as $envName => $key) {
+        $envPrice = trim((string) (getenv($envName) ?: ''));
+        if ($envPrice !== '') {
+            $priceToKey[$envPrice] = $key;
+        }
+    }
 
     $productKey = $priceToKey[$priceId] ?? 'unknown';
     $planType   = str_starts_with($productKey, 'individual') ? 'individual' : 'business';
