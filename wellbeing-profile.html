@@ -131,6 +131,19 @@
 #wellbeing-sketch .ws-answer:has(input:checked){background:var(--soft);border-color:var(--quiet)}
 #wellbeing-sketch .ws-answer input{margin-top:6px;accent-color:var(--ink);flex-shrink:0;width:17px;height:17px}
 #wellbeing-sketch input[type=range]{display:block;width:100%;margin:22px 0;accent-color:var(--ink)}
+/* Questionnaire slider: some people didn't see it was a slider, so a thick track that fills, a big dot and tappable numbers. */
+#wellbeing-sketch .ws-slider-help{margin:16px 0 0;font-weight:600;color:var(--ink)}
+#wellbeing-sketch #ws-slider{-webkit-appearance:none;appearance:none;height:36px;margin:4px 0 0;background:transparent;cursor:pointer;--ws-fill:0px}
+#wellbeing-sketch #ws-slider::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:linear-gradient(to right,var(--teal) 0 var(--ws-fill),var(--line) var(--ws-fill) 100%)}
+#wellbeing-sketch #ws-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;box-sizing:border-box;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:var(--teal);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--teal),0 2px 6px rgba(0,0,0,.25);cursor:grab}
+#wellbeing-sketch #ws-slider::-moz-range-track{height:10px;border-radius:5px;background:var(--line)}
+#wellbeing-sketch #ws-slider::-moz-range-progress{height:10px;border-radius:5px;background:var(--teal)}
+#wellbeing-sketch #ws-slider::-moz-range-thumb{box-sizing:border-box;width:30px;height:30px;border-radius:50%;background:var(--teal);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--teal),0 2px 6px rgba(0,0,0,.25);cursor:grab}
+#wellbeing-sketch .ws-slider-ticks{position:relative;height:36px;margin:2px 0 0}
+#wellbeing-sketch .ws-slider-ticks button{position:absolute;top:0;transform:translateX(-50%);width:30px;min-height:32px;padding:3px 0;border:0;border-radius:6px;background:transparent;text-align:center;font-size:14px;line-height:1.6;color:var(--quiet);cursor:pointer}
+#wellbeing-sketch .ws-slider-ticks button.ws-active{background:var(--teal);color:var(--on-teal);font-weight:600}
+#wellbeing-sketch .ws-slider-readout{display:block;margin:8px 0 0;font-size:15px;color:var(--ink)}
+#wellbeing-sketch .ws-slider-readout output{font-weight:700;color:var(--teal)}
 #wellbeing-sketch .ws-hours{display:flex;flex-wrap:wrap;gap:22px;margin:18px 0}
 #wellbeing-sketch .ws-hours label{display:grid;gap:7px}
 #wellbeing-sketch select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:8px 12px;border-radius:7px;max-width:100%}
@@ -594,7 +607,10 @@ function renderQuestion(){
  q('#ws-question-status').textContent='';
  let markup='';
  if(item.type==='slider'){
- const v=answers[item.id];markup='<div class="ws-scale-ends"><span>'+escape(item.minLabel)+'</span><span>'+escape(item.maxLabel)+'</span></div><label class="ws-small" for="ws-slider">Your rating: <output id="ws-slider-value">'+(v===undefined?'Choose a rating':v)+'</output></label><input id="ws-slider" data-answer="'+item.id+'" type="range" min="'+item.min+'" max="'+item.max+'" step="1" value="'+(v===undefined?item.min:v)+'">';
+ const v=answers[item.id],span=item.max-item.min;
+ // Tappable numbers sit under the dot's centre for each value (dot is 30px wide). Pointer-only: the slider itself is the keyboard/screen-reader control.
+ const ticks=Array.from({length:span+1},(_,i)=>'<button type="button" tabindex="-1" aria-hidden="true" data-slider-tick="'+(item.min+i)+'" style="left:calc(15px + (100% - 30px) * '+(i/span)+')">'+(item.min+i)+'</button>').join('');
+ markup='<p class="ws-slider-help">Drag the dot along the line, or tap a number.</p><div class="ws-scale-ends"><span>'+escape(item.minLabel)+'</span><span>'+escape(item.maxLabel)+'</span></div><input id="ws-slider" data-answer="'+item.id+'" type="range" min="'+item.min+'" max="'+item.max+'" step="1" value="'+(v===undefined?item.min:v)+'"><div class="ws-slider-ticks">'+ticks+'</div><label class="ws-slider-readout" for="ws-slider">Your rating: <output id="ws-slider-value"></output></label>';
  }else if(item.type==='reminder_time'){
  const p=answers[item.id]||{};const choose=p.mode==='time';
  markup='<label class="ws-answer cursor-interaction"><input type="radio" name="ws-reminder-choice" data-reminder-choice value="time" '+(choose?'checked':'')+'><span>Choose a time</span></label>'+
@@ -609,6 +625,7 @@ function renderQuestion(){
  markup=options.map((o,i)=>'<label class="ws-answer cursor-interaction"><input type="'+(item.type==='multi'?'checkbox':'radio')+'" name="ws-answer" data-answer="'+item.id+'" value="'+o.id+'" '+(choices(item.id).includes(o.id)?'checked':'')+'><span>'+escape(o.text)+'</span></label>').join('');
  }
  q('#ws-question-options').innerHTML=markup;
+syncSlider();
 updateGoalControls();
 updateRequiredControls();
 }
@@ -625,7 +642,7 @@ root.addEventListener('input',e=>{
  }
  if(el.dataset.answer){const id=el.dataset.answer;const item=data.questions.find(v=>v.id===id);
  if(id!=='1.3'){state.resultFit='pending';renderFit();}
- if(item.type==='slider'){answers[id]=Number(el.value);q('#ws-slider-value').textContent=el.value;}
+ if(item.type==='slider'){answers[id]=Number(el.value);syncSlider();}
  else if(item.type==='multi'){
  let selected=choices(id).filter(v=>v!==el.value);if(el.checked)selected.push(el.value);
  if(id==='6.5'){if(el.value==='6.5.o'&&el.checked)selected=['6.5.o'];else selected=selected.filter(v=>v!=='6.5.o');delete answers['6.5b'];}
@@ -650,6 +667,16 @@ function recordUntouchedSlider(e){
 }
 root.addEventListener('pointerup',recordUntouchedSlider);
 root.addEventListener('keyup',recordUntouchedSlider);
+// Fill the track up to the dot, highlight the chosen number and show the rating (or that none is chosen yet).
+function syncSlider(){
+ const el=q('#ws-slider');if(!el)return;
+ const v=answers[el.dataset.answer],min=Number(el.min),max=Number(el.max);
+ el.style.setProperty('--ws-fill',v===undefined?'0px':'calc(15px + (100% - 30px) * '+((v-min)/(max-min))+')');
+ q('#ws-slider-value').textContent=v===undefined?'Not chosen yet':String(v);
+ qa('[data-slider-tick]').forEach(b=>b.classList.toggle('ws-active',v!==undefined&&Number(b.dataset.sliderTick)===v));
+}
+root.addEventListener('click',e=>{const t=e.target.closest('[data-slider-tick]');if(!t)return;
+ const el=q('#ws-slider');if(!el)return;el.value=t.dataset.sliderTick;el.dispatchEvent(new Event('input',{bubbles:true}));});
 root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  if(b.hasAttribute('data-question-prev')){if(questionIndex===0)state.screen='intro';else questionIndex--;render();save();}
  if(b.hasAttribute('data-goal-preview')){
