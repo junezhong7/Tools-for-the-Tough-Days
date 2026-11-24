@@ -8,7 +8,7 @@
  * GET  /api/wellbeing-report.php?session_id=cs_...     after Stripe Checkout: confirm the payment
  *                                                      (in case the webhook is slower) and return it
  * POST /api/wellbeing-report.php  JSON body, by "action":
- *   save       {answers, accepted_primary, language, safety_confirmed}
+ *   save       {answers, accepted_primary, language, safety_confirmed, eligibility_confirmed}
  *              -> {run_id, checkout_url}. Answers are scored again here; nothing is charged yet.
  *   secondary  {run_id, selected, response}   answer the "does this also fit?" question once
  *   language   {run_id, language}             'characters' | 'plain'
@@ -74,6 +74,10 @@ try {
         $language = (string) ($body['language'] ?? 'characters');
         if ($answers === null || $primary === '') {
             json_error(400, 'INVALID_REQUEST', 'Answers and a confirmed description are required.');
+        }
+        // The page's "Before you start" boxes: 18 or over, lives in Australia, safe right now.
+        if (($body['eligibility_confirmed'] ?? false) !== true) {
+            json_error(422, 'ELIGIBILITY_NOT_CONFIRMED', 'Please go back to the start of the Wellbeing Profile and confirm you’re 18 or over, live in Australia and are safe right now.');
         }
         $runId = wr_save_run($userId, $answers, $primary, $language, ($body['safety_confirmed'] ?? false) === true);
         json_ok([

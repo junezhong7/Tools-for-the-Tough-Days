@@ -244,6 +244,16 @@
    <p>Watch this short introduction, then begin when you’re ready.</p>
    <p class="ws-note" data-needs-report hidden>You have a full report saved to your account. <button type="button" class="cursor-interaction" data-go="report">View my full report</button></p>
    <video id="ws-intro-video" controls="" playsinline="" preload="metadata" aria-label="Your Wellbeing Profile introduction, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" src="https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/intro-music-v1.mp4">Your browser cannot play this video. You can read the transcript below.</video>
+   <!-- Adult/Australia eligibility and safety entry (master v4: "eligibility and safety entry" comes before the questionnaire). Wording from the 3 Nov trial. -->
+   <div class="ws-note" id="ws-entry" role="group" aria-labelledby="ws-entry-title">
+    <h2 id="ws-entry-title">Before you start</h2>
+    <p>The Wellbeing Profile is for adults 18 and over who live in Australia.</p>
+    <p>This questionnaire is for people who are safe right now. If you’re having thoughts of ending your life or harming yourself, please <a href="/crisis-support.html" data-entry-unsafe>get support immediately</a>.</p>
+    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-adult"><span>I’m 18 or over and happy to take part</span></label>
+    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-australia"><span>I live in Australia</span></label>
+    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-safe"><span>I’m safe right now. I’m not having thoughts of ending my life or harming myself, and I’m not in danger.</span></label>
+    <p class="ws-small ws-status" id="ws-entry-status" role="alert"></p>
+   </div>
    <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="questionnaire">Start the questionnaire</button></div>
    <details><summary class="cursor-interaction">Read the video transcript</summary><div><p>Welcome to your Wellbeing Profile, from Tools for the Tough Days!</p><p>This questionnaire explores how you’ve been feeling, how you respond on tough days, and what helps you.</p><p>We’ll use what you share to create your Wellbeing Profile. It’s a starting point to understand how you respond in different situations, and consider what might support your wellbeing.</p><p>As you answer, think about your life as it is right now. Your responses may vary depending on what’s happening and how you’re feeling. They can also change over time.</p><p>To help you understand yourself a little better, we use three characters as metaphors.</p><p>The Bodyguard represents ways of protecting yourself or getting through difficulty, such as pushing through, keeping busy or pulling back.</p><p>The Teenager represents feelings and emotional needs. It can bring energy, excitement and enthusiasm, as well as hurt, frustration or a wish for connection.</p><p>And the Adult represents your capacity to pause, consider different perspectives, and choose a response.</p><p>Imagine these three travelling together in the same car. Each brings something useful. In different situations, one or another may take the wheel, depending on what’s happening and how you’re feeling.</p><p>These are responses we can all recognise in ourselves. They aren’t labels for your age, maturity or whole personality.</p><p>The aim is to notice who’s at the wheel and consider what you need, with more room to choose your next step. When you’re ready, let’s begin!</p></div></details>
    <details><summary class="cursor-interaction">Prefer descriptions without the characters?</summary><div><h3 data-presentation-heading="">Prefer descriptions without the characters?</h3>
@@ -351,7 +361,8 @@ const data=JSON.parse(document.getElementById('ws-source-data').textContent);
 const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
 // driverPreview: the driver whose content is shown (BP only as the journey/report example until a result exists).
 // result/safety/stage come from /api/wellbeing-score.php and live in memory only. Answers are saved only when the visitor buys the full report (see the launch module below).
-const state={driverPreview:'BP',screen:'intro',section:3,neutral:false,spacing:22,phase:0,resultFit:'pending',result:null,safety:'none',stage:null,chosen:null,noPrimary:null};
+// eligible: the three "Before you start" boxes were ticked this visit (not saved; asked again on the next visit).
+const state={driverPreview:'BP',screen:'intro',section:3,neutral:false,spacing:22,phase:0,resultFit:'pending',result:null,safety:'none',stage:null,chosen:null,noPrimary:null,eligible:false};
 // Approved one-line descriptions for the near-tie choice (primary-choice reference, 2 Nov 2026).
 const CHOICE_DESC={TH:'You tend to notice sadness, hurt, self-doubt or a need for comfort when things get difficult.',TF:'When life gets tricky, you may notice quick, intense feelings like frustration, urgency or excitement.',BS:'You tend to go quiet, step back or distract yourself when demands feel overwhelming.',BP:'You tend to keep working, take on more or put your own needs aside to get things done.'};
 // Illustrative pairing for copy review only, not a calculated or confirmed result.
@@ -406,9 +417,10 @@ function renderChoice(){
 function renderSummaryState(){
  const r=state.result,restricted=state.safety==='check'||state.safety==='crisis',none=state.stage==='none';
  qa('[data-screen="offer"],[data-screen="report"],[data-screen="resources"],[data-screen="interest"],[data-screen="followup"],[data-screen="checkout"]').forEach(b=>b.hidden=restricted);
- q('#ws-summary-gate').hidden=!!r;
+ q('#ws-summary-gate').hidden=!!r||state.safety==='crisis';
  q('#ws-safety-check').hidden=!(r&&state.safety==='check');
- q('#ws-crisis').hidden=!(r&&state.safety==='crisis');
+ // Crisis support can come from the entry link (no result yet) or the later safety check.
+ q('#ws-crisis').hidden=state.safety!=='crisis';
  q('#ws-support-unsafe').hidden=!(r&&!restricted&&r.safety.support_concerns.includes('unsafe_at_home_or_relationship'));
  const choosing=!!r&&!restricted&&state.stage==='choice';
  q('#ws-primary-choice').hidden=!choosing;
@@ -459,8 +471,26 @@ function save(){}
 function applySaved(){}
 
 root.addEventListener('play',e=>{if(e.target.tagName==='VIDEO')qa('video').forEach(v=>{if(v!==e.target)v.pause();});},true);
+// The questionnaire only starts once all three "Before you start" boxes are ticked.
+function entryConfirmed(){
+ if(state.eligible)return true;
+ const boxes=['#ws-entry-adult','#ws-entry-australia','#ws-entry-safe'].map(s=>q(s));
+ const missing=boxes.filter(x=>!x.checked);
+ if(!missing.length){state.eligible=true;q('#ws-entry-status').textContent='';return true;}
+ const msg=missing.length===boxes.length?'Tick all three boxes to start.':
+  missing[0]===boxes[0]?'Tick the box to confirm you’re 18 or over and happy to take part.':
+  missing[0]===boxes[1]?'Tick the box to confirm you live in Australia. For now, the Wellbeing Profile is only available to people living in Australia.':
+  'Tick the box to confirm you’re safe right now. If you’re not, please get support immediately using the link above.';
+ state.screen='intro';render();
+ q('#ws-entry-status').textContent=msg;
+ q('#ws-entry').scrollIntoView({block:'center'});missing[0].focus({preventScroll:true});
+ return false;
+}
+// "get support immediately": crisis support only, with no questionnaire, result, price or sales message for the rest of the visit.
+root.addEventListener('click',e=>{if(!e.target.closest('[data-entry-unsafe]'))return;e.preventDefault();state.safety='crisis';state.screen='summary';render();root.scrollIntoView({block:'start'});});
+root.addEventListener('change',e=>{if(e.target.closest('#ws-entry'))q('#ws-entry-status').textContent='';});
 root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-if(b.dataset.screen||b.dataset.go){state.screen=b.dataset.screen||b.dataset.go;render();save();}
+if(b.dataset.screen||b.dataset.go){const to=b.dataset.screen||b.dataset.go;if(to!=='questionnaire'||entryConfirmed()){state.screen=to;render();save();}}
 if(b.dataset.section){state.section=Number(b.dataset.section);render();save();}
 if(b.hasAttribute('data-prev')||b.hasAttribute('data-next')){state.section+=b.hasAttribute('data-next')?1:-1;render();save();}
 if(b.dataset.phase!==undefined){state.phase=Number(b.dataset.phase);renderJourneyPhase();save();}
@@ -762,7 +792,7 @@ async function buyReport(){
  const primary=acceptedPrimary();if(!primary||launch.buyBusy)return;
  const picked={};REPORT_QUESTIONS.forEach(k=>{if(answers[k]!==undefined)picked[k]=answers[k];});
  launch.buyBusy=true;render();say('#ws-buy-status','Saving your answers…');
- try{await saveAndCheckout({action:'save',answers:picked,accepted_primary:primary,language:state.neutral?'plain':'characters',safety_confirmed:state.safety==='cleared'});}
+ try{await saveAndCheckout({action:'save',answers:picked,accepted_primary:primary,language:state.neutral?'plain':'characters',safety_confirmed:state.safety==='cleared',eligibility_confirmed:state.eligible});}
  catch(e){launch.buyBusy=false;render();say('#ws-buy-status',e.message&&e.message!=='save'?e.message:'We couldn’t start your purchase just now. Please check your connection and try again.');}
 }
 async function resumePurchase(){
