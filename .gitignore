@@ -16,3 +16,6 @@ page-update/
 # Ignore ToGitIgnore folder
 ToGitIgnore/
 Archive/
+
+# Ignore References folder
+References/

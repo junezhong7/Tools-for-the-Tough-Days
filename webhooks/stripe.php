@@ -122,6 +122,12 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session, ?string $e
         upsert_subscription($userId, $stripeSub, $sessionId);
 
         send_initial_subscription_email_once($userId, $sessionId, $subscriptionId, $eventId);
+    } elseif ($session->mode === 'payment' && ($session->metadata['product_key'] ?? '') === 'wellbeing_report') {
+        // Full Wellbeing Profile Report: recorded on its questionnaire run, never as platform access.
+        require_once __DIR__ . '/../lib/wellbeing_report.php';
+        if (wr_confirm_checkout_session($session, $userId) === null) {
+            error_log("checkout.session.completed: wellbeing report session {$sessionId} not recorded (unpaid or metadata mismatch)");
+        }
     } elseif ($session->mode === 'payment') {
         // One-off payment (counselling sessions)
         $productKey = $session->metadata['product_key'] ?? 'counselling';
@@ -255,6 +261,9 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
     $priceToKey = [
         'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual_monthly',
         'price_1TLDMFC8xESC1BMDRVGsCGIY' => 'individual_yearly',
+        // Resource library offered on the Wellbeing Profile page ($9.95 / $99)
+        'price_1Udf9FC8xESC1BMDo43Vx9az' => 'individual_resource_monthly',
+        'price_1UdfGLC8xESC1BMDlTmUCSs9' => 'individual_resource_yearly',
         'price_1TLElkC8xESC1BMD1IkfyBQl' => 'starter_only',
         'price_1TLEnfC8xESC1BMDuM43gQNr' => 'growth_only',
         'price_1TLEpWC8xESC1BMDuTCnIF2F' => 'team_only',

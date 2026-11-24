@@ -123,7 +123,7 @@ function send_registration_welcome_email(string $toEmail, ?string $fullName = nu
 
     $textBody = $greeting . "\n\n"
         . "Thank you for joining Tools for the Tough Days. Taking that first step is often the hardest part, so well done for making it happen.\n\n"
-        . "We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of your first 14 days.\n\n"
+        . "We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of the platform.\n\n"
         . "We have also included six short videos below. Our Founder and Principal Psychologist, Nic Marcon, recorded these himself if you would rather watch and listen than read.\n\n";
     foreach ($videos as $title => $url) {
         $textBody .= "{$title}: {$url}\n";
@@ -147,7 +147,7 @@ function send_registration_welcome_email(string $toEmail, ?string $fullName = nu
 
     $htmlBody = '<p>' . $safeGreeting . '</p>'
         . '<p>Thank you for joining Tools for the Tough Days. Taking that first step is often the hardest part, so well done for making it happen.</p>'
-        . '<p>We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of your first 14 days.</p>'
+        . '<p>We have put together a Welcome Guide for you to read in your own time (attached to this email). It walks through some sample resources you will find on the platform and how to make the most of the platform.</p>'
         . '<p>We have also included six short videos below. Our Founder and Principal Psychologist, Nic Marcon, recorded these himself if you would rather watch and listen than read.</p>'
         . $videoListHtml
         . '<p>Have a look through whichever format suits you best, and we hope you find them helpful.</p>'
@@ -339,8 +339,7 @@ function send_free_guide_email(string $toEmail): bool
         . "These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.\n\n"
         . "Want more support beyond the guide?\n\n"
         . "You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.\n\n"
-        . "Try the platform free for 14 days — no credit card required.\n\n"
-        . "Explore your free 14-day trial: " . $platformUrl . "\n\n"
+        . "Explore the platform: " . $platformUrl . "\n\n"
         . "There's no pressure to do everything at once. Start with what feels useful to you.\n\n"
         . "The Tools for the Tough Days Team\n\n"
         . "Unsubscribe from our newsletter: " . $siteUrl . "/unsubscribe.html?email=" . rawurlencode($toEmail);
@@ -353,8 +352,7 @@ function send_free_guide_email(string $toEmail): bool
         . '<p>These tools are part of Tools for the Tough Days, a wellbeing platform developed by a psychologist with over 20 years of experience.</p>'
         . '<p><strong>Want more support beyond the guide?</strong></p>'
         . '<p>You can explore our growing library of practical wellbeing tools, track your mood over time and find strategies to try at your own pace.</p>'
-        . '<p>Try the platform free for 14 days — no credit card required.</p>'
-        . '<p><a href="' . $safePlatformUrl . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Explore your free 14-day trial</a></p>'
+        . '<p><a href="' . $safePlatformUrl . '" style="display:inline-block;background:#26777B;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Explore the platform</a></p>'
         . '<p>There\'s no pressure to do everything at once. Start with what feels useful to you.</p>'
         . '<p>The Tools for the Tough Days Team</p>'
         . '<p style="font-size:12px;color:#999;"><a href="' . $safeUnsubUrl . '">Unsubscribe from our newsletter</a>.</p>';
@@ -395,7 +393,7 @@ function send_lead_magnet_followup1_email(string $toEmail): bool
         . "When you're getting by (score 5): you're invited to check in and see what's available, at your own pace.\n\n"
         . "When things are on track (score 8): worth logging anyway. It helps you notice what's working.\n\n"
         . "It doesn't need to be perfect. Even a rough guess, checked in regularly, tells you more than most people ever track.\n\n"
-        . "Haven't tried it yet? Free for 14 days, no card required.\n"
+        . "Haven't tried it yet? Have a look at the platform:\n"
         . $registerUrl . "\n\n"
         . "Warm regards,\n"
         . "Nic Marcon\n"
@@ -455,7 +453,7 @@ function send_lead_magnet_followup1_email(string $toEmail): bool
         . '<tr><td style="padding:20px 32px 28px;">'
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fff6e0; border-radius:8px;"><tr>'
         . '<td style="padding:18px 24px; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.5; color:#5a4a1f;">'
-        . '<p style="margin:0 0 10px;"><strong>Haven\'t tried it yet?</strong> Free for 14 days, no card required.</p>'
+        . '<p style="margin:0 0 10px;"><strong>Haven\'t tried it yet?</strong> Have a look at the platform.</p>'
         . '<a href="' . $safeRegisterUrl . '" style="color:#26777B; font-weight:bold; text-decoration:none;">www.toolsforthetoughdays.com.au &rarr;</a>'
         . '</td></tr></table>'
         . '</td></tr>'
@@ -493,7 +491,7 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . "The patterns are the point. One low day tells you very little. Three low Mondays in a row tells you something you can do something about.\n\n"
         . "That's the idea behind the platform. You set your own check-in time, you choose how you want to be supported, "
         . "and what you get on the day is matched to where you actually are, rather than to where an average person might be.\n\n"
-        . "If you're curious, it's free for 14 days, no credit card required.\n"
+        . "If you're curious, you can see how it works here:\n"
         . $registerUrl . "\n\n"
         . "Warm regards,\n"
         . "Nic Marcon\n"
@@ -535,10 +533,10 @@ function send_lead_magnet_followup2_email(string $toEmail): bool
         . '<tr><td style="padding:24px 44px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.7; color:#3a3a3a;">'
         . '<p style="margin:0 0 20px;">That\'s the idea behind the platform. You set your own check-in time, you choose how you want to be supported, '
         . 'and what you get on the day is matched to where you actually are, rather than to where an average person might be.</p>'
-        . '<p style="margin:0;">If you\'re curious, it\'s free for 14 days, no credit card required.</p>'
+        . '<p style="margin:0;">If you\'re curious, you can see how it works here.</p>'
         . '</td></tr>'
         . '<tr><td style="padding:20px 44px 0;">'
-        . '<a href="' . $safeRegisterUrl . '" style="font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#26777B; text-decoration:underline;">Try the platform free for 14 days</a>'
+        . '<a href="' . $safeRegisterUrl . '" style="font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#26777B; text-decoration:underline;">See how the platform works</a>'
         . '</td></tr>'
         . '<tr><td style="padding:32px 44px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.7; color:#3a3a3a;">'
         . '<p style="margin:0;">Warm regards,<br>Nic Marcon<br>Registered Psychologist<br>Tools for the Tough Days<br>www.toolsforthetoughdays.com.au</p>'
@@ -824,6 +822,8 @@ function subscription_label_from_product_key(string $productKey, string $planTyp
 {
     $map = [
         'individual_monthly' => 'Individual Monthly',
+        'individual_resource_monthly' => 'Resource library, monthly',
+        'individual_resource_yearly' => 'Resource library, yearly',
         'individual_yearly' => 'Individual Yearly',
         'starter_only' => 'Starter Monthly',
         'growth_only' => 'Growth Monthly',

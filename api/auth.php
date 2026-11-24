@@ -151,13 +151,6 @@ function handle_register(array $body): never
         $token = create_session($userId);
         audit('user.register', $userId, array_merge(['email' => $email], $utm));
 
-        $trialPlanType = $isBusinessUser ? 'business' : 'individual';
-        $trialStmt = db()->prepare(
-            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
-             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
-        );
-        $trialStmt->execute([$userId, 'free_trial', $trialPlanType, 'trialing']);
-
         try {
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
@@ -353,12 +346,6 @@ function handle_google_auth(array $body): never
         $token = create_session($userId);
         audit('user.google_register', $userId, array_merge(['email' => $email], $utm));
 
-        $trialStmt = db()->prepare(
-            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
-             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
-        );
-        $trialStmt->execute([$userId, 'free_trial', 'individual', 'trialing']);
-
         try {
             send_registration_welcome_email($email, $fullName ?: null);
         } catch (Throwable $mailErr) {
@@ -500,12 +487,6 @@ function handle_facebook_auth(array $body): never
 
         $token = create_session($userId);
         audit('user.facebook_register', $userId, array_merge(['email' => $email], $utm));
-
-        $trialStmt = db()->prepare(
-            'INSERT INTO subscriptions (user_id, product_key, plan_type, status, current_period_start, current_period_end, cancel_at_period_end)
-             VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 1)'
-        );
-        $trialStmt->execute([$userId, 'free_trial', 'individual', 'trialing']);
 
         try {
             send_registration_welcome_email($email, $fullName ?: null);
