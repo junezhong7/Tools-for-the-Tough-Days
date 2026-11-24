@@ -885,7 +885,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <tbody>
           ${payments.map(p => `<tr>
             <td>${fmtDate(p.created_at)}</td>
-            <td>${p.description || '-'}</td>
+            <td>${p.description || PLAN_LABELS[p.product_key] || '-'}</td>
             <td>$${p.amount} AUD</td>
             <td><span class="pay-status ${p.status}">${p.status}</span></td>
           </tr>`).join('')}

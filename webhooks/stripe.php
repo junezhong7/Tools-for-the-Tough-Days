@@ -211,7 +211,7 @@ function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null):
         (int) $invoice->amount_paid,
         strtolower($invoice->currency ?? 'aud'),
         'succeeded',
-        $invoice->description ?? null,
+        invoice_payment_description($invoice),
     ]);
 
     // Re-activate subscription if it was past_due
@@ -269,11 +269,39 @@ function invoice_subscription_id(\Stripe\Invoice $invoice): ?string
     return is_string($sub) && $sub !== '' ? $sub : null;
 }
 
-function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sessionId = null): void
+/**
+ * What the payment history shows. Subscription invoices carry no description of their own,
+ * so use the plan name (e.g. "Library Access, monthly") from the invoice's price.
+ */
+function invoice_payment_description(\Stripe\Invoice $invoice): ?string
 {
-    $priceId = $s->items->data[0]->price->id ?? null;
+    $own = trim((string) ($invoice->description ?? ''));
+    if ($own !== '') {
+        return $own;
+    }
+    $productKey = price_product_key(invoice_line_price_id($invoice));
+    return $productKey !== 'unknown' ? subscription_label_from_product_key($productKey, '') : null;
+}
 
-    // Determine product_key from price ID
+/**
+ * The price ID on an invoice's first line. API versions from 2025-03-31.basil moved it
+ * from line.price.id to line.pricing.price_details.price.
+ */
+function invoice_line_price_id(\Stripe\Invoice $invoice): ?string
+{
+    $line  = $invoice->lines->data[0] ?? null;
+    $price = $line->price->id ?? ($line->pricing->price_details->price ?? null);
+    if ($price instanceof \Stripe\StripeObject) {
+        $price = $price->id ?? null;
+    }
+    return is_string($price) && $price !== '' ? $price : null;
+}
+
+/**
+ * Our product key for a Stripe price ID ('unknown' when it is not one of our prices).
+ */
+function price_product_key(?string $priceId): string
+{
     $priceToKey = [
         // Old $15 / $120 prices (archived 27 Nov 2026), kept for subscriptions still on them
         'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual_monthly',
@@ -307,7 +335,13 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
         }
     }
 
-    $productKey = $priceToKey[$priceId] ?? 'unknown';
+    return $priceToKey[(string) $priceId] ?? 'unknown';
+}
+
+function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sessionId = null): void
+{
+    $priceId    = $s->items->data[0]->price->id ?? null;
+    $productKey = price_product_key($priceId);
     $planType   = str_starts_with($productKey, 'individual') ? 'individual' : 'business';
 
     // Stripe API versions from 2025-03-31.basil keep the period dates on the subscription item, not the subscription.
