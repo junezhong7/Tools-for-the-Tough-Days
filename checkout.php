@@ -60,9 +60,11 @@ if (!defined('SITE_URL')) {
 
 $prices = [
 
-  // ── INDIVIDUAL ──────────────────────────────
-  'individual_monthly'   => getenv('STRIPE_PRICE_INDIVIDUAL_MONTHLY') ?: 'price_1TLD1mC8xESC1BMDifb6wvHd',  // $15/mo (coupon applied = $10 x 3 months)
-  'individual_yearly'    => getenv('STRIPE_PRICE_INDIVIDUAL_YEARLY') ?: 'price_1TLDMFC8xESC1BMDRVGsCGIY',  // $120/yr
+  // ── INDIVIDUAL — Library Access ($9.95/month, $99/year since 27 Nov 2026) ──
+  // Same prices as the Wellbeing Profile offer below (sand sets the test-mode ones through STRIPE_PRICE_RESOURCE_*).
+  // The old $15/$120 prices (price_1TLD1mC8xESC1BMDifb6wvHd, price_1TLDMFC8xESC1BMDRVGsCGIY) are archived in Stripe.
+  'individual_monthly'   => getenv('STRIPE_PRICE_INDIVIDUAL_MONTHLY') ?: (getenv('STRIPE_PRICE_RESOURCE_MONTHLY') ?: 'price_1Udf9FC8xESC1BMDo43Vx9az'),  // $9.95/mo
+  'individual_yearly'    => getenv('STRIPE_PRICE_INDIVIDUAL_YEARLY') ?: (getenv('STRIPE_PRICE_RESOURCE_YEARLY') ?: 'price_1UdfGLC8xESC1BMDlTmUCSs9'),   // $99/yr
 
   // ── RESOURCE LIBRARY (offered on the Wellbeing Profile page) ──
   'individual_resource_monthly' => getenv('STRIPE_PRICE_RESOURCE_MONTHLY') ?: 'price_1Udf9FC8xESC1BMDo43Vx9az',  // $9.95/mo

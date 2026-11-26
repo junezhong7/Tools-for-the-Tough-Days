@@ -264,8 +264,6 @@
     <p>The Wellbeing Profile is for adults 18 and over who live in Australia.</p>
     <p>This questionnaire is for people who are safe right now. If you’re having thoughts of ending your life or harming yourself, please <a href="/crisis-support.html" data-entry-unsafe>get support immediately</a>.</p>
     <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-adult"><span>I’m 18 or over and happy to take part</span></label>
-    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-australia"><span>I live in Australia</span></label>
-    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-safe"><span>I’m safe right now. I’m not having thoughts of ending my life or harming myself, and I’m not in danger.</span></label>
     <p class="ws-small ws-status" id="ws-entry-status" role="alert"></p>
    </div>
    <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="questionnaire">Start the questionnaire</button></div>
@@ -485,19 +483,14 @@ function save(){}
 function applySaved(){}
 
 root.addEventListener('play',e=>{if(e.target.tagName==='VIDEO')qa('video').forEach(v=>{if(v!==e.target)v.pause();});},true);
-// The questionnaire only starts once all three "Before you start" boxes are ticked.
+// The questionnaire only starts once the "Before you start" 18+ box is ticked.
 function entryConfirmed(){
  if(state.eligible)return true;
- const boxes=['#ws-entry-adult','#ws-entry-australia','#ws-entry-safe'].map(s=>q(s));
- const missing=boxes.filter(x=>!x.checked);
- if(!missing.length){state.eligible=true;q('#ws-entry-status').textContent='';return true;}
- const msg=missing.length===boxes.length?'Tick all three boxes to start.':
-  missing[0]===boxes[0]?'Tick the box to confirm you’re 18 or over and happy to take part.':
-  missing[0]===boxes[1]?'Tick the box to confirm you live in Australia. For now, the Wellbeing Profile is only available to people living in Australia.':
-  'Tick the box to confirm you’re safe right now. If you’re not, please get support immediately using the link above.';
+ const box=q('#ws-entry-adult');
+ if(box.checked){state.eligible=true;q('#ws-entry-status').textContent='';return true;}
  state.screen='intro';render();
- q('#ws-entry-status').textContent=msg;
- q('#ws-entry').scrollIntoView({block:'center'});missing[0].focus({preventScroll:true});
+ q('#ws-entry-status').textContent='Tick the box to confirm you’re 18 or over and happy to take part.';
+ q('#ws-entry').scrollIntoView({block:'center'});box.focus({preventScroll:true});
  return false;
 }
 // "get support immediately": crisis support only, with no questionnaire, result, price or sales message for the rest of the visit.

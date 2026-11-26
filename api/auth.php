@@ -564,6 +564,16 @@ function handle_delete_account(array $body): never
 
         db()->beginTransaction();
 
+        // Journey interest rows hold the follow-up email and their foreign key only nulls user_id,
+        // so remove them here (otherwise a deleted account could still get the one-month email).
+        try {
+            db()->prepare('DELETE FROM wellbeing_journey_interest WHERE user_id = ?')->execute([$userId]);
+        } catch (PDOException $e) {
+            if ($e->getCode() !== '42S02') { // 42S02: table not created yet
+                throw $e;
+            }
+        }
+
         db()->prepare('DELETE FROM users WHERE id = ?')->execute([$userId]);
         audit('user.delete', $userId, ['email' => (string) $dbUser['email']]);
 

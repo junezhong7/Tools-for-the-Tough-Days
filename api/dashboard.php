@@ -42,11 +42,14 @@ $activeSubStmt = db()->prepare(
 $activeSubStmt->execute([$userId]);
 $hasActiveSubscription = (bool) $activeSubStmt->fetchColumn();
 
-// Recent payments (last 20)
+// Recent payments (last 20), with the plan's product_key so the page can name payments that have no description
 $payStmt = db()->prepare(
-    'SELECT id, amount_cents, currency, status, description, created_at
-     FROM payments WHERE user_id = ?
-     ORDER BY created_at DESC LIMIT 20'
+    'SELECT p.id, p.amount_cents, p.currency, p.status, p.description, p.created_at,
+            s.product_key
+     FROM payments p
+     LEFT JOIN subscriptions s ON s.id = p.subscription_id
+     WHERE p.user_id = ?
+     ORDER BY p.created_at DESC LIMIT 20'
 );
 $payStmt->execute([$userId]);
 $payments = $payStmt->fetchAll();

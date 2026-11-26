@@ -144,8 +144,9 @@ function handle_update_plan(int $userId, array $body): never
 
     // Only allow known price IDs
     $allowedPrices = [
-        'price_1TLD1mC8xESC1BMDifb6wvHd',
-        'price_1TLDMFC8xESC1BMDRVGsCGIY',
+        // Library Access $9.95 / $99 (the old $15 / $120 prices are archived from 27 Nov 2026)
+        getenv('STRIPE_PRICE_RESOURCE_MONTHLY') ?: 'price_1Udf9FC8xESC1BMDo43Vx9az',
+        getenv('STRIPE_PRICE_RESOURCE_YEARLY') ?: 'price_1UdfGLC8xESC1BMDlTmUCSs9',
         'price_1TLElkC8xESC1BMD1IkfyBQl',
         'price_1TLEnfC8xESC1BMDuM43gQNr',
         'price_1TLEpWC8xESC1BMDuTCnIF2F',

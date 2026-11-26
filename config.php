@@ -49,7 +49,9 @@ if (!defined('SITE_URL')) {
 }
 
 define('PRICE_PLAN_MAP', [
-    'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual',
+    'price_1Udf9FC8xESC1BMDo43Vx9az' => 'individual', // Library Access $9.95/month
+    'price_1UdfGLC8xESC1BMDlTmUCSs9' => 'individual', // Library Access $99/year
+    'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual', // old $15/month (archived 27 Nov 2026)
     'price_1TLDMFC8xESC1BMDRVGsCGIY' => 'individual',
     'price_1TLElkC8xESC1BMD1IkfyBQl' => 'business',
     'price_1TLEnfC8xESC1BMDuM43gQNr' => 'business',

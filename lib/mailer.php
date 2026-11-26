@@ -822,8 +822,8 @@ function subscription_label_from_product_key(string $productKey, string $planTyp
 {
     $map = [
         'individual_monthly' => 'Individual Monthly',
-        'individual_resource_monthly' => 'Resource library, monthly',
-        'individual_resource_yearly' => 'Resource library, yearly',
+        'individual_resource_monthly' => 'Library Access, monthly',
+        'individual_resource_yearly' => 'Library Access, yearly',
         'individual_yearly' => 'Individual Yearly',
         'starter_only' => 'Starter Monthly',
         'growth_only' => 'Growth Monthly',
