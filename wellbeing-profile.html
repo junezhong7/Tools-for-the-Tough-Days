@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wellbeing Profile, Tools for the Tough Days</title>
+  <link rel="icon" type="image/png" href="/data/TOUGH%20DAYS_LOGO.png" />
+  <meta name="description" content="Answer a short questionnaire to see your free Wellbeing Profile summary, with an optional personalised full report and wellbeing resource subscriptions." />
+  <!-- Design preview: keep out of search results until the live version replaces it. -->
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Site crisis bar + nav, same rules as index.html */
+    :root {
+      --white:      #ffffff;
+      --warm-grey:  #4a6566;
+      --teal:       #26777B;
+      --teal-hover: #1f6468;
+      --teal-dark:  #1a5558;
+      --border:     #d0e6e7;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Nunito', sans-serif; }
+
+    /* CRISIS BAR */
+    .crisis-bar { background: #aada37; color: var(--teal-dark); padding: 8px 20px; text-align: center; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; letter-spacing: 0.01em; }
+    .crisis-bar a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
+    .crisis-bar a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,119,123,0.07); }
+    .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-left: 100px; }
+    .nav-logo img { height: 62px; max-height: 62px; max-width: 240px; width: auto; object-fit: contain; display: block; }
+    .nav-logo-text { display: none; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { font-size: 13px; color: var(--warm-grey); text-decoration: none; font-weight: 700; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-login { color: var(--teal-dark); border: 1px solid var(--border); padding: 8px 16px; border-radius: 999px; background: var(--white); }
+    .nav-login:hover { border-color: rgba(38,119,123,0.35); color: var(--teal); }
+
+    @media (max-width: 800px) {
+      .nav-inner { padding: 0 16px; height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px; }
+      .nav-logo { margin-left: 0; }
+      .nav-links { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    }
+  
+/* Approved November launch additions */
+.launch-review,.launch-note {padding:1.1rem 1.3rem;border:1px solid #b8d9db;border-radius:12px;background:#eef8f7;margin-bottom:1.4rem;}
+.launch-preview-label{margin:0;padding:.65rem 1.4rem;font-size:.9rem;color:#4a6566;background:#eef8f7}
+.launch-review p {margin:.5rem 0;font-size:.95rem}.launch-review summary{cursor:pointer;font-weight:700}
+.launch-contents {display:block;margin-top:1rem}#wellbeing-sketch .launch-content-group{padding:.8rem 0;border-bottom:1px solid #d0e6e7}#wellbeing-sketch .launch-content-group summary{cursor:pointer;min-height:44px;padding:.15rem .25rem}.launch-group-title{font-weight:800;color:#1a5558}.launch-group-description{display:block;font-size:.95rem;line-height:1.5;margin-top:.2rem;color:#4a6566}#wellbeing-sketch .launch-section-list{padding:.6rem 0 .1rem 1.4rem}.launch-section-list section{margin:0 0 1rem;padding:0;border:0;background:transparent}.launch-section-list h3{margin:0 0 .25rem;font-size:1rem}.launch-section-list p{margin:0;line-height:1.55;font-size:1rem}
+.launch-table-wrap{overflow-x:auto}.launch-rating-table{width:100%;border-collapse:collapse;font-size:.95rem;margin:1rem 0}.launch-rating-table caption{text-align:left;font-weight:700;margin-bottom:.6rem}.launch-rating-table th,.launch-rating-table td{text-align:left;vertical-align:top;border-bottom:1px solid #d0e6e7;padding:.65rem .5rem}.launch-rating-table thead th{background:#eef8f7}.launch-rating-table tbody th{font-weight:600}
+.launch-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}.launch-plan{border:1px solid #b8d9db;border-radius:16px;padding:1.4rem;background:#f5fbfa}.launch-price{font-size:2.4rem;font-weight:800;color:#1a5558;margin:.8rem 0}.launch-price span{font-size:1rem;font-weight:600}
+#wellbeing-sketch button:focus-visible,#wellbeing-sketch summary:focus-visible {outline:3px solid #bc5e22;outline-offset:4px}#wellbeing-sketch [hidden]{display:none!important}
+@media(max-width:650px){.launch-contents,.launch-plans{grid-template-columns:1fr}.nav-logo{margin-left:0}.nav-links{display:none}.launch-price{font-size:2rem}}
+</style>
+  <link rel="stylesheet" href="assets/theme-unified.css" />
+  <link rel="stylesheet" href="assets/readability.css" />
+  <!-- Wellbeing Profile sketch styles (from the ChatGPT design preview) -->
+  <style>html{color-scheme:light}body{background:#edf5f5}.wbp-main{padding:20px}#wellbeing-sketch{max-width:1100px;margin:auto}.cursor-interaction{cursor:pointer}#ws-driver-preview{display:block;width:100%;max-width:100%;font:inherit;padding:10px;margin:8px 0 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:var(--paper)}@media(max-width:600px){.wbp-main{padding:8px}}</style>
+  <style>
+#wellbeing-sketch{--paper:light-dark(#F7FBFB,#172526);--ink:light-dark(#1A2E2F,#E8F1F1);--soft:light-dark(#E4F1F1,#233C3E);--quiet:light-dark(#4A6566,#B7CDCE);--line:light-dark(#D3E3E4,#3F5C5E);--teal:light-dark(#1A5558,#8ECACC);--teal-medium:light-dark(#2F878C,#66B4B9);--on-teal:light-dark(#FFFFFF,#102D2F);--orange:light-dark(#C8752A,#E3A26A);color:var(--ink);font:16px/1.65 system-ui,sans-serif;background:var(--paper);border-radius:12px;overflow:hidden}
+#wellbeing-sketch *{box-sizing:border-box}
+#wellbeing-sketch .ws-car-story{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:16px 0}
+#wellbeing-sketch .ws-car-story img{display:block;width:240px;max-width:100%;height:auto;margin:auto}
+#wellbeing-sketch .ws-car-story p{flex:1 1 220px;min-width:0}
+#wellbeing-sketch [hidden]{display:none!important}
+#wellbeing-sketch h1,#wellbeing-sketch h2,#wellbeing-sketch h3,#wellbeing-sketch p{margin:0}
+#wellbeing-sketch h1{font:400 34px/1.2 Georgia,serif;max-width:650px;margin:8px 0 18px}
+#wellbeing-sketch h2{font:400 25px/1.3 Georgia,serif;margin:0 0 12px}
+#wellbeing-sketch h3{font-size:17px;font-weight:600;margin:0 0 7px}
+#wellbeing-sketch p+p{margin-top:14px}
+#wellbeing-sketch .ws-top{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between;align-items:center}
+#wellbeing-sketch .ws-name{font:400 23px Georgia,serif}
+#wellbeing-sketch .ws-small{font-size:13px;color:var(--quiet)}
+#wellbeing-sketch .ws-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:14px 24px;border-bottom:1px solid var(--line)}
+#wellbeing-sketch button,#wellbeing-sketch summary{font:inherit;color:inherit}
+#wellbeing-sketch button{border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:var(--paper);text-align:left;white-space:normal}
+#wellbeing-sketch button[aria-selected=true],#wellbeing-sketch button.ws-active{background:var(--soft);border-color:var(--quiet)}
+#wellbeing-sketch .ws-primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#wellbeing-sketch .ws-stage{padding:32px clamp(18px,4vw,40px)}
+#wellbeing-sketch .ws-prose{max-width:680px;margin:auto}
+#wellbeing-sketch .ws-kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet)}
+#wellbeing-sketch .ws-art{display:block;width:100%;max-width:680px;height:auto;margin:22px auto 16px;border-radius:5px}
+#wellbeing-sketch .ws-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin:22px 0}
+#wellbeing-sketch .ws-three p{font-size:15px}
+#wellbeing-sketch .ws-divider{margin:24px 0;padding-top:23px;border-top:1px solid var(--line)}
+#wellbeing-sketch details{border-bottom:1px solid var(--line);padding:14px 0}
+#wellbeing-sketch summary{list-style-position:outside;margin-left:18px;padding:2px 4px}
+#wellbeing-sketch details>div{padding:14px 0 4px}
+#wellbeing-sketch .ws-actions{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0 0}
+#wellbeing-sketch .ws-status{margin:12px 0 0;color:var(--quiet);font-size:14px}
+#wellbeing-sketch #ws-entry-status:not(:empty){color:light-dark(#B42318,#FFB4AB);background:light-dark(#FDECEA,#3A2222);border-left:4px solid light-dark(#B42318,#FFB4AB);border-radius:6px;padding:10px 14px;font-size:15px;font-weight:600}
+#wellbeing-sketch .ws-highlights{display:grid;gap:22px;margin:26px 0}
+#wellbeing-sketch .ws-highlights section{padding-left:16px;border-left:2px solid var(--line)}
+#wellbeing-sketch .ws-report{display:grid;grid-template-columns:205px minmax(0,1fr);gap:32px}
+#wellbeing-sketch .ws-contents details{padding:9px 0}
+#wellbeing-sketch .ws-contents button{display:block;width:100%;margin:6px 0;border:0;font-size:14px;padding:7px 10px}
+#wellbeing-sketch .ws-contents summary{font-size:14px}
+#wellbeing-sketch .ws-reader{min-width:0}
+#wellbeing-sketch .ws-reader p{margin:0 0 15px}
+#wellbeing-sketch .ws-reader ul{padding-left:22px;margin:10px 0 18px}
+#wellbeing-sketch .ws-note{padding:16px 20px;background:var(--soft);border-radius:8px;margin:22px 0}
+#wellbeing-sketch .ws-sample{padding:16px 20px;background:var(--soft);border-radius:8px;margin:18px 0;min-width:0;overflow-wrap:anywhere}
+#wellbeing-sketch .ws-sample p:last-child{margin-bottom:0}
+#wellbeing-sketch .ws-example{margin:0 0 25px;font-size:13px;color:var(--quiet)}
+#wellbeing-sketch .ws-offer{padding:24px;background:var(--soft);border-radius:9px;margin:24px 0}
+#wellbeing-sketch .ws-price{font:400 32px Georgia,serif;margin:12px 0}
+#wellbeing-sketch .ws-footer{border-top:1px solid var(--line);padding:16px 24px;font-size:13px;color:var(--quiet)}
+@media(max-width:600px){#wellbeing-sketch .ws-three,#wellbeing-sketch .ws-report{grid-template-columns:1fr}#wellbeing-sketch .ws-stage{padding:24px 18px}#wellbeing-sketch .ws-tabs{padding:12px 18px}#wellbeing-sketch h1{font-size:28px}#wellbeing-sketch .ws-contents{border-bottom:1px solid var(--line);padding-bottom:18px}#wellbeing-sketch .ws-top{padding:15px 18px}}
+@media(pointer:coarse){#wellbeing-sketch button,#wellbeing-sketch summary{min-height:44px}}
+
+#wellbeing-sketch{--ws-symbol-sheet:url("data:image/webp;base64,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")}
+#wellbeing-sketch .ws-symbol{width:140px;max-width:100%;aspect-ratio:1;background-image:var(--ws-symbol-sheet);background-size:300% auto;background-repeat:no-repeat;margin:0 auto 14px;border-radius:8px}
+#wellbeing-sketch .ws-shield{background-position:0% 43%}
+#wellbeing-sketch .ws-heart{background-position:50% 43%}
+#wellbeing-sketch .ws-compass{background-position:100% 43%}
+#wellbeing-sketch .ws-symbol-small{width:90px;margin:12px 0}
+#wellbeing-sketch .ws-report-symbols{display:flex;gap:14px;margin:0 0 22px}
+#wellbeing-sketch .ws-report-symbols .ws-symbol{width:100px;margin:0}
+#wellbeing-sketch .ws-summary-opening{margin:12px 0 18px}
+#wellbeing-sketch .ws-question-progress,#wellbeing-sketch .ws-scale-ends{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin:18px 0 7px;font-size:13px;color:var(--quiet)}
+#wellbeing-sketch progress{display:block;appearance:none;width:100%;height:6px;border:0;border-radius:6px;background:var(--soft);accent-color:var(--ink);margin:0 0 18px}
+#wellbeing-sketch progress::-webkit-progress-bar{background:var(--soft);border-radius:6px}
+#wellbeing-sketch progress::-webkit-progress-value{background:var(--ink);border-radius:6px}
+#wellbeing-sketch progress::-moz-progress-bar{background:var(--ink);border-radius:6px}
+#wellbeing-sketch fieldset{border:0;padding:0;margin:26px 0 0;min-width:0}
+#wellbeing-sketch legend{font:400 27px/1.35 Georgia,serif;margin-bottom:12px;padding:0}
+#wellbeing-sketch .ws-answer{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:7px;margin-top:9px;background:var(--paper)}
+#wellbeing-sketch .ws-answer:has(input:checked){background:var(--soft);border-color:var(--quiet)}
+#wellbeing-sketch .ws-answer input{margin-top:6px;accent-color:var(--ink);flex-shrink:0;width:17px;height:17px}
+#wellbeing-sketch input[type=range]{display:block;width:100%;margin:22px 0;accent-color:var(--ink)}
+/* Questionnaire slider: some people didn't see it was a slider, so a thick track that fills, a big dot and tappable numbers. */
+#wellbeing-sketch .ws-slider-help{margin:16px 0 0;font-weight:600;color:var(--ink)}
+#wellbeing-sketch #ws-slider{-webkit-appearance:none;appearance:none;height:36px;margin:4px 0 0;background:transparent;cursor:pointer;--ws-fill:0px}
+#wellbeing-sketch #ws-slider::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:linear-gradient(to right,var(--teal) 0 var(--ws-fill),var(--line) var(--ws-fill) 100%)}
+#wellbeing-sketch #ws-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;box-sizing:border-box;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:var(--teal);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--teal),0 2px 6px rgba(0,0,0,.25);cursor:grab}
+#wellbeing-sketch #ws-slider::-moz-range-track{height:10px;border-radius:5px;background:var(--line)}
+#wellbeing-sketch #ws-slider::-moz-range-progress{height:10px;border-radius:5px;background:var(--teal)}
+#wellbeing-sketch #ws-slider::-moz-range-thumb{box-sizing:border-box;width:30px;height:30px;border-radius:50%;background:var(--teal);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--teal),0 2px 6px rgba(0,0,0,.25);cursor:grab}
+#wellbeing-sketch .ws-slider-ticks{position:relative;height:36px;margin:2px 0 0}
+#wellbeing-sketch .ws-slider-ticks button{position:absolute;top:0;transform:translateX(-50%);width:30px;min-height:32px;padding:3px 0;border:0;border-radius:6px;background:transparent;text-align:center;font-size:14px;line-height:1.6;color:var(--quiet);cursor:pointer}
+#wellbeing-sketch .ws-slider-ticks button.ws-active{background:var(--teal);color:var(--on-teal);font-weight:600}
+#wellbeing-sketch .ws-slider-readout{display:block;margin:8px 0 0;font-size:15px;color:var(--ink)}
+#wellbeing-sketch .ws-slider-readout output{font-weight:700;color:var(--teal)}
+#wellbeing-sketch .ws-hours{display:flex;flex-wrap:wrap;gap:22px;margin:18px 0}
+#wellbeing-sketch .ws-hours label{display:grid;gap:7px}
+#wellbeing-sketch select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:8px 12px;border-radius:7px;max-width:100%}
+@media(max-width:600px){#wellbeing-sketch #ws-intro .ws-three{gap:22px}#wellbeing-sketch #ws-intro .ws-three section{display:grid;grid-template-columns:78px minmax(0,1fr);column-gap:14px;align-items:start}#wellbeing-sketch #ws-intro .ws-three .ws-symbol{grid-row:1/3;width:78px;margin:0}#wellbeing-sketch #ws-intro .ws-three p{grid-column:2}#wellbeing-sketch legend{font-size:24px}#wellbeing-sketch .ws-tabs button{padding:7px 10px;font-size:14px}}
+
+/* Website palette applied to the existing reading flow */
+#wellbeing-sketch .ws-top{background:var(--teal);color:var(--on-teal);border-bottom-color:var(--teal)}
+#wellbeing-sketch .ws-top .ws-small{color:var(--on-teal)}
+#wellbeing-sketch h1,#wellbeing-sketch h2,#wellbeing-sketch h3,#wellbeing-sketch legend{color:var(--teal)}
+#wellbeing-sketch .ws-kicker{color:var(--teal)}
+#wellbeing-sketch .ws-primary{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-tabs button[aria-selected=true]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-contents button.ws-active{background:var(--soft);color:var(--teal);border-left:3px solid var(--orange)}
+#wellbeing-sketch .ws-highlights section{border-left-color:var(--orange)}
+#wellbeing-sketch .ws-answer:has(input:checked){border-color:var(--teal-medium)}
+#wellbeing-sketch .ws-answer input,#wellbeing-sketch input[type=range]{accent-color:var(--teal)}
+#wellbeing-sketch progress{accent-color:var(--teal-medium)}
+#wellbeing-sketch progress::-webkit-progress-value{background:var(--teal-medium)}
+#wellbeing-sketch progress::-moz-progress-bar{background:var(--teal-medium)}
+#wellbeing-sketch .ws-price{color:var(--teal)}
+#wellbeing-sketch button:focus-visible,#wellbeing-sketch summary:focus-visible,#wellbeing-sketch input:focus-visible,#wellbeing-sketch select:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+#wellbeing-sketch .ws-roadmap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:20px 0 12px}
+#wellbeing-sketch .ws-roadmap button{display:flex;flex-direction:column;gap:5px;min-width:0;padding:12px;border-color:var(--line)}
+#wellbeing-sketch .ws-roadmap button span{font-size:12px;color:var(--quiet)}
+#wellbeing-sketch .ws-roadmap button strong{font-size:15px;font-weight:500}
+#wellbeing-sketch .ws-roadmap button[aria-pressed=true]{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+#wellbeing-sketch .ws-roadmap button[aria-pressed=true] span{color:var(--on-teal)}
+#wellbeing-sketch #ws-phase-detail{border-left:3px solid var(--orange);margin:0 0 14px}
+#wellbeing-sketch .ws-daily-flow{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+#wellbeing-sketch .ws-daily-flow span{font-size:13px;color:var(--teal)}
+#wellbeing-sketch .ws-daily-flow span+span:before{content:'›';margin-right:8px;color:var(--quiet)}
+#wellbeing-sketch #ws-journey details h3{margin-top:18px}
+#wellbeing-sketch .ws-week-list{padding-left:24px;margin:12px 0 0}
+#wellbeing-sketch .ws-week-list li{margin:5px 0}
+@media(max-width:500px){#wellbeing-sketch .ws-roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+#wellbeing-sketch .ws-goal-labels{padding-left:21px;margin:7px 0 16px}
+#wellbeing-sketch .ws-goal-labels li{margin:4px 0;color:var(--teal)}
+#wellbeing-sketch .ws-goal-benefits{padding-left:21px;margin:15px 0}
+#wellbeing-sketch .ws-goal-benefits li{margin:9px 0}
+#wellbeing-sketch .ws-goal-reminder:empty{display:none}
+#wellbeing-sketch .ws-goal-reminder:not(:empty){margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+#wellbeing-sketch .ws-answer:has(input:disabled){opacity:.6}
+#wellbeing-sketch button:disabled{opacity:.55}
+  </style>
+  <style>
+    /* Site integration: stop shared site type styles leaking into the sketch */
+    #wellbeing-sketch h3{font-family:inherit}
+    /* Links styled like the sketch's buttons */
+    #wellbeing-sketch .ws-link-button{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:var(--paper);color:var(--ink);text-decoration:none;font:inherit}
+    #wellbeing-sketch .ws-link-button.ws-primary{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+    #wellbeing-sketch .ws-link-button:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+    #wellbeing-sketch a:not(.ws-link-button){color:var(--teal);font-weight:600}
+    @media(pointer:coarse){#wellbeing-sketch .ws-link-button{min-height:44px}}
+    /* Live full report */
+    #wellbeing-sketch #ws-real-content h2{font-size:21px;margin:26px 0 10px}
+    #wellbeing-sketch #ws-real-content h3{margin:18px 0 6px}
+    #wellbeing-sketch #ws-real-content ul{padding-left:22px;margin:8px 0 16px}
+    #wellbeing-sketch #ws-real-title:focus{outline:none}
+    #wellbeing-sketch .ws-statement{font-style:italic;color:var(--quiet);margin:0 0 12px}
+    #wellbeing-sketch .ws-table-wrap{overflow-x:auto;margin:6px 0 20px}
+    #wellbeing-sketch .ws-table{border-collapse:collapse;width:100%;font-size:15px}
+    #wellbeing-sketch .ws-table th,#wellbeing-sketch .ws-table td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}
+    #wellbeing-sketch .ws-table thead th{font-size:13px;color:var(--quiet);font-weight:600}
+    #wellbeing-sketch .ws-table tbody th{font-weight:400}
+    #wellbeing-sketch .ws-links{list-style:none;padding:0;margin:8px 0 16px}
+    #wellbeing-sketch .ws-links li{margin:6px 0}
+    #ws-real-print{display:none}
+    @media print{
+      body.ws-printing *{visibility:hidden}
+      body.ws-printing #ws-real-print,body.ws-printing #ws-real-print *{visibility:visible}
+      body.ws-printing #ws-real-print{display:block;position:absolute;left:0;top:0;width:100%;color:#000;background:#fff;font:15px/1.5 Georgia,serif}
+      body.ws-printing #ws-real-print h2{break-after:avoid;margin:22px 0 8px}
+      body.ws-printing #ws-real-print section{break-before:page}
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="crisis-bar">
+    <span>If things feel urgent right now:</span>
+    <a href="tel:131114">Lifeline 13 11 14</a>
+    <a href="tel:1300224636">Beyond Blue 1300 22 4636</a>
+    <a href="tel:000">Emergency 000</a>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="data/TOUGH DAYS_LOGO.png" alt="Tools for the Tough Days" /><span class="nav-logo-text">Tools for the Tough Days</span></a>
+      <div class="nav-links">
+        <a href="index.html">For Personal Life</a>
+        <a href="business.html">For Workplaces</a>
+        <a href="wellbeing-profile.html" class="active" aria-current="page">Wellbeing Profile</a>
+        <a href="about-nic.html">About Nic</a>
+        <a href="login.html" class="nav-login" id="navSignIn">Sign In</a>
+        <a href="register.html" class="nav-login" id="navSignUp">Sign up</a>
+        <a href="dashboard.html" class="nav-login" id="navDashboard" style="display:none;">Dashboard</a>
+        <button class="nav-login" id="navSignOut" type="button" style="display:none;">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+<main class="wbp-main">
+<div id="wellbeing-sketch" aria-label="Wellbeing Profile" style="--ws-gap: 22px;">
+ <header class="ws-top"><span class="ws-name">Tools for the Tough Days</span><span class="ws-small">Wellbeing Profile</span></header>
+
+ <section class="ws-stage" id="ws-intro" role="tabpanel">
+  <div class="ws-prose">
+   <div class="ws-kicker">Before you begin</div><h1>Your Wellbeing Profile</h1>
+   <p>Watch this short introduction, then begin when you’re ready.</p>
+   <p class="ws-note" data-needs-report hidden>You have a full report saved to your account. <button type="button" class="cursor-interaction" data-go="report">View my full report</button></p>
+   <video id="ws-intro-video" controls="" playsinline="" preload="metadata" aria-label="Your Wellbeing Profile introduction, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" src="https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/intro-music-v1.mp4">Your browser cannot play this video. You can read the transcript below.</video>
+   <!-- Adult/Australia eligibility and safety entry (master v4: "eligibility and safety entry" comes before the questionnaire). Wording from the 3 Nov trial. -->
+   <div class="ws-note" id="ws-entry" role="group" aria-labelledby="ws-entry-title">
+    <h2 id="ws-entry-title">Before you start</h2>
+    <p>The Wellbeing Profile is for adults 18 and over who live in Australia.</p>
+    <p>This questionnaire is for people who are safe right now. If you’re having thoughts of ending your life or harming yourself, please <a href="/crisis-support.html" data-entry-unsafe>get support immediately</a>.</p>
+    <label class="ws-answer cursor-interaction"><input type="checkbox" id="ws-entry-adult"><span>I’m 18 or over and happy to take part</span></label>
+    <p class="ws-small ws-status" id="ws-entry-status" role="alert"></p>
+   </div>
+   <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="questionnaire">Start the questionnaire</button></div>
+   <details><summary class="cursor-interaction">Read the video transcript</summary><div><p>Welcome to your Wellbeing Profile, from Tools for the Tough Days!</p><p>This questionnaire explores how you’ve been feeling, how you respond on tough days, and what helps you.</p><p>We’ll use what you share to create your Wellbeing Profile. It’s a starting point to understand how you respond in different situations, and consider what might support your wellbeing.</p><p>As you answer, think about your life as it is right now. Your responses may vary depending on what’s happening and how you’re feeling. They can also change over time.</p><p>To help you understand yourself a little better, we use three characters as metaphors.</p><p>The Bodyguard represents ways of protecting yourself or getting through difficulty, such as pushing through, keeping busy or pulling back.</p><p>The Teenager represents feelings and emotional needs. It can bring energy, excitement and enthusiasm, as well as hurt, frustration or a wish for connection.</p><p>And the Adult represents your capacity to pause, consider different perspectives, and choose a response.</p><p>Imagine these three travelling together in the same car. Each brings something useful. In different situations, one or another may take the wheel, depending on what’s happening and how you’re feeling.</p><p>These are responses we can all recognise in ourselves. They aren’t labels for your age, maturity or whole personality.</p><p>The aim is to notice who’s at the wheel and consider what you need, with more room to choose your next step. When you’re ready, let’s begin!</p></div></details>
+   <details><summary class="cursor-interaction">Prefer descriptions without the characters?</summary><div><h3 data-presentation-heading="">Prefer descriptions without the characters?</h3>
+    <p class="ws-small" id="ws-presentation-help-intro" data-presentation-help="">We’ll describe your responses directly, without the Bodyguard, Teenager or Adult names, symbols or car analogy. Your answers and results stay the same.</p>
+    <div class="ws-actions"><button type="button" class="cursor-interaction" data-language="" aria-describedby="ws-presentation-help-intro">Show my results without the characters</button></div>
+   </div></details>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-questionnaire" role="tabpanel" hidden="">
+  <div class="ws-prose">
+   <p class="ws-example">Your answers are used to create your free summary and are not saved. If you choose to buy your full report, the answers it needs are saved to your account so your report can be created and kept.</p>
+   <div class="ws-kicker">During the questionnaire</div>
+   <div class="ws-question-progress"><span id="ws-question-step">Question 1 of 20</span><span id="ws-question-group">What is going on</span></div>
+   <progress id="ws-question-progress" value="5" max="100" aria-label="Questionnaire progress"></progress>
+   <p class="ws-small">Think about the last few weeks, and especially the harder moments.</p>
+   <form id="ws-question-form"><fieldset><legend id="ws-question-title">What’s been hardest lately?</legend><p id="ws-question-hint" class="ws-small">Pick any that fit.</p><div id="ws-question-options"><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.a"><span>Feeling flat or low</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.b"><span>Worry or racing thoughts</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.c"><span>Feeling on edge or irritable</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.d"><span>Trouble sleeping</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.e"><span>Feeling disconnected from people</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.f"><span>No motivation or energy</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.g"><span>Feeling overwhelmed</span></label><label class="ws-answer cursor-interaction"><input type="checkbox" name="ws-answer" data-answer="1.1" value="1.1.h"><span>Being hard on yourself</span></label></div></fieldset></form>
+   <div class="ws-actions"><button type="button" class="cursor-interaction" data-question-prev="">Back to introduction</button><button type="button" class="ws-primary cursor-interaction" data-question-next="">Next question</button></div>
+   <p class="ws-small ws-status" id="ws-question-status" aria-live="polite"></p>
+   <div class="ws-actions"><button type="button" class="cursor-interaction" data-goal-preview="" hidden="" disabled="">Preview the message for these goals</button></div>
+  </div>
+ </section>
+ <section class="ws-stage" id="ws-summary" role="tabpanel" hidden="">
+  <div class="ws-prose">
+<!-- Live result states. Answers are scored by /api/wellbeing-score.php and not saved; only a full-report purchase saves them (api/wellbeing-report.php). -->
+<div id="ws-summary-gate">
+ <div class="ws-kicker">Your free summary</div><h1>Complete the questionnaire first</h1>
+ <p>Your summary is created from your answers. They are not saved unless you choose to buy your full report.</p>
+ <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="questionnaire">Start the questionnaire</button></div>
+</div>
+<div id="ws-safety-check" hidden="">
+ <div class="ws-kicker">Before your summary</div><h1>Are you safe right now?</h1>
+ <p>Some of your answers suggest things may be very hard at the moment, so we’d like to check in with you before showing your summary.</p>
+ <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-safety="yes">Yes, I’m safe right now</button><button type="button" class="cursor-interaction" data-safety="unsure">I’m not sure</button><button type="button" class="cursor-interaction" data-safety="no">No</button></div>
+ <p class="ws-small ws-status">If you are in danger now or there is an emergency, call 000. For crisis support, Lifeline is available on 13 11 14.</p>
+</div>
+<div id="ws-crisis" hidden="" role="region" aria-labelledby="ws-crisis-title">
+ <h1 id="ws-crisis-title">Please reach out for support now</h1>
+ <p>If you are in danger now or there is an emergency, call 000. For crisis support, Lifeline is available on 13 11 14. For domestic, family or sexual violence support, contact 1800RESPECT on 1800 737 732. Consider whether your device and communications are private before choosing how to access a service. The wellbeing platform does not monitor your safety or provide an emergency response.</p>
+ <div class="ws-actions"><a class="ws-link-button ws-primary" href="tel:000">Call 000</a><a class="ws-link-button" href="tel:131114">Call Lifeline 13 11 14</a><a class="ws-link-button" href="tel:1800737732">Call 1800RESPECT</a></div>
+ <p class="ws-small ws-status"><a href="/crisis-support.html">More urgent support options</a></p>
+</div>
+<div id="ws-support-unsafe" class="ws-note" hidden="" role="region" aria-labelledby="ws-support-unsafe-title">
+ <h3 id="ws-support-unsafe-title">Support if you feel unsafe at home or in a relationship</h3>
+ <p>If you are in danger now or there is an emergency, call 000. For crisis support, Lifeline is available on 13 11 14. For domestic, family or sexual violence support, contact 1800RESPECT on 1800 737 732. Consider whether your device and communications are private before choosing how to access a service. The wellbeing platform does not monitor your safety or provide an emergency response.</p>
+ <p class="ws-small"><a href="/crisis-support.html">More support options</a></p>
+</div>
+<div id="ws-primary-choice" hidden="">
+ <div class="ws-kicker">Your free summary</div><h1>Which description feels closest?</h1>
+ <p>Your answers suggest a few ways you may respond when things get difficult. Choose the one that sounds most like your usual experience.</p>
+ <div id="ws-choice-options" role="radiogroup" aria-label="Descriptions"></div>
+ <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-choice-continue="" disabled="">Continue</button><button type="button" class="cursor-interaction" data-choice-none="">None of these feels right</button><button type="button" class="cursor-interaction" data-review-answers="">Review my answers</button></div>
+</div>
+<div id="ws-summary-result" hidden="">
+<div id="ws-no-primary" hidden=""><div class="ws-kicker">Your free summary</div><h1 id="ws-no-primary-title"></h1><p id="ws-no-primary-text"></p><div class="ws-actions"><button type="button" class="cursor-interaction" data-review-answers="">Review my answers</button></div></div>
+<p class="ws-note" id="ws-recent-change" hidden="">You said some of this started or happened in the last six months. A recent change can take attention and adjustment. Notice what you need now, without assuming how quickly your feelings or circumstances should change.</p>
+<div id="ws-summary-welcome" data-character="" data-needs-primary="">
+ <video id="ws-summary-video" controls="" playsinline="" preload="metadata" aria-label="Welcome to your free Wellbeing Profile summary, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" src="https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/summary-music-v1.mp4">Your browser cannot play this video. You can read the transcript below.</video>
+ <details><summary class="cursor-interaction">Read the welcome video transcript</summary><div><p>Your Wellbeing Profile is ready!</p><p>It reflects what you’ve shared about life right now, and gives you a starting point to explore how you respond in different situations, including on tough days.</p><p>As you listen, consider what feels familiar.</p><p>You can tell us if the description fits, or take a different path based on what you’d like support with.</p></div></details>
+</div>
+
+   <section id="ws-primary-video-section" data-character="" data-needs-primary="" aria-label="Your primary driver video">
+ <video id="ws-primary-video" controls="" playsinline="" preload="metadata" src="https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/BP-music-v1.mp4" poster="https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/BP-brand-v2.jpg" aria-label="Bodyguard: Pushing Through, narrated by Charlie" style="display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:#f5faf9" data-profile="BP">Your browser cannot play this video. The written summary is available below.</video>
+ <p class="ws-small" id="ws-primary-playback" role="status" aria-live="polite"></p>
+</section>
+
+   <div id="ws-written-summary" data-neutral="" data-needs-primary="" hidden="">
+   <div class="ws-kicker">Your wellbeing at a glance</div><div id="ws-summary-symbol" data-character="" class="ws-symbol ws-symbol-small ws-shield" role="img" aria-label="Bodyguard shield"></div><h1 data-result-title="">Bodyguard: Pushing Through</h1>
+   <p id="ws-summary-lead">You might keep busy, work through the list and make sure everyone else is looked after, even when you’re running low.</p>
+   <div class="ws-highlights">
+    <section><h3>Strengths</h3><p id="ws-summary-strength">Perseverance and dependability</p></section>
+    <section><h3>Challenges</h3><p id="ws-summary-challenge">When your own needs slip down the list</p></section>
+    <section><h3>Key insight</h3><p id="ws-summary-insight">When would rest, support or another approach fit?</p></section>
+   </div>
+      </div>
+   <div class="ws-divider" data-needs-primary=""><h2>Does this sound like you?</h2><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-fit="" aria-expanded="false" aria-controls="ws-after-fit">This fits</button><button type="button" class="cursor-interaction" data-disagree="">This description doesn’t fit me</button></div><p class="ws-status" id="ws-fit-status" aria-live="polite"></p><div id="ws-review" hidden=""><p>Thank you for letting us know. This summary reflects your answers, but it may not capture how you see yourself. You can review your answers or leave this result unconfirmed.</p><div class="ws-actions"><button type="button" class="cursor-interaction" data-review-answers="">Review my answers</button><button type="button" class="cursor-interaction" data-unconfirmed="">Leave result unconfirmed</button></div></div></div>
+<section id="ws-unconfirmed-next" class="ws-divider" hidden><div id="ws-unconfirmed-goal-message"><h2>Your result is unconfirmed</h2><p>You can review your answers or explore our resource subscriptions. We won’t assign a driver you haven’t accepted.</p></div><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="resources">Explore wellbeing resources</button><button type="button" class="cursor-interaction" data-review-answers>Review my answers</button></div></section><div id="ws-after-fit" hidden><div class="ws-divider"><h2>Explore your Wellbeing Profile in more detail</h2><p>Your full personalised report takes a closer look at your responses, how you cope and what helps you.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="offer">Explore my full report — $39.95</button></div></div><details><summary>More about your results</summary><div><div id="ws-approved-summary"></div><div id="ws-secondary-invitation"></div><h3>A snapshot of you right now</h3><p>Your answers reflect a point in your life. Other responses may show up in different situations, and how you respond can change over time.</p></div></details><details><summary data-presentation-heading>Prefer descriptions without the characters?</summary><p id="ws-presentation-help-summary" data-presentation-help></p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-language aria-describedby="ws-presentation-help-summary">Show my results without the characters</button></div></details></div>
+   </div><!-- /#ws-summary-result -->
+  </div>
+ </section>
+<section class="ws-stage" id="ws-offer" role="tabpanel" hidden><div class="ws-prose"><div class="ws-kicker">Your full personalised report</div><h1>Explore your Wellbeing Profile in more detail</h1><p>Your free summary introduces your primary driver. Your full personalised report takes a closer look at your responses, how you cope, what may sit underneath your patterns, and what you’ve told us helps you.</p><p>Where your answers identify a distinct secondary driver, your report explores that too.</p><div class="launch-price">$39.95 <span>once</span></div><p>Read your report on screen straight after purchase. We’ll also email you a copy.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-launch="buy-report">Get my full report — $39.95</button><button type="button" class="cursor-interaction" data-launch="skip-report">Not now</button></div><p class="ws-small" id="ws-buy-help" hidden>Your full report builds on the description you confirm in your free summary. Answer the questionnaire and confirm your summary first.</p><p id="ws-buy-return" hidden><a class="ws-link-button ws-primary" href="/wellbeing-profile.html">Return to checkout</a></p><p class="ws-small">You’ll sign in or create an account first, so your report is saved to it. Payment is handled securely by Stripe.</p><p class="ws-small ws-status" id="ws-buy-status" role="status" aria-live="polite"></p><h2>What’s inside your personalised report</h2><p>Your report brings your questionnaire answers together across 12 sections. Open a heading below to see what’s included.</p><div class="launch-contents"><details class="launch-content-group"><summary><span class="launch-group-title">Getting started</span><span class="launch-group-description">How to use your report and understand the characters.</span></summary><div class="launch-section-list"><section><h3>1. How to read your report</h3><p>A guide to understanding your results and finding the sections most useful to you.</p></section><section><h3>2. Meet your crew</h3><p>An introduction to the Bodyguard, Teenager and Adult—the characters we use to explain different ways of responding.</p></section></div></details><details class="launch-content-group"><summary><span class="launch-group-title">Your patterns</span><span class="launch-group-description">Your drivers, what may sit underneath them, and how you cope.</span></summary><div class="launch-section-list"><section><h3>3. When things get tough</h3><p>A closer look at your primary driver: the response your answers suggest you commonly turn to on tough days.</p></section><section><h3>4. When it gets really hard</h3><p>Where your answers identify a distinct secondary driver, explore how another response may come forward under greater strain.</p></section><section><h3>5. What’s underneath</h3><p>Explore the beliefs, expectations and concerns reflected in your answers, and how they may relate to your responses.</p></section><section><h3>6. How you cope</h3><p>Look at the ways you manage difficult moments and how helpful you currently find those responses.</p></section></div></details><details class="launch-content-group"><summary><span class="launch-group-title">Your life and what helps</span><span class="launch-group-description">The pressures you identified and the support that suits you.</span></summary><div class="launch-section-list"><section><h3>7. What’s on your plate</h3><p>Bring together the areas of life you identified as difficult, such as work, relationships, health or caring responsibilities.</p></section><section><h3>8. What helps you</h3><p>Explore the activities, support preferences and ways of recharging you selected in the questionnaire.</p></section></div></details><details class="launch-content-group"><summary><span class="launch-group-title">Your next steps</span><span class="launch-group-description">Practical ideas, your Tough-Day Guide and looking ahead.</span></summary><div class="launch-section-list"><section><h3>9. Your practical next steps</h3><p>Consider manageable ways to use your report, with your goals, preferences and available time in mind.</p></section><section><h3>10. Your personal Tough-Day Guide</h3><p>Bring key reminders from your report together in one place to revisit when things feel difficult.</p></section><section><h3>11. Looking ahead</h3><p>Consider what you would like to keep, adjust or explore as your circumstances and needs change.</p></section><section><h3>12. About your report</h3><p>Understand how your answers inform the report, what it can offer and its limitations.</p></section></div></details></div></div></section> <section class="ws-stage" id="ws-report" role="tabpanel" hidden="">
+  <div id="ws-report-none" class="ws-prose"><div class="ws-kicker">Your full personalised report</div><h1>Your report</h1><p>If you’ve just paid, we’re confirming your payment. This usually takes a few seconds. If you bought your report earlier, sign in to see it.</p><p class="ws-small ws-status" id="ws-report-status" role="status" aria-live="polite"></p><div class="ws-actions"><a class="ws-link-button ws-primary" data-signed-out hidden href="/login.html?redirect=%2Fwellbeing-profile.html%3Fview%3Dreport">Sign in</a><button type="button" class="cursor-interaction" data-go="intro">Back to the start</button></div></div>
+  <div id="ws-report-real" hidden>
+   <div class="ws-kicker">Your full personalised report</div>
+   <h1 id="ws-real-heading"></h1>
+   <p class="ws-small" id="ws-real-meta"></p>
+   <div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-launch="report-continue">Continue</button><button type="button" class="cursor-interaction" data-real-language></button><button type="button" class="cursor-interaction" data-real-print>Print or save as PDF</button><button type="button" class="cursor-interaction" data-real-email>Email me a copy</button></div>
+   <p class="ws-small ws-status" id="ws-real-status" role="status" aria-live="polite"></p>
+   <div id="ws-real-support" class="ws-note" role="region" aria-label="Support first" hidden></div>
+   <div class="ws-report" style="margin-top:26px">
+    <aside class="ws-contents" id="ws-real-contents" aria-label="Report contents"></aside>
+    <article class="ws-reader"><div class="ws-kicker" id="ws-real-number"></div><h1 id="ws-real-title" tabindex="-1"></h1><div id="ws-real-content"></div><div class="ws-actions"><button type="button" class="cursor-interaction" data-real-prev>Previous section</button><button type="button" class="cursor-interaction" data-real-next>Next section</button></div></article>
+   </div>
+   <div id="ws-real-print"></div>
+  </div>
+ </section>
+<section class="ws-stage" id="ws-resources" role="tabpanel" hidden><div class="ws-prose"><div class="ws-kicker">Your wellbeing resources</div><h1>Support that fits your everyday life</h1><p id="launch-resource-intro"></p><p>Tools for the Tough Days gives you access to our resource library, with practical ideas and activities to explore at your own pace.</p><h2>Choose your subscription</h2><div class="launch-plans"><section class="launch-plan"><h3>Monthly</h3><div class="launch-price">$9.95 <span>per month</span></div><p>Renews automatically each month until cancelled.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-launch="monthly">Choose monthly</button></div></section><section class="launch-plan"><h3>Annual</h3><div class="launch-price">$99 <span>per year</span></div><p>Renews automatically each year until cancelled.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-launch="annual">Choose annual</button></div></section></div><p>Both options include the same access to all platform resources. The personalised report is purchased separately.</p><p>Cancel before your next renewal to stop future charges. Your subscription access continues until the end of your paid period.</p><p class="ws-small">You’ll sign in or create an account before paying. Payment is handled securely by Stripe.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-launch="skip-resources">Not now</button></div></div></section><section class="ws-stage" id="ws-interest" role="tabpanel" hidden><div class="ws-prose"><p class="ws-note" id="launch-interest-status" role="status" hidden></p><div class="ws-kicker">A future option</div><h1>Would you be interested in a personalised 90-day wellbeing journey?</h1><p>We’re preparing a guided journey based on your Wellbeing Profile, exploring your primary driver and, where your answers identify one, a distinct secondary driver.</p><p>The journey will offer brief daily insights and manageable actions to help you explore your patterns in everyday life.</p><div class="launch-note"><p>The planned subscription is <strong>$29.95 per month</strong>, including the journey and access to our wellbeing resource library. It would replace the resource-only subscription if you choose to join.</p><p><strong>The journey is not available yet.</strong> We’d like to understand whether it interests you.</p><p>Indicating interest does not start a subscription, change an existing plan or take any payment.</p></div><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-interest="yes">Yes, I’m interested</button><button type="button" class="cursor-interaction" data-interest="maybe">Maybe</button><button type="button" class="cursor-interaction" data-interest="no">Not at the moment</button></div></div></section><section class="ws-stage" id="ws-followup" role="tabpanel" hidden><div class="ws-prose"><div class="ws-kicker">Your choice</div><h1>Would you like us to email you in a month?</h1><p>If now isn’t the right time, we can check back with you in a month about the personalised 90-day wellbeing journey.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-followup="yes">Yes please</button><button type="button" class="cursor-interaction" data-followup="no">No thanks</button></div><p class="ws-small ws-status" id="launch-followup-status" role="status" aria-live="polite"></p></div></section><section class="ws-stage" id="ws-closing" role="tabpanel" hidden><div class="ws-prose"><div class="ws-kicker">Whenever you’re ready</div><h1>Thanks for taking the time to explore your Wellbeing Profile.</h1><p id="launch-closing-status" role="status"></p><p>You’re welcome to come back whenever the time feels right. If you have any questions about our resources or access, please get in touch.</p><div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-go="report" data-needs-report hidden>View my full report</button><button type="button" class="ws-primary cursor-interaction" data-go="summary" data-needs-result>Back to my free summary</button><button type="button" class="cursor-interaction" data-go="resources">Explore resource subscriptions</button></div></div></section>
+ <div class="ws-footer">Your answers are not saved unless you choose to buy your full report, which is kept in your account. Your summary reflects what you shared about life right now. It is a starting point for reflection, not a diagnosis, and this service does not monitor your safety or provide an emergency response. If you are in danger now, call 000.</div>
+</div>
+</main>
+<script type="application/json" id="ws-source-data">{"characterSummary": ["When life becomes demanding, your Bodyguard tends to take the wheel by pushing through. You might keep working when you’re tired, take on more than you planned or tell yourself you’ll rest later. That drive can help you persevere, stay dependable and achieve things you care about.", "But it can also make it easy to miss your own limits. Your Bodyguard isn’t doing anything wrong. It’s responding in a way that may have worked before. Noticing when that drive shows up can help you understand your patterns with more kindness."], "neutralSummary": ["When life becomes demanding, you may respond by pushing through. You might keep working when you’re tired, take on more than you planned or tell yourself you’ll rest later. That drive can help you persevere, stay dependable and achieve things you care about.", "Continuing can also make it easy to miss your own limits. It does not mean you are doing something wrong. Notice when the effort is useful and when it leaves less room for rest, support or adjustment. Understanding when that drive shows up can help you respond to yourself with more kindness."], "questions": [{"id": "1.1", "section": 1, "type": "multi", "question": "What’s been hardest lately?", "hint": "Pick any that fit.", "options": [{"id": "1.1.a", "text": "Feeling flat or low"}, {"id": "1.1.b", "text": "Worry or racing thoughts"}, {"id": "1.1.c", "text": "Feeling on edge or irritable"}, {"id": "1.1.d", "text": "Trouble sleeping"}, {"id": "1.1.e", "text": "Feeling disconnected from people"}, {"id": "1.1.f", "text": "No motivation or energy"}, {"id": "1.1.g", "text": "Feeling overwhelmed"}, {"id": "1.1.h", "text": "Being hard on yourself"}]}, {"id": "1.2", "section": 1, "type": "slider", "question": "How much is this getting in the way of your day-to-day right now?", "min": 0, "max": 10, "minLabel": "Barely", "maxLabel": "A lot"}, {"id": "1.3", "section": 1, "type": "multi", "question": "What would you most like this journey to help you work towards?", "hint": "Choose one or two things that matter most to you right now.", "options": [{"id": "1.3.b", "text": "Understand my feelings, needs and patterns better."}, {"id": "1.3.a", "text": "Find practical ways to manage stress and difficult moments."}, {"id": "1.3.c", "text": "Pause and respond with more choice when things get tough."}, {"id": "1.3.f", "text": "Make time for my wellbeing and build practices that fit my life."}, {"id": "1.3.d", "text": "Recognise my limits and feel more comfortable asking for support or setting boundaries."}, {"id": "1.3.e", "text": "Reconnect with what matters to me and what helps me feel like myself."}], "required": true, "maxSelections": 2}, {"id": "1.4", "section": 1, "type": "multi", "optional": true, "question": "Is any of this connected to a particular part of your life?", "hint": "Pick any that fit.", "options": [{"id": "1.4.a", "text": "Work or study, like pressure, conflict or losing a job"}, {"id": "1.4.b", "text": "Money, like bills, debt or a big money setback"}, {"id": "1.4.c", "text": "Relationships or family, like conflict, a break-up or separation"}, {"id": "1.4.d", "text": "Health, like an illness or diagnosis, for me or someone close"}, {"id": "1.4.e", "text": "Loss or grief, like someone close to me dying"}, {"id": "1.4.f", "text": "Loneliness or feeling cut off from people"}, {"id": "1.4.g", "text": "Becoming a parent, or caring for someone who’s unwell"}, {"id": "1.4.h", "text": "Moving house or city, or another big change"}, {"id": "1.4.i", "text": "An accident or a frightening event"}, {"id": "1.4.j", "text": "Alcohol or other substances"}, {"id": "1.4.k", "text": "Feeling unsafe at home or in a relationship"}]}, {"id": "1.5", "section": 1, "type": "single", "question": "Did any of this start or happen in the last six months?", "options": [{"id": "1.5.a", "text": "Yes"}, {"id": "1.5.b", "text": "No"}], "showIf": "At least one option ticked in 1.4"}, {"id": "2.1", "section": 2, "type": "multi", "question": "What would you most like to be different a month from now?", "hint": "Pick any that fit.", "options": [{"id": "2.1.a", "text": "Sleeping better"}, {"id": "2.1.b", "text": "Feeling calmer day to day"}, {"id": "2.1.c", "text": "Being less hard on myself"}, {"id": "2.1.d", "text": "Coping better when things spike"}, {"id": "2.1.e", "text": "Feeling more connected"}, {"id": "2.1.f", "text": "Having a routine that sticks"}, {"id": "2.1.g", "text": "Understanding my patterns"}]}, {"id": "2.2", "section": 2, "type": "single", "question": "Most days, how much time could you realistically set aside to work on yourself?", "options": [{"id": "2.2.a", "text": "2 minutes"}, {"id": "2.2.b", "text": "5 minutes"}, {"id": "2.2.c", "text": "10 minutes"}, {"id": "2.2.d", "text": "15 minutes or more"}]}, {"id": "3.1", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "Deep down I worry people will let me down or leave, or that there’s something wrong with me.", "options": [{"id": "3.1.0", "value": 0, "text": "Not like me"}, {"id": "3.1.1", "value": 1, "text": "A little like me"}, {"id": "3.1.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.1.3", "value": 3, "text": "Quite like me"}, {"id": "3.1.4", "value": 4, "text": "Very like me"}]}, {"id": "3.2", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I often doubt I can handle things on my own, or feel like I’ll end up failing.", "options": [{"id": "3.2.0", "value": 0, "text": "Not like me"}, {"id": "3.2.1", "value": 1, "text": "A little like me"}, {"id": "3.2.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.2.3", "value": 3, "text": "Quite like me"}, {"id": "3.2.4", "value": 4, "text": "Very like me"}]}, {"id": "3.3", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "When I don’t feel like doing something, I find it really hard to make myself do it anyway.", "options": [{"id": "3.3.0", "value": 0, "text": "Not like me"}, {"id": "3.3.1", "value": 1, "text": "A little like me"}, {"id": "3.3.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.3.3", "value": 3, "text": "Quite like me"}, {"id": "3.3.4", "value": 4, "text": "Very like me"}]}, {"id": "3.4", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I put everyone else’s needs ahead of my own, even when it wears me down.", "options": [{"id": "3.4.0", "value": 0, "text": "Not like me"}, {"id": "3.4.1", "value": 1, "text": "A little like me"}, {"id": "3.4.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.4.3", "value": 3, "text": "Quite like me"}, {"id": "3.4.4", "value": 4, "text": "Very like me"}]}, {"id": "3.5", "section": 3, "type": "scale", "lead": "How like you is this?", "question": "I hold myself to very high standards, and I find it hard to switch off or relax.", "options": [{"id": "3.5.0", "value": 0, "text": "Not like me"}, {"id": "3.5.1", "value": 1, "text": "A little like me"}, {"id": "3.5.2", "value": 2, "text": "Somewhat like me"}, {"id": "3.5.3", "value": 3, "text": "Quite like me"}, {"id": "3.5.4", "value": 4, "text": "Very like me"}]}, {"id": "4.1", "section": 4, "type": "multi", "question": "When things get tough, what do you tend to do?", "hint": "Pick the ones that fit you most.", "options": [{"id": "4.1.a", "text": "Push through and keep busy"}, {"id": "4.1.b", "text": "Withdraw and go quiet"}, {"id": "4.1.c", "text": "Distract yourself"}, {"id": "4.1.d", "text": "Get hard on yourself"}, {"id": "4.1.e", "text": "Reach out to someone"}, {"id": "4.1.f", "text": "Try to numb it out"}, {"id": "4.1.g", "text": "Overthink and analyse"}, {"id": "4.1.h", "text": "Get short or snappy with people"}, {"id": "4.1.i", "text": "Act first, think later"}, {"id": "4.1.j", "text": "Slow down and work out what I need"}, {"id": "4.1.k", "text": "Look for comfort or reassurance"}, {"id": "4.1.l", "text": "Put pressure on myself to get everything right, even when things are difficult"}]}, {"id": "4.2", "section": 4, "type": "single", "question": "And when it gets really hard, or you’re running on empty, what happens then?", "hint": "Pick the one that’s most like you.", "options": [{"id": "4.2.a", "text": "Push through and keep busy"}, {"id": "4.2.b", "text": "Withdraw and go quiet"}, {"id": "4.2.c", "text": "Distract yourself"}, {"id": "4.2.d", "text": "Get hard on yourself"}, {"id": "4.2.e", "text": "Reach out to someone"}, {"id": "4.2.f", "text": "Try to numb it out"}, {"id": "4.2.g", "text": "Overthink and analyse"}, {"id": "4.2.h", "text": "Get short or snappy with people"}, {"id": "4.2.i", "text": "Act first, think later"}, {"id": "4.2.j", "text": "Slow down and work out what I need"}, {"id": "4.2.k", "text": "Look for comfort or reassurance"}, {"id": "4.2.l", "text": "Put pressure on myself to get everything right, even when things are difficult"}]}, {"id": "4.3", "section": 4, "type": "slider", "question": "And how’s that working for you?", "min": 0, "max": 4, "minLabel": "It helps", "maxLabel": "It makes things worse"}, {"id": "4.4", "section": 4, "type": "single", "question": "When frustration gets the better of you, which is closest?", "options": [{"id": "4.4.a", "text": "It bursts out before I can stop it"}, {"id": "4.4.b", "text": "It builds up for a while, then I snap"}, {"id": "4.4.c", "text": "I’m standing my ground or protecting something that matters"}, {"id": "4.4.d", "text": "A bit of all of these"}, {"id": "4.4.e", "text": "I get irritable, but it doesn’t usually spill over"}], "showIf": "1.1 “Feeling on edge or irritable”, or 4.1 “Get short or snappy with people” or “Act first, think later”, or 4.2 “Get short or snappy with people”"}, {"id": "5.1", "section": 5, "type": "multi", "question": "When you’re struggling, what helps most from other people?", "hint": "Pick any that fit.", "options": [{"id": "5.1.a", "text": "Having someone just listen"}, {"id": "5.1.b", "text": "Being given practical steps"}, {"id": "5.1.c", "text": "Being left to work it out alone"}, {"id": "5.1.d", "text": "Gentle encouragement"}, {"id": "5.1.e", "text": "Being checked in on"}, {"id": "5.1.f", "text": "Honest, direct feedback"}, {"id": "5.1.g", "text": "Not being a burden to anyone"}, {"id": "5.1.h", "text": "I don’t have anyone I can turn to right now"}]}, {"id": "6.1", "section": 6, "type": "multi", "question": "What kind of things are you most likely to actually use?", "hint": "Pick any that fit.", "options": [{"id": "6.1.a", "text": "Short audio or guided exercises"}, {"id": "6.1.b", "text": "Reading something quick"}, {"id": "6.1.c", "text": "Practical tasks to try"}, {"id": "6.1.d", "text": "Videos"}, {"id": "6.1.e", "text": "Reminders or prompts through the day"}, {"id": "6.1.f", "text": "Tracking how you’re going"}]}, {"id": "6.2", "section": 6, "type": "single", "question": "When are you most likely to use something like this?", "options": [{"id": "6.2.a", "text": "First thing in the morning"}, {"id": "6.2.b", "text": "During the workday"}, {"id": "6.2.c", "text": "Evening"}, {"id": "6.2.d", "text": "Late at night"}, {"id": "6.2.e", "text": "Whenever it hits"}]}, {"id": "6.3", "section": 6, "type": "quiet_hours", "question": "Any times you don’t want to hear from us?", "hint": "Set your quiet hours. Nothing is sent inside this window.", "default": [22, 7]}, {"id": "6.3a", "section": 6, "type": "reminder_time", "optional": true, "question": "If you choose a resource subscription, what time would suit a general wellbeing notification?", "hint": "Choose a time that suits you, or decide later. This sets a preference only; it does not turn notifications on."}, {"id": "6.5", "section": 6, "type": "multi", "question": "When life gets difficult, which of these things already help you, even a little?", "hint": "Pick any that fit.", "options": [{"id": "6.5.a", "text": "Time alone"}, {"id": "6.5.b", "text": "A trusted person"}, {"id": "6.5.c", "text": "Movement"}, {"id": "6.5.d", "text": "Getting outdoors"}, {"id": "6.5.e", "text": "Listening to music"}, {"id": "6.5.f", "text": "Writing"}, {"id": "6.5.g", "text": "Quiet"}, {"id": "6.5.h", "text": "Something creative"}, {"id": "6.5.i", "text": "Time with an animal"}, {"id": "6.5.j", "text": "Something practical"}, {"id": "6.5.k", "text": "Humour"}, {"id": "6.5.l", "text": "Rest"}, {"id": "6.5.m", "text": "Family"}, {"id": "6.5.n", "text": "Something else"}, {"id": "6.5.o", "text": "I’m not sure yet"}], "exclusive": ["6.5.o"]}, {"id": "6.5b", "section": 6, "type": "single", "question": "Which one helps most?", "options": "Built from the 6.5 answers ticked, excluding Something else and I’m not sure yet", "showIf": "Two or more of 6.5.a to 6.5.m ticked"}], "questionGroups": {"1": "What is going on", "2": "Goals and available time", "3": "How you tend to see things", "4": "When things get tough", "5": "Other people", "6": "What suits you"}, "goalMessages": {"1.3.a": {"label": "Find practical ways to manage stress and difficult moments.", "title": "Build practical responses, one small step at a time", "message": "You said you’d like practical ways to manage stress and difficult moments. The guided 90-day wellbeing programme helps you build a set of responses over time. You begin by noticing what happens when things get difficult, then explore small actions you can try in everyday situations. As the weeks progress, you bring together what you find useful in your personal Tough-Day Guide.", "benefit": "For difficult moments, explore small practical responses and bring useful options together in your Tough-Day Guide."}, "1.3.b": {"label": "Understand my feelings, needs and patterns better.", "title": "Get to know yourself through everyday life", "message": "You said you’d like to understand your feelings, needs and patterns better. Across the guided 90-day wellbeing programme, you explore how your patterns show up in everyday life, what they offer and when a different response might help. Brief daily insights, small actions and weekly activities help you build on your understanding and consider what supports you.", "benefit": "For understanding yourself, use daily observations and weekly activities to explore your patterns and what supports you."}, "1.3.c": {"label": "Pause and respond with more choice when things get tough.", "title": "Make more room to choose your response", "message": "You said you’d like to pause and respond with more choice when things get tough. The guided 90-day wellbeing programme helps you explore where that room for choice is available. You start by noticing familiar reactions, then gradually practise small pauses, practical adjustments and alternative approaches. The daily steps give you opportunities to discover what feels workable in your own circumstances.", "benefit": "For more choice, practise noticing familiar reactions and exploring small pauses, adjustments or alternative approaches."}, "1.3.d": {"label": "Recognise my limits and feel more comfortable asking for support or setting boundaries.", "title": "Make room for your needs, limits and support", "message": "You said you’d like to recognise your limits and feel more comfortable asking for support or setting boundaries. Across the guided 90-day wellbeing programme, you begin by noticing demands, your needs and familiar responses. You gradually explore small ways to ask for help, express a need or set a workable limit, and reflect on what fits your circumstances.", "benefit": "For limits and support, notice your needs and explore small ways to ask for help or set workable boundaries."}, "1.3.e": {"label": "Reconnect with what matters to me and what helps me feel like myself.", "title": "Reconnect with what matters and supports you", "message": "You said you’d like to reconnect with what matters to you and what helps you feel like yourself. The guided 90-day wellbeing programme gives you a structured way to explore what matters to you, what is asking a lot of you and what supports your wellbeing. You begin with noticing, gradually try manageable changes and build on the practices you find useful in everyday life.", "benefit": "For reconnecting with yourself, explore what matters to you and make room for activities and practices you find useful."}, "1.3.f": {"label": "Make time for my wellbeing and build practices that fit my life.", "title": "Build a wellbeing practice that fits your life", "message": "You said you’d like to make time for your wellbeing and build practices that fit your life. The guided 90-day wellbeing programme combines brief daily learning with one chosen wellbeing habit. You connect that habit with an existing routine, try a manageable version and review what fits as the weeks unfold. The daily insights and weekly activities help you understand your responses while keeping your chosen practice realistic.", "benefit": "For a manageable practice, connect one chosen wellbeing habit with an existing routine and adjust it as you learn what fits."}}, "goalPairs": {"1.3.a|1.3.b": "Understand your patterns and explore practical ways to respond", "1.3.a|1.3.c": "Build practical responses and make more room to choose", "1.3.a|1.3.d": "Explore practical responses and make room for support", "1.3.a|1.3.e": "Explore practical responses and reconnect with what supports you", "1.3.a|1.3.f": "Build practical responses into a manageable wellbeing practice", "1.3.b|1.3.c": "Understand your patterns and make more room to choose", "1.3.b|1.3.d": "Understand your patterns, needs and limits", "1.3.b|1.3.e": "Understand your patterns and reconnect with what matters", "1.3.b|1.3.f": "Understand your patterns and build a practice that fits", "1.3.c|1.3.d": "Make room for choice, support and workable boundaries", "1.3.c|1.3.e": "Make room for choice and reconnect with what supports you", "1.3.c|1.3.f": "Practise making room for choice in everyday life", "1.3.d|1.3.e": "Reconnect with what matters and make room for your needs", "1.3.d|1.3.f": "Make room for your wellbeing, limits and support", "1.3.e|1.3.f": "Reconnect with what supports you through a manageable practice"}, "driverVideoPreviews": [{"id": "TH", "slug": "teenager-hurting", "character": "teenager", "title": "Teenager: Hurting", "tone": "gentle", "highlights": ["Caring deeply and noticing what matters", "When hard feelings shape how you see yourself", "What care or connection might help?"], "paragraphs": ["Your answers suggest that on tough days, the Teenager may take the wheel through a response we call Hurting.", "You might feel things deeply, replay a difficult moment, or feel disconnected, even when people are around.", "That sensitivity can also help you care deeply, understand other people’s feelings and notice when something matters.", "The challenge comes when a difficult feeling starts to shape how you see yourself. Feeling low can start to sound like ‘I’m not good enough.’", "A useful starting point is noticing those moments and considering what care or connection might help.", "Does this sound like you?"], "plainTitle": "Feeling hurt or disconnected"}, {"id": "TF", "slug": "teenager-fired-up", "character": "teenager", "title": "Teenager: Fired Up", "tone": "upbeat", "highlights": ["Energy, excitement, enthusiasm and courage", "When your response arrives before a pause", "Notice the rush. Make space to choose."], "paragraphs": ["Your answers suggest that on tough days, the Teenager may take the wheel through a response we call Fired Up.", "This can bring energy, excitement, enthusiasm and the courage to try something new. Under pressure, it might also look like frustration, a shorter fuse or an urge to act straight away.", "That energy can help you get things moving. The challenge is that sometimes your response arrives before you’ve had time to consider what you need.", "A useful starting point is noticing that rush and creating a little space before deciding what to do next.", "Does this sound like you?"], "plainTitle": "Strong feelings and a rush to respond"}, {"id": "BS", "slug": "bodyguard-shutting-down", "character": "bodyguard", "title": "Bodyguard: Shutting Down", "tone": "gentle", "highlights": ["Independence and respect for others’ space", "When pulling back makes connection harder", "When does space help? When might support help?"], "paragraphs": ["Your answers suggest that on tough days, the Bodyguard may take the wheel through a response we call Shutting Down.", "You might go quiet, pull back from people, or find it hard to put your feelings into words. Keeping things at a distance may give you some breathing room.", "You may also recognise strengths like independence, staying calm on the outside and respecting other people’s need for space.", "The challenge is that pulling back can also make comfort and connection harder to reach.", "A useful starting point is noticing when space helps, and when a small step towards support might help too.", "Does this sound like you?"], "plainTitle": "Pulling back under pressure"}, {"id": "BP", "slug": "bodyguard-pushing-through", "character": "bodyguard", "title": "Bodyguard: Pushing Through", "tone": "warmly", "highlights": ["Perseverance and dependability", "When your own needs slip down the list", "When would rest, support or another approach fit?"], "paragraphs": ["Your answers suggest that on tough days, the Bodyguard may take the wheel through a response we call Pushing Through.", "You might keep busy, work through the list and make sure everyone else is looked after, even when you’re running low.", "This response can help you persevere, get things done and be someone others depend on.", "The challenge is that your own needs can keep slipping to the bottom of the list. Even when you stop, your mind might keep going.", "A useful starting point is noticing when pushing through helps, and when rest, support or a different approach might fit better.", "Does this sound like you?"], "plainTitle": "Keeping going under pressure"}, {"id": "AS", "slug": "adult-stretched", "character": "adult", "title": "Adult: Stretched", "tone": "warmly", "highlights": ["Perspective, practical steps and supporting others", "When life asks more of your energy", "Notice the load. Make room for rest and support."], "paragraphs": ["Your answers suggest a response we call Adult, Stretched.", "On tough days, you may still be able to pause, see different perspectives and work out a practical next step. Right now, though, life may be asking a lot of you.", "You might recognise strengths like staying level-headed, understanding what you need and supporting the people around you.", "The challenge is keeping those strengths available when your energy is running low. Small decisions may feel bigger, or the things that usually help you may start slipping.", "A useful starting point is noticing the load you’re carrying and making room for rest and support.", "Does this sound like you?"], "plainTitle": "Managing a demanding load"}, {"id": "AD", "slug": "adult-steady", "character": "adult", "title": "Adult: Steady", "tone": "warmly", "highlights": ["Perspective and choosing what supports you", "When busy periods squeeze out useful routines", "Notice what helps you stay steady."], "paragraphs": ["Your answers suggest a response we call Adult, Steady.", "On tough days, you may usually be able to pause, notice how you’re feeling and choose a response that considers your needs and the situation.", "You might recognise strengths like keeping perspective, reaching out when it helps and making room for the things that support your wellbeing.", "Even when things feel steady, busy periods can squeeze out those useful routines.", "A useful starting point is understanding what helps you stay steady, noticing when those habits begin to slip and choosing what you’d like to keep building on.", "Does this sound like you?"], "plainTitle": "Responding steadily under pressure"}]}</script>
+<script>
+(()=>{
+const root=document.getElementById('wellbeing-sketch');
+const data=JSON.parse(document.getElementById('ws-source-data').textContent);
+const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
+// driverPreview: the driver whose content is shown (BP only as the journey/report example until a result exists).
+// result/safety/stage come from /api/wellbeing-score.php and live in memory only. Answers are saved only when the visitor buys the full report (see the launch module below).
+// eligible: the three "Before you start" boxes were ticked this visit (not saved; asked again on the next visit).
+const state={driverPreview:'BP',screen:'intro',section:3,neutral:false,spacing:22,phase:0,resultFit:'pending',result:null,safety:'none',stage:null,chosen:null,noPrimary:null,eligible:false};
+// Approved one-line descriptions for the near-tie choice (primary-choice reference, 2 Nov 2026).
+const CHOICE_DESC={TH:'You tend to notice sadness, hurt, self-doubt or a need for comfort when things get difficult.',TF:'When life gets tricky, you may notice quick, intense feelings like frustration, urgency or excitement.',BS:'You tend to go quiet, step back or distract yourself when demands feel overwhelming.',BP:'You tend to keep working, take on more or put your own needs aside to get things done.'};
+// Illustrative pairing for copy review only, not a calculated or confirmed result.
+const previewHasSecondary=true;
+function secondaryInvitation(hasSecondary,neutral){return '<h3>Explore more in your full report</h3><p>Your answers may identify a distinct secondary '+(neutral?'response':'driver')+'. Where supported, your purchased full report explores this alongside your primary response.</p>'; }
+
+function renderFit(){
+ const fits=state.resultFit==='fits';
+ q('#ws-after-fit').hidden=!fits;
+ q('#ws-unconfirmed-next').hidden=state.resultFit!=='unconfirmed';
+ q('[data-fit]').setAttribute('aria-expanded',String(fits));
+ q('[data-fit]').setAttribute('aria-controls','ws-after-fit');
+ q('#ws-review').hidden=state.resultFit!=='disagrees'&&state.resultFit!=='unconfirmed';
+ q('#ws-fit-status').textContent=fits?'Thank you. You can explore a little more below.':state.resultFit==='unconfirmed'?'You haven’t confirmed this description. You can still review your answers.':'';
+}
+const escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const paragraphs=a=>a.map(t=>'<p>'+escape(t)+'</p>').join('');
+function render(){
+// While the safety check is open or crisis support is shown: no journey, report or bundle (prices).
+if((state.safety==='check'||state.safety==='crisis')&&['offer','report','resources','interest','followup','checkout'].includes(state.screen))state.screen='summary';
+if(state.screen!=='intro')q('#ws-intro-video').pause();
+if(state.screen!=='summary'||state.neutral)q('#ws-summary-video').pause();
+if(state.resultFit==='unconfirmed')state.neutral=true;
+renderFit();
+qa('[data-screen]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.screen===state.screen)));
+qa('.ws-stage').forEach(p=>p.hidden=p.id!=='ws-'+state.screen);
+qa('[data-character]').forEach(n=>n.hidden=state.neutral);qa('[data-neutral]').forEach(n=>n.hidden=!state.neutral);
+qa('[data-language]').forEach(b=>b.textContent=state.neutral?'Show the character descriptions again':'Show my results without the characters');
+qa('[data-presentation-heading]').forEach(n=>n.textContent=state.neutral?'Prefer the character descriptions?':'Prefer descriptions without the characters?');
+qa('[data-presentation-help]').forEach(n=>n.textContent=state.neutral?'Your responses are shown without character names, symbols or the car analogy. You can switch back at any time. Your answers and results stay the same.':'We’ll describe your responses directly, without the Bodyguard, Teenager or Adult names, symbols or car analogy. Your answers and results stay the same.');
+
+q('[data-result-title]').textContent=state.neutral?'Keeping going under pressure':'Bodyguard: Pushing Through';
+q('#ws-secondary-invitation').innerHTML=secondaryInvitation(previewHasSecondary,state.neutral);
+q('#ws-approved-summary').innerHTML=paragraphs([state.neutral?'Keeping going may help you meet demands, but it can leave less room for your own needs. Notice when persistence helps and when a pause or support would be useful.':'Your Bodyguard may protect you by keeping you moving and getting things done. That can be useful, but it may also make it harder to notice your limits.']);
+root.style.setProperty('--ws-gap',state.spacing+'px');
+renderJourneyPhase();
+renderGoalMessages();
+renderReminderPreferences();
+renderQuestion();
+renderDriverPreview();
+renderGoalRoute();
+renderSummaryState();
+renderCommerce();
+qa('video').forEach(v=>{if(v.closest('[hidden]'))v.pause();});
+}
+function renderChoice(){
+ const c=state.result.primary.candidates;
+ q('#ws-choice-options').innerHTML=c.map(id=>{const s=data.driverVideoPreviews.find(x=>x.id===id);const title=state.neutral?s.plainTitle:s.title;
+  return '<label class="ws-answer cursor-interaction"><input type="radio" name="ws-primary-choice" value="'+id+'" '+(state.chosen===id?'checked':'')+'><span><strong>'+escape(title)+'</strong><br>'+escape(CHOICE_DESC[id]||'')+'</span></label>';}).join('');
+ q('[data-choice-continue]').disabled=!state.chosen;
+}
+function renderSummaryState(){
+ const r=state.result,restricted=state.safety==='check'||state.safety==='crisis',none=state.stage==='none';
+ qa('[data-screen="offer"],[data-screen="report"],[data-screen="resources"],[data-screen="interest"],[data-screen="followup"],[data-screen="checkout"]').forEach(b=>b.hidden=restricted);
+ q('#ws-summary-gate').hidden=!!r||state.safety==='crisis';
+ q('#ws-safety-check').hidden=!(r&&state.safety==='check');
+ // Crisis support can come from the entry link (no result yet) or the later safety check.
+ q('#ws-crisis').hidden=state.safety!=='crisis';
+ q('#ws-support-unsafe').hidden=!(r&&!restricted&&r.safety.support_concerns.includes('unsafe_at_home_or_relationship'));
+ const choosing=!!r&&!restricted&&state.stage==='choice';
+ q('#ws-primary-choice').hidden=!choosing;
+ if(choosing)renderChoice();
+ q('#ws-summary-result').hidden=!(r&&!restricted&&(state.stage==='single'||none));
+ q('#ws-recent-change').hidden=!(r&&r.recent_change);
+ q('#ws-no-primary').hidden=!none;
+ if(none){
+  const declined=state.noPrimary==='declined';
+  q('#ws-no-primary-title').textContent=declined?'That’s okay':'We won’t choose a description for you';
+  q('#ws-no-primary-text').textContent=declined?'We’ll leave this result unconfirmed. You can return to your answers later. We won’t choose another driver for you.':'Your answers didn’t point clearly to one way of responding when things get tough. You can review your answers, or start with what you told us you’d like to work towards.';
+  
+ }
+ // Driver content needs an accepted or offered primary; elements without their own language toggle are restored here.
+ qa('#ws-summary-result [data-needs-primary]').forEach(n=>{if(none)n.hidden=true;else if(!n.hasAttribute('data-character')&&!n.hasAttribute('data-neutral'))n.hidden=false;});
+}
+function applyScore(r){
+ state.result=r;state.chosen=null;state.noPrimary=null;state.resultFit='pending';
+ // A "not sure"/"no" answer keeps crisis support for the rest of the visit; a "yes" is not asked again.
+ if(state.safety!=='crisis'&&state.safety!=='cleared')state.safety=r.safety.safety_check_required?'check':'clear';
+ const kind=r.primary.kind,c=r.primary.candidates;
+ if(kind==='participant_choice_required')state.stage='choice';
+ else if(kind==='no_supported_pattern'){state.stage='none';state.noPrimary='no_pattern';state.resultFit='unconfirmed';}
+ else{state.stage='single';state.driverPreview=c[0];}
+ state.screen='summary';
+}
+const SCORED_QUESTIONS=['1.1','1.2','1.4','1.5','3.1','3.2','3.3','3.4','3.5','4.1','4.2','4.3','4.4','5.1'];
+let scoring=false;
+async function requestScore(){
+ if(scoring)return;scoring=true;
+ const next=q('[data-question-next]');next.disabled=true;q('#ws-question-status').textContent='Creating your summary…';
+ const payload={};SCORED_QUESTIONS.forEach(k=>{if(answers[k]!==undefined)payload[k]=answers[k];}); // only what scoring needs
+ try{
+  const res=await fetch('/api/wellbeing-score.php',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({answers:payload})});
+  const r=await res.json().catch(()=>null);
+  if(!res.ok||!r||!r.primary||!r.safety)throw new Error('score');
+  applyScore(r);render();save();
+  root.scrollIntoView({block:'start'});
+ }catch(e){q('#ws-question-status').textContent='We couldn’t create your summary just now. Please check your connection and try again.';}
+ finally{scoring=false;next.disabled=false;}
+}
+
+function renderGoalRoute(){qa('[data-language]').forEach(b=>b.disabled=state.resultFit==='unconfirmed');}
+
+function renderJourneyPhase(){}
+
+function save(){}
+function applySaved(){}
+
+root.addEventListener('play',e=>{if(e.target.tagName==='VIDEO')qa('video').forEach(v=>{if(v!==e.target)v.pause();});},true);
+// The questionnaire only starts once the "Before you start" 18+ box is ticked.
+function entryConfirmed(){
+ if(state.eligible)return true;
+ const box=q('#ws-entry-adult');
+ if(box.checked){state.eligible=true;q('#ws-entry-status').textContent='';return true;}
+ state.screen='intro';render();
+ q('#ws-entry-status').textContent='Tick the box to confirm you’re 18 or over and happy to take part.';
+ q('#ws-entry').scrollIntoView({block:'center'});box.focus({preventScroll:true});
+ return false;
+}
+// "get support immediately": crisis support only, with no questionnaire, result, price or sales message for the rest of the visit.
+root.addEventListener('click',e=>{if(!e.target.closest('[data-entry-unsafe]'))return;e.preventDefault();state.safety='crisis';state.screen='summary';render();root.scrollIntoView({block:'start'});});
+root.addEventListener('change',e=>{if(e.target.closest('#ws-entry'))q('#ws-entry-status').textContent='';});
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.screen||b.dataset.go){const to=b.dataset.screen||b.dataset.go;if(to!=='questionnaire'||entryConfirmed()){state.screen=to;render();save();}}
+if(b.dataset.section){state.section=Number(b.dataset.section);render();save();}
+if(b.hasAttribute('data-prev')||b.hasAttribute('data-next')){state.section+=b.hasAttribute('data-next')?1:-1;render();save();}
+if(b.dataset.phase!==undefined){state.phase=Number(b.dataset.phase);renderJourneyPhase();save();}
+if(b.hasAttribute('data-edit-goals')){questionIndex=visibleQuestions().findIndex(item=>item.id==='1.3');state.screen='questionnaire';render();save();}
+if(b.hasAttribute('data-language')&&state.resultFit!=='unconfirmed'){state.neutral=!state.neutral;render();save();}
+
+
+if(b.hasAttribute('data-fit')){state.resultFit='fits';render();}
+if(b.hasAttribute('data-disagree')){state.resultFit='disagrees';render();}
+if(b.hasAttribute('data-unconfirmed')){state.resultFit='unconfirmed';render();}
+if(b.hasAttribute('data-review-answers')){state.screen='questionnaire';questionIndex=0;render();save();}
+if(b.dataset.safety){state.safety=b.dataset.safety==='yes'?'cleared':'crisis';render();root.scrollIntoView({block:'start'});}
+if(b.hasAttribute('data-choice-continue')&&state.chosen){state.driverPreview=state.chosen;state.stage='single';state.resultFit='pending';render();root.scrollIntoView({block:'start'});}
+if(b.hasAttribute('data-choice-none')){state.stage='none';state.noPrimary='declined';state.resultFit='unconfirmed';render();root.scrollIntoView({block:'start'});}
+});
+root.addEventListener('change',e=>{if(e.target.name==='ws-primary-choice'){state.chosen=e.target.value;q('[data-choice-continue]').disabled=false;}});
+qa('[data-screen]').forEach((b,i,a)=>b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const n=(i+(e.key==='ArrowRight'?1:-1)+a.length)%a.length;a[n].click();a[n].focus();}}));
+const answers={};let questionIndex=0;
+function normaliseGoals(values){
+ const optionIds=data.questions.find(item=>item.id==='1.3').options.map(item=>item.id);
+ const requested=new Set(Array.isArray(values)?values:[]);
+ return optionIds.filter(id=>requested.has(id)).slice(0,2);
+}
+
+
+function renderGoalMessages(){}
+
+function updateGoalControls(){
+ const isGoals=visibleQuestions()[questionIndex].id==='1.3';
+ const count=normaliseGoals(answers['1.3']).length;
+ q('[data-goal-preview]').hidden=true; // review-only shortcut from the sketch; summaries now need scored answers
+ q('[data-goal-preview]').disabled=count<1;
+ q('[data-question-next]').disabled=isGoals&&count<1;
+ if(isGoals){
+  q('#ws-question-status').textContent=count?count+' of 2 goals selected. You can continue with one or two.':'Select at least one goal to continue.';
+  qa('[data-answer="1.3"]').forEach(el=>{el.disabled=count===2&&!el.checked;});
+ }
+}
+
+
+const reminderZones=[['Australia/Brisbane','Brisbane'],['Australia/Sydney','Sydney / Canberra'],['Australia/Melbourne','Melbourne'],['Australia/Hobart','Hobart'],['Australia/Adelaide','Adelaide'],['Australia/Darwin','Darwin'],['Australia/Perth','Perth'],['Australia/Broken_Hill','Broken Hill'],['Australia/Eucla','Eucla'],['Australia/Lord_Howe','Lord Howe Island']];
+function reminderError(){
+ const pref=answers['6.3a'];if(!pref||pref.mode!=='time')return '';
+ if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(pref.time||''))return 'Choose a reminder time, or select “I’ll decide later”.';
+ if(!reminderZones.some(z=>z[0]===pref.timezone))return 'Choose the time zone for your reminder.';
+ const quiet=answers['6.3'];
+ if(quiet&&quiet.length===2&&quiet.every(v=>v!==''&&v!==undefined)){
+  const from=Number(quiet[0])*60,to=Number(quiet[1])*60;const parts=pref.time.split(':').map(Number),at=parts[0]*60+parts[1];
+  if(from===to)return 'Your quiet hours have the same start and end. Review them on the previous question.';
+  if(from<to?at>=from&&at<to:at>=from||at<to)return 'That time falls within your quiet hours. Choose another time, review your quiet hours, or decide when you start.';
+ }
+ return '';
+}
+function renderReminderPreferences(){
+ const p=answers['6.3a'];let message='';
+ if(p?.mode==='time'&&!reminderError()){
+  const parts=p.time.split(':').map(Number),hour=parts[0];const label=(hour%12||12)+':'+String(parts[1]).padStart(2,'0')+' '+(hour<12?'am':'pm');
+  const zone=reminderZones.find(z=>z[0]===p.timezone)[1];message='Your preferred notification time: '+label+' ('+zone+' time). This is a preference only. Notifications require a separate opt-in.';
+ }else if(p?.mode==='later')message='You can choose a notification time later. None are enabled in this sketch.';
+ qa('[data-reminder-preference]').forEach(el=>{el.textContent=message;el.hidden=!message;});
+}
+
+function choices(id){return Array.isArray(answers[id])?answers[id]:answers[id]?[answers[id]]:[];}
+function visibleQuestions(){return data.questions.filter(item=>{
+ if(item.id==='1.5')return choices('1.4').length>0;
+ if(item.id==='4.4')return choices('1.1').includes('1.1.c')||choices('4.1').some(v=>['4.1.h','4.1.i'].includes(v))||answers['4.2']==='4.2.h';
+ if(item.id==='6.5b')return choices('6.5').filter(v=>!['6.5.n','6.5.o'].includes(v)).length>=2;
+ return true;
+});}
+// Every shown question is required unless the data marks it optional (1.4, 6.3a).
+// Goals (1.3) keep their own controls in updateGoalControls().
+function isAnswered(item){
+ const v=answers[item.id];
+ if(item.type==='multi')return choices(item.id).length>0;
+ if(item.type==='quiet_hours')return Array.isArray(v)&&v.length===2&&v.every(x=>x!==''&&x!==undefined);
+ return v!==undefined&&v!=='';
+}
+function requiredMessage(item){
+ if(item.type==='multi')return 'Choose at least one answer to continue.';
+ if(item.type==='slider')return 'Choose a rating on the slider to continue.';
+ if(item.type==='quiet_hours')return 'Choose a start and end time to continue.';
+ return 'Choose an answer to continue.';
+}
+function updateRequiredControls(){
+ const item=visibleQuestions()[questionIndex];
+ if(item.id==='1.3'||item.optional)return;
+ const missing=!isAnswered(item);
+ q('[data-question-next]').disabled=missing;
+ q('#ws-question-status').textContent=missing?requiredMessage(item):'';
+}
+function renderQuestion(){
+ const items=visibleQuestions();questionIndex=Math.min(Math.max(0,questionIndex),items.length-1);const item=items[questionIndex];
+ q('#ws-question-step').textContent='Question '+(questionIndex+1)+' of '+items.length;
+ q('#ws-question-group').textContent=data.questionGroups[item.section];
+ q('#ws-question-progress').value=Math.round((questionIndex+1)/items.length*100);
+ q('#ws-question-title').textContent=item.question;
+ q('#ws-question-hint').textContent=[item.lead,item.hint,item.optional?'Optional':''].filter(Boolean).join(' · ');
+ q('[data-question-prev]').textContent=questionIndex===0?'Back to introduction':'Previous question';
+ q('[data-question-next]').textContent=questionIndex===items.length-1?'See my summary':'Next question';
+ q('#ws-question-status').textContent='';
+ let markup='';
+ if(item.type==='slider'){
+ const v=answers[item.id],span=item.max-item.min;
+ // Tappable numbers sit under the dot's centre for each value (dot is 30px wide). Pointer-only: the slider itself is the keyboard/screen-reader control.
+ const ticks=Array.from({length:span+1},(_,i)=>'<button type="button" tabindex="-1" aria-hidden="true" data-slider-tick="'+(item.min+i)+'" style="left:calc(15px + (100% - 30px) * '+(i/span)+')">'+(item.min+i)+'</button>').join('');
+ markup='<p class="ws-slider-help">Drag the dot along the line, or tap a number.</p><div class="ws-scale-ends"><span>'+escape(item.minLabel)+'</span><span>'+escape(item.maxLabel)+'</span></div><input id="ws-slider" data-answer="'+item.id+'" type="range" min="'+item.min+'" max="'+item.max+'" step="1" value="'+(v===undefined?item.min:v)+'"><div class="ws-slider-ticks">'+ticks+'</div><label class="ws-slider-readout" for="ws-slider">Your rating: <output id="ws-slider-value"></output></label>';
+ }else if(item.type==='reminder_time'){
+ const p=answers[item.id]||{};const choose=p.mode==='time';
+ markup='<label class="ws-answer cursor-interaction"><input type="radio" name="ws-reminder-choice" data-reminder-choice value="time" '+(choose?'checked':'')+'><span>Choose a time</span></label>'+
+ '<label class="ws-answer cursor-interaction"><input type="radio" name="ws-reminder-choice" data-reminder-choice value="later" '+(p.mode==='later'?'checked':'')+'><span>I’ll decide later</span></label>'+
+ '<div id="ws-reminder-fields" '+(choose?'':'hidden')+'><div class="ws-hours"><label for="ws-reminder-clock">Preferred reminder time<select id="ws-reminder-clock" data-reminder-clock><option value="">Choose a time</option>'+Array.from({length:48},(_,i)=>{const t=String(Math.floor(i/2)).padStart(2,'0')+(i%2?':30':':00');return '<option value="'+t+'" '+(p.time===t?'selected':'')+'>'+t+'</option>';}).join('')+'</select></label><label for="ws-reminder-zone">Time zone<select id="ws-reminder-zone" data-reminder-zone><option value="">Choose your time zone</option>'+reminderZones.map(z=>'<option value="'+z[0]+'" '+(p.timezone===z[0]?'selected':'')+'>'+z[1]+'</option>').join('')+'</select></label></div><p class="ws-small">Your quiet hours apply in this time zone. You can change this preference later. Subscribing does not switch notifications on.</p></div>'+
+ '<p class="ws-small">Choosing a time here does not turn reminders on.</p>';
+ }else if(item.type==='quiet_hours'){
+ if(!answers[item.id]&&Array.isArray(item.default))answers[item.id]=item.default.map(String);
+ const value=answers[item.id]||['',''];markup='<div class="ws-hours">'+['From','To'].map((label,i)=>'<label>'+label+'<select data-hour="'+i+'" aria-label="Quiet hours '+label.toLowerCase()+'"><option value="">Choose a time</option>'+Array.from({length:24},(_,h)=>'<option value="'+h+'" '+(String(value[i])===String(h)?'selected':'')+'>'+String(h).padStart(2,'0')+':00</option>').join('')+'</select></label>').join('')+'</div><p class="ws-small">Choosing times here does not turn reminders on.</p>';
+ }else{
+ let options=item.options;if(item.id==='6.5b')options=data.questions.find(v=>v.id==='6.5').options.filter(o=>choices('6.5').includes(o.id)&&!['6.5.n','6.5.o'].includes(o.id));
+ markup=options.map((o,i)=>'<label class="ws-answer cursor-interaction"><input type="'+(item.type==='multi'?'checkbox':'radio')+'" name="ws-answer" data-answer="'+item.id+'" value="'+o.id+'" '+(choices(item.id).includes(o.id)?'checked':'')+'><span>'+escape(o.text)+'</span></label>').join('');
+ }
+ q('#ws-question-options').innerHTML=markup;
+syncSlider();
+updateGoalControls();
+updateRequiredControls();
+}
+root.addEventListener('input',e=>{
+ const el=e.target;
+ if(el.dataset.reminderChoice!==undefined){
+  answers['6.3a']=el.value==='time'?{...(answers['6.3a']||{}),mode:'time'}:{mode:'later'};
+  renderQuestion();renderReminderPreferences();return;
+ }
+ if(el.dataset.reminderClock!==undefined||el.dataset.reminderZone!==undefined){
+  const p=answers['6.3a']||{mode:'time'};
+  if(el.dataset.reminderClock!==undefined)p.time=el.value;else p.timezone=el.value;
+  answers['6.3a']=p;renderReminderPreferences();q('#ws-question-status').textContent='';return;
+ }
+ if(el.dataset.answer){const id=el.dataset.answer;const item=data.questions.find(v=>v.id===id);
+ if(id!=='1.3'){state.resultFit='pending';renderFit();}
+ if(item.type==='slider'){answers[id]=Number(el.value);syncSlider();}
+ else if(item.type==='multi'){
+ let selected=choices(id).filter(v=>v!==el.value);if(el.checked)selected.push(el.value);
+ if(id==='6.5'){if(el.value==='6.5.o'&&el.checked)selected=['6.5.o'];else selected=selected.filter(v=>v!=='6.5.o');delete answers['6.5b'];}
+ if(id==='1.3'){
+ const allowed=data.questions.find(item=>item.id==='1.3').options.map(item=>item.id);
+ if(!allowed.includes(el.value))return;
+ if(selected.length>2){el.checked=false;q('#ws-question-status').textContent='Choose up to two goals. Untick one if you’d like to change your selection.';return;}
+ answers[id]=normaliseGoals(selected);renderGoalMessages();updateGoalControls();
+}else{answers[id]=selected;if(id==='6.5')renderQuestion();}
+ }else answers[id]=el.value;
+ }
+ if(el.dataset.hour!==undefined){const item=visibleQuestions()[questionIndex];const value=answers[item.id]||['',''];value[Number(el.dataset.hour)]=el.value;answers[item.id]=value;}
+ updateRequiredControls();
+});
+// A range input only fires "input" when its value changes, so choosing the starting
+// value (e.g. 0) by clicking or arrowing at the end would never register an answer.
+function recordUntouchedSlider(e){
+ const el=e.target;
+ if(el.id!=='ws-slider'||answers[el.dataset.answer]!==undefined)return;
+ if(e.type==='keyup'&&!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','PageUp','PageDown',' ','Enter'].includes(e.key))return;
+ el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+root.addEventListener('pointerup',recordUntouchedSlider);
+root.addEventListener('keyup',recordUntouchedSlider);
+// Fill the track up to the dot, highlight the chosen number and show the rating (or that none is chosen yet).
+function syncSlider(){
+ const el=q('#ws-slider');if(!el)return;
+ const v=answers[el.dataset.answer],min=Number(el.min),max=Number(el.max);
+ el.style.setProperty('--ws-fill',v===undefined?'0px':'calc(15px + (100% - 30px) * '+((v-min)/(max-min))+')');
+ q('#ws-slider-value').textContent=v===undefined?'Not chosen yet':String(v);
+ qa('[data-slider-tick]').forEach(b=>b.classList.toggle('ws-active',v!==undefined&&Number(b.dataset.sliderTick)===v));
+}
+root.addEventListener('click',e=>{const t=e.target.closest('[data-slider-tick]');if(!t)return;
+ const el=q('#ws-slider');if(!el)return;el.value=t.dataset.sliderTick;el.dispatchEvent(new Event('input',{bubbles:true}));});
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.hasAttribute('data-question-prev')){if(questionIndex===0)state.screen='intro';else questionIndex--;render();save();}
+ if(b.hasAttribute('data-goal-preview')){
+ if(!normaliseGoals(answers['1.3']).length){q('#ws-question-status').textContent='Select at least one goal to preview your invitation.';return;}
+ state.screen='summary';render();save();
+}
+if(b.hasAttribute('data-question-next')){
+ const active=visibleQuestions()[questionIndex];
+ if(active.id==='6.3a'){
+  if(!answers['6.3a'])answers['6.3a']={mode:'later'};
+  const error=reminderError();if(error){q('#ws-question-status').textContent=error;return;}
+  renderReminderPreferences();
+ }
+
+ const items=visibleQuestions();
+ if(items[questionIndex].id==='1.3'&&!normaliseGoals(answers['1.3']).length){q('#ws-question-status').textContent='Select at least one goal to continue.';return;}
+ if(!active.optional&&!isAnswered(active)){q('#ws-question-status').textContent=requiredMessage(active);return;}
+ if(questionIndex===items.length-1){
+  if(reminderError()){questionIndex=items.findIndex(item=>item.id==='6.3a');render();q('#ws-question-status').textContent=reminderError();return;}
+  // Answers changed on the way back can reveal a follow-up question that was never answered.
+  const unanswered=items.find(item=>!item.optional&&item.id!=='1.3'&&!isAnswered(item));
+  if(unanswered){questionIndex=items.indexOf(unanswered);render();q('#ws-question-status').textContent='Please answer this question before viewing your summary.';return;}
+
+  if(!normaliseGoals(answers['1.3']).length){questionIndex=items.findIndex(item=>item.id==='1.3');state.screen='questionnaire';render();q('#ws-question-status').textContent='Choose one or two goals before continuing to your summary.';return;}
+  requestScore();return; // scored on the server; render happens when the result arrives
+ }else questionIndex++;
+ render();save();
+}
+});
+function renderDriverPreview(){
+ const sample=data.driverVideoPreviews.find(s=>s.id===state.driverPreview)||data.driverVideoPreviews.find(s=>s.id==='BP');
+ const video=q('#ws-primary-video');
+ if(video.dataset.profile!==sample.id){
+  video.pause();video.src='https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/'+sample.id+'-music-v1.mp4';video.poster='https://toolsforthetoughdays.blob.core.windows.net/resources/Wellbeing%20Profile/'+sample.id+'-brand-v2.jpg';
+  video.dataset.profile=sample.id;video.setAttribute('aria-label',sample.title+', narrated by Charlie');video.load();
+ }
+ if(state.screen!=='summary'||state.neutral||state.resultFit==='unconfirmed')video.pause();
+ const symbol=q('#ws-summary-symbol');
+ symbol.classList.remove('ws-shield','ws-heart','ws-compass');
+ symbol.classList.add(sample.character==='teenager'?'ws-heart':sample.character==='bodyguard'?'ws-shield':'ws-compass');
+ symbol.setAttribute('aria-label',sample.character==='teenager'?'Teenager heart':sample.character==='bodyguard'?'Bodyguard shield':'Adult compass');
+ q('[data-result-title]').textContent=state.neutral?sample.plainTitle:sample.title;
+ q('#ws-summary-lead').textContent=sample.paragraphs[1];
+ q('#ws-summary-strength').textContent=sample.highlights[0];
+ q('#ws-summary-challenge').textContent=sample.highlights[1];
+ q('#ws-summary-insight').textContent=sample.highlights[2];
+ q('#ws-approved-summary').innerHTML=paragraphs([sample.paragraphs[2]]);
+}
+q('#ws-primary-video').addEventListener('error',()=>{q('#ws-primary-playback').textContent='The video could not load. You can still read your summary below.';});
+
+q('#ws-question-form').addEventListener('submit',e=>e.preventDefault());
+
+// ── Live launch flow (Nic's launch sketch, 23 Nov 2026) ─────────────────────
+// Report purchase and viewer, resource subscription, journey interest and the one-month follow-up.
+// Payment and fulfilment happen on the server (checkout.php, webhooks/stripe.php, api/wellbeing-report.php);
+// nothing here treats a page visit as proof of payment. Answers leave the page only when someone
+// chooses to buy the report; if they must sign in first, they wait in sessionStorage for this tab only.
+qa('[role="tabpanel"]').forEach(n=>n.setAttribute('role','region'));
+const REPORT_QUESTIONS=SCORED_QUESTIONS.concat(['1.3','2.2','6.3a','6.5','6.5b']);
+const PENDING_REPORT='wp_pending_report',PENDING_FOLLOWUP='wp_pending_followup';
+const launch={signedIn:null,hasAccess:false,report:null,realSection:0,buyBusy:false,cancelledRun:null,interestId:null,interestToken:null,interest:null,followup:null,followupInfo:null,subscribed:null};
+async function api(path,method,body,query){
+ const res=await fetch(path+(query||''),{method,credentials:'same-origin',cache:'no-store',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+ const data=await res.json().catch(()=>null);
+ return {status:res.status,ok:res.ok,data};
+}
+const reportApi=(method,body,query)=>api('/api/wellbeing-report.php',method,body,query);
+function goLaunch(screen){state.screen=screen;render();root.scrollIntoView({block:'start'});const h=q('#ws-'+screen+' h1:not([hidden])')||q('#ws-'+screen+' h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+function acceptedPrimary(){return state.result&&state.result.primary&&state.stage==='single'&&state.resultFit==='fits'?state.driverPreview:null;}
+function say(selector,text){const el=q(selector);if(el)el.textContent=text||'';}
+function fmtDate(iso){const d=new Date(iso+'T00:00:00');return isNaN(d)?iso:d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});}
+function renderCommerce(){
+ // Report offer: only a confirmed summary can be bought.
+ const buy=q('[data-launch="buy-report"]'),ready=!!acceptedPrimary();
+ buy.disabled=!ready||launch.buyBusy;
+ q('#ws-buy-help').hidden=ready||!!launch.cancelledRun;
+ q('#ws-buy-return').hidden=!launch.cancelledRun;
+ if(launch.cancelledRun)q('#ws-buy-return a').setAttribute('href','/checkout.php?product=wellbeing_report&run='+encodeURIComponent(launch.cancelledRun));
+ q('#launch-resource-intro').textContent=launch.report?'Alongside your personalised report, you can explore practical wellbeing resources whenever it suits you.':'If a full report isn’t what you’re looking for right now, you can still explore our wellbeing resources.';
+ q('#launch-interest-status').hidden=!launch.subscribed;
+ q('#launch-interest-status').textContent=launch.subscribed?'Thank you. Your '+(launch.subscribed==='monthly'?'monthly':'annual')+' resource subscription is being set up. You’ll find it on your dashboard.':'';
+ q('#launch-closing-status').textContent=launch.followup==='yes'&&launch.followupInfo?'We’ll email you at '+launch.followupInfo.email+' around '+fmtDate(launch.followupInfo.due_on)+' about the personalised 90-day wellbeing journey.':launch.followup==='no'?'You chose not to receive a follow-up email.':launch.interest==='yes'?'Thank you for letting us know you’re interested. No subscription has been started or changed.':'';
+ qa('[data-needs-result]').forEach(n=>n.hidden=!state.result);
+ qa('[data-needs-report]').forEach(n=>n.hidden=!launch.report);
+ qa('[data-signed-out]').forEach(n=>n.hidden=launch.signedIn!==false);
+ renderRealReport();
+}
+function blocksHtml(blocks){
+ return blocks.map(b=>{
+  if(b.type==='p')return '<p>'+escape(b.text)+'</p>';
+  if(b.type==='h')return '<h2>'+escape(b.text)+'</h2>';
+  if(b.type==='h3')return '<h3>'+escape(b.text)+'</h3>';
+  if(b.type==='note')return '<p class="ws-statement">'+escape(b.text)+'</p>';
+  if(b.type==='list')return '<ul>'+b.items.map(i=>'<li>'+escape(i)+'</li>').join('')+'</ul>';
+  if(b.type==='table')return '<div class="ws-table-wrap"><table class="ws-table"><thead><tr>'+b.head.map(h=>'<th scope="col">'+escape(h)+'</th>').join('')+'</tr></thead><tbody>'+b.rows.map(r=>'<tr><th scope="row">'+escape(r[0])+'</th><td>'+escape(r[1])+'</td></tr>').join('')+'</tbody></table></div>';
+  if(b.type==='links')return '<ul class="ws-links">'+b.items.map(l=>'<li><a href="'+escape(l.href)+'"'+(/^https?:/.test(l.href)?' target="_blank" rel="noopener"':'')+'>'+escape(l.label)+'</a></li>').join('')+'</ul>';
+  if(b.type==='question')return questionHtml();
+  return '';
+ }).join('');
+}
+// Draft wording for Nic's review: the master has no approved copy for this question.
+function questionHtml(){
+ const qn=launch.report&&launch.report.question;if(!qn)return '';
+ const intro='<p class="ws-small">Your answer only decides which descriptions your report includes. You can keep using your report with your main pattern whatever you choose.</p>';
+ if(qn.kind==='confirm'){const c=qn.candidates[0];
+  return '<div class="ws-note" role="group" aria-labelledby="ws-sq-title"><h3 id="ws-sq-title">Does this also sound like you when things get really hard?</h3><p style="margin-top:10px"><strong>'+escape(c.title)+'</strong></p><p>'+escape(c.description)+'</p>'+intro+
+   '<div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-sq="fits" data-sq-id="'+c.id+'">This fits</button><button type="button" class="cursor-interaction" data-sq="no">Not really</button><button type="button" class="cursor-interaction" data-sq="unsure">I’m not sure</button><button type="button" class="cursor-interaction" data-sq="skip">Skip this question</button></div><p class="ws-small ws-status" id="ws-sq-status" role="status" aria-live="polite"></p></div>';}
+ return '<div class="ws-note" role="group" aria-labelledby="ws-sq-title"><h3 id="ws-sq-title">Which of these sounds more like you when things get really hard?</h3>'+intro+
+  qn.candidates.map(c=>'<label class="ws-answer cursor-interaction"><input type="radio" name="ws-sq-choice" value="'+c.id+'"><span><strong>'+escape(c.title)+'</strong><br>'+escape(c.description)+'</span></label>').join('')+
+  '<label class="ws-answer cursor-interaction"><input type="radio" name="ws-sq-choice" value=""><span>Neither / I’m not sure</span></label>'+
+  '<div class="ws-actions"><button type="button" class="ws-primary cursor-interaction" data-sq-continue>Continue</button><button type="button" class="cursor-interaction" data-sq="skip">Skip this question</button></div><p class="ws-small ws-status" id="ws-sq-status" role="status" aria-live="polite"></p></div>';
+}
+function renderRealReport(){
+ const r=launch.report;
+ q('#ws-report-real').hidden=!r;q('#ws-report-none').hidden=!!r;
+ if(!r)return;
+ const sections=r.sections;launch.realSection=Math.min(Math.max(0,launch.realSection),sections.length-1);
+ const current=sections[launch.realSection];
+ q('#ws-real-heading').textContent=r.primary.title;
+ q('#ws-real-meta').textContent=r.language==='plain'?'Shown without the character descriptions.':'';
+ q('[data-real-language]').textContent=r.language==='plain'?'Show the character descriptions':'Show my report without the characters';
+ const support=q('#ws-real-support');support.hidden=!r.support_first;support.innerHTML=r.support_first?'<h3>Support first</h3>'+blocksHtml(r.support_first):'';
+ const groups=[];sections.forEach((s,i)=>{let g=groups.find(x=>x.name===s.group);if(!g){g={name:s.group,items:[]};groups.push(g);}g.items.push([s,i]);});
+ q('#ws-real-contents').innerHTML='<h3>In your report</h3>'+groups.map(g=>'<details '+(g.items.some(([,i])=>i===launch.realSection)?'open':'')+'><summary class="cursor-interaction">'+escape(g.name)+'</summary><div>'+g.items.map(([s,i])=>'<button type="button" class="cursor-interaction'+(i===launch.realSection?' ws-active':'')+'" data-real-section="'+i+'" aria-current="'+(i===launch.realSection?'page':'false')+'">'+s.number+'. '+escape(s.title)+'</button>').join('')+'</div></details>').join('');
+ q('#ws-real-number').textContent='Section '+current.number+' of '+r.section_count;
+ q('#ws-real-title').textContent=current.title;
+ q('#ws-real-content').innerHTML=blocksHtml(current.blocks);
+ q('[data-real-prev]').disabled=launch.realSection===0;q('[data-real-next]').disabled=launch.realSection===sections.length-1;
+}
+function setReport(r){launch.report=r||null;if(r){launch.cancelledRun=null;}render();}
+async function saveAndCheckout(payload){
+ const r=await reportApi('POST',payload);
+ if(r.status===401){
+  try{sessionStorage.setItem(PENDING_REPORT,JSON.stringify(payload));}catch(e){}
+  location.href='/login.html?redirect='+encodeURIComponent('/wellbeing-profile.html?resume=report');return;
+ }
+ if(r.ok&&r.data&&r.data.checkout_url){try{sessionStorage.removeItem(PENDING_REPORT);}catch(e){}location.href=r.data.checkout_url;return;}
+ throw new Error(r.data&&r.data.message?r.data.message:'save');
+}
+async function buyReport(){
+ const primary=acceptedPrimary();if(!primary||launch.buyBusy)return;
+ const picked={};REPORT_QUESTIONS.forEach(k=>{if(answers[k]!==undefined)picked[k]=answers[k];});
+ launch.buyBusy=true;render();say('#ws-buy-status','Saving your answers…');
+ try{await saveAndCheckout({action:'save',answers:picked,accepted_primary:primary,language:state.neutral?'plain':'characters',safety_confirmed:state.safety==='cleared',eligibility_confirmed:state.eligible});}
+ catch(e){launch.buyBusy=false;render();say('#ws-buy-status',e.message&&e.message!=='save'?e.message:'We couldn’t start your purchase just now. Please check your connection and try again.');}
+}
+async function resumePurchase(){
+ let payload=null;try{payload=JSON.parse(sessionStorage.getItem(PENDING_REPORT)||'null');}catch(e){}
+ if(!payload)return;
+ launch.buyBusy=true;render();say('#ws-buy-status','Taking you to secure checkout…');
+ try{await saveAndCheckout(payload);}
+ catch(e){launch.buyBusy=false;try{sessionStorage.removeItem(PENDING_REPORT);}catch(x){}render();say('#ws-buy-status','We couldn’t continue your purchase. Please answer the questionnaire again and try once more.');}
+}
+async function confirmPurchase(sessionId){
+ say('#ws-report-status','Confirming your payment…');
+ for(let attempt=0;attempt<4;attempt++){
+  try{const r=await reportApi('GET',null,'?session_id='+encodeURIComponent(sessionId));
+   if(r.ok&&r.data&&r.data.report){launch.realSection=0;setReport(r.data.report);say('#ws-real-status',r.data.report.emailed_at?'We’ve also emailed you a copy.':'');return;}
+   if(r.status===401){say('#ws-report-status','Please sign in to see your report.');return;}
+  }catch(e){}
+  await new Promise(done=>setTimeout(done,2500));
+ }
+ say('#ws-report-status','We’re still confirming your payment. Please refresh this page in a minute. We’ll also email you a copy of your report.');
+}
+async function loadAccount(){
+ try{const r=await reportApi('GET');if(r.ok&&r.data){launch.signedIn=r.data.signed_in!==false;launch.hasAccess=!!r.data.has_resource_access;if(r.data.report&&!launch.report)setReport(r.data.report);else render();}}catch(e){}
+}
+async function updateReport(body,statusSelector){
+ try{const r=await reportApi('POST',Object.assign({run_id:launch.report.run_id},body));
+  if(r.ok&&r.data&&r.data.report){setReport(r.data.report);return;}
+  say(statusSelector,r.data&&r.data.message?r.data.message:'That didn’t save. Please try again.');
+ }catch(e){say(statusSelector,'That didn’t save. Please check your connection and try again.');}
+}
+async function emailReport(button){
+ button.disabled=true;say('#ws-real-status','Sending…');
+ try{const r=await reportApi('POST',{action:'email',run_id:launch.report.run_id});
+  say('#ws-real-status',r.ok?'We’ve emailed a copy of your report to '+r.data.email+'.':(r.data&&r.data.message)||'We couldn’t send the email just now. Please try again later.');
+ }catch(e){say('#ws-real-status','We couldn’t send the email just now. Please try again later.');}
+ finally{setTimeout(()=>{button.disabled=false;},5000);}
+}
+function printReport(){
+ const r=launch.report;if(!r)return;
+ q('#ws-real-print').innerHTML='<h1>Your Full Wellbeing Profile Report</h1><p>'+escape(r.primary.title)+'</p>'+(r.support_first?'<h2>Support first</h2>'+blocksHtml(r.support_first):'')+
+  r.sections.map(s=>'<section><h2>'+s.number+'. '+escape(s.title)+'</h2>'+blocksHtml(s.blocks.filter(b=>b.type!=='question'))+'</section>').join('');
+ document.body.classList.add('ws-printing');
+ window.addEventListener('afterprint',()=>document.body.classList.remove('ws-printing'),{once:true});
+ window.print();
+}
+function subscribe(plan){
+ const target='/checkout.php?product=individual_resource_'+(plan==='monthly'?'monthly':'yearly');
+ location.href=launch.signedIn===false?'/login.html?redirect='+encodeURIComponent(target):target;
+}
+async function recordInterest(choice){
+ launch.interest=choice;launch.followup=null;launch.followupInfo=null;
+ try{const r=await api('/api/wellbeing-interest.php','POST',{action:'interest',interest:choice});if(r.ok&&r.data){launch.interestId=r.data.id;launch.interestToken=r.data.token;}}catch(e){}
+ goLaunch(choice==='yes'?'closing':'followup');
+}
+async function recordFollowup(choice){
+ say('#launch-followup-status','');
+ const body={action:'followup',id:launch.interestId,token:launch.interestToken,choice};
+ try{const r=await api('/api/wellbeing-interest.php','POST',body);
+  if(r.status===401){
+   try{sessionStorage.setItem(PENDING_FOLLOWUP,JSON.stringify(body));}catch(e){}
+   location.href='/login.html?redirect='+encodeURIComponent('/wellbeing-profile.html?resume=followup');return;
+  }
+  if(!r.ok){say('#launch-followup-status',(r.data&&r.data.message)||'That didn’t save. Please try again.');return;}
+  launch.followup=choice;launch.followupInfo=choice==='yes'?r.data:null;
+ }catch(e){say('#launch-followup-status','That didn’t save. Please check your connection and try again.');return;}
+ goLaunch('closing');
+}
+async function resumeFollowup(){
+ let body=null;try{body=JSON.parse(sessionStorage.getItem(PENDING_FOLLOWUP)||'null');sessionStorage.removeItem(PENDING_FOLLOWUP);}catch(e){}
+ if(!body)return;
+ launch.interestId=body.id;launch.interestToken=body.token;
+ await recordFollowup(body.choice);
+}
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.launch){
+  switch(b.dataset.launch){
+   case 'buy-report':buyReport();break;
+   case 'skip-report':goLaunch(launch.hasAccess?'interest':'resources');break;
+   case 'report-continue':goLaunch('interest');break;
+   case 'monthly':case 'annual':subscribe(b.dataset.launch);break;
+   case 'skip-resources':goLaunch('interest');break;
+  }
+ }
+ if(b.dataset.interest)recordInterest(b.dataset.interest);
+ if(b.dataset.followup)recordFollowup(b.dataset.followup);
+ if(b.dataset.realSection!==undefined){launch.realSection=Number(b.dataset.realSection);renderRealReport();q('#ws-real-title').focus();}
+ if(b.hasAttribute('data-real-prev')||b.hasAttribute('data-real-next')){launch.realSection+=b.hasAttribute('data-real-next')?1:-1;renderRealReport();q('#ws-real-title').focus();}
+ if(b.hasAttribute('data-real-language')&&launch.report)updateReport({action:'language',language:launch.report.language==='plain'?'characters':'plain'},'#ws-real-status');
+ if(b.hasAttribute('data-real-print'))printReport();
+ if(b.hasAttribute('data-real-email'))emailReport(b);
+ if(b.dataset.sq){b.disabled=true;updateReport({action:'secondary',selected:b.dataset.sq==='fits'?b.dataset.sqId:null,response:b.dataset.sq},'#ws-sq-status');}
+ if(b.hasAttribute('data-sq-continue')){const picked=root.querySelector('input[name="ws-sq-choice"]:checked');
+  if(!picked){say('#ws-sq-status','Choose a description, or choose “Neither / I’m not sure”.');return;}
+  updateReport({action:'secondary',selected:picked.value||null,response:picked.value?'fits':'unsure'},'#ws-sq-status');}
+});
+(()=>{
+ const params=new URLSearchParams(location.search);
+ const session=params.get('report_session'),cancelled=params.get('report_cancelled'),resume=params.get('resume'),view=params.get('view'),subscribed=params.get('subscribed');
+ // A plain view= link first; return links from checkout and sign-in decide the screen after it.
+ if(['report','resources','offer','interest'].includes(view))state.screen=view;
+ if(cancelled&&/^\d+$/.test(cancelled)){launch.cancelledRun=cancelled;state.screen='offer';}
+ if(params.get('report')==='missing')state.screen='offer';
+ if(session)state.screen='report';
+ if(resume==='report')state.screen='offer';
+ if(resume==='followup')state.screen='followup';
+ if(subscribed==='monthly'||subscribed==='yearly'){launch.subscribed=subscribed;state.screen='interest';}
+ if(['report_session','report_cancelled','resume','view','report','subscribed','session_id'].some(k=>params.has(k)))history.replaceState(null,'',location.pathname+location.hash);
+ loadAccount().then(()=>{
+  if(cancelled)say('#ws-buy-status','Checkout was cancelled, so you haven’t been charged.');
+  if(params.get('report')==='missing')say('#ws-buy-status','We couldn’t find that purchase. Please start again from your free summary.');
+  if(resume==='report')resumePurchase();
+  else if(resume==='followup')resumeFollowup();
+  else if(session&&/^cs_[A-Za-z0-9_]+$/.test(session))confirmPurchase(session);
+ });
+})();
+render();applySaved(window.openai?.widgetState);window.addEventListener('openai:set_globals',e=>applySaved(e.detail?.globals?.widgetState));
+})();
+</script>
+<script src="auth-guard.js"></script>
+<script src="auth-nav.js"></script>
+<script src="scripts/nav-mobile.js"></script>
+</body>
+</html>

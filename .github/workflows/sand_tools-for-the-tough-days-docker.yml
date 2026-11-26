@@ -121,6 +121,9 @@ jobs:
               AzureWebJobsStorage="${{ secrets.AZUREWEBJOBSSTORAGE }}" \
               STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
               STRIPE_WEBHOOK_SECRET="${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
+              STRIPE_PRICE_RESOURCE_MONTHLY="${{ vars.STRIPE_PRICE_RESOURCE_MONTHLY }}" \
+              STRIPE_PRICE_RESOURCE_YEARLY="${{ vars.STRIPE_PRICE_RESOURCE_YEARLY }}" \
+              STRIPE_PRICE_WELLBEING_REPORT="${{ vars.STRIPE_PRICE_WELLBEING_REPORT }}" \
               SUBSCRIPTION_EMAIL="${{ vars.SUBSCRIPTION_EMAIL }}" \
               GOOGLE_CLIENT_ID="${{ vars.GOOGLE_CLIENT_ID }}" \
               FACEBOOK_APP_ID="${{ vars.FACEBOOK_APP_ID }}" \

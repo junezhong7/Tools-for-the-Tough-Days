@@ -98,6 +98,7 @@ src="https://www.facebook.com/tr?id=1022504650555050&ev=PageView&noscript=1"/>
     /* INLINE PRICING */
     .plans-panel { display: none; margin-bottom: 16px; border: 1px solid rgba(38,119,123,0.16); border-radius: 14px; background: linear-gradient(180deg, rgba(38,119,123,0.06), rgba(38,119,123,0.02)); padding: 16px; }
     .plans-panel.open { display: block; }
+    #plansPanel { scroll-margin-top: 100px; } /* clear the fixed header when scrolled to */
     .plans-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--teal-dark); text-align: center; margin-bottom: 8px; }
     .plans-subtitle { max-width: 620px; margin: 0 auto 24px; text-align: center; color: var(--warm-grey); font-size: 14px; }
     .plans-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warm-grey); margin-bottom: 14px; }
@@ -541,7 +542,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="plan-card individual">
               <div class="plan-top">
                 <div class="plan-label">Monthly</div>
-                <div class="plan-price">$15</div>
+                <div class="plan-price">$9.95</div>
                 <div class="plan-price-note">/month</div>
               </div>
               <div class="plan-body">
@@ -551,10 +552,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="plan-card individual">
               <div class="plan-top">
-                <div class="plan-pill">4 months free</div>
+                <div class="plan-pill">Best value</div>
                 <div class="plan-label">Annual</div>
-                <div class="plan-price">$120</div>
-                <div class="plan-price-note">/year<br>Save $60 vs monthly</div>
+                <div class="plan-price">$99</div>
+                <div class="plan-price-note">/year<br>Save $20.40 vs monthly</div>
               </div>
               <div class="plan-body">
                 <p class="plan-copy">Best for uninterrupted access all year, with a simpler annual renewal and stronger savings.</p>
@@ -666,6 +667,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script>
     const PLAN_LABELS = {
       individual_monthly: 'Individual - Monthly',
+      individual_resource_monthly: 'Library Access - Monthly',
+      individual_resource_yearly: 'Library Access - Annual',
       individual_yearly:  'Individual - Annual',
       starter_only:   'Business Starter - Monthly',
       growth_only:    'Business Growth - Monthly',
@@ -675,7 +678,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       team_bundle:    'Business Team - Annual Bundle',
       sessions_3:     'Counselling - 3 Sessions',
       sessions_6:     'Counselling - 6 Sessions',
+      free_trial:     'Free trial',
     };
+    // Fixed-term access with no Stripe subscription behind it: nothing to cancel or resume.
+    const ONE_OFF_ACCESS = ['free_trial'];
 
     const MOOD_ALERT_LABELS = {
       low_streak: 'Low mood streak',
@@ -799,6 +805,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         renderMoodTracker(data.mood || null);
         applyMoodGate(!!data.has_active_subscription);
 
+        // New members arrive from sign-up with ?plans=1 (there is no free trial): show the plans.
+        if (new URLSearchParams(window.location.search).get('plans') === '1') {
+          history.replaceState(null, '', window.location.pathname + window.location.hash);
+          if (!data.has_active_subscription) {
+            const plansPanel = document.getElementById('plansPanel');
+            if (!plansPanel.classList.contains('open')) document.getElementById('btnTogglePlans').click();
+            plansPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+
       } catch (e) {
         document.getElementById('loadingState').textContent = 'Failed to load account data. Please refresh.';
       }
@@ -819,7 +835,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const statusLabel = s.status.replace('_', ' ');
         const badge   = `<span class="sub-badge ${s.status}">${statusLabel}</span>`;
         const meta = [`Status: ${statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}`];
-        if (s.current_period_end) {
+        const isOneOff = ONE_OFF_ACCESS.includes(s.product_key);
+        if (s.current_period_end && isOneOff) {
+          meta.push(new Date(s.current_period_end) > new Date()
+            ? `Access until ${fmtDate(s.current_period_end)} · does not renew`
+            : `Ended on ${fmtDate(s.current_period_end)}`);
+        } else if (s.current_period_end) {
           meta.push(
             s.status === 'cancelled'
               ? `Ended on ${fmtDate(s.current_period_end)}`
@@ -832,7 +853,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         } else if (s.status === 'pending') {
           meta.push('This checkout was started but not completed yet.');
         }
-        const actions = s.status === 'active' && !s.cancel_at_period_end
+        const actions = isOneOff
+          ? ''
+          : s.status === 'active' && !s.cancel_at_period_end
           ? `<button class="btn-sm btn-danger" onclick="cancelSub(${s.id}, this)">Cancel Subscription</button>`
           : s.cancel_at_period_end
           ? `<button class="btn-sm btn-success" onclick="resumeSub(${s.id}, this)">Keep Subscription</button>`
@@ -862,7 +885,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <tbody>
           ${payments.map(p => `<tr>
             <td>${fmtDate(p.created_at)}</td>
-            <td>${p.description || '-'}</td>
+            <td>${p.description || PLAN_LABELS[p.product_key] || '-'}</td>
             <td>$${p.amount} AUD</td>
             <td><span class="pay-status ${p.status}">${p.status}</span></td>
           </tr>`).join('')}

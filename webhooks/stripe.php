@@ -122,6 +122,12 @@ function handle_checkout_completed(\Stripe\Checkout\Session $session, ?string $e
         upsert_subscription($userId, $stripeSub, $sessionId);
 
         send_initial_subscription_email_once($userId, $sessionId, $subscriptionId, $eventId);
+    } elseif ($session->mode === 'payment' && ($session->metadata['product_key'] ?? '') === 'wellbeing_report') {
+        // Full Wellbeing Profile Report: recorded on its questionnaire run, never as platform access.
+        require_once __DIR__ . '/../lib/wellbeing_report.php';
+        if (wr_confirm_checkout_session($session, $userId) === null) {
+            error_log("checkout.session.completed: wellbeing report session {$sessionId} not recorded (unpaid or metadata mismatch)");
+        }
     } elseif ($session->mode === 'payment') {
         // One-off payment (counselling sessions)
         $productKey = $session->metadata['product_key'] ?? 'counselling';
@@ -182,10 +188,11 @@ function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null):
 
     if (!$userId) return;
 
+    $stripeSubId = invoice_subscription_id($invoice);
     $subId = null;
-    if ($invoice->subscription) {
+    if ($stripeSubId) {
         $subStmt = db()->prepare('SELECT id FROM subscriptions WHERE stripe_subscription_id = ?');
-        $subStmt->execute([$invoice->subscription]);
+        $subStmt->execute([$stripeSubId]);
         $sub = $subStmt->fetch();
         $subId = $sub ? (int) $sub['id'] : null;
     }
@@ -204,18 +211,19 @@ function handle_invoice_paid(\Stripe\Invoice $invoice, ?string $eventId = null):
         (int) $invoice->amount_paid,
         strtolower($invoice->currency ?? 'aud'),
         'succeeded',
-        $invoice->description ?? null,
+        invoice_payment_description($invoice),
     ]);
 
     // Re-activate subscription if it was past_due
-    if ($invoice->subscription) {
+    if ($stripeSubId) {
         db()->prepare(
             "UPDATE subscriptions SET status = 'active'
              WHERE stripe_subscription_id = ? AND status = 'past_due'"
-        )->execute([$invoice->subscription]);
+        )->execute([$stripeSubId]);
 
-        if (should_send_renewal_emails()) {
-            send_subscription_renewal_email_once($userId, (string) $invoice->id, (string) $invoice->subscription, $eventId);
+        // Only real renewals; the first invoice of a new subscription gets the welcome email instead.
+        if (should_send_renewal_emails() && ($invoice->billing_reason ?? '') === 'subscription_cycle') {
+            send_subscription_renewal_email_once($userId, (string) $invoice->id, $stripeSubId, $eventId);
         }
     }
 
@@ -230,11 +238,12 @@ function handle_invoice_failed(\Stripe\Invoice $invoice): void
     $customerId = $invoice->customer;
     $userId     = user_id_from_customer($customerId);
 
-    if ($invoice->subscription) {
+    $stripeSubId = invoice_subscription_id($invoice);
+    if ($stripeSubId) {
         db()->prepare(
             "UPDATE subscriptions SET status = 'past_due'
              WHERE stripe_subscription_id = ?"
-        )->execute([$invoice->subscription]);
+        )->execute([$stripeSubId]);
     }
 
     audit_webhook('invoice.payment_failed', $userId, [
@@ -247,14 +256,59 @@ function handle_invoice_failed(\Stripe\Invoice $invoice): void
 // HELPERS
 // ─────────────────────────────────────────────
 
-function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sessionId = null): void
+/**
+ * The Stripe subscription an invoice belongs to. API versions from 2025-03-31.basil moved it
+ * from invoice.subscription to invoice.parent.subscription_details.subscription.
+ */
+function invoice_subscription_id(\Stripe\Invoice $invoice): ?string
 {
-    $priceId = $s->items->data[0]->price->id ?? null;
+    $sub = $invoice->subscription ?? ($invoice->parent->subscription_details->subscription ?? null);
+    if ($sub instanceof \Stripe\StripeObject) {
+        $sub = $sub->id ?? null;
+    }
+    return is_string($sub) && $sub !== '' ? $sub : null;
+}
 
-    // Determine product_key from price ID
+/**
+ * What the payment history shows. Subscription invoices carry no description of their own,
+ * so use the plan name (e.g. "Library Access, monthly") from the invoice's price.
+ */
+function invoice_payment_description(\Stripe\Invoice $invoice): ?string
+{
+    $own = trim((string) ($invoice->description ?? ''));
+    if ($own !== '') {
+        return $own;
+    }
+    $productKey = price_product_key(invoice_line_price_id($invoice));
+    return $productKey !== 'unknown' ? subscription_label_from_product_key($productKey, '') : null;
+}
+
+/**
+ * The price ID on an invoice's first line. API versions from 2025-03-31.basil moved it
+ * from line.price.id to line.pricing.price_details.price.
+ */
+function invoice_line_price_id(\Stripe\Invoice $invoice): ?string
+{
+    $line  = $invoice->lines->data[0] ?? null;
+    $price = $line->price->id ?? ($line->pricing->price_details->price ?? null);
+    if ($price instanceof \Stripe\StripeObject) {
+        $price = $price->id ?? null;
+    }
+    return is_string($price) && $price !== '' ? $price : null;
+}
+
+/**
+ * Our product key for a Stripe price ID ('unknown' when it is not one of our prices).
+ */
+function price_product_key(?string $priceId): string
+{
     $priceToKey = [
+        // Old $15 / $120 prices (archived 27 Nov 2026), kept for subscriptions still on them
         'price_1TLD1mC8xESC1BMDifb6wvHd' => 'individual_monthly',
         'price_1TLDMFC8xESC1BMDRVGsCGIY' => 'individual_yearly',
+        // Library Access ($9.95 / $99): the main individual subscription and the Wellbeing Profile offer
+        'price_1Udf9FC8xESC1BMDo43Vx9az' => 'individual_resource_monthly',
+        'price_1UdfGLC8xESC1BMDlTmUCSs9' => 'individual_resource_yearly',
         'price_1TLElkC8xESC1BMD1IkfyBQl' => 'starter_only',
         'price_1TLEnfC8xESC1BMDuM43gQNr' => 'growth_only',
         'price_1TLEpWC8xESC1BMDuTCnIF2F' => 'team_only',
@@ -262,12 +316,40 @@ function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sess
         'price_1TLeVDC8xESC1BMDxQFkfvDC' => 'growth_bundle',
         'price_1TLeVeC8xESC1BMD25LqYUGK' => 'team_bundle',
     ];
+    // Price IDs set per environment (e.g. Stripe sandbox prices on sand), the same settings checkout.php uses.
+    foreach ([
+        'STRIPE_PRICE_INDIVIDUAL_MONTHLY' => 'individual_monthly',
+        'STRIPE_PRICE_INDIVIDUAL_YEARLY'  => 'individual_yearly',
+        'STRIPE_PRICE_RESOURCE_MONTHLY'   => 'individual_resource_monthly',
+        'STRIPE_PRICE_RESOURCE_YEARLY'    => 'individual_resource_yearly',
+        'STRIPE_PRICE_STARTER_ONLY'       => 'starter_only',
+        'STRIPE_PRICE_GROWTH_ONLY'        => 'growth_only',
+        'STRIPE_PRICE_TEAM_ONLY'          => 'team_only',
+        'STRIPE_PRICE_STARTER_BUNDLE'     => 'starter_bundle',
+        'STRIPE_PRICE_GROWTH_BUNDLE'      => 'growth_bundle',
+        'STRIPE_PRICE_TEAM_BUNDLE'        => 'team_bundle',
+    ] as $envName => $key) {
+        $envPrice = trim((string) (getenv($envName) ?: ''));
+        if ($envPrice !== '') {
+            $priceToKey[$envPrice] = $key;
+        }
+    }
 
-    $productKey = $priceToKey[$priceId] ?? 'unknown';
+    return $priceToKey[(string) $priceId] ?? 'unknown';
+}
+
+function upsert_subscription(int $userId, \Stripe\Subscription $s, ?string $sessionId = null): void
+{
+    $priceId    = $s->items->data[0]->price->id ?? null;
+    $productKey = price_product_key($priceId);
     $planType   = str_starts_with($productKey, 'individual') ? 'individual' : 'business';
 
-    $periodStart = $s->current_period_start ? date('Y-m-d H:i:s', $s->current_period_start) : null;
-    $periodEnd   = $s->current_period_end   ? date('Y-m-d H:i:s', $s->current_period_end)   : null;
+    // Stripe API versions from 2025-03-31.basil keep the period dates on the subscription item, not the subscription.
+    $item        = $s->items->data[0] ?? null;
+    $startTs     = $s->current_period_start ?? ($item->current_period_start ?? null);
+    $endTs       = $s->current_period_end ?? ($item->current_period_end ?? null);
+    $periodStart = $startTs ? date('Y-m-d H:i:s', (int) $startTs) : null;
+    $periodEnd   = $endTs ? date('Y-m-d H:i:s', (int) $endTs) : null;
 
     $existingId = subscription_row_id_from_stripe($s->id);
     if ($existingId === null && $sessionId !== null) {

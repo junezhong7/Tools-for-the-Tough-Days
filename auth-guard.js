@@ -129,7 +129,9 @@
 
   function getRedirectTarget() {
     var params = new URLSearchParams(window.location.search);
-    return params.get('redirect') || '/';
+    var r = params.get('redirect') || '';
+    // Same-site paths only: blocks //other-site, /\other-site and javascript: links.
+    return r.charAt(0) === '/' && r.charAt(1) !== '/' && r.charAt(1) !== '\\' ? r : '/';
   }
 
   function getCurrentPathWithQuery() {

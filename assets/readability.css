@@ -31,6 +31,19 @@ nav > .nav-logo { min-height: 80px; }
   nav > ul.nav-links { margin-right: max(24px, calc((100% - 1200px) / 2 + 24px)); }
 }
 
+/* Tablet / small laptop: the full-size nav (logo + 6 items) no longer fits on one line.
+   Keep every label on one line, tighten spacing, and let items wrap inside a taller nav
+   instead of squashing each label onto two lines. */
+@media (min-width: 801px) and (max-width: 1279px) {
+  nav, .nav-inner { height: auto; min-height: 80px; }
+  .nav-inner { gap: 16px; }
+  .nav-inner .nav-logo { margin-left: 0; }
+  nav > .nav-logo { margin-left: 24px; }
+  .nav-links { gap: 8px 20px; flex-wrap: wrap; justify-content: flex-end; padding-top: 10px; padding-bottom: 10px; }
+  .nav-links a, .nav-links button { white-space: nowrap; font-size: 14px; }
+  .nav-login { padding: 8px 14px; }
+}
+
 /* Hero - compact banner, matches index.html */
 .hero { padding-top: var(--hero-space-top); padding-bottom: var(--hero-space-bottom); overflow-x: clip; } /* clip the theme orbs that caused sideways scroll */
 .hero-content { max-width: 760px; }
